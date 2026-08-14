@@ -31,11 +31,11 @@ Ramu bukan aplikasi pengganti ChatGPT dan bukan kumpulan jawaban tugas. Anggap s
 <td width="100%">
 <p align="center"><strong>Fondasi Ramu</strong><br><sub>Lima hal yang selalu dijaga di setiap Project.</sub></p>
 <hr>
-<p><kbd>R</kbd>&nbsp;&nbsp;<strong>Referensi</strong><br>Memilih sumber yang sesuai dengan pertanyaan dan memastikan informasi yang digunakan masih berlaku.</p>
-<p><kbd>I</kbd>&nbsp;&nbsp;<strong>Instruksi</strong><br>Mengikuti aturan tugas, rubrik, arahan tutor, dan ketentuan kampus sebelum menyusun jawaban.</p>
-<p><kbd>Z</kbd>&nbsp;&nbsp;<strong>Zona Konteks</strong><br>Menjaga setiap mata kuliah tetap berada di Project-nya sendiri agar materi dan percakapan tidak bercampur.</p>
-<p><kbd>M</kbd>&nbsp;&nbsp;<strong>Materi</strong><br>Menggunakan BMP, bahan tutor, soal, dan materi kelas sebagai dasar belajar saat tersedia.</p>
-<p><kbd>A</kbd>&nbsp;&nbsp;<strong>Asesmen</strong><br>Memeriksa kembali isi, hitungan, sumber, dan format sebelum jawaban dianggap selesai.</p>
+<p><strong>Referensi</strong><br>Memilih sumber yang sesuai dengan pertanyaan dan memastikan informasi yang digunakan masih berlaku.</p>
+<p><strong>Instruksi</strong><br>Mengikuti aturan tugas, rubrik, arahan tutor, dan ketentuan kampus sebelum menyusun jawaban.</p>
+<p><strong>Zona Konteks</strong><br>Menjaga setiap mata kuliah tetap berada di Project-nya sendiri agar materi dan percakapan tidak bercampur.</p>
+<p><strong>Materi</strong><br>Menggunakan BMP, bahan tutor, soal, dan materi kelas sebagai dasar belajar saat tersedia.</p>
+<p><strong>Asesmen</strong><br>Memeriksa kembali isi, hitungan, sumber, dan format sebelum jawaban dianggap selesai.</p>
 <hr>
 <p align="center"><sub><em>Ada alasan kenapa lima bagian ini selalu ditulis dalam urutan yang sama.</em></sub></p>
 </td>
