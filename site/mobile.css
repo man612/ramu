@@ -1,0 +1,119 @@
+/* Mobile-only navigation and touch refinements. */
+.mobile-dock { display: none; }
+
+@media (max-width: 720px) {
+  body { padding-bottom: calc(84px + env(safe-area-inset-bottom)); }
+  .site-header nav { gap: 8px; }
+  .site-header nav a:not(.nav-github) { display: none; }
+  .site-header { min-height: 58px; padding-inline: 14px; }
+  .nav-github { padding: 8px 11px; font-size: .78rem; }
+
+  .mobile-dock {
+    position: fixed;
+    z-index: 900;
+    left: 12px;
+    right: 12px;
+    bottom: calc(10px + env(safe-area-inset-bottom));
+    min-height: 62px;
+    padding: 7px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    border: 1px solid rgba(30,33,29,.12);
+    border-radius: 20px;
+    background: rgba(255,253,248,.92);
+    backdrop-filter: blur(18px) saturate(1.15);
+    box-shadow: 0 18px 52px rgba(30,33,29,.16);
+    transform: translateY(130%);
+    animation: dock-enter 620ms var(--motion-ease) 460ms forwards;
+  }
+
+  @keyframes dock-enter { to { transform: translateY(0); } }
+
+  .mobile-dock a,
+  .mobile-dock button {
+    min-width: 0;
+    min-height: 48px;
+    padding: 6px 8px;
+    border: 0;
+    border-radius: 14px;
+    background: transparent;
+    color: var(--muted);
+    text-decoration: none;
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 2px;
+    font: inherit;
+    font-size: .68rem;
+    font-weight: 780;
+    line-height: 1.1;
+    text-align: center;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 180ms var(--motion-ease), background 220ms ease, color 220ms ease;
+  }
+
+  .mobile-dock a:active,
+  .mobile-dock button:active { transform: scale(.94); }
+
+  .mobile-dock .dock-primary {
+    background: var(--ink);
+    color: var(--white);
+  }
+
+  .mobile-dock .dock-icon {
+    width: 22px;
+    height: 22px;
+    display: grid;
+    place-items: center;
+    font-size: 1rem;
+    line-height: 1;
+  }
+
+  .mobile-dock .dock-progress {
+    color: var(--ink);
+    background: var(--sage-soft);
+  }
+
+  .mobile-dock .dock-progress strong {
+    font-size: .85rem;
+    letter-spacing: -.03em;
+  }
+
+  .mobile-dock.is-quiet {
+    transform: translateY(calc(100% + 24px));
+    opacity: .2;
+    transition: transform 320ms var(--motion-ease), opacity 320ms ease;
+  }
+
+  .hero { padding-top: 62px; }
+  .hero-actions { display: grid; grid-template-columns: 1fr; }
+  .hero-actions .button { width: 100%; }
+  .hero-facts { gap: 6px; }
+  .hero-facts div { padding: 10px 6px; border-radius: 13px; background: rgba(255,255,255,.36); text-align: center; }
+
+  .comparison, .use-card, .foundation-card, .course-card, .trust-grid article, .setup-step-card {
+    scroll-margin-top: 82px;
+  }
+
+  .setup-layout { display: block; }
+  .setup-nav { position: relative; top: auto; margin-bottom: 18px; }
+  .setup-step-card { margin-bottom: 14px; }
+  .setup-course summary { min-height: 72px; }
+  .setup-body { padding-inline: 15px; }
+  .inline-actions { display: grid; grid-template-columns: 1fr; }
+  .inline-actions .small-button { width: 100%; }
+  .copy-actions { display: grid; grid-template-columns: 1fr; width: 100%; }
+  .copy-actions .button { width: 100%; }
+  .prompt-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 390px) {
+  .mobile-dock { left: 8px; right: 8px; border-radius: 18px; }
+  .mobile-dock a, .mobile-dock button { font-size: .64rem; padding-inline: 4px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-dock { animation: none; transform: none; }
+}
