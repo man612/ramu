@@ -28,30 +28,24 @@ Jadi bukan aplikasi pengganti ChatGPT dan bukan tempat kumpulan jawaban tugas. R
 
 <table>
 <tr>
-<td width="50%">
-
-### Tanpa Ramu
-
-Kamu buka chat baru lalu harus menjelaskan lagi:
-
-- ini mata kuliah apa;
-- materi yang sedang dipakai;
-- format tugas;
-- sumber mana yang harus dipercaya;
-- cara mengecek hitungan/jawaban.
-
+<td width="50%" valign="top">
+<h3>Tanpa Ramu</h3>
+<p>Kamu buka chat baru lalu harus menjelaskan lagi:</p>
+<ul>
+<li>ini mata kuliah apa;</li>
+<li>materi yang sedang dipakai;</li>
+<li>format tugas;</li>
+<li>sumber mana yang harus dipercaya;</li>
+<li>cara mengecek hitungan/jawaban.</li>
+</ul>
 </td>
-<td width="50%">
-
-### Dengan Ramu
-
-Kamu buka Project mata kuliahnya lalu cukup kirim:
-
-> “aku nggak paham bagian ini”  
-> “cek jawaban aku”  
-> “bantu kerjain soal ini pelan-pelan”  
-> “ini feedback tutor kemarin”
-
+<td width="50%" valign="top">
+<h3>Dengan Ramu</h3>
+<p>Kamu buka Project mata kuliahnya lalu cukup kirim:</p>
+<p><code>aku nggak paham bagian ini</code></p>
+<p><code>cek jawaban aku</code></p>
+<p><code>bantu kerjain soal ini pelan-pelan</code></p>
+<p><code>ini feedback tutor kemarin</code></p>
 </td>
 </tr>
 </table>
