@@ -139,12 +139,11 @@ async function renderSetup(manifest) {
         if (!response.ok) throw new Error();
         const text = await response.text();
         const copied = await copyText(text, null);
-        if (!copied) return;
-        button.textContent = "Paket tersalin";
+        button.textContent = copied ? "Paket tersalin" : "Gunakan Unduh file";
       } catch {
-        button.textContent = "Buka file manual";
+        button.textContent = "Gunakan Unduh file";
       }
-      setTimeout(() => button.textContent = original, 1600);
+      setTimeout(() => button.textContent = original, 1800);
     });
   });
 
