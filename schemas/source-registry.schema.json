@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Ramu source registry",
+  "type": "object",
+  "required": ["version", "verified_at", "sources"],
+  "properties": {
+    "version": {"type": "integer", "minimum": 1},
+    "verified_at": {"type": "string", "format": "date"},
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "kind", "authority", "url", "canonical_for", "freshness_class", "verified_at", "review_interval_days", "watch", "status"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]+$"},
+          "name": {"type": "string", "minLength": 3},
+          "kind": {"type": "string"},
+          "authority": {"type": "string"},
+          "url": {"type": "string", "pattern": "^https://"},
+          "canonical_for": {"type": "array", "items": {"type": "string"}},
+          "freshness_class": {"type": "string"},
+          "verified_at": {"type": "string", "format": "date"},
+          "review_interval_days": {"type": "integer", "minimum": 1},
+          "watch": {"type": "boolean"},
+          "status": {"type": "string", "enum": ["active", "secondary", "signal-only"]},
+          "notes": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

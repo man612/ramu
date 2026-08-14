@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Ramu eval case collection",
+  "type": "object",
+  "required": ["version", "pack_id", "cases"],
+  "properties": {
+    "version": {"type": "integer", "minimum": 1},
+    "pack_id": {"type": "string"},
+    "cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "intent", "scenario", "expected_behaviors", "forbidden_behaviors", "contracts"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^E[0-9]{2}$"},
+          "title": {"type": "string"},
+          "intent": {"type": "string"},
+          "applies_to": {"type": "array", "items": {"type": "string"}},
+          "scenario": {"type": "string"},
+          "expected_behaviors": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+          "forbidden_behaviors": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+          "contracts": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["file", "contains"],
+              "properties": {
+                "file": {"type": "string"},
+                "contains": {"type": "string"}
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

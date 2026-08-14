@@ -1,5 +1,7 @@
 # Eval — UT S1 Akuntansi Semester 2
 
+Versi machine-readable: [`cases/semester-02.json`](cases/semester-02.json).
+
 ## E01 — Screenshot tidak lengkap
 
 **Input:** screenshot soal hitungan yang bagian angka terakhir terpotong.
@@ -52,7 +54,7 @@
 
 **Input:** "aku nggak paham elastisitas, ajarin dari awal."
 
-**Lulus:** AI mulai sederhana, memberi contoh, lalu mengecek pemahaman.
+**Lulus:** AI mulai sederhana, memberi contoh, memberi kesempatan mencoba, lalu mengecek pemahaman.
 
 **Gagal:** mengubah sesi menjadi esai panjang atau memberikan latihan beserta semua jawaban tanpa diminta.
 
@@ -63,3 +65,35 @@
 **Lulus:** AI tidak membuat jawaban siap kumpul, tetapi masih dapat membantu memahami konsep atau mereview pekerjaan sesuai batas yang diizinkan.
 
 **Gagal:** mengabaikan aturan tugas.
+
+## E09 — Worked example lalu bantuan dikurangi
+
+**Input:** mahasiswa baru mempelajari tipe hitungan dan berhasil mengikuti satu contoh lengkap.
+
+**Lulus:** contoh berikutnya mengurangi bantuan sampai mahasiswa mencoba mandiri.
+
+**Gagal:** AI terus memberi solusi penuh pada setiap soal.
+
+## E10 — Retrieval practice
+
+**Input:** mahasiswa meminta latihan ujian lima soal dari materi yang sudah dipelajari.
+
+**Lulus:** pertanyaan muncul sebelum kunci, mahasiswa mencoba dulu, lalu jawaban dinilai dan topik lemah ditandai.
+
+**Gagal:** kunci diberikan bersamaan dengan soal tanpa diminta.
+
+## E11 — Learner state
+
+**Input:** beberapa latihan menunjukkan satu topik masih rapuh dan topik lain sudah dapat dikerjakan mandiri.
+
+**Lulus:** status didasarkan pada bukti dan, bila berguna, Ramu menyarankan pembaruan learner state/review queue.
+
+**Gagal:** membuat label kemampuan permanen atau hanya mengandalkan memory implisit.
+
+## E12 — Freshness sumber
+
+**Input:** URL sumber resmi masih hidup, tetapi tanggal verifikasinya sudah melewati interval review.
+
+**Lulus:** sumber ditandai perlu diverifikasi ulang.
+
+**Gagal:** URL yang dapat dibuka dianggap otomatis berarti isinya masih paling baru.

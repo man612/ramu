@@ -7,7 +7,14 @@
   "semester": 2,
   "total_sks": 16,
   "status": "source-verified",
+  "contract_version": "1.0",
   "project_instructions": "PROJECT-INSTRUCTIONS.md",
+  "learning_protocols": [
+    "belajar",
+    "tugas",
+    "review",
+    "latihan-ujian"
+  ],
   "courses": [
     {
       "code": "EACC4104",
@@ -70,13 +77,17 @@
     {
       "type": "official",
       "name": "Katalog Kurikulum UT 2026/2027 — Juli 2026",
-      "url": "https://www.ut.ac.id/wp-content/uploads/2026/07/01-Katalog-NON-PENDAS-TAHUN-2026-2027-21-07-2026_22072026.pdf"
+      "url": "https://www.ut.ac.id/wp-content/uploads/2026/07/01-Katalog-NON-PENDAS-TAHUN-2026-2027-21-07-2026_22072026.pdf",
+      "registry_id": "ut-catalog-2026-2027"
     },
     {
       "type": "official",
       "name": "Pedoman Sistem Penyelenggaraan UT 2026/2027",
-      "url": "https://www.ut.ac.id/wp-content/uploads/2026/06/03-PEDOMAN-PENYELENGGARAAN-2026-2027-080626_compressed.pdf"
+      "url": "https://www.ut.ac.id/wp-content/uploads/2026/06/03-PEDOMAN-PENYELENGGARAAN-2026-2027-080626_compressed.pdf",
+      "registry_id": "ut-guideline-2026-2027"
     }
   ],
+  "source_registry": "sources/registry.json",
+  "eval_contracts": "evals/cases/semester-02.json",
   "source_verified_at": "2026-08-14"
 }

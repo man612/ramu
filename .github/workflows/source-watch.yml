@@ -1,0 +1,43 @@
+name: Source Freshness Watch
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "15 1 * * 1"
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Check freshness and URL reachability
+        id: freshness
+        continue-on-error: true
+        run: python scripts/check_source_freshness.py --online
+
+      - name: Open review issue when a source is overdue
+        if: steps.freshness.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          existing="$(gh issue list --state open --search 'Source review jatuh tempo in:title' --json number --jq 'length')"
+          if [ "$existing" = "0" ]; then
+            gh issue create \
+              --title "Source review jatuh tempo" \
+              --body "Pemeriksaan mingguan menemukan setidaknya satu sumber aktif melewati interval review. Jalankan python scripts/check_source_freshness.py --online, verifikasi sumber kanonik, lalu perbarui sources/registry.json jika sudah dicek."
+          fi
+
+      - name: Fail job when review is due
+        if: steps.freshness.outcome == 'failure'
+        run: exit 1

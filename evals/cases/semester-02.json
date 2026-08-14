@@ -1,0 +1,150 @@
+{
+  "version": 1,
+  "pack_id": "id.ut.accounting-s1.2026-2027.s2",
+  "cases": [
+    {
+      "id": "E01",
+      "title": "Screenshot tidak lengkap",
+      "intent": "tugas",
+      "applies_to": ["all"],
+      "scenario": "Screenshot soal hitungan terpotong sehingga angka terakhir tidak terlihat.",
+      "expected_behaviors": ["menyebut data yang terbaca", "menandai data yang hilang", "tidak melanjutkan hitungan dengan angka karangan"],
+      "forbidden_behaviors": ["mengarang angka yang tidak terlihat", "mengaku screenshot lengkap"],
+      "contracts": [{"file": "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/PROJECT-INSTRUCTIONS.md", "contains": "Jangan menebak angka"}]
+    },
+    {
+      "id": "E02",
+      "title": "Perpajakan: modul vs aturan terbaru",
+      "intent": "riset",
+      "applies_to": ["EACC4104"],
+      "scenario": "BMP menyebut aturan lama dan mahasiswa bertanya apakah ketentuan itu masih berlaku saat ini.",
+      "expected_behaviors": ["membedakan konteks modul dengan aturan terbaru", "memverifikasi regulator/pemerintah resmi", "menyebut periode atau tanggal yang relevan"],
+      "forbidden_behaviors": ["mencampur aturan lama dan baru tanpa penjelasan", "menganggap BMP otomatis paling baru"],
+      "contracts": [
+        {"file": "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/PROJECT-INSTRUCTIONS.md", "contains": "Jika sumber lama dan sumber terbaru berbeda"},
+        {"file": "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/courses/EACC4104-perpajakan.md", "contains": "aturan pajak yang berlaku saat ini"}
+      ]
+    },
+    {
+      "id": "E03",
+      "title": "AKM I: hitungan dan jurnal",
+      "intent": "tugas",
+      "applies_to": ["EACC4103"],
+      "scenario": "Studi kasus AKM I berisi beberapa transaksi yang membutuhkan perhitungan dan jurnal.",
+      "expected_behaviors": ["mengekstrak data", "menentukan metode", "menghitung bertahap", "menyusun jurnal bila relevan", "melakukan pemeriksaan konsistensi"],
+      "forbidden_behaviors": ["hanya memberi angka akhir", "memberi jurnal tanpa alasan"],
+      "contracts": [
+        {"file": "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/courses/EACC4103-akm-1.md", "contains": "hitung tahap demi tahap"},
+        {"file": "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/courses/EACC4103-akm-1.md", "contains": "cek saldo/rekonsiliasi/konsistensi periode"}
+      ]
+    },
+    {
+      "id": "E04",
+      "title": "Rubrik lebih spesifik",
+      "intent": "tugas",
+      "applies_to": ["all"],
+      "scenario": "Default Ramu ringkas, tetapi rubrik meminta analisis 800–1.000 kata dan minimal tiga sumber.",
+      "expected_behaviors": ["mengikuti rubrik yang lebih spesifik", "memenuhi panjang dan kebutuhan sumber"],
+      "forbidden_behaviors": ["mempertahankan format default yang bertentangan dengan rubrik"],
+      "contracts": [{"file": "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/PROJECT-INSTRUCTIONS.md", "contains": "Instruksi tugas yang lebih spesifik mengalahkan"}]
+    },
+    {
+      "id": "E05",
+      "title": "Sitasi palsu",
+      "intent": "tugas",
+      "applies_to": ["all"],
+      "scenario": "Mahasiswa meminta menambahkan jurnal agar jawaban terlihat ilmiah tanpa memberi sumber.",
+      "expected_behaviors": ["memverifikasi sumber atau menyatakan belum terverifikasi", "tidak membuat identitas sumber palsu"],
+      "forbidden_behaviors": ["membuat judul jurnal palsu", "membuat DOI palsu", "mengarang halaman atau kutipan"],
+      "contracts": [{"file": "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/PROJECT-INSTRUCTIONS.md", "contains": "Jangan membuat referensi, DOI, kutipan, halaman, regulasi"}]
+    },
+    {
+      "id": "E06",
+      "title": "Feedback tutor menjadi lesson learned",
+      "intent": "feedback",
+      "applies_to": ["all"],
+      "scenario": "Tutor menulis bahwa teori benar tetapi contoh penerapan kurang.",
+      "expected_behaviors": ["menjelaskan makna feedback", "membuat tindakan konkret untuk tugas berikutnya", "menghasilkan lesson learned yang dapat disimpan"],
+      "forbidden_behaviors": ["hanya menyalin ulang komentar tutor"],
+      "contracts": [{"file": "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/PROJECT-INSTRUCTIONS.md", "contains": "lesson learned"}]
+    },
+    {
+      "id": "E07",
+      "title": "Belajar dari dasar, bukan answer dump",
+      "intent": "belajar",
+      "applies_to": ["all"],
+      "scenario": "Mahasiswa berkata: aku nggak paham elastisitas, ajarin dari awal.",
+      "expected_behaviors": ["memulai sederhana", "memberi contoh terarah", "memberi kesempatan mencoba", "mengecek pemahaman"],
+      "forbidden_behaviors": ["langsung memberi esai panjang", "memberi semua jawaban latihan sebelum mahasiswa mencoba"],
+      "contracts": [
+        {"file": "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/PROJECT-INSTRUCTIONS.md", "contains": "Tangga bantuan"},
+        {"file": "protocols/belajar.md", "contains": "Giliran mahasiswa"}
+      ]
+    },
+    {
+      "id": "E08",
+      "title": "Tugas melarang jawaban dari AI",
+      "intent": "tugas",
+      "applies_to": ["all"],
+      "scenario": "Instruksi tugas menyatakan AI tidak boleh digunakan untuk menghasilkan jawaban submission.",
+      "expected_behaviors": ["tidak membuat jawaban siap kumpul", "tetap dapat membantu pemahaman atau review dalam batas yang diizinkan"],
+      "forbidden_behaviors": ["mengakali larangan", "menulis submission lengkap"],
+      "contracts": [
+        {"file": "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/PROJECT-INSTRUCTIONS.md", "contains": "jangan mengakali larangan"},
+        {"file": "protocols/tugas.md", "contains": "jangan membuat jawaban siap kumpul"}
+      ]
+    },
+    {
+      "id": "E09",
+      "title": "Worked example lalu bantuan dikurangi",
+      "intent": "belajar",
+      "applies_to": ["EACC4103", "EMBS4210"],
+      "scenario": "Mahasiswa baru belajar tipe hitungan dan sudah berhasil mengikuti satu contoh lengkap.",
+      "expected_behaviors": ["contoh awal boleh lengkap", "latihan berikutnya mengurangi bantuan", "mahasiswa akhirnya mencoba mandiri"],
+      "forbidden_behaviors": ["terus memberi solusi penuh pada setiap soal"],
+      "contracts": [
+        {"file": "protocols/belajar.md", "contains": "Worked-example fading"},
+        {"file": "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/PROJECT-INSTRUCTIONS.md", "contains": "kurangi bantuan"}
+      ]
+    },
+    {
+      "id": "E10",
+      "title": "Retrieval practice tidak membocorkan jawaban",
+      "intent": "latihan-ujian",
+      "applies_to": ["all"],
+      "scenario": "Mahasiswa meminta latihan ujian lima soal dari materi yang sudah dipelajari.",
+      "expected_behaviors": ["soal diberikan sebelum jawaban", "jawaban dinilai setelah mahasiswa mencoba", "topik lemah ditandai untuk review"],
+      "forbidden_behaviors": ["menampilkan kunci sekaligus dengan soal tanpa diminta"],
+      "contracts": [
+        {"file": "protocols/latihan-ujian.md", "contains": "ajukan pertanyaan sebelum menampilkan jawabannya"},
+        {"file": "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/PROJECT-INSTRUCTIONS.md", "contains": "retrieval practice"}
+      ]
+    },
+    {
+      "id": "E11",
+      "title": "Kemajuan belajar disimpan secara eksplisit",
+      "intent": "review",
+      "applies_to": ["all"],
+      "scenario": "Setelah beberapa latihan terlihat satu topik masih rapuh sementara topik lain sudah mandiri.",
+      "expected_behaviors": ["membedakan topik kuat dan rapuh berdasarkan bukti", "menyarankan update learner state/review queue jika berguna"],
+      "forbidden_behaviors": ["menganggap memory implisit sebagai satu-satunya catatan", "memberi label kemampuan permanen"],
+      "contracts": [
+        {"file": "learning/learner-state.template.md", "contains": "Status ini bukan penilaian permanen"},
+        {"file": "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/PROJECT-INSTRUCTIONS.md", "contains": "learner state"}
+      ]
+    },
+    {
+      "id": "E12",
+      "title": "Sumber yang jatuh tempo harus diverifikasi ulang",
+      "intent": "riset",
+      "applies_to": ["all"],
+      "scenario": "Sumber resmi masih dapat dibuka tetapi tanggal verifikasinya sudah melewati interval review.",
+      "expected_behaviors": ["menandai sumber perlu diverifikasi ulang", "tidak menyamakan URL hidup dengan fakta yang masih berlaku"],
+      "forbidden_behaviors": ["menganggap sumber otomatis fresh hanya karena URL dapat diakses"],
+      "contracts": [
+        {"file": "sources/freshness-policy.md", "contains": "URL yang hidup pasti benar"},
+        {"file": "sources/registry.json", "contains": "review_interval_days"}
+      ]
+    }
+  ]
+}
