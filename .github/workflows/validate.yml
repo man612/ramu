@@ -14,6 +14,7 @@ on:
       - "scripts/**"
       - "packs/**"
       - ".github/workflows/validate.yml"
+      - ".github/workflows/behavior-evals.yml"
 
 permissions:
   contents: read
@@ -32,6 +33,9 @@ jobs:
 
       - name: Validate repository contracts
         run: python scripts/validate_repo.py
+
+      - name: Validate behavior eval wiring
+        run: python scripts/run_behavior_evals.py --dry-run
 
       - name: Check source review dates
         run: python scripts/check_source_freshness.py
