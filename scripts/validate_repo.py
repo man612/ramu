@@ -41,10 +41,17 @@ def contains_casefold(path: Path, needle: str) -> bool:
 
 manifest = load_json(MANIFEST)
 if manifest:
-    required = ["id", "academic_year", "semester", "total_sks", "project_instructions", "courses"]
+    required = [
+        "id", "academic_year", "semester", "total_sks", "pack_version",
+        "project_instructions", "courses"
+    ]
     for key in required:
         if key not in manifest:
             fail(f"manifest.json kehilangan field `{key}`")
+
+    pack_version = str(manifest.get("pack_version", "")).strip()
+    if not pack_version:
+        fail("manifest.json memiliki pack_version kosong.")
 
     courses = manifest.get("courses", [])
     codes = [course.get("code") for course in courses]
@@ -58,11 +65,18 @@ if manifest:
     instructions = PACK / manifest.get("project_instructions", "")
     if not instructions.is_file():
         fail(f"Project Instructions tidak ditemukan: {instructions.relative_to(ROOT)}")
+    elif not contains_casefold(instructions, "Catatan Belajar Terbaru"):
+        fail("Project Instructions harus memuat format runtime `Catatan Belajar Terbaru`.")
 
     for course in courses:
         course_file = PACK / course.get("file", "")
         if not course_file.is_file():
             fail(f"Course file tidak ditemukan untuk {course.get('code')}: {course_file.relative_to(ROOT)}")
+            continue
+        if pack_version and not contains_casefold(course_file, f"Versi paket:** {pack_version}"):
+            fail(f"Course {course.get('code')} tidak memuat pack_version {pack_version}.")
+        if not contains_casefold(course_file, "Sumber paket diverifikasi:"):
+            fail(f"Course {course.get('code')} tidak memuat tanggal verifikasi sumber paket.")
 
 registry = load_json(REGISTRY)
 if registry:
@@ -139,5 +153,6 @@ if errors:
 print(
     f"OK: {len(manifest.get('courses', [])) if manifest else 0} course, "
     f"{len(registry.get('sources', [])) if registry else 0} source, "
-    f"{len(evals.get('cases', [])) if evals else 0} eval contract."
+    f"{len(evals.get('cases', [])) if evals else 0} eval contract, "
+    f"pack {manifest.get('pack_version', '-') if manifest else '-'} ."
 )
