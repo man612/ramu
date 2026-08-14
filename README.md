@@ -1,77 +1,104 @@
 # Ramu
 
-**Ramu** adalah kerangka konfigurasi workspace AI untuk membantu proses kuliah tetap rapi, kontekstual, dan bisa dipakai berulang sepanjang semester.
+**Ramu membantu menyiapkan ChatGPT Projects untuk kuliah supaya tiap mata kuliah punya konteks, sumber, dan cara kerja yang lebih rapi.**
 
-Ramu tidak membuat AI baru dan tidak menggantikan LMS kampus. Ramu menyiapkan **Project Instructions**, **course pack**, aturan sumber, alur belajar, dan pemeriksaan hasil supaya ChatGPT Projects tidak selalu mulai dari nol setiap kali mahasiswa membuka tugas baru.
+Implementasi pertama dibuat untuk **Universitas Terbuka · S1 Akuntansi · Semester 2 · 2026/2027**.
 
-> Dukungan pertama: **Universitas Terbuka · S1 Akuntansi · 2026/2027 · Semester 2**
+> Awamnya: di awal semester kamu menyiapkan satu Project ChatGPT untuk tiap mata kuliah. Setelah itu, setiap ada soal, materi, jawaban, atau feedback tutor, tinggal buka Project yang sesuai lalu kirim seperti biasa.
 
-[Mulai dari paket Semester 2](packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/README.md) · [Panduan setup ChatGPT](docs/PANDUAN-SETUP-CHATGPT.md) · [Dasar riset & keputusan desain](docs/RISET-DAN-DASAR-DESAIN.md)
+[Mulai dari Semester 2](packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/README.md) · [Panduan setup dari HP](docs/PANDUAN-SETUP-CHATGPT.md) · [Dasar riset](docs/RISET-DAN-DASAR-DESAIN.md)
 
-## Cara kerjanya
+## Kalau kamu cuma mau pakai
 
-Satu semester dipilih sekali dari Ramu, lalu setiap mata kuliah dibuat sebagai **Project terpisah di ChatGPT**. Pemisahan ini menjaga konteks tetap fokus dan memberi ruang file sendiri untuk tiap mata kuliah.
+Tidak perlu ngerti struktur repo ini.
+
+Untuk UT S1 Akuntansi Semester 2, alurnya:
+
+1. siapkan **5 Project** di ChatGPT;
+2. tempel **Project Instructions** yang sama ke masing-masing Project;
+3. masukkan **1 course pack** sesuai mata kuliahnya;
+4. selesai.
+
+Setelah itu penggunaan sehari-hari cukup seperti ini:
 
 ```text
-Ramu
-└── Universitas Terbuka
-    └── S1 Akuntansi
-        └── Semester 2
-            ├── S2 • Perpajakan
-            ├── S2 • AKM I
-            ├── S2 • Manajemen Keuangan
-            ├── S2 • Ekonomi Mikro
-            └── S2 • Manajemen
+Buka ChatGPT
+→ pilih Project mata kuliah
+→ buat chat baru
+→ kirim soal / materi / jawaban
+→ bilang kebutuhanmu dengan bahasa biasa
 ```
 
-Di awal semester, mahasiswa cukup menyalin satu Project Instructions yang sama dan memasukkan satu course pack untuk masing-masing Project. Setelah itu penggunaan harian kembali sederhana: buka Project mata kuliah, kirim soal atau materi, lalu bicara seperti biasa.
+Contoh:
 
-## Lima prinsip dasar
+- `aku ga paham bagian ini`
+- `bantu tugas ini`
+- `cek jawabanku`
+- `ini feedback tutor kemarin`
 
-Ramu dirancang dengan lima hal yang selalu dipisahkan agar konteks tidak berantakan:
+## Project yang dibuat untuk Semester 2
 
-1. **Referensi** — menentukan sumber mana yang berwenang untuk pertanyaan tertentu dan kapan informasi terbaru perlu diverifikasi.
-2. **Instruksi** — membedakan aturan umum, aturan kampus, aturan mata kuliah, rubrik, dan instruksi tugas yang lebih spesifik.
-3. **Zona Konteks** — menjaga satu mata kuliah berada di ruangnya sendiri dan mencegah konteks semester berubah menjadi satu tumpukan besar.
-4. **Materi** — mengutamakan bahan kuliah yang memang sedang dipakai, tanpa menyalin bahan berhak cipta ke repo publik.
-5. **Asesmen** — memeriksa hasil terhadap soal, rubrik, hitungan, sumber, dan feedback sebelumnya sebelum dianggap selesai.
+| Project | Mata kuliah | SKS |
+|---|---|---:|
+| `S2 • Perpajakan` | Perpajakan | 3 |
+| `S2 • AKM I` | Akuntansi Keuangan Menengah I | 3 |
+| `S2 • Manajemen Keuangan` | Manajemen Keuangan | 3 |
+| `S2 • Ekonomi Mikro` | Pengantar Ekonomi Mikro | 3 |
+| `S2 • Manajemen` | Manajemen | 4 |
 
-## Kenapa memakai ChatGPT Projects?
+Kenapa dipisah? Supaya file, riwayat tugas, aturan sumber, dan konteks AKM tidak bercampur dengan Perpajakan atau mata kuliah lain.
 
-Projects menyatukan chat, file, dan Project Instructions dalam satu ruang. Ramu merekomendasikan **project-only memory** supaya konteks satu mata kuliah tidak mengambil chat dari luar Project. Detail pengaturan dan batasannya dijelaskan di [panduan setup](docs/PANDUAN-SETUP-CHATGPT.md).
+## Lima fondasi Ramu
 
-Ramu tidak mengandalkan memory sebagai satu-satunya tempat menyimpan hal penting. Feedback tutor, aturan yang berubah, dan ringkasan keputusan penting sebaiknya tetap disimpan sebagai sumber eksplisit karena Project memory tidak menyediakan daftar memory yang dapat diperiksa satu per satu.
+Ramu memakai lima hal yang selalu dijaga terpisah:
 
-## Status paket pertama
+### R — Referensi
+Menentukan sumber mana yang tepat untuk pertanyaan tertentu. Soal dan rubrik menentukan apa yang harus dikerjakan; modul/BMP membantu memahami materi; aturan kampus dicek dari sumber kampus; informasi yang berubah seperti pajak harus dicek ke sumber resmi terbaru.
 
-| Mata kuliah | Kode | SKS | Status |
-|---|---|---:|---|
-| Perpajakan | EACC4104 | 3 | Sumber terverifikasi |
-| Akuntansi Keuangan Menengah I | EACC4103 | 3 | Sumber terverifikasi |
-| Manajemen Keuangan | EMBS4210 | 3 | Sumber terverifikasi |
-| Pengantar Ekonomi Mikro | ECON4102 | 3 | Sumber terverifikasi |
-| Manajemen | EMBS4101 | 4 | Sumber terverifikasi |
+### I — Instruksi
+AI tidak langsung menjawab dari judul soal. Arahan tutor, rubrik, batas kata, format, dan ketentuan tugas dibaca lebih dulu.
 
-Data paket mengacu pada **Katalog Kurikulum UT 2026/2027 edisi Juli 2026** dan **Pedoman Sistem Penyelenggaraan UT 2026/2027**. Detail sumber dan cara menangani perbedaan antarhalaman UT ada di [Sumber & Validasi](docs/SUMBER-DAN-VALIDASI.md).
+### Z — Zona Konteks
+Satu mata kuliah dibuat sebagai satu Project supaya percakapan dan file tidak bercampur dengan mata kuliah lain.
 
-## Batasan
+### M — Materi
+Course pack tidak menggantikan BMP atau materi kelas. Mahasiswa tetap memasukkan modul, screenshot, PDF, soal, atau materi tutor yang memang sedang dipakai.
 
-- Ramu bukan layanan resmi Universitas Terbuka maupun OpenAI.
-- Course pack tidak menggantikan BMP, Tuton, PRATON, RPS/silabus, rubrik, atau arahan tutor.
-- Aturan tugas dan kebijakan penggunaan AI dari kampus/tutor selalu harus diperhatikan.
-- Informasi yang dapat berubah, terutama regulasi dan perpajakan, harus diverifikasi terhadap sumber resmi terbaru.
-- Materi kuliah berhak cipta tidak disertakan ke repo publik.
+### A — Asesmen
+Sebelum dianggap selesai, hasil dicek lagi: semua pertanyaan terjawab, hitungan masuk akal, sumber benar, dan format sesuai instruksi.
+
+## Ramu bukan apa
+
+- bukan aplikasi kuliah baru;
+- bukan LMS pengganti UT;
+- bukan kumpulan jawaban tugas;
+- bukan tempat menyimpan salinan BMP berhak cipta;
+- bukan jaminan bahwa AI selalu benar;
+- bukan layanan resmi Universitas Terbuka atau OpenAI.
+
+## Paket pertama
+
+Paket **UT S1 Akuntansi Semester 2 2026/2027** saat ini berstatus **Sumber terverifikasi**. Artinya data utama sudah diperiksa terhadap sumber resmi yang relevan, tetapi paket belum diberi status “Terverifikasi” penuh sampai eval perilakunya selesai dijalankan.
+
+Acuan utama saat ini:
+
+- Katalog Kurikulum UT 2026/2027 edisi Juli 2026;
+- Pedoman Sistem Penyelenggaraan UT 2026/2027.
+
+Lihat [Sumber dan Validasi](docs/SUMBER-DAN-VALIDASI.md) untuk detail sumber dan cara Ramu menangani perbedaan informasi antarhalaman resmi.
 
 ## Struktur repo
 
+Bagian ini untuk yang ingin melihat cara Ramu disusun.
+
 ```text
 ramu/
-├── core/           # prinsip dasar lintas kampus/mata kuliah
-├── docs/           # panduan, riset, validasi, dan keputusan desain
+├── core/           # Referensi, Instruksi, Zona Konteks, Materi, Asesmen
+├── docs/           # panduan, riset, dan validasi sumber
 ├── evals/          # skenario uji perilaku pack
-├── packs/          # konfigurasi siap pakai per institusi/program/semester
-├── site/           # GitHub Pages, mobile-first
+├── packs/          # paket siap pakai per institusi/program/semester
+├── site/           # halaman GitHub Pages
 └── .github/        # workflow deployment
 ```
 
-Implementasi awal memang difokuskan pada UT S1 Akuntansi Semester 2. Struktur `core` dan format pack dibuat supaya kelak dapat diperluas tanpa mencampur aturan tiap institusi.
+Implementasi awal sengaja fokus dulu ke UT S1 Akuntansi Semester 2. Fondasinya dibuat cukup umum supaya kelak dapat diperluas tanpa mencampur aturan dari kampus atau mata kuliah yang berbeda.

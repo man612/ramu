@@ -1,85 +1,118 @@
-# Panduan Setup ChatGPT Projects
+# Panduan Setup Ramu di ChatGPT Android
 
-Panduan ini dibuat untuk penggunaan dari **aplikasi ChatGPT di Android**. Nama menu dapat sedikit berubah mengikuti pembaruan aplikasi.
+Panduan ini dibuat untuk orang yang **tidak perlu ngerti GitHub, prompt engineering, atau cara kerja AI di belakangnya**.
 
-## Sebelum mulai
+Tujuannya cuma satu: setelah setup selesai, kamu punya 5 Project ChatGPT untuk Semester 2 dan bisa langsung dipakai sehari-hari.
 
-Ramu merekomendasikan satu Project untuk setiap mata kuliah. Untuk UT S1 Akuntansi Semester 2, berarti ada lima Project.
+## Yang akan dibuat
 
-Pastikan fitur Memory yang diperlukan Project aktif:
+- `S2 • Perpajakan`
+- `S2 • AKM I`
+- `S2 • Manajemen Keuangan`
+- `S2 • Ekonomi Mikro`
+- `S2 • Manajemen`
+
+Satu mata kuliah dipisah menjadi satu Project supaya file dan riwayat chat-nya tidak bercampur.
+
+## Langkah 1 — cek Memory
+
+Di aplikasi ChatGPT, buka:
+
+`Settings → Personalization → Memory`
+
+Pastikan fitur Memory yang diperlukan Projects aktif. Pada akun personal, dokumentasi OpenAI saat ini meminta **Reference saved memories** dan **Reference chat history** aktif agar Project memory dapat digunakan.
+
+Saat membuat Project nanti, pilih **Project-only memory**. Awamnya, ini supaya konteks Project tersebut fokus ke percakapan di dalam Project dan tidak mengambil chat random dari luar Project.
+
+### Pilihan privasi
+
+Kalau ingin mengecek apakah percakapan boleh digunakan untuk membantu peningkatan model, buka:
+
+`Settings → Data Controls → Improve the model for everyone`
+
+Pilihan ini terserah pengguna dan bukan syarat Ramu.
+
+## Langkah 2 — salin Project Instructions
+
+Buka file:
+
+[`PROJECT-INSTRUCTIONS.md`](../packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/PROJECT-INSTRUCTIONS.md)
+
+Salin seluruh isinya.
+
+Teks yang sama dipakai untuk semua mata kuliah. Kamu tidak perlu mengubahnya satu-satu.
+
+## Langkah 3 — buat Project pertama
+
+Mulai dari Perpajakan.
 
 1. buka ChatGPT;
-2. masuk ke **Settings → Personalization → Memory**;
-3. aktifkan **Reference saved memories** dan **Reference chat history** jika opsi tersebut tersedia di akun.
+2. pilih **New Project**;
+3. beri nama `S2 • Perpajakan`;
+4. pilih **Project-only memory**;
+5. buka Project settings;
+6. tempel Project Instructions dari langkah 2;
+7. download dan masukkan file course pack Perpajakan.
 
-OpenAI saat ini mensyaratkan kedua pengaturan tersebut untuk Project memory pada akun personal.
+Course pack:
 
-## Buat Project
+[`EACC4104-perpajakan.md`](../packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/courses/EACC4104-perpajakan.md)
 
-Untuk setiap mata kuliah:
+Kalau sudah, Project pertama selesai.
 
-1. pilih **New Project**;
-2. pakai nama Project yang sudah disediakan di Semester Pack;
-3. saat pilihan memory muncul, pilih **Project-only**;
-4. buka **Project settings**;
-5. tempel isi `PROJECT-INSTRUCTIONS.md`;
-6. upload satu file course pack mata kuliah yang sesuai;
-7. selesai.
+## Langkah 4 — ulangi untuk empat mata kuliah lain
 
-`project-only memory` hanya bisa dipilih ketika Project dibuat. Project lama dengan default memory perlu dibuat ulang jika ingin memakai mode ini.
-
-## Project Semester 2
+Pola yang dilakukan sama. Yang berubah hanya nama Project dan course pack-nya.
 
 | Nama Project | Course pack |
 |---|---|
-| `S2 • Perpajakan` | `courses/EACC4104-perpajakan.md` |
-| `S2 • AKM I` | `courses/EACC4103-akm-1.md` |
-| `S2 • Manajemen Keuangan` | `courses/EMBS4210-manajemen-keuangan.md` |
-| `S2 • Ekonomi Mikro` | `courses/ECON4102-ekonomi-mikro.md` |
-| `S2 • Manajemen` | `courses/EMBS4101-manajemen.md` |
+| `S2 • AKM I` | [`EACC4103-akm-1.md`](../packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/courses/EACC4103-akm-1.md) |
+| `S2 • Manajemen Keuangan` | [`EMBS4210-manajemen-keuangan.md`](../packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/courses/EMBS4210-manajemen-keuangan.md) |
+| `S2 • Ekonomi Mikro` | [`ECON4102-ekonomi-mikro.md`](../packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/courses/ECON4102-ekonomi-mikro.md) |
+| `S2 • Manajemen` | [`EMBS4101-manajemen.md`](../packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/courses/EMBS4101-manajemen.md) |
 
-Semua file tersedia dari [paket Semester 2](../packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/README.md).
+Setelah lima Project selesai, setup semester selesai.
 
-## Cara pakai sehari-hari
+## Setelah setup, pakainya gimana?
 
-Setelah setup, GitHub tidak perlu dibuka setiap kali belajar.
+GitHub tidak perlu dibuka setiap kali ada tugas.
 
-Contoh:
+### Kalau ada tugas AKM I
 
-- ada tugas AKM I → buka `S2 • AKM I` → New Chat → kirim soal → `bantu ini`;
-- tidak paham halaman BMP → upload halaman → `jelasin bagian ini dari awal`;
-- sudah punya jawaban → kirim → `cek jawabanku`;
-- mau latihan → `buat latihan mirip ini, jangan kasih jawaban dulu`;
-- ada feedback tutor → kirim → `ini feedback tugas kemarin, apa yang harus aku perbaiki ke depan?`.
+1. buka ChatGPT;
+2. masuk `S2 • AKM I`;
+3. buat chat baru;
+4. kirim screenshot/PDF soal;
+5. bilang `bantu tugas ini`.
 
-Sebaiknya satu tugas besar atau satu topik belajar memakai chat tersendiri. Jangan menyimpan seluruh semester dalam satu thread yang terus memanjang.
+### Kalau tidak paham materi
 
-## File dan batas Project
+Kirim halaman atau materi yang dimaksud lalu bilang:
 
-Menurut dokumentasi OpenAI yang berlaku saat panduan ini diverifikasi:
+`aku ga paham bagian ini`
 
-- jumlah Project tidak dibatasi;
-- Free: sampai 5 file per Project;
-- Go/Plus: sampai 25 file per Project;
-- Edu/Pro/Business/Enterprise: sampai 40 file per Project;
-- maksimal 10 file dapat diunggah sekaligus.
+### Kalau sudah punya jawaban
 
-Karena itu Ramu sengaja memakai **satu course pack permanen** per Project dan membiarkan sisa ruang untuk materi mahasiswa.
+Kirim jawabanmu lalu bilang:
 
-## Study Mode
+`cek jawabanku`
 
-Study Mode native ChatGPT tersedia di Android, tetapi saat ini **tidak tersedia di percakapan Project**. Ramu meniru perilaku belajar bertahap melalui Project Instructions agar sesi belajar tetap bisa dilakukan di Project yang sama.
+### Kalau tutor memberi feedback
 
-Jika ingin memakai Study Mode native, buka chat biasa di luar Project lalu masukkan materi yang ingin dipelajari.
+Kirim feedback lalu bilang:
 
-## Privasi
+`ini feedback tutor kemarin`
 
-Untuk akun personal, pengguna dapat memilih apakah percakapan baru dipakai untuk peningkatan model melalui:
+Kalau ada pelajaran penting dari feedback tersebut, simpan ringkasannya sebagai Project Source supaya bisa dipakai lagi pada tugas berikutnya.
 
-**Settings → Data Controls → Improve the model for everyone**
+## Kebiasaan yang disarankan
 
-Mematikannya tidak menghapus chat dari history. Pilihan ini terserah pengguna; Ramu hanya memastikan opsi tersebut diketahui sebelum memasukkan dokumen kuliah atau data pribadi.
+- satu tugas atau satu topik besar = satu chat baru;
+- kalau soal terpotong di screenshot, kirim bagian yang kurang daripada membiarkan AI menebak;
+- kalau tugas punya rubrik, kirim rubriknya juga;
+- kalau pertanyaannya meminta jawaban berdasarkan modul, masukkan bagian modul yang relevan;
+- untuk informasi yang bisa berubah seperti aturan pajak, minta AI mengecek sumber resmi terbaru.
 
-## Catatan penting
+## Kalau menu ChatGPT berbeda
 
-Project memory membantu kontinuitas, tetapi jangan diperlakukan sebagai database yang pasti mengingat semuanya. OpenAI tidak menyediakan daftar Project memory yang dapat diperiksa satu per satu. Simpan feedback tutor, keputusan penting, atau catatan yang harus bertahan sebagai Project Source atau file ringkas yang eksplisit.
+Nama menu bisa berubah karena aplikasi ChatGPT terus diperbarui. Kalau ada nama menu yang sedikit berbeda, cari fungsi yang setara di pengaturan Project/Memory. Dokumentasi resmi OpenAI tetap menjadi acuan untuk fitur Projects yang tersedia saat itu.
