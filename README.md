@@ -27,6 +27,8 @@ Ramu adalah **paket konfigurasi untuk ChatGPT Projects** agar setiap mata kuliah
 
 Ramu bukan aplikasi pengganti ChatGPT dan bukan kumpulan jawaban tugas. Anggap saja Ramu sebagai **meja belajar yang sudah disiapkan**. Setelah setup selesai, kamu tinggal membuka Project mata kuliah yang sesuai, mengirim soal atau materi, lalu menjelaskan kebutuhanmu dengan bahasa biasa.
 
+> **Kenapa Ramu?** Namanya diambil dari kata *meramu*: menyatukan konteks, sumber, materi, aturan belajar, dan pemeriksaan menjadi satu ruang belajar yang siap dipakai.
+
 <table>
 <tr>
 <td width="100%">
