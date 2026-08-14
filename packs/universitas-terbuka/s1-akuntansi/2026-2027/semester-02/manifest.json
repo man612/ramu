@@ -7,6 +7,7 @@
   "semester": 2,
   "total_sks": 16,
   "status": "source-verified",
+  "pack_version": "2026-2027.s2.1",
   "contract_version": "1.0",
   "project_instructions": "PROJECT-INSTRUCTIONS.md",
   "learning_protocols": [

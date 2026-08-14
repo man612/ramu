@@ -206,7 +206,7 @@
   });
 
   document.addEventListener('click', event => {
-    const copyButton = event.target.closest('#copy-instructions, .copy-project, [data-copy-phrase]');
+    const copyButton = event.target.closest('#copy-instructions, .copy-project, .copy-course-pack, [data-copy-phrase]');
     if (copyButton) burstFrom(copyButton);
   });
 

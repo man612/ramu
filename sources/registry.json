@@ -79,7 +79,8 @@
       "verified_at": "2026-08-14",
       "review_interval_days": 30,
       "watch": true,
-      "status": "active"
+      "status": "active",
+      "notes": "Pada 14 Agustus 2026 dokumentasi resmi Projects dan Study Mode belum konsisten tentang ketersediaan Study Mode di percakapan Project. Ramu tidak menjadikannya dependency runtime."
     },
     {
       "id": "openai-data-controls",

@@ -2,6 +2,8 @@
 
 **Semester:** 2  
 **SKS:** 3  
+**Versi paket:** 2026-2027.s2.1  
+**Sumber paket diverifikasi:** 14 Agustus 2026  
 **Waktu ujian:** I.4  
 **Bahan ajar katalog:** EMBS4210 Manajemen Keuangan  
 **Layanan katalog:** T

@@ -2,6 +2,8 @@
 
 **Semester:** 2  
 **SKS:** 3  
+**Versi paket:** 2026-2027.s2.1  
+**Sumber paket diverifikasi:** 14 Agustus 2026  
 **Waktu ujian:** I.1  
 **Bahan ajar katalog:** EKSI4206 Perpajakan (Edisi 4)  
 **Layanan katalog:** T  

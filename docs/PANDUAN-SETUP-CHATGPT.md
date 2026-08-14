@@ -40,7 +40,7 @@ Buka:
 
 Salin seluruh isinya.
 
-Project Instructions yang sama digunakan untuk kelima mata kuliah. Perbedaan setiap mata kuliah ditentukan oleh paket mata kuliah yang diunggah ke Project masing-masing.
+Project Instructions yang sama digunakan untuk kelima mata kuliah. Perbedaan setiap mata kuliah ditentukan oleh course pack yang ditambahkan sebagai Project Source.
 
 ## Langkah 3 — buat Project pertama
 
@@ -52,19 +52,21 @@ Mulai dari Perpajakan.
 4. Pilih **Project-only memory**.
 5. Buka pengaturan Project.
 6. Tempel Project Instructions dari langkah 2.
-7. Unduh dan unggah paket mata kuliah Perpajakan.
+7. Tambahkan course pack Perpajakan sebagai **Project Source**.
 
-Paket mata kuliah:
+Course pack:
 
 [`EACC4104-perpajakan.md`](../packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/courses/EACC4104-perpajakan.md)
+
+Di HP, jalur paling praktis adalah membuka panduan setup interaktif, menekan **Salin paket**, lalu di Project memilih **Add source** atau menu setara dan menempel teksnya. Kalau lebih nyaman, file `.md` juga dapat diunduh lalu diunggah.
 
 Setelah itu, Project Perpajakan selesai disiapkan.
 
 ## Langkah 4 — ulangi untuk empat mata kuliah lain
 
-Caranya sama. Yang berubah hanya nama Project dan paket mata kuliahnya.
+Caranya sama. Yang berubah hanya nama Project dan course pack-nya.
 
-| Nama Project | Paket mata kuliah |
+| Nama Project | Course pack |
 |---|---|
 | `S2 • AKM I` | [`EACC4103-akm-1.md`](../packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/courses/EACC4103-akm-1.md) |
 | `S2 • Manajemen Keuangan` | [`EMBS4210-manajemen-keuangan.md`](../packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/courses/EMBS4210-manajemen-keuangan.md) |
@@ -103,7 +105,18 @@ Kirim feedback tersebut, lalu tulis:
 
 `ini feedback tutor kemarin`
 
-Kalau ada pelajaran penting dari feedback itu, simpan ringkasannya sebagai Project Source agar dapat digunakan kembali pada tugas berikutnya.
+Jika dari sesi belajar/review muncul pola yang berguna untuk dibawa ke chat berikutnya, Ramu dapat membuat **Catatan Belajar Terbaru**. Simpan respons itu melalui **Save to project / Add to project sources** atau menu setara. Jika kemudian dibuat versi yang lebih baru, hapus source lama agar dua catatan yang bertentangan tidak dipakai bersamaan.
+
+## Mengatur file supaya Project tidak cepat penuh
+
+Course pack sebaiknya menjadi source tetap. Untuk pekerjaan harian:
+
+- screenshot soal dapat dikirim langsung di chat;
+- rubrik/materi ditambahkan hanya saat relevan;
+- file lama yang sudah tidak diperlukan dapat dihapus;
+- potongan materi pendek dapat ditempel langsung daripada menyimpan seluruh file.
+
+Batas file per Project bergantung pada paket ChatGPT dan dapat berubah. Dokumentasi resmi OpenAI menjadi acuan terbaru untuk batas tersebut.
 
 ## Kebiasaan yang disarankan
 
@@ -114,6 +127,10 @@ Kalau ada pelajaran penting dari feedback itu, simpan ringkasannya sebagai Proje
 - Untuk informasi yang dapat berubah, seperti aturan pajak, minta pemeriksaan terhadap sumber resmi terbaru.
 - Kalau jawaban berisi hitungan, tetap periksa hasil akhirnya sebelum dikumpulkan.
 
+## Tentang Study Mode
+
+Ramu tidak bergantung pada Study Mode bawaan ChatGPT. Dokumentasi resmi OpenAI saat ini belum sepenuhnya konsisten mengenai ketersediaan Study Mode di dalam Project, jadi alur belajar Ramu tetap ditangani oleh Project Instructions. Jika suatu saat Study Mode muncul dan dapat dipakai di Project akunmu, anggap sebagai alat tambahan, bukan syarat Ramu.
+
 ## Kalau nama menu ChatGPT berbeda
 
-Tampilan dan nama menu ChatGPT dapat berubah seiring pembaruan aplikasi. Kalau nama menu sedikit berbeda, cari fungsi yang setara pada pengaturan Project atau Memory. Dokumentasi resmi OpenAI tetap menjadi acuan untuk fitur Projects yang tersedia saat itu.
+Tampilan dan nama menu ChatGPT dapat berubah seiring pembaruan aplikasi. Kalau nama menu sedikit berbeda, cari fungsi yang setara pada pengaturan Project, Sources, atau Memory. Dokumentasi resmi OpenAI tetap menjadi acuan untuk fitur Projects yang tersedia saat itu.

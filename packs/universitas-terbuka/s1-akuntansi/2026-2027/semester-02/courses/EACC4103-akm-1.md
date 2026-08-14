@@ -2,6 +2,8 @@
 
 **Semester:** 2  
 **SKS:** 3  
+**Versi paket:** 2026-2027.s2.1  
+**Sumber paket diverifikasi:** 14 Agustus 2026  
 **Waktu ujian:** II.2  
 **Bahan ajar katalog:** EACC4103 Akuntansi Keuangan Menengah I  
 **Jenis:** BP — mata kuliah berpraktik  

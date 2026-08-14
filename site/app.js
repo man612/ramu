@@ -71,7 +71,7 @@ async function renderSetup(manifest) {
   if (instructionButton) {
     instructionButton.addEventListener("click", async () => {
       try {
-        const response = await fetch(instructionsUrl);
+        const response = await fetch(instructionsUrl, { cache: "no-store" });
         if (!response.ok) throw new Error();
         const text = await response.text();
         const copied = await copyText(text, status, "Project Instructions sudah disalin. Tempelkan teks ini ke setiap Project.");
@@ -86,13 +86,13 @@ async function renderSetup(manifest) {
   }
   if (openInstructions) openInstructions.href = instructionsUrl;
 
-  target.innerHTML = manifest.courses.map((course, index) => {
+  const courseCards = manifest.courses.map((course, index) => {
     const complete = Boolean(progress[course.code]);
     return `
       <details class="setup-course" data-course="${course.code}" data-complete="${complete}" ${index === 0 ? "open" : ""}>
         <summary>
           <span class="course-number">${index + 1}</span>
-          <span class="setup-title"><strong>${course.short_name}</strong><span>${course.code} · ${course.sks} SKS</span></span>
+          <span class="setup-title"><strong>${course.short_name}</strong><span>${course.code} · ${course.sks} SKS · pack ${manifest.pack_version || "Semester 2"}</span></span>
           <span class="done-pill">${complete ? "Selesai" : "Belum"}</span>
         </summary>
         <div class="setup-body">
@@ -100,18 +100,26 @@ async function renderSetup(manifest) {
             <li>Buka aplikasi ChatGPT, lalu pilih <strong>New Project</strong>.</li>
             <li>Beri nama <strong>${course.project_name}</strong>, kemudian pilih <strong>Project-only memory</strong>.</li>
             <li>Buka pengaturan Project, lalu tempel <strong>Project Instructions</strong> yang sudah disalin pada langkah 2.</li>
-            <li>Unduh dan unggah paket mata kuliah <strong>${course.file.split("/").pop()}</strong> ke Project tersebut.</li>
+            <li>Tambahkan course pack sebagai <strong>Project Source</strong>. Di HP, cara paling praktis: tekan <strong>Salin paket</strong>, lalu di Project pilih <strong>Add source</strong> (atau menu setara) dan tempel teksnya. Kalau lebih nyaman, file tetap bisa diunduh lalu diunggah.</li>
           </ol>
           <div class="inline-actions">
             <button class="small-button copy-project" type="button" data-text="${course.project_name}">Salin nama Project</button>
-            <a class="small-button" href="${PACK_BASE}/${course.file}" download>Unduh paket mata kuliah</a>
+            <button class="small-button copy-course-pack" type="button" data-file="${course.file}">Salin paket</button>
+            <a class="small-button" href="${PACK_BASE}/${course.file}" download>Unduh file</a>
             <a class="small-button" href="https://chatgpt.com/" target="_blank" rel="noopener">Buka ChatGPT</a>
           </div>
+          <p class="small-note">Course pack ini adalah source tetap. Screenshot soal, rubrik, atau materi sementara cukup ditambahkan saat dibutuhkan dan tidak harus disimpan permanen.</p>
           <label class="complete-check"><input type="checkbox" data-course-check="${course.code}" ${complete ? "checked" : ""}><span>Project ${course.short_name} sudah selesai disiapkan</span></label>
         </div>
       </details>
     `;
   }).join("");
+
+  target.innerHTML = `${courseCards}
+    <div class="info-box">
+      <strong>Kalau batas file Project terasa sempit</strong>
+      <p>Jaga course pack sebagai source tetap. Untuk tugas harian, kirim screenshot/PDF di chat atau tambahkan hanya materi yang benar-benar relevan. Batas file memang berbeda menurut paket ChatGPT dan dapat berubah.</p>
+    </div>`;
 
   target.querySelectorAll(".copy-project").forEach(button => {
     button.addEventListener("click", async () => {
@@ -120,6 +128,22 @@ async function renderSetup(manifest) {
       const original = button.textContent;
       button.textContent = "Tersalin";
       setTimeout(() => button.textContent = original, 1200);
+    });
+  });
+
+  target.querySelectorAll(".copy-course-pack").forEach(button => {
+    button.addEventListener("click", async () => {
+      const original = button.textContent;
+      try {
+        const response = await fetch(`${PACK_BASE}/${button.dataset.file}`, { cache: "no-store" });
+        if (!response.ok) throw new Error();
+        const text = await response.text();
+        const copied = await copyText(text, null);
+        button.textContent = copied ? "Paket tersalin" : "Gunakan Unduh file";
+      } catch {
+        button.textContent = "Gunakan Unduh file";
+      }
+      setTimeout(() => button.textContent = original, 1800);
     });
   });
 
