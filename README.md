@@ -26,6 +26,16 @@ Ramu adalah **paket konfigurasi untuk ChatGPT Projects** agar setiap mata kuliah
 
 Ramu bukan aplikasi pengganti ChatGPT dan bukan kumpulan jawaban tugas. Anggap saja Ramu sebagai **meja belajar yang sudah disiapkan**. Setelah setup selesai, kamu tinggal membuka Project mata kuliah yang sesuai, mengirim soal atau materi, lalu menjelaskan kebutuhanmu dengan bahasa biasa.
 
+### Fondasi Ramu
+
+**R**eferensi — memilih sumber yang sesuai dengan pertanyaan dan memastikan informasi yang digunakan masih berlaku.  
+**I**nstruksi — mengikuti aturan tugas, rubrik, arahan tutor, dan ketentuan kampus sebelum menyusun jawaban.  
+**Z**ona Konteks — menjaga setiap mata kuliah tetap berada di Project-nya sendiri agar materi dan percakapan tidak bercampur.  
+**M**ateri — menggunakan BMP, bahan tutor, soal, dan materi kelas sebagai dasar belajar saat tersedia.  
+**A**sesmen — memeriksa kembali isi, hitungan, sumber, dan format sebelum jawaban dianggap selesai.
+
+Kelima bagian ini sudah diterapkan di balik layar melalui **Project Instructions** dan **paket mata kuliah**, jadi pengguna tidak perlu mengaturnya satu per satu.
+
 <table>
 <tr>
 <td width="50%" valign="top">
@@ -67,18 +77,6 @@ Paket pertama Ramu disiapkan untuk **Universitas Terbuka · S1 Akuntansi · Seme
 | `S2 • Manajemen` | EMBS4101 Manajemen | 4 |
 
 > **Kalau ingin langsung menggunakan Ramu:** buka [panduan setup interaktif](https://man612.github.io/ramu/setup.html). Kamu tidak perlu memahami struktur repo ini.
-
-## Yang dijaga Ramu
-
-Ramu menyiapkan beberapa aturan dasar di belakang layar agar penggunaan tiap Project tetap rapi. Pengguna tidak perlu mengatur bagian ini satu per satu.
-
-- **Sumber yang sesuai** — sumber dipilih berdasarkan jenis pertanyaan dan masa berlakunya.
-- **Aturan tugas** — rubrik, instruksi tutor, dan ketentuan kampus diprioritaskan.
-- **Konteks per mata kuliah** — satu mata kuliah tetap berada di Project-nya sendiri.
-- **Materi utama** — BMP, bahan tutor, soal, dan materi kelas tetap menjadi dasar belajar.
-- **Pemeriksaan akhir** — isi, hitungan, sumber, dan format diperiksa sebelum jawaban dianggap selesai.
-
-Aturan tersebut sudah diterjemahkan ke dalam **Project Instructions** dan **paket mata kuliah (course pack)**.
 
 ## Yang sudah disiapkan
 
