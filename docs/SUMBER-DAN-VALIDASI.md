@@ -2,6 +2,8 @@
 
 Ramu membedakan **sumber resmi**, **literatur akademik**, dan **sinyal komunitas**. Ketiganya berguna, tetapi fungsinya tidak sama.
 
+Daftar sumber machine-readable ada di [`../sources/registry.json`](../sources/registry.json). Dokumen ini menjelaskan cara mengambil keputusan dari registry tersebut.
+
 ## Aturan sumber
 
 Untuk data kurikulum dan aturan UT, prioritasnya:
@@ -41,6 +43,27 @@ Saat validasi 14 Agustus 2026 ditemukan bahwa halaman **UT Banjarmasin – Progr
 
 Ramu memakai **katalog pusat terbaru untuk tahun akademik terkait** sebagai sumber kanonik untuk struktur kurikulum dan mencatat ketidaksinkronan seperti ini agar course pack tidak mengikuti halaman regional yang belum diperbarui. Jika dokumen pusat yang lebih baru menggantikan katalog tersebut, pack harus diperiksa ulang.
 
+## Source registry
+
+Setiap entri di registry memiliki:
+
+- `authority` — siapa penerbit/otoritasnya;
+- `canonical_for` — jenis klaim apa yang boleh menjadikannya sumber utama;
+- `verified_at` — kapan terakhir diperiksa manusia;
+- `review_interval_days` — berapa lama sebelum perlu review ulang;
+- `watch` — apakah source watch perlu mencoba URL tersebut;
+- `status` — `active`, `secondary`, atau `signal-only`.
+
+Dengan cara ini, “sumber resmi” tidak otomatis berarti “sumber paling tepat untuk semua hal”.
+
+## Freshness dan source watch
+
+`python scripts/check_source_freshness.py` memeriksa umur verifikasi. Workflow `.github/workflows/source-watch.yml` menjalankannya setiap minggu dan mencoba mengakses URL yang ditandai `watch: true`.
+
+Kegagalan akses sesaat hanya menjadi warning. Sebaliknya, sumber aktif yang melewati interval review membuat workflow gagal agar maintainer tahu bahwa verifikasi manual sudah jatuh tempo.
+
+Ramu **tidak** menganggap URL yang masih hidup sebagai bukti bahwa isinya masih paling baru. Perubahan fakta tetap harus diverifikasi dari dokumen/otoritas yang tepat.
+
 ## Sinyal masalah mahasiswa UT
 
 Forum komunitas PojokUT dan kanal komunitas mahasiswa memperlihatkan pertanyaan berulang tentang:
@@ -52,25 +75,6 @@ Forum komunitas PojokUT dan kanal komunitas mahasiswa memperlihatkan pertanyaan 
 - interpretasi nilai Tuton dan ujian;
 - registrasi ulang mata kuliah.
 
-UT sendiri juga secara resmi mengingatkan mahasiswa untuk membuat timeline belajar/alarm per sesi Tuton dan pernah memperpanjang deadline ketika e-learning mengalami kendala akses.
-
-Ramu tidak menganggap keluhan komunitas sebagai statistik resmi. Temuan tersebut hanya dipakai untuk menentukan fitur yang masuk akal: konteks per mata kuliah, pencatatan deadline, penjelasan feedback/nilai, dan checklist sumber.
-
-## Sumber yang dipantau
-
-### Universitas Terbuka
-
-- Katalog Kurikulum 2026/2027: https://www.ut.ac.id/wp-content/uploads/2026/07/01-Katalog-NON-PENDAS-TAHUN-2026-2027-21-07-2026_22072026.pdf
-- Pedoman Sistem Penyelenggaraan 2026/2027: https://www.ut.ac.id/wp-content/uploads/2026/06/03-PEDOMAN-PENYELENGGARAAN-2026-2027-080626_compressed.pdf
-- Prodi S1 Akuntansi FEB UT: https://feb.ut.ac.id/program-studi-akuntansi-s1/
-- Contoh pengingat resmi pengelolaan jadwal Tuton: https://fhisip.ut.ac.id/jadwal-tutorial-online-tuton-2025-2026-genap/
-- Contoh halaman regional yang perlu dicek freshness-nya: https://banjarmasin.ut.ac.id/program-studi-akuntansi-s1/
-- PojokUT (komunitas, bukan sumber resmi): https://pojokut.com/
-
-### OpenAI
-
-- Projects in ChatGPT: https://help.openai.com/en/articles/10169521-projects-in-chatgpt
-- Study Mode: https://help.openai.com/en/articles/11780217-study-mode
-- Data Controls: https://help.openai.com/en/articles/7730893-data-controls-faq
+Ramu tidak menganggap keluhan komunitas sebagai statistik resmi. Temuan tersebut hanya dipakai untuk menentukan fitur yang masuk akal.
 
 Tanggal verifikasi sumber utama: **14 Agustus 2026**.
