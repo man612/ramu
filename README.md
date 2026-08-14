@@ -68,15 +68,17 @@ Paket pertama Ramu disiapkan untuk **Universitas Terbuka · S1 Akuntansi · Seme
 
 > **Kalau ingin langsung menggunakan Ramu:** buka [panduan setup interaktif](https://man612.github.io/ramu/setup.html). Kamu tidak perlu memahami struktur repo ini.
 
-## Fondasi Ramu
+## Yang dijaga Ramu
 
-<p align="center">
-  <img src=".github/assets/foundations.svg" alt="Lima fondasi Ramu: Referensi, Instruksi, Zona Konteks, Materi, dan Asesmen" width="100%">
-</p>
+Ramu menyiapkan beberapa aturan dasar di belakang layar agar penggunaan tiap Project tetap rapi. Pengguna tidak perlu mengatur bagian ini satu per satu.
 
-Urutannya sengaja dibuat **R → I → Z → M → A**. Di layar sempit, susunannya tetap dibaca dari atas ke bawah agar kelima huruf dan fungsinya tetap jelas.
+- **Sumber yang sesuai** — sumber dipilih berdasarkan jenis pertanyaan dan masa berlakunya.
+- **Aturan tugas** — rubrik, instruksi tutor, dan ketentuan kampus diprioritaskan.
+- **Konteks per mata kuliah** — satu mata kuliah tetap berada di Project-nya sendiri.
+- **Materi utama** — BMP, bahan tutor, soal, dan materi kelas tetap menjadi dasar belajar.
+- **Pemeriksaan akhir** — isi, hitungan, sumber, dan format diperiksa sebelum jawaban dianggap selesai.
 
-Lima fondasi tersebut bukan lima pengaturan yang harus kamu isi sendiri. Ramu sudah menerjemahkannya ke dalam **Project Instructions** dan **paket mata kuliah (course pack)**.
+Aturan tersebut sudah diterjemahkan ke dalam **Project Instructions** dan **paket mata kuliah (course pack)**.
 
 ## Yang sudah disiapkan
 
