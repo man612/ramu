@@ -88,7 +88,7 @@ Paket pertama Ramu disiapkan untuk **Universitas Terbuka · S1 Akuntansi · Seme
 | `S2 • Ekonomi Mikro` | ECON4102 Pengantar Ekonomi Mikro | 3 |
 | `S2 • Manajemen` | EMBS4101 Manajemen | 4 |
 
-Untuk setiap Project, yang dipasang hanya **Project Instructions yang sama + satu course pack mata kuliah**. Materi, rubrik, screenshot, atau PDF tugas ditambahkan saat memang diperlukan.
+Untuk setiap Project, yang dipasang hanya **Project Instructions yang sama + satu course pack mata kuliah**. Project Instructions ditempel lewat **Project settings**, sedangkan course pack ditambahkan lewat **Sources** sebagai file. Materi, rubrik, screenshot, atau PDF tugas ditambahkan saat memang diperlukan.
 
 > **Kalau ingin langsung menggunakan Ramu:** buka [panduan setup interaktif](https://man612.github.io/ramu/setup.html). Kamu tidak perlu memahami struktur repo ini.
 
@@ -97,12 +97,12 @@ Untuk setiap Project, yang dipasang hanya **Project Instructions yang sama + sat
 - **Project Instructions** — aturan runtime yang digunakan di semua Project.
 - **Course pack** — konteks, sumber, alur kerja, verifier, versi paket, dan tanggal verifikasi yang disesuaikan dengan mata kuliah.
 - **Protokol belajar** — spesifikasi desain untuk belajar, tugas, review, dan latihan ujian; perilaku intinya sudah diringkas ke Project Instructions.
-- **State belajar** — template desain untuk learner state, review queue, misconception log, dan mastery map. Di runtime, catatan penting dapat diringkas menjadi **Catatan Belajar Terbaru** lalu disimpan sebagai Project Source.
+- **State belajar** — template desain untuk learner state, review queue, misconception log, dan mastery map. Di runtime, catatan penting dapat diringkas menjadi **Catatan Belajar Terbaru** lalu disimpan sebagai Project Source jika fitur tersebut tersedia.
 - **Source registry** — sumber memiliki fungsi, otoritas, tanggal verifikasi, interval review, dan status.
 - **Eval contracts** — guardrail penting diuji agar tidak hilang saat prompt/course pack diedit.
 - **Behavior evals** — E01–E12 dapat dijalankan ke model dan dinilai oleh model judge sebagai pengujian opsional.
 - **Source freshness watch** — GitHub Actions mengecek kapan sumber aktif perlu diverifikasi ulang.
-- **Panduan Android** — setup dari HP dengan jalur utama salin course pack lalu tempel sebagai Project Source; upload file tetap tersedia sebagai fallback.
+- **Panduan Android** — setup dari HP dengan jalur utama unduh course pack `.txt` lalu unggah melalui `Sources → Add source → Upload files`; `Add from library` menjadi alternatif bila file sudah tersimpan.
 - **GitHub Pages** — tampilan yang lebih mudah digunakan tanpa harus memahami GitHub.
 
 ## Belajarnya tidak cuma “tanya → dapat jawaban”
