@@ -26,24 +26,44 @@ Ramu adalah **paket konfigurasi untuk ChatGPT Projects** agar setiap mata kuliah
 
 Ramu bukan aplikasi pengganti ChatGPT dan bukan kumpulan jawaban tugas. Anggap saja Ramu sebagai **meja belajar yang sudah disiapkan**. Setelah setup selesai, kamu tinggal membuka Project mata kuliah yang sesuai, mengirim soal atau materi, lalu menjelaskan kebutuhanmu dengan bahasa biasa.
 
-### Fondasi Ramu
+<table>
+<tr>
+<td width="100%">
 
-#### **R**eferensi
+<p align="center"><strong>Fondasi Ramu</strong><br><sub>Lima hal yang selalu dijaga di setiap Project.</sub></p>
+
+---
+
+<kbd>R</kbd> <strong>Referensi</strong><br>
 Memilih sumber yang sesuai dengan pertanyaan dan memastikan informasi yang digunakan masih berlaku.
 
-#### **I**nstruksi
+<br>
+
+<kbd>I</kbd> <strong>Instruksi</strong><br>
 Mengikuti aturan tugas, rubrik, arahan tutor, dan ketentuan kampus sebelum menyusun jawaban.
 
-#### **Z**ona Konteks
+<br>
+
+<kbd>Z</kbd> <strong>Zona Konteks</strong><br>
 Menjaga setiap mata kuliah tetap berada di Project-nya sendiri agar materi dan percakapan tidak bercampur.
 
-#### **M**ateri
+<br>
+
+<kbd>M</kbd> <strong>Materi</strong><br>
 Menggunakan BMP, bahan tutor, soal, dan materi kelas sebagai dasar belajar saat tersedia.
 
-#### **A**sesmen
+<br>
+
+<kbd>A</kbd> <strong>Asesmen</strong><br>
 Memeriksa kembali isi, hitungan, sumber, dan format sebelum jawaban dianggap selesai.
 
-> *Ada alasan kenapa lima bagian ini selalu ditulis dalam urutan yang sama.*
+---
+
+<p align="center"><sub><em>Ada alasan kenapa lima bagian ini selalu ditulis dalam urutan yang sama.</em></sub></p>
+
+</td>
+</tr>
+</table>
 
 Kelima bagian ini sudah diterapkan di balik layar melalui **Project Instructions** dan **paket mata kuliah**, jadi pengguna tidak perlu mengaturnya satu per satu.
 
