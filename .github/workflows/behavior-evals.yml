@@ -1,0 +1,106 @@
+name: Behavior Evals
+
+on:
+  workflow_dispatch:
+    inputs:
+      candidate_model:
+        description: "Model yang diuji"
+        required: true
+        default: "gpt-5-mini"
+        type: string
+      grader_model:
+        description: "Model judge"
+        required: true
+        default: "gpt-5-mini"
+        type: string
+      cases:
+        description: "all atau E01,E05,E08"
+        required: true
+        default: "all"
+        type: string
+      fail_under:
+        description: "Pass rate minimum, 0–1"
+        required: true
+        default: "0.80"
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: behavior-evals-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      RAMU_CANDIDATE_MODEL: ${{ inputs.candidate_model }}
+      RAMU_GRADER_MODEL: ${{ inputs.grader_model }}
+      RAMU_EVAL_CASES: ${{ inputs.cases }}
+      RAMU_FAIL_UNDER: ${{ inputs.fail_under }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Verify API secret
+        shell: bash
+        run: |
+          if [ -z "$OPENAI_API_KEY" ]; then
+            echo "Repository secret OPENAI_API_KEY belum tersedia." >&2
+            exit 2
+          fi
+
+      - name: Validate behavior dataset
+        run: python scripts/run_behavior_evals.py --dry-run --only "$RAMU_EVAL_CASES"
+
+      - name: Run behavior evals
+        id: behavior
+        continue-on-error: true
+        run: |
+          python scripts/run_behavior_evals.py \
+            --candidate-model "$RAMU_CANDIDATE_MODEL" \
+            --grader-model "$RAMU_GRADER_MODEL" \
+            --only "$RAMU_EVAL_CASES" \
+            --fail-under "$RAMU_FAIL_UNDER"
+          echo "exit_code=$?" >> "$GITHUB_OUTPUT"
+
+      - name: Publish summary
+        if: always()
+        shell: bash
+        run: |
+          if [ -f evals/results/summary.md ]; then
+            cat evals/results/summary.md >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "# Ramu Behavior Eval" >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "Run berhenti sebelum summary dibuat." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload eval artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ramu-behavior-evals-${{ github.run_id }}
+          path: evals/results/
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Enforce behavior gate
+        if: always()
+        shell: bash
+        run: |
+          code="${{ steps.behavior.outputs.exit_code }}"
+          if [ -z "$code" ]; then
+            echo "Behavior eval tidak menghasilkan exit code." >&2
+            exit 2
+          fi
+          exit "$code"
