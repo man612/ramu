@@ -40,7 +40,11 @@ Buka:
 
 Salin seluruh isinya.
 
-Project Instructions yang sama digunakan untuk kelima mata kuliah. Perbedaan setiap mata kuliah ditentukan oleh course pack yang ditambahkan sebagai Project Source.
+Project Instructions **bukan Project Source**. Setelah Project dibuat, buka:
+
+`⋯ → Project settings → Project Instructions`
+
+lalu tempel teks Ramu di sana. Instruksi yang sama digunakan untuk kelima mata kuliah.
 
 ## Langkah 3 — buat Project pertama
 
@@ -50,15 +54,17 @@ Mulai dari Perpajakan.
 2. Pilih **New Project**.
 3. Beri nama `S2 • Perpajakan`.
 4. Pilih **Project-only memory**.
-5. Buka pengaturan Project.
+5. Buka `⋯ → Project settings → Project Instructions`.
 6. Tempel Project Instructions dari langkah 2.
-7. Tambahkan course pack Perpajakan sebagai **Project Source**.
+7. Dari panduan setup interaktif Ramu, tekan **Unduh paket (.txt)** untuk Perpajakan.
+8. Kembali ke Project dan buka **Sources → Add source → Upload files**.
+9. Pilih file course pack yang baru diunduh.
 
-Course pack:
+Jika file tersebut sudah tersimpan di Library ChatGPT, **Add from library** juga dapat digunakan.
+
+Course pack sumber di repo tetap dapat dilihat di:
 
 [`EACC4104-perpajakan.md`](../packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/courses/EACC4104-perpajakan.md)
-
-Di HP, jalur paling praktis adalah membuka panduan setup interaktif, menekan **Salin paket**, lalu di Project memilih **Add source** atau menu setara dan menempel teksnya. Kalau lebih nyaman, file `.md` juga dapat diunduh lalu diunggah.
 
 Setelah itu, Project Perpajakan selesai disiapkan.
 
@@ -72,6 +78,8 @@ Caranya sama. Yang berubah hanya nama Project dan course pack-nya.
 | `S2 • Manajemen Keuangan` | [`EMBS4210-manajemen-keuangan.md`](../packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/courses/EMBS4210-manajemen-keuangan.md) |
 | `S2 • Ekonomi Mikro` | [`ECON4102-ekonomi-mikro.md`](../packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/courses/ECON4102-ekonomi-mikro.md) |
 | `S2 • Manajemen` | [`EMBS4101-manajemen.md`](../packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/courses/EMBS4101-manajemen.md) |
+
+Panduan interaktif menghasilkan file `.txt` dari course pack yang sama supaya lebih aman dipilih melalui menu **Upload files**. Ramu tidak bergantung pada opsi paste-text di Sources, karena pada sebagian UI Project opsi yang terlihat hanya upload file dan Add from library.
 
 Setelah kelima Project selesai dibuat, setup semester selesai.
 
@@ -105,7 +113,7 @@ Kirim feedback tersebut, lalu tulis:
 
 `ini feedback tutor kemarin`
 
-Jika dari sesi belajar/review muncul pola yang berguna untuk dibawa ke chat berikutnya, Ramu dapat membuat **Catatan Belajar Terbaru**. Simpan respons itu melalui **Save to project / Add to project sources** atau menu setara. Jika kemudian dibuat versi yang lebih baru, hapus source lama agar dua catatan yang bertentangan tidak dipakai bersamaan.
+Jika dari sesi belajar/review muncul pola yang berguna untuk dibawa ke chat berikutnya, Ramu dapat membuat **Catatan Belajar Terbaru**. Jika menu respons menyediakan **Save to project / Add to project sources**, simpan respons itu di sana. Jika kemudian dibuat versi yang lebih baru, hapus source lama agar dua catatan yang bertentangan tidak dipakai bersamaan.
 
 ## Mengatur file supaya Project tidak cepat penuh
 
@@ -114,7 +122,7 @@ Course pack sebaiknya menjadi source tetap. Untuk pekerjaan harian:
 - screenshot soal dapat dikirim langsung di chat;
 - rubrik/materi ditambahkan hanya saat relevan;
 - file lama yang sudah tidak diperlukan dapat dihapus;
-- potongan materi pendek dapat ditempel langsung daripada menyimpan seluruh file.
+- potongan materi pendek dapat dikirim di chat bila tidak perlu menjadi source permanen.
 
 Batas file per Project bergantung pada paket ChatGPT dan dapat berubah. Dokumentasi resmi OpenAI menjadi acuan terbaru untuk batas tersebut.
 
@@ -129,8 +137,8 @@ Batas file per Project bergantung pada paket ChatGPT dan dapat berubah. Dokument
 
 ## Tentang Study Mode
 
-Ramu tidak bergantung pada Study Mode bawaan ChatGPT. Dokumentasi resmi OpenAI saat ini belum sepenuhnya konsisten mengenai ketersediaan Study Mode di dalam Project, jadi alur belajar Ramu tetap ditangani oleh Project Instructions. Jika suatu saat Study Mode muncul dan dapat dipakai di Project akunmu, anggap sebagai alat tambahan, bukan syarat Ramu.
+Ramu tidak bergantung pada Study Mode bawaan ChatGPT. Alur belajar Ramu tetap ditangani oleh Project Instructions. Jika Study Mode tersedia dan nyaman dipakai di Project akunmu, anggap sebagai alat tambahan, bukan syarat Ramu.
 
 ## Kalau nama menu ChatGPT berbeda
 
-Tampilan dan nama menu ChatGPT dapat berubah seiring pembaruan aplikasi. Kalau nama menu sedikit berbeda, cari fungsi yang setara pada pengaturan Project, Sources, atau Memory. Dokumentasi resmi OpenAI tetap menjadi acuan untuk fitur Projects yang tersedia saat itu.
+Tampilan dan nama menu ChatGPT dapat berubah seiring pembaruan aplikasi. Kalau nama menu sedikit berbeda, cari fungsi yang setara pada pengaturan Project, Sources, atau Memory. Untuk setup Ramu, patokan praktisnya tetap: **Project Instructions masuk ke Project settings; course pack masuk ke Sources sebagai file**.
