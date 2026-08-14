@@ -46,7 +46,7 @@ Ramu bukan aplikasi pengganti ChatGPT dan bukan kumpulan jawaban tugas. Anggap s
 </tr>
 </table>
 
-Kelima bagian ini diterapkan melalui **Project Instructions**, **paket mata kuliah**, protokol belajar, dan pemeriksaan otomatis di repo. Pengguna tetap tidak perlu mengatur semuanya satu per satu.
+Kelima bagian ini diterapkan di runtime melalui **Project Instructions** dan **course pack** mata kuliah. Folder protokol, state, source registry, dan eval di repo menjadi lapisan desain serta pemeriksaan di belakangnya; pengguna tidak perlu mengunggah semuanya ke ChatGPT.
 
 <table>
 <tr>
@@ -88,19 +88,21 @@ Paket pertama Ramu disiapkan untuk **Universitas Terbuka · S1 Akuntansi · Seme
 | `S2 • Ekonomi Mikro` | ECON4102 Pengantar Ekonomi Mikro | 3 |
 | `S2 • Manajemen` | EMBS4101 Manajemen | 4 |
 
+Untuk setiap Project, yang dipasang hanya **Project Instructions yang sama + satu course pack mata kuliah**. Materi, rubrik, screenshot, atau PDF tugas ditambahkan saat memang diperlukan.
+
 > **Kalau ingin langsung menggunakan Ramu:** buka [panduan setup interaktif](https://man612.github.io/ramu/setup.html). Kamu tidak perlu memahami struktur repo ini.
 
 ## Yang sudah disiapkan
 
-- **Project Instructions** — aturan dasar yang digunakan di semua Project.
-- **Paket mata kuliah** — konteks, sumber, alur kerja, dan verifier yang disesuaikan dengan mata kuliah.
-- **Protokol belajar** — membedakan belajar, tugas, review, dan latihan ujian.
-- **State belajar** — template learner state, review queue, misconception log, dan mastery map yang dapat disimpan secara eksplisit di Project.
+- **Project Instructions** — aturan runtime yang digunakan di semua Project.
+- **Course pack** — konteks, sumber, alur kerja, verifier, versi paket, dan tanggal verifikasi yang disesuaikan dengan mata kuliah.
+- **Protokol belajar** — spesifikasi desain untuk belajar, tugas, review, dan latihan ujian; perilaku intinya sudah diringkas ke Project Instructions.
+- **State belajar** — template desain untuk learner state, review queue, misconception log, dan mastery map. Di runtime, catatan penting dapat diringkas menjadi **Catatan Belajar Terbaru** lalu disimpan sebagai Project Source.
 - **Source registry** — sumber memiliki fungsi, otoritas, tanggal verifikasi, interval review, dan status.
 - **Eval contracts** — guardrail penting diuji agar tidak hilang saat prompt/course pack diedit.
-- **Behavior evals** — E01–E12 dapat benar-benar dijalankan ke model, lalu dinilai oleh model judge dan disimpan sebagai artifact untuk audit/regresi.
+- **Behavior evals** — E01–E12 dapat dijalankan ke model dan dinilai oleh model judge sebagai pengujian opsional.
 - **Source freshness watch** — GitHub Actions mengecek kapan sumber aktif perlu diverifikasi ulang.
-- **Panduan Android** — langkah setup dari aplikasi ChatGPT.
+- **Panduan Android** — setup dari HP dengan jalur utama salin course pack lalu tempel sebagai Project Source; upload file tetap tersedia sebagai fallback.
 - **GitHub Pages** — tampilan yang lebih mudah digunakan tanpa harus memahami GitHub.
 
 ## Belajarnya tidak cuma “tanya → dapat jawaban”
@@ -126,8 +128,8 @@ Penjelasan lengkap tentang keputusan ini ada di [`docs/RISET-DAN-DASAR-DESAIN.md
 ```text
 ramu/
 ├── core/        prinsip dasar Ramu
-├── protocols/   perilaku belajar, tugas, review, dan latihan
-├── learning/    template state belajar yang dapat disimpan di Project
+├── protocols/   spesifikasi perilaku belajar, tugas, review, dan latihan
+├── learning/    template desain state belajar
 ├── packs/       paket kampus / program studi / semester
 ├── sources/     registry sumber dan kebijakan freshness
 ├── evals/       contract + behavior eval
@@ -143,9 +145,11 @@ ramu/
 `python scripts/validate_repo.py` dan `python scripts/run_behavior_evals.py --dry-run` memeriksa antara lain:
 
 - total SKS dan file mata kuliah pada manifest;
+- `pack_version` serta metadata verifikasi pada setiap course pack;
 - struktur source registry;
 - ID eval yang unik;
 - keberadaan learner-state templates;
+- keberadaan format runtime **Catatan Belajar Terbaru**;
 - contract marker pada Project Instructions/protokol/course pack;
 - seluruh E01–E12 memiliki skenario behavior dan context file yang valid.
 
@@ -153,7 +157,7 @@ Contract test ini **bukan bukti bahwa model pasti selalu berperilaku benar**. Tu
 
 ## Behavior eval nyata
 
-Workflow **Behavior Evals** dapat dijalankan manual dari GitHub Actions setelah repository secret `OPENAI_API_KEY` tersedia. Model kandidat dan model judge bisa dipilih secara terpisah, case dapat dibatasi misalnya `E01,E05,E08`, dan pass rate minimum dapat diubah tanpa mengubah dataset.
+Workflow **Behavior Evals** bersifat opsional. Ia dapat dijalankan manual dari GitHub Actions jika repository secret `OPENAI_API_KEY` tersedia. Model kandidat dan model judge bisa dipilih secara terpisah, case dapat dibatasi misalnya `E01,E05,E08`, dan pass rate minimum dapat diubah tanpa mengubah dataset.
 
 Setiap run menghasilkan ringkasan `PASS/FAIL`, skor per case, alasan judge, penggunaan token, serta artifact JSON yang menyimpan respons kandidat untuk audit. Workflow ini sengaja tidak berjalan pada setiap push agar penggunaan API tetap terkendali dan hasil probabilistik tidak membuat CI rutin menjadi noisy.
 
