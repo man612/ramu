@@ -1,8 +1,8 @@
 # Panduan Setup Ramu di ChatGPT Android
 
-Panduan ini dibuat untuk orang yang **tidak perlu ngerti GitHub, prompt engineering, atau cara kerja AI di belakangnya**.
+Panduan ini dibuat untuk pengguna yang ingin langsung memakai Ramu tanpa perlu memahami GitHub, prompt engineering, atau cara kerja teknis di belakangnya.
 
-Tujuannya cuma satu: setelah setup selesai, kamu punya 5 Project ChatGPT untuk Semester 2 dan bisa langsung dipakai sehari-hari.
+Tujuannya sederhana: setelah setup selesai, kamu memiliki lima Project ChatGPT untuk Semester 2 dan dapat menggunakannya untuk belajar, mengerjakan tugas, memeriksa jawaban, atau membahas feedback tutor.
 
 ## Yang akan dibuat
 
@@ -12,107 +12,108 @@ Tujuannya cuma satu: setelah setup selesai, kamu punya 5 Project ChatGPT untuk S
 - `S2 • Ekonomi Mikro`
 - `S2 • Manajemen`
 
-Satu mata kuliah dipisah menjadi satu Project supaya file dan riwayat chat-nya tidak bercampur.
+Satu mata kuliah dibuat sebagai satu Project agar file, percakapan, dan konteksnya tidak bercampur dengan mata kuliah lain.
 
-## Langkah 1 — cek Memory
+## Langkah 1 — periksa Memory ChatGPT
 
 Di aplikasi ChatGPT, buka:
 
 `Settings → Personalization → Memory`
 
-Pastikan fitur Memory yang diperlukan Projects aktif. Pada akun personal, dokumentasi OpenAI saat ini meminta **Reference saved memories** dan **Reference chat history** aktif agar Project memory dapat digunakan.
+Pastikan pengaturan Memory yang dibutuhkan Projects aktif. Untuk akun personal, dokumentasi OpenAI saat ini menjelaskan bahwa **Reference saved memories** dan **Reference chat history** perlu aktif agar Project memory dapat digunakan.
 
-Saat membuat Project nanti, pilih **Project-only memory**. Awamnya, ini supaya konteks Project tersebut fokus ke percakapan di dalam Project dan tidak mengambil chat random dari luar Project.
+Saat membuat Project nanti, pilih **Project-only memory**. Artinya, konteks Project tersebut dijaga tetap berada di dalam ruang mata kuliah itu dan tidak mengambil percakapan dari luar Project.
 
 ### Pilihan privasi
 
-Kalau ingin mengecek apakah percakapan boleh digunakan untuk membantu peningkatan model, buka:
+Kalau ingin mengatur apakah percakapan boleh digunakan untuk membantu peningkatan model, buka:
 
 `Settings → Data Controls → Improve the model for everyone`
 
-Pilihan ini terserah pengguna dan bukan syarat Ramu.
+Pengaturan ini merupakan pilihan akunmu dan bukan syarat untuk menggunakan Ramu.
 
 ## Langkah 2 — salin Project Instructions
 
-Buka file:
+Buka:
 
 [`PROJECT-INSTRUCTIONS.md`](../packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/PROJECT-INSTRUCTIONS.md)
 
 Salin seluruh isinya.
 
-Teks yang sama dipakai untuk semua mata kuliah. Kamu tidak perlu mengubahnya satu-satu.
+Project Instructions yang sama digunakan untuk kelima mata kuliah. Perbedaan setiap mata kuliah ditentukan oleh paket mata kuliah yang diunggah ke Project masing-masing.
 
 ## Langkah 3 — buat Project pertama
 
 Mulai dari Perpajakan.
 
-1. buka ChatGPT;
-2. pilih **New Project**;
-3. beri nama `S2 • Perpajakan`;
-4. pilih **Project-only memory**;
-5. buka Project settings;
-6. tempel Project Instructions dari langkah 2;
-7. download dan masukkan file course pack Perpajakan.
+1. Buka ChatGPT.
+2. Pilih **New Project**.
+3. Beri nama `S2 • Perpajakan`.
+4. Pilih **Project-only memory**.
+5. Buka pengaturan Project.
+6. Tempel Project Instructions dari langkah 2.
+7. Unduh dan unggah paket mata kuliah Perpajakan.
 
-Course pack:
+Paket mata kuliah:
 
 [`EACC4104-perpajakan.md`](../packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/courses/EACC4104-perpajakan.md)
 
-Kalau sudah, Project pertama selesai.
+Setelah itu, Project Perpajakan selesai disiapkan.
 
 ## Langkah 4 — ulangi untuk empat mata kuliah lain
 
-Pola yang dilakukan sama. Yang berubah hanya nama Project dan course pack-nya.
+Caranya sama. Yang berubah hanya nama Project dan paket mata kuliahnya.
 
-| Nama Project | Course pack |
+| Nama Project | Paket mata kuliah |
 |---|---|
 | `S2 • AKM I` | [`EACC4103-akm-1.md`](../packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/courses/EACC4103-akm-1.md) |
 | `S2 • Manajemen Keuangan` | [`EMBS4210-manajemen-keuangan.md`](../packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/courses/EMBS4210-manajemen-keuangan.md) |
 | `S2 • Ekonomi Mikro` | [`ECON4102-ekonomi-mikro.md`](../packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/courses/ECON4102-ekonomi-mikro.md) |
 | `S2 • Manajemen` | [`EMBS4101-manajemen.md`](../packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/courses/EMBS4101-manajemen.md) |
 
-Setelah lima Project selesai, setup semester selesai.
+Setelah kelima Project selesai dibuat, setup semester selesai.
 
-## Setelah setup, pakainya gimana?
+## Setelah setup, bagaimana cara menggunakannya?
 
 GitHub tidak perlu dibuka setiap kali ada tugas.
 
 ### Kalau ada tugas AKM I
 
-1. buka ChatGPT;
-2. masuk `S2 • AKM I`;
-3. buat chat baru;
-4. kirim screenshot/PDF soal;
-5. bilang `bantu tugas ini`.
+1. Buka ChatGPT.
+2. Masuk ke `S2 • AKM I`.
+3. Buat chat baru.
+4. Kirim screenshot, PDF, atau teks soal.
+5. Tulis, misalnya: `bantu aku kerjakan tugas ini`.
 
-### Kalau tidak paham materi
+### Kalau belum memahami materi
 
-Kirim halaman atau materi yang dimaksud lalu bilang:
+Kirim bagian materi yang dimaksud, lalu tulis:
 
-`aku ga paham bagian ini`
+`aku belum paham bagian ini`
 
-### Kalau sudah punya jawaban
+### Kalau sudah memiliki jawaban
 
-Kirim jawabanmu lalu bilang:
+Kirim jawabanmu, lalu tulis:
 
 `cek jawabanku`
 
-### Kalau tutor memberi feedback
+### Kalau tutor memberikan feedback
 
-Kirim feedback lalu bilang:
+Kirim feedback tersebut, lalu tulis:
 
 `ini feedback tutor kemarin`
 
-Kalau ada pelajaran penting dari feedback tersebut, simpan ringkasannya sebagai Project Source supaya bisa dipakai lagi pada tugas berikutnya.
+Kalau ada pelajaran penting dari feedback itu, simpan ringkasannya sebagai Project Source agar dapat digunakan kembali pada tugas berikutnya.
 
 ## Kebiasaan yang disarankan
 
-- satu tugas atau satu topik besar = satu chat baru;
-- kalau soal terpotong di screenshot, kirim bagian yang kurang daripada membiarkan AI menebak;
-- kalau tugas punya rubrik, kirim rubriknya juga;
-- kalau pertanyaannya meminta jawaban berdasarkan modul, masukkan bagian modul yang relevan;
-- untuk informasi yang bisa berubah seperti aturan pajak, minta AI mengecek sumber resmi terbaru.
+- Gunakan satu chat untuk satu tugas atau satu topik besar.
+- Kalau screenshot soal terpotong, kirim bagian yang kurang. Jangan membiarkan AI menebak isi yang tidak terlihat.
+- Kalau tugas memiliki rubrik, kirim rubriknya juga.
+- Kalau tugas harus dijawab berdasarkan modul, tambahkan bagian modul yang relevan.
+- Untuk informasi yang dapat berubah, seperti aturan pajak, minta pemeriksaan terhadap sumber resmi terbaru.
+- Kalau jawaban berisi hitungan, tetap periksa hasil akhirnya sebelum dikumpulkan.
 
-## Kalau menu ChatGPT berbeda
+## Kalau nama menu ChatGPT berbeda
 
-Nama menu bisa berubah karena aplikasi ChatGPT terus diperbarui. Kalau ada nama menu yang sedikit berbeda, cari fungsi yang setara di pengaturan Project/Memory. Dokumentasi resmi OpenAI tetap menjadi acuan untuk fitur Projects yang tersedia saat itu.
+Tampilan dan nama menu ChatGPT dapat berubah seiring pembaruan aplikasi. Kalau nama menu sedikit berbeda, cari fungsi yang setara pada pengaturan Project atau Memory. Dokumentasi resmi OpenAI tetap menjadi acuan untuk fitur Projects yang tersedia saat itu.

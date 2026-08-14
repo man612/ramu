@@ -3,101 +3,28 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Panduan awam menyiapkan Ramu untuk UT S1 Akuntansi Semester 2 di ChatGPT Android.">
+  <meta name="description" content="Panduan menyiapkan Ramu untuk UT S1 Akuntansi Semester 2 di ChatGPT Android.">
   <meta name="theme-color" content="#f7f3ea">
-  <title>Setup Semester 2 — Ramu</title>
+  <title>Panduan setup Semester 2 — Ramu</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="responsive.css">
 </head>
 <body>
-  <header class="site-header">
-    <a class="brand" href="./" aria-label="Ramu beranda">
-      <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
-      <span>ramu</span>
-    </a>
-    <nav aria-label="Navigasi utama"><a href="./">Beranda</a><a class="nav-github" href="https://github.com/man612/ramu">GitHub</a></nav>
-  </header>
-
+  <header class="site-header"><a class="brand" href="./" aria-label="Beranda Ramu"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><span>ramu</span></a><nav aria-label="Navigasi utama"><a href="./">Beranda</a><a class="nav-github" href="https://github.com/man612/ramu">GitHub</a></nav></header>
   <main class="setup-main shell">
-    <a class="back-link" href="./">← kembali ke beranda</a>
-
-    <section class="setup-intro">
-      <div>
-        <p class="eyebrow"><span></span> Setup sekali di awal semester</p>
-        <h1>Siapkan Semester 2 dari HP.</h1>
-        <p class="setup-lead">Tidak ada aplikasi tambahan. Tidak perlu ngerti GitHub. Ikuti langkahnya dari atas ke bawah, lalu setelah selesai kamu cukup pakai ChatGPT seperti biasa.</p>
-      </div>
-      <div class="setup-summary-card">
-        <span class="summary-label">Yang akan dibuat</span>
-        <strong>5 Project ChatGPT</strong>
-        <ul>
-          <li>Perpajakan</li><li>AKM I</li><li>Manajemen Keuangan</li><li>Ekonomi Mikro</li><li>Manajemen</li>
-        </ul>
-      </div>
-    </section>
-
+    <a class="back-link" href="./">← Kembali ke beranda</a>
+    <section class="setup-intro"><div><p class="eyebrow"><span></span> Setup sekali di awal semester</p><h1>Siapkan Semester 2 dari HP.</h1><p class="setup-lead">Tidak ada aplikasi tambahan dan kamu tidak perlu memahami GitHub. Ikuti langkah dari atas ke bawah. Setelah lima Project selesai dibuat, kegiatan sehari-hari cukup dilakukan di ChatGPT.</p></div><div class="setup-summary-card"><span class="summary-label">Yang akan dibuat</span><strong>5 Project ChatGPT</strong><ul><li>Perpajakan</li><li>AKM I</li><li>Manajemen Keuangan</li><li>Ekonomi Mikro</li><li>Manajemen</li></ul></div></section>
     <div class="setup-layout">
-      <aside class="setup-nav" aria-label="Ringkasan langkah setup">
-        <span class="setup-nav-label">LANGKAH</span>
-        <a href="#langkah-1"><b>1</b><span>Cek Memory</span></a>
-        <a href="#langkah-2"><b>2</b><span>Salin aturan</span></a>
-        <a href="#langkah-3"><b>3</b><span>Buat 5 Project</span></a>
-        <a href="#langkah-4"><b>4</b><span>Mulai pakai</span></a>
-        <div class="nav-progress"><span id="progress-title">0 dari 5 Project selesai</span><div class="progress-track"><div id="progress-bar"></div></div></div>
-      </aside>
-
+      <aside class="setup-nav" aria-label="Ringkasan langkah setup"><span class="setup-nav-label">LANGKAH</span><a href="#langkah-1"><b>1</b><span>Cek Memory</span></a><a href="#langkah-2"><b>2</b><span>Salin instruksi</span></a><a href="#langkah-3"><b>3</b><span>Buat 5 Project</span></a><a href="#langkah-4"><b>4</b><span>Mulai gunakan</span></a><div class="nav-progress"><span id="progress-title">0 dari 5 Project selesai</span><div class="progress-track"><div id="progress-bar"></div></div></div></aside>
       <div class="setup-content">
-        <section id="langkah-1" class="setup-step-card">
-          <div class="step-heading"><span class="big-step">1</span><div><p class="step-caption">Cuma sekali</p><h2>Cek pengaturan Memory ChatGPT.</h2></div></div>
-          <p class="step-explain">Tujuannya supaya Project bisa mengingat percakapan di dalam mata kuliah itu. Nanti kita pilih <strong>Project-only memory</strong>, jadi konteks kuliah tidak mengambil chat random dari luar Project.</p>
-          <div class="settings-path"><span>ChatGPT</span><i>→</i><span>Settings</span><i>→</i><span>Personalization</span><i>→</i><span>Memory</span></div>
-          <div class="check-list">
-            <label><input type="checkbox" data-progress="saved-memory"><span><strong>Reference saved memories</strong> aktif</span></label>
-            <label><input type="checkbox" data-progress="chat-history"><span><strong>Reference chat history</strong> aktif</span></label>
-          </div>
-          <div class="info-box"><strong>Soal privasi?</strong><p>Kalau kamu tidak ingin percakapan dipakai untuk membantu peningkatan model, cek juga <em>Settings → Data Controls → Improve the model for everyone</em>. Itu pilihan akun kamu, bukan syarat Ramu.</p></div>
-        </section>
-
-        <section id="langkah-2" class="setup-step-card accent-card">
-          <div class="step-heading"><span class="big-step">2</span><div><p class="step-caption">Salin satu kali</p><h2>Ambil aturan dasar Ramu.</h2></div></div>
-          <p class="step-explain">Teks ini nanti ditempel ke semua Project. Kamu tidak perlu baca atau mengedit isinya kalau tidak mau.</p>
-          <div class="copy-panel">
-            <div><span class="copy-kicker">PROJECT INSTRUCTIONS</span><strong>Satu aturan untuk semua mata kuliah</strong><p>Course pack masing-masing mata kuliah yang membuat konteksnya berbeda.</p></div>
-            <div class="copy-actions"><button class="button primary" id="copy-instructions" type="button">Salin sekarang</button><a class="button ghost" id="open-instructions" href="#">Lihat teks</a></div>
-          </div>
-          <p id="copy-status" class="copy-status" role="status"></p>
-        </section>
-
-        <section id="langkah-3" class="setup-step-card projects-step">
-          <div class="step-heading"><span class="big-step">3</span><div><p class="step-caption">Ulangi pola yang sama 5 kali</p><h2>Buat Project untuk tiap mata kuliah.</h2></div></div>
-          <p class="step-explain">Setiap kartu di bawah ini sudah kasih nama Project dan file yang harus dimasukkan. Buka satu per satu, ikuti empat langkahnya, lalu centang kalau sudah selesai.</p>
-          <div id="setup-courses" class="setup-courses"><p class="muted">Memuat course pack…</p></div>
-        </section>
-
-        <section id="langkah-4" class="setup-step-card finish-card">
-          <div class="step-heading"><span class="big-step">4</span><div><p class="step-caption">Kalau sudah 5/5</p><h2>Selesai. GitHub tidak perlu dibuka tiap ada tugas.</h2></div></div>
-          <p class="step-explain">Mulai sekarang cukup pilih mata kuliah yang benar di aplikasi ChatGPT, buat chat baru untuk tugas/topik baru, lalu kirim bahan yang kamu punya.</p>
-          <div class="phone-mini-flow">
-            <div><span>1</span><strong>Buka ChatGPT</strong></div>
-            <i>→</i><div><span>2</span><strong>Pilih Project</strong></div>
-            <i>→</i><div><span>3</span><strong>Kirim soal/materi</strong></div>
-          </div>
-          <div class="prompt-grid">
-            <button type="button" data-copy-phrase="aku ga paham bagian ini">aku ga paham bagian ini</button>
-            <button type="button" data-copy-phrase="bantu tugas ini">bantu tugas ini</button>
-            <button type="button" data-copy-phrase="cek jawabanku">cek jawabanku</button>
-            <button type="button" data-copy-phrase="ini feedback tutor kemarin">ini feedback tutor kemarin</button>
-          </div>
-          <p class="small-note">Tips: satu tugas atau satu topik besar sebaiknya punya chat sendiri. Jadi riwayatnya lebih gampang dicari lagi.</p>
-        </section>
+        <section id="langkah-1" class="setup-step-card"><div class="step-heading"><span class="big-step">1</span><div><p class="step-caption">Dilakukan sekali</p><h2>Periksa pengaturan Memory ChatGPT.</h2></div></div><p class="step-explain">Tujuannya agar Project dapat menggunakan percakapan di dalam ruang mata kuliah tersebut sebagai konteks. Saat membuat Project nanti, pilih <strong>Project-only memory</strong> agar konteksnya tetap terpisah dari chat di luar Project.</p><div class="settings-path"><span>ChatGPT</span><i>→</i><span>Settings</span><i>→</i><span>Personalization</span><i>→</i><span>Memory</span></div><div class="check-list"><label><input type="checkbox" data-progress="saved-memory"><span><strong>Reference saved memories</strong> aktif</span></label><label><input type="checkbox" data-progress="chat-history"><span><strong>Reference chat history</strong> aktif</span></label></div><div class="info-box"><strong>Tentang privasi</strong><p>Kalau kamu ingin mengatur apakah percakapan boleh digunakan untuk membantu peningkatan model, buka <em>Settings → Data Controls → Improve the model for everyone</em>. Pengaturan ini adalah pilihan akunmu dan bukan syarat untuk menggunakan Ramu.</p></div></section>
+        <section id="langkah-2" class="setup-step-card accent-card"><div class="step-heading"><span class="big-step">2</span><div><p class="step-caption">Salin satu kali</p><h2>Salin Project Instructions.</h2></div></div><p class="step-explain">Project Instructions adalah aturan dasar Ramu. Teks yang sama digunakan pada kelima Project. Kamu tidak perlu mengubah isinya satu per satu.</p><div class="copy-panel"><div><span class="copy-kicker">PROJECT INSTRUCTIONS</span><strong>Satu instruksi dasar untuk semua mata kuliah</strong><p>Perbedaannya ada pada paket mata kuliah yang diunggah ke masing-masing Project.</p></div><div class="copy-actions"><button class="button primary" id="copy-instructions" type="button">Salin instruksi</button><a class="button ghost" id="open-instructions" href="#">Lihat teks</a></div></div><p id="copy-status" class="copy-status" role="status"></p></section>
+        <section id="langkah-3" class="setup-step-card projects-step"><div class="step-heading"><span class="big-step">3</span><div><p class="step-caption">Ulangi pola yang sama lima kali</p><h2>Buat satu Project untuk setiap mata kuliah.</h2></div></div><p class="step-explain">Setiap kartu di bawah sudah berisi nama Project dan paket mata kuliah yang diperlukan. Buka satu per satu, ikuti langkahnya, lalu centang setelah selesai.</p><div id="setup-courses" class="setup-courses"><p class="muted">Memuat paket mata kuliah…</p></div></section>
+        <section id="langkah-4" class="setup-step-card finish-card"><div class="step-heading"><span class="big-step">4</span><div><p class="step-caption">Setelah 5/5 selesai</p><h2>Selesai. GitHub tidak perlu dibuka setiap kali ada tugas.</h2></div></div><p class="step-explain">Mulai sekarang, pilih Project mata kuliah yang sesuai di ChatGPT. Untuk tugas atau topik baru, buat chat baru lalu kirim soal, materi, jawaban, atau feedback yang ingin dibahas.</p><div class="phone-mini-flow"><div><span>1</span><strong>Buka ChatGPT</strong></div><i>→</i><div><span>2</span><strong>Pilih Project</strong></div><i>→</i><div><span>3</span><strong>Kirim soal atau materi</strong></div></div><div class="prompt-grid"><button type="button" data-copy-phrase="aku belum paham bagian ini">aku belum paham bagian ini</button><button type="button" data-copy-phrase="bantu aku kerjakan tugas ini">bantu aku kerjakan tugas ini</button><button type="button" data-copy-phrase="cek jawabanku">cek jawabanku</button><button type="button" data-copy-phrase="ini feedback tutor kemarin">ini feedback tutor kemarin</button></div><p class="small-note">Saran: gunakan satu chat untuk satu tugas atau satu topik besar. Riwayatnya akan lebih mudah ditemukan kembali.</p></section>
       </div>
     </div>
   </main>
-
-  <footer class="site-footer shell">
-    <a class="brand footer-brand" href="./"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><span>ramu</span></a>
-    <p>Proyek independen. Bukan layanan resmi Universitas Terbuka maupun OpenAI.</p>
-  </footer>
-
+  <footer class="site-footer shell"><a class="brand footer-brand" href="./"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><span>ramu</span></a><p>Proyek independen. Bukan layanan resmi Universitas Terbuka maupun OpenAI.</p></footer>
   <script src="app.js" defer></script>
 </body>
 </html>
