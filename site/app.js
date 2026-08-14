@@ -1,3 +1,21 @@
+(() => {
+  ["motion.css", "mobile.css"].forEach(href => {
+    if (document.querySelector(`link[href="${href}"]`)) return;
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = href;
+    document.head.appendChild(link);
+  });
+
+  ["motion.js", "mobile.js"].forEach(src => {
+    if (document.querySelector(`script[src="${src}"]`)) return;
+    const script = document.createElement("script");
+    script.src = src;
+    script.defer = true;
+    document.head.appendChild(script);
+  });
+})();
+
 const PACK_BASE = "./packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02";
 
 const COURSE_FOCUS = {
