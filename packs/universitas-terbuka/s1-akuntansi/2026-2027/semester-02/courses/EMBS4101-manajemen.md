@@ -2,6 +2,8 @@
 
 **Semester:** 2  
 **SKS:** 4  
+**Versi paket:** 2026-2027.s2.1  
+**Sumber paket diverifikasi:** 14 Agustus 2026  
 **Waktu ujian:** II.5  
 **Bahan ajar katalog:** EKMA4116 Manajemen (Edisi 3)  
 **Layanan katalog:** WT — wajib Tuton untuk layanan SIPAS Penuh dan SIPAS Plus.
