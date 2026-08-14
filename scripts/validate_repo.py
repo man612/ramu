@@ -154,5 +154,5 @@ print(
     f"OK: {len(manifest.get('courses', [])) if manifest else 0} course, "
     f"{len(registry.get('sources', [])) if registry else 0} source, "
     f"{len(evals.get('cases', [])) if evals else 0} eval contract, "
-    f"pack {manifest.get('pack_version', '-') if manifest else '-'} ."
+    f"pack {manifest.get('pack_version', '-') if manifest else '-'}."
 )
