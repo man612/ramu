@@ -2,6 +2,8 @@
 
 **Semester:** 2  
 **SKS:** 3  
+**Versi paket:** 2026-2027.s2.1  
+**Sumber paket diverifikasi:** 14 Agustus 2026  
 **Waktu ujian:** II.4  
 **Bahan ajar katalog:** ESPA4111 Pengantar Ekonomi Mikro (Edisi 3)  
 **Layanan katalog:** T
