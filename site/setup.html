@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Panduan setup Ramu untuk UT S1 Akuntansi Semester 2 di ChatGPT Projects.">
+  <meta name="theme-color" content="#f4f2ea">
+  <title>Setup Semester 2 — Ramu</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="./">ramu<span>.</span></a>
+    <nav aria-label="Navigasi utama">
+      <a href="./">Beranda</a>
+      <a href="https://github.com/man612/ramu">GitHub</a>
+    </nav>
+  </header>
+
+  <main class="shell setup-page">
+    <a class="back-link" href="./">← Kembali</a>
+    <div class="setup-hero">
+      <p class="eyebrow">Panduan setup</p>
+      <h1>UT S1 Akuntansi<br>Semester 2</h1>
+      <p>
+        Pilih Semester 2 sekali. Di ChatGPT, lima mata kuliahnya tetap dibuat sebagai
+        Project terpisah supaya konteks tidak bercampur.
+      </p>
+    </div>
+
+    <section class="preflight">
+      <div>
+        <span class="step-index">00</span>
+        <h2>Sebelum membuat Project</h2>
+      </div>
+      <div class="preflight-list">
+        <label><input type="checkbox" data-progress="memory"> <span>Memory ChatGPT yang diperlukan Project sudah aktif.</span></label>
+        <label><input type="checkbox" data-progress="privacy"> <span>Sudah mengecek pilihan privasi di Data Controls.</span></label>
+      </div>
+      <p class="fine-print">
+        Untuk Project memory pada akun personal, OpenAI saat ini meminta Reference saved memories
+        dan Reference chat history aktif. Pilihan “Improve the model for everyone” di Data Controls
+        bersifat keputusan pengguna.
+      </p>
+    </section>
+
+    <section class="setup-tools">
+      <div>
+        <p class="eyebrow">Dipakai untuk semua Project</p>
+        <h2>Project Instructions</h2>
+        <p>Salin file yang sama ke setiap mata kuliah. Course pack yang membuat perilakunya menjadi spesifik.</p>
+      </div>
+      <div class="tool-actions">
+        <button class="button primary" id="copy-instructions" type="button">Salin instructions</button>
+        <a class="button secondary" id="open-instructions" href="./packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/PROJECT-INSTRUCTIONS.md">Lihat file</a>
+      </div>
+      <p id="copy-status" class="copy-status" role="status"></p>
+    </section>
+
+    <section class="setup-section">
+      <div class="section-heading">
+        <p class="eyebrow">Project Semester 2</p>
+        <h2 id="progress-title">0 dari 5 selesai</h2>
+        <div class="progress-track" aria-hidden="true"><div id="progress-bar"></div></div>
+      </div>
+      <div id="setup-courses" class="setup-courses">
+        <p class="muted">Memuat course pack…</p>
+      </div>
+    </section>
+
+    <section class="after-setup">
+      <p class="eyebrow">Setelah 5/5</p>
+      <h2>GitHub tidak perlu dibuka setiap kali ada tugas.</h2>
+      <div class="after-flow">
+        <span>Buka ChatGPT</span><b>→</b>
+        <span>Pilih mata kuliah</span><b>→</b>
+        <span>New Chat</span><b>→</b>
+        <span>Kirim soal/materi</span>
+      </div>
+      <p>
+        Gunakan satu chat per tugas atau topik besar. Kalau ada feedback tutor, minta ChatGPT
+        membuat lesson learned ringkas lalu simpan sebagai sumber Project.
+      </p>
+    </section>
+  </main>
+
+  <footer class="site-footer shell">
+    <a class="wordmark small" href="./">ramu<span>.</span></a>
+    <p>Proyek independen. Bukan layanan resmi Universitas Terbuka maupun OpenAI.</p>
+  </footer>
+  <script src="app.js" defer></script>
+</body>
+</html>

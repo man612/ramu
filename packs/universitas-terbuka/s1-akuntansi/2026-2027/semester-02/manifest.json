@@ -1,0 +1,82 @@
+{
+  "id": "id.ut.accounting-s1.2026-2027.s2",
+  "name": "UT S1 Akuntansi — Semester 2",
+  "institution": "Universitas Terbuka",
+  "program": "S1 Akuntansi",
+  "academic_year": "2026/2027",
+  "semester": 2,
+  "total_sks": 16,
+  "status": "source-verified",
+  "project_instructions": "PROJECT-INSTRUCTIONS.md",
+  "courses": [
+    {
+      "code": "EACC4104",
+      "name": "Perpajakan",
+      "short_name": "Perpajakan",
+      "project_name": "S2 • Perpajakan",
+      "sks": 3,
+      "exam_slot": "I.1",
+      "material": "EKSI4206 Perpajakan (Edisi 4)",
+      "service": "T",
+      "file": "courses/EACC4104-perpajakan.md"
+    },
+    {
+      "code": "EACC4103",
+      "name": "Akuntansi Keuangan Menengah I",
+      "short_name": "AKM I",
+      "project_name": "S2 • AKM I",
+      "sks": 3,
+      "exam_slot": "II.2",
+      "material": "EACC4103 Akuntansi Keuangan Menengah I",
+      "practice": "BP",
+      "service": "BPro",
+      "file": "courses/EACC4103-akm-1.md"
+    },
+    {
+      "code": "EMBS4210",
+      "name": "Manajemen Keuangan",
+      "short_name": "Manajemen Keuangan",
+      "project_name": "S2 • Manajemen Keuangan",
+      "sks": 3,
+      "exam_slot": "I.4",
+      "material": "EMBS4210 Manajemen Keuangan",
+      "service": "T",
+      "file": "courses/EMBS4210-manajemen-keuangan.md"
+    },
+    {
+      "code": "ECON4102",
+      "name": "Pengantar Ekonomi Mikro",
+      "short_name": "Ekonomi Mikro",
+      "project_name": "S2 • Ekonomi Mikro",
+      "sks": 3,
+      "exam_slot": "II.4",
+      "material": "ESPA4111 Pengantar Ekonomi Mikro (Edisi 3)",
+      "service": "T",
+      "file": "courses/ECON4102-ekonomi-mikro.md"
+    },
+    {
+      "code": "EMBS4101",
+      "name": "Manajemen",
+      "short_name": "Manajemen",
+      "project_name": "S2 • Manajemen",
+      "sks": 4,
+      "exam_slot": "II.5",
+      "material": "EKMA4116 Manajemen (Edisi 3)",
+      "service": "WT",
+      "file": "courses/EMBS4101-manajemen.md"
+    }
+  ],
+  "sources": [
+    {
+      "type": "official",
+      "name": "Katalog Kurikulum UT 2026/2027 — Juli 2026",
+      "url": "https://www.ut.ac.id/wp-content/uploads/2026/07/01-Katalog-NON-PENDAS-TAHUN-2026-2027-21-07-2026_22072026.pdf"
+    },
+    {
+      "type": "official",
+      "name": "Pedoman Sistem Penyelenggaraan UT 2026/2027",
+      "url": "https://www.ut.ac.id/wp-content/uploads/2026/06/03-PEDOMAN-PENYELENGGARAAN-2026-2027-080626_compressed.pdf"
+    }
+  ],
+  "source_verified_at": "2026-08-14"
+}
