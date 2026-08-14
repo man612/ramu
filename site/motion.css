@@ -1,0 +1,292 @@
+/* Motion layer: visual movement and interaction only. */
+:root {
+  --motion-fast: 180ms;
+  --motion-base: 420ms;
+  --motion-slow: 760ms;
+  --motion-ease: cubic-bezier(.22, 1, .36, 1);
+  --motion-ease-soft: cubic-bezier(.2, .75, .25, 1);
+}
+
+html.motion-ready body {
+  overflow-x: clip;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto;
+  height: 3px;
+  z-index: 999;
+  transform: scaleX(var(--page-progress, 0));
+  transform-origin: left center;
+  background: linear-gradient(90deg, var(--orange), var(--gold), var(--sage), var(--blue), var(--plum));
+  pointer-events: none;
+}
+
+.site-header {
+  transition: transform var(--motion-base) var(--motion-ease), opacity var(--motion-base) ease, box-shadow var(--motion-base) ease, background var(--motion-base) ease;
+}
+.site-header.is-scrolled { box-shadow: 0 16px 44px rgba(30, 33, 29, .1); }
+.site-header.is-hidden { transform: translateY(-130%); opacity: .2; }
+
+.brand-mark i {
+  transform-origin: 50% 100%;
+  animation: ramu-bars 2.8s var(--motion-ease) infinite alternate;
+}
+.brand-mark i:nth-child(2) { animation-delay: -1.7s; }
+.brand-mark i:nth-child(3) { animation-delay: -.9s; }
+.brand-mark i:nth-child(4) { animation-delay: -2.1s; }
+.brand-mark i:nth-child(5) { animation-delay: -1.2s; }
+@keyframes ramu-bars {
+  0%, 30% { transform: scaleY(.72); }
+  72%, 100% { transform: scaleY(1.08); }
+}
+
+[data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 32px, 0) scale(.985);
+  filter: blur(6px);
+  transition: opacity var(--motion-slow) var(--motion-ease), transform var(--motion-slow) var(--motion-ease), filter var(--motion-slow) ease;
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: transform, opacity;
+}
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+  filter: blur(0);
+}
+
+[data-stagger] > * {
+  opacity: 0;
+  transform: translateY(22px) scale(.98);
+  transition: opacity 620ms var(--motion-ease), transform 620ms var(--motion-ease);
+  transition-delay: calc(var(--stagger-index, 0) * 75ms);
+}
+[data-stagger].is-visible > * {
+  opacity: 1;
+  transform: none;
+}
+
+.hero-copy-block > * {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: hero-enter 780ms var(--motion-ease) forwards;
+}
+.hero-copy-block > *:nth-child(1) { animation-delay: 80ms; }
+.hero-copy-block > *:nth-child(2) { animation-delay: 160ms; }
+.hero-copy-block > *:nth-child(3) { animation-delay: 250ms; }
+.hero-copy-block > *:nth-child(4) { animation-delay: 340ms; }
+.hero-copy-block > *:nth-child(5) { animation-delay: 430ms; }
+@keyframes hero-enter { to { opacity: 1; transform: none; } }
+
+.hero h1 em {
+  position: relative;
+  display: inline;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0 7%;
+  background-position: 0 96%;
+  background-repeat: no-repeat;
+  animation: marker-draw 1s var(--motion-ease) 680ms forwards;
+}
+@keyframes marker-draw { to { background-size: 100% 7%; } }
+
+.phone-stage { perspective: 1100px; }
+.phone-card:not(.phone-back) {
+  transform: rotateX(var(--phone-rx, 0deg)) rotateY(var(--phone-ry, 0deg)) translate3d(0, var(--phone-y, 0px), 0);
+  transition: transform 180ms ease-out, box-shadow 350ms ease;
+  will-change: transform;
+}
+.phone-card:not(.phone-back):hover { box-shadow: 0 38px 90px rgba(30, 33, 29, .18); }
+.phone-back {
+  animation: phone-back-float 5.8s ease-in-out infinite;
+}
+@keyframes phone-back-float {
+  0%, 100% { transform: translate(34px, 20px) rotate(5deg); }
+  50% { transform: translate(48px, 3px) rotate(7deg); }
+}
+.floating-note { animation: note-float 4.2s ease-in-out infinite; }
+.note-two { animation-delay: -2s; }
+@keyframes note-float {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -10px; }
+}
+.phone-project.active { animation: active-project 2.8s ease-in-out infinite; }
+@keyframes active-project {
+  0%, 100% { box-shadow: inset 0 0 0 0 rgba(73, 99, 84, 0); }
+  50% { box-shadow: inset 0 0 0 1px rgba(73, 99, 84, .22); }
+}
+.bubble.user { animation: bubble-in-right 720ms var(--motion-ease) 720ms both; }
+.bubble.assistant { animation: bubble-in-left 760ms var(--motion-ease) 1.05s both; }
+@keyframes bubble-in-right { from { opacity: 0; transform: translate(28px, 12px) scale(.94); } }
+@keyframes bubble-in-left { from { opacity: 0; transform: translate(-24px, 12px) scale(.94); } }
+.chat-input b { animation: send-pulse 2.3s ease-in-out 1.5s infinite; }
+@keyframes send-pulse { 0%, 80%, 100% { transform: scale(1); } 88% { transform: scale(1.12); } }
+
+.button, .small-button, .prompt-grid button, .setup-course summary, .faq-list summary, .course-card, .comparison, .foundation-card, .trust-grid article, .use-card {
+  -webkit-tap-highlight-color: transparent;
+}
+.button, .small-button, .prompt-grid button {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transition: transform var(--motion-fast) var(--motion-ease), box-shadow var(--motion-fast) ease, background var(--motion-fast) ease, border-color var(--motion-fast) ease;
+}
+.button::after, .small-button::after, .prompt-grid button::after {
+  content: "";
+  position: absolute;
+  left: var(--ripple-x, 50%);
+  top: var(--ripple-y, 50%);
+  width: 12px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0);
+  pointer-events: none;
+  z-index: -1;
+}
+.button.is-rippling::after, .small-button.is-rippling::after, .prompt-grid button.is-rippling::after {
+  animation: ripple 620ms ease-out;
+}
+@keyframes ripple {
+  0% { opacity: .16; transform: translate(-50%, -50%) scale(0); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(28); }
+}
+.button:active, .small-button:active, .prompt-grid button:active { transform: scale(.965); }
+
+.comparison, .course-card, .foundation-card, .trust-grid article, .use-card, .setup-step-card, .setup-course {
+  transition: transform 320ms var(--motion-ease), box-shadow 320ms ease, border-color 320ms ease, background 320ms ease;
+}
+.course-card:hover, .foundation-card:hover, .trust-grid article:hover, .comparison:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 22px 50px rgba(30, 33, 29, .09);
+}
+
+.course-card {
+  position: relative;
+  overflow: hidden;
+}
+.course-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(280px circle at var(--card-x, 50%) var(--card-y, 50%), rgba(255,255,255,.65), transparent 52%);
+  opacity: 0;
+  transition: opacity 240ms ease;
+  pointer-events: none;
+}
+.course-card:hover::before { opacity: 1; }
+
+.marker {
+  background-size: 100% 100%;
+  transition: background-size 600ms var(--motion-ease);
+}
+.marker.is-animated { animation: marker-pulse 1.8s ease-in-out 1; }
+@keyframes marker-pulse { 50% { background-size: 100% 72%; } }
+
+.daily-flow span, .prompt-examples span, .settings-path span, .phone-mini-flow div {
+  transition: transform 260ms var(--motion-ease), background 260ms ease, border-color 260ms ease;
+}
+.daily-flow span:hover, .prompt-examples span:hover, .settings-path span:hover, .phone-mini-flow div:hover { transform: translateY(-3px); }
+.daily-flow i, .settings-path i, .phone-mini-flow > i { animation: arrow-breathe 1.8s ease-in-out infinite; }
+@keyframes arrow-breathe { 50% { transform: translateX(4px); opacity: .5; } }
+
+.faq-list details {
+  overflow: clip;
+  transition: border-color 260ms ease, background 260ms ease, transform 260ms var(--motion-ease);
+}
+.faq-list details[open] { transform: translateX(4px); }
+.faq-list summary { cursor: pointer; }
+.faq-list summary::after { transition: transform 320ms var(--motion-ease); }
+.faq-list details[open] summary::after { transform: rotate(45deg); }
+.faq-list details > p { transform-origin: top; animation: details-in 360ms var(--motion-ease); }
+@keyframes details-in { from { opacity: 0; transform: translateY(-8px); } }
+
+.setup-nav a {
+  transition: color 260ms ease, background 260ms ease, transform 260ms var(--motion-ease), border-color 260ms ease;
+}
+.setup-nav a.is-current { transform: translateX(5px); }
+.setup-nav a.is-current b { animation: step-pop 420ms var(--motion-ease); }
+@keyframes step-pop { 50% { transform: scale(1.22) rotate(-5deg); } }
+
+.setup-step-card.is-current-step {
+  box-shadow: 0 24px 60px rgba(30, 33, 29, .09);
+  border-color: rgba(73, 99, 84, .32);
+}
+.setup-course[open] { transform: translateY(-2px); box-shadow: 0 16px 38px rgba(30,33,29,.07); }
+.setup-course summary { transition: background 240ms ease, transform 180ms var(--motion-ease); }
+.setup-course summary:active { transform: scale(.99); }
+.done-pill { transition: background 280ms ease, color 280ms ease, transform 280ms var(--motion-ease); }
+.setup-course[data-complete="true"] .done-pill { animation: done-pop 460ms var(--motion-ease); }
+@keyframes done-pop { 50% { transform: scale(1.12); } }
+
+.progress-track { overflow: hidden; }
+#progress-bar { position: relative; transition: width 680ms var(--motion-ease); }
+#progress-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.7), transparent);
+  transform: translateX(-120%);
+  animation: progress-shimmer 2.4s ease-in-out infinite;
+}
+@keyframes progress-shimmer { 55%, 100% { transform: translateX(160%); } }
+
+.complete-check input:checked + span { animation: check-label 420ms var(--motion-ease); }
+@keyframes check-label { 50% { transform: translateX(4px); } }
+
+.motion-particle {
+  position: fixed;
+  z-index: 9999;
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  pointer-events: none;
+  background: var(--particle-color, var(--sage));
+  animation: particle-fly 760ms var(--motion-ease) forwards;
+}
+@keyframes particle-fly {
+  to { transform: translate(var(--particle-x), var(--particle-y)) rotate(var(--particle-r)); opacity: 0; scale: .4; }
+}
+
+.page-enter {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: var(--paper);
+  pointer-events: none;
+  transform-origin: top;
+  animation: page-enter 720ms var(--motion-ease) forwards;
+}
+@keyframes page-enter { to { transform: translateY(-100%); } }
+
+@media (hover: hover) and (pointer: fine) {
+  [data-magnetic] { transition: transform 170ms ease-out; will-change: transform; }
+  .button:hover { box-shadow: 0 10px 26px rgba(30,33,29,.1); }
+}
+
+@media (max-width: 720px) {
+  body::before { height: 2px; }
+  .site-header { top: 7px; }
+  [data-reveal] { transform: translate3d(0, 20px, 0) scale(.992); filter: blur(3px); }
+  [data-stagger] > * { transform: translateY(14px); }
+  .hero-copy-block > * { animation-duration: 640ms; }
+  .phone-stage { perspective: none; }
+  .phone-card:not(.phone-back) { transform: translateY(var(--phone-y, 0px)); }
+  .course-card:hover, .foundation-card:hover, .trust-grid article:hover, .comparison:hover { transform: none; box-shadow: none; }
+  .floating-note { animation-duration: 5.4s; }
+  .use-card, .comparison, .foundation-card, .trust-grid article, .course-card, .setup-step-card { contain: paint; }
+  .button, .small-button, .prompt-grid button { min-height: 48px; }
+  .setup-nav a.is-current { transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+  [data-reveal], [data-stagger] > *, .hero-copy-block > * { opacity: 1 !important; transform: none !important; filter: none !important; }
+  .site-header.is-hidden { transform: none; opacity: 1; }
+}
