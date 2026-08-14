@@ -32,22 +32,18 @@ async function copyText(text, statusEl, message = "Tersalin.") {
     if (statusEl) statusEl.textContent = message;
     return true;
   } catch {
-    if (statusEl) statusEl.textContent = "Tidak bisa menyalin otomatis. Buka file lalu salin manual.";
+    if (statusEl) statusEl.textContent = "Tidak dapat menyalin otomatis. Buka file, lalu salin teks secara manual.";
     return false;
   }
 }
 
 function storageKey(id) { return `ramu:${id}`; }
-function getProgress(id) {
-  try { return JSON.parse(localStorage.getItem(storageKey(id))) || {}; }
-  catch { return {}; }
-}
+function getProgress(id) { try { return JSON.parse(localStorage.getItem(storageKey(id))) || {}; } catch { return {}; } }
 function saveProgress(id, progress) { localStorage.setItem(storageKey(id), JSON.stringify(progress)); }
 
 async function renderSetup(manifest) {
   const target = document.querySelector("#setup-courses");
   if (!target) return;
-
   const progress = getProgress(manifest.id);
   const instructionsUrl = `${PACK_BASE}/${manifest.project_instructions}`;
   const instructionButton = document.querySelector("#copy-instructions");
@@ -60,13 +56,13 @@ async function renderSetup(manifest) {
         const response = await fetch(instructionsUrl);
         if (!response.ok) throw new Error();
         const text = await response.text();
-        const copied = await copyText(text, status, "Sudah disalin. Nanti tempel ke Project Instructions.");
+        const copied = await copyText(text, status, "Project Instructions sudah disalin. Tempelkan teks ini ke setiap Project.");
         if (copied) {
           instructionButton.textContent = "Sudah disalin";
-          setTimeout(() => instructionButton.textContent = "Salin sekarang", 1500);
+          setTimeout(() => instructionButton.textContent = "Salin instruksi", 1500);
         }
       } catch {
-        status.textContent = "Instructions tidak dapat dimuat. Buka teks lalu salin manual.";
+        status.textContent = "Project Instructions tidak dapat dimuat. Buka teks, lalu salin secara manual.";
       }
     });
   }
@@ -84,16 +80,16 @@ async function renderSetup(manifest) {
         <div class="setup-body">
           <ol>
             <li>Buka aplikasi ChatGPT, lalu pilih <strong>New Project</strong>.</li>
-            <li>Kasih nama <strong>${course.project_name}</strong> dan pilih <strong>Project-only memory</strong>.</li>
-            <li>Masuk ke Project settings, lalu tempel <strong>Project Instructions</strong> yang sudah disalin di langkah 2.</li>
-            <li>Download dan upload file <strong>${course.file.split("/").pop()}</strong> ke Project tersebut.</li>
+            <li>Beri nama <strong>${course.project_name}</strong>, kemudian pilih <strong>Project-only memory</strong>.</li>
+            <li>Buka pengaturan Project, lalu tempel <strong>Project Instructions</strong> yang sudah disalin pada langkah 2.</li>
+            <li>Unduh dan unggah paket mata kuliah <strong>${course.file.split("/").pop()}</strong> ke Project tersebut.</li>
           </ol>
           <div class="inline-actions">
             <button class="small-button copy-project" type="button" data-text="${course.project_name}">Salin nama Project</button>
-            <a class="small-button" href="${PACK_BASE}/${course.file}" download>Download course pack</a>
+            <a class="small-button" href="${PACK_BASE}/${course.file}" download>Unduh paket mata kuliah</a>
             <a class="small-button" href="https://chatgpt.com/" target="_blank" rel="noopener">Buka ChatGPT</a>
           </div>
-          <label class="complete-check"><input type="checkbox" data-course-check="${course.code}" ${complete ? "checked" : ""}><span>Project ${course.short_name} sudah beres</span></label>
+          <label class="complete-check"><input type="checkbox" data-course-check="${course.code}" ${complete ? "checked" : ""}><span>Project ${course.short_name} sudah selesai disiapkan</span></label>
         </div>
       </details>
     `;
@@ -123,10 +119,7 @@ async function renderSetup(manifest) {
   document.querySelectorAll("[data-progress]").forEach(input => {
     const key = `preflight:${input.dataset.progress}`;
     input.checked = Boolean(progress[key]);
-    input.addEventListener("change", () => {
-      progress[key] = input.checked;
-      saveProgress(manifest.id, progress);
-    });
+    input.addEventListener("change", () => { progress[key] = input.checked; saveProgress(manifest.id, progress); });
   });
 
   document.querySelectorAll("[data-copy-phrase]").forEach(button => {
@@ -138,7 +131,6 @@ async function renderSetup(manifest) {
       setTimeout(() => button.textContent = original, 1000);
     });
   });
-
   updateProgress(manifest, progress);
 }
 
@@ -158,7 +150,7 @@ function updateProgress(manifest, progress) {
   } catch {
     const home = document.querySelector("#course-list");
     const setup = document.querySelector("#setup-courses");
-    if (home) home.innerHTML = `<p class="muted">Daftar mata kuliah belum bisa dimuat. Coba muat ulang halaman.</p>`;
-    if (setup) setup.innerHTML = `<p class="muted">Course pack belum bisa dimuat. Coba muat ulang halaman.</p>`;
+    if (home) home.innerHTML = `<p class="muted">Daftar mata kuliah belum dapat dimuat. Coba muat ulang halaman.</p>`;
+    if (setup) setup.innerHTML = `<p class="muted">Paket mata kuliah belum dapat dimuat. Coba muat ulang halaman.</p>`;
   }
 })();

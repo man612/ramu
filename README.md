@@ -1,12 +1,12 @@
 <p align="center">
-  <img src=".github/assets/hero-light.svg#gh-light-mode-only" alt="Ramu — workspace kuliah berbasis ChatGPT Projects" width="100%">
-  <img src=".github/assets/hero-dark.svg#gh-dark-mode-only" alt="Ramu — workspace kuliah berbasis ChatGPT Projects" width="100%">
+  <img src=".github/assets/hero-light.svg#gh-light-mode-only" alt="Ramu — ChatGPT Projects yang disiapkan untuk kuliah" width="100%">
+  <img src=".github/assets/hero-dark.svg#gh-dark-mode-only" alt="Ramu — ChatGPT Projects yang disiapkan untuk kuliah" width="100%">
 </p>
 
 <p align="center">
   <a href="https://man612.github.io/ramu/"><strong>Buka Ramu</strong></a>
   ·
-  <a href="https://man612.github.io/ramu/setup.html">Mulai setup Semester 2</a>
+  <a href="https://man612.github.io/ramu/setup.html">Panduan setup Semester 2</a>
   ·
   <a href="docs/RISET-DAN-DASAR-DESAIN.md">Dasar riset</a>
 </p>
@@ -22,29 +22,29 @@
 
 ## Ramu itu apa?
 
-Ramu adalah **setelan siap pakai untuk ChatGPT Projects** supaya tiap mata kuliah punya ruang, konteks, sumber, dan cara pengecekan sendiri.
+Ramu adalah **paket konfigurasi untuk ChatGPT Projects** agar setiap mata kuliah memiliki ruang, konteks, sumber, dan cara pemeriksaan yang jelas.
 
-Jadi bukan aplikasi pengganti ChatGPT dan bukan tempat kumpulan jawaban tugas. Ramu cuma menyiapkan “meja belajar”-nya supaya kamu tidak perlu menjelaskan dari nol setiap kali membuka tugas baru.
+Ramu bukan aplikasi pengganti ChatGPT dan bukan kumpulan jawaban tugas. Anggap saja Ramu sebagai **meja belajar yang sudah disiapkan**. Setelah setup selesai, kamu tinggal membuka Project mata kuliah yang sesuai, mengirim soal atau materi, lalu menjelaskan kebutuhanmu dengan bahasa biasa.
 
 <table>
 <tr>
 <td width="50%" valign="top">
 <h3>Tanpa Ramu</h3>
-<p>Kamu buka chat baru lalu harus menjelaskan lagi:</p>
+<p>Setiap membuka chat baru, kamu mungkin perlu menjelaskan ulang:</p>
 <ul>
-<li>ini mata kuliah apa;</li>
-<li>materi yang sedang dipakai;</li>
-<li>format tugas;</li>
-<li>sumber mana yang harus dipercaya;</li>
-<li>cara mengecek hitungan/jawaban.</li>
+<li>mata kuliah yang sedang dibahas;</li>
+<li>materi yang digunakan;</li>
+<li>format dan aturan tugas;</li>
+<li>sumber yang perlu diprioritaskan;</li>
+<li>cara memeriksa hitungan atau jawaban.</li>
 </ul>
 </td>
 <td width="50%" valign="top">
 <h3>Dengan Ramu</h3>
-<p>Kamu buka Project mata kuliahnya lalu cukup kirim:</p>
-<p><code>aku nggak paham bagian ini</code></p>
-<p><code>cek jawaban aku</code></p>
-<p><code>bantu kerjain soal ini pelan-pelan</code></p>
+<p>Buka Project mata kuliahnya, lalu kamu bisa langsung menulis:</p>
+<p><code>aku belum paham bagian ini</code></p>
+<p><code>cek jawabanku</code></p>
+<p><code>bantu aku kerjakan soal ini pelan-pelan</code></p>
 <p><code>ini feedback tutor kemarin</code></p>
 </td>
 </tr>
@@ -53,10 +53,10 @@ Jadi bukan aplikasi pengganti ChatGPT dan bukan tempat kumpulan jawaban tugas. R
 ## Cara pakainya
 
 <p align="center">
-  <img src=".github/assets/setup-flow.svg" alt="Alur setup Ramu: ambil pack, buat Project, upload, lalu pakai" width="100%">
+  <img src=".github/assets/setup-flow.svg" alt="Alur penggunaan Ramu dari setup sampai pemakaian sehari-hari" width="100%">
 </p>
 
-Untuk paket pertama, Ramu sudah menyiapkan **UT · S1 Akuntansi · Semester 2 · 2026/2027**. Kamu cukup membuat lima Project di ChatGPT:
+Paket pertama Ramu disiapkan untuk **Universitas Terbuka · S1 Akuntansi · Semester 2 · 2026/2027**. Di ChatGPT, kamu membuat lima Project terpisah:
 
 | Project | Mata kuliah | SKS |
 |---|---|---:|
@@ -66,42 +66,38 @@ Untuk paket pertama, Ramu sudah menyiapkan **UT · S1 Akuntansi · Semester 2 ·
 | `S2 • Ekonomi Mikro` | ECON4102 Pengantar Ekonomi Mikro | 3 |
 | `S2 • Manajemen` | EMBS4101 Manajemen | 4 |
 
-> **Kalau cuma mau pakai:** buka [panduan setup interaktif](https://man612.github.io/ramu/setup.html). Tidak perlu memahami struktur repo ini.
+> **Kalau ingin langsung menggunakan Ramu:** buka [panduan setup interaktif](https://man612.github.io/ramu/setup.html). Kamu tidak perlu memahami struktur repo ini.
 
 ## Fondasi Ramu
 
-<table>
-<tr>
-<td align="center" width="20%"><h3>R</h3><b>Referensi</b><br><sub>sumber yang tepat untuk pertanyaan yang tepat</sub></td>
-<td align="center" width="20%"><h3>I</h3><b>Instruksi</b><br><sub>aturan kampus, tutor, rubrik, dan tugas tidak dicampur</sub></td>
-<td align="center" width="20%"><h3>Z</h3><b>Zona Konteks</b><br><sub>satu mata kuliah tetap berada di ruangnya sendiri</sub></td>
-<td align="center" width="20%"><h3>M</h3><b>Materi</b><br><sub>BMP dan bahan kelas tetap jadi dasar belajar</sub></td>
-<td align="center" width="20%"><h3>A</h3><b>Asesmen</b><br><sub>jawaban dicek lagi sebelum dianggap selesai</sub></td>
-</tr>
-</table>
+<p align="center">
+  <img src=".github/assets/foundations.svg" alt="Lima fondasi Ramu: Referensi, Instruksi, Zona Konteks, Materi, dan Asesmen" width="100%">
+</p>
 
-Lima fondasi ini bukan lima fitur terpisah yang harus kamu atur manual. Semuanya sudah diterjemahkan ke Project Instructions dan course pack.
+Urutannya sengaja dibuat **R → I → Z → M → A**. Di layar sempit, susunannya tetap dibaca dari atas ke bawah agar kelima huruf dan fungsinya tetap jelas.
+
+Lima fondasi tersebut bukan lima pengaturan yang harus kamu isi sendiri. Ramu sudah menerjemahkannya ke dalam **Project Instructions** dan **paket mata kuliah (course pack)**.
 
 ## Yang sudah disiapkan
 
-- **Project Instructions** — aturan umum yang dipakai di semua Project.
-- **Course pack per mata kuliah** — konteks, sumber, workflow, dan verifier yang spesifik.
+- **Project Instructions** — aturan dasar yang digunakan di semua Project.
+- **Paket mata kuliah** — konteks, sumber, alur kerja, dan pemeriksaan yang disesuaikan dengan mata kuliah.
 - **Panduan Android** — langkah setup dari aplikasi ChatGPT.
-- **Aturan sumber & freshness** — terutama untuk informasi yang bisa berubah seperti perpajakan.
-- **Eval** — skenario uji untuk mengecek perilaku pack, bukan cuma membaca prompt-nya.
-- **GitHub Pages** — tampilan yang lebih gampang dipakai kalau tidak terbiasa dengan GitHub.
+- **Aturan sumber dan kebaruan informasi** — penting untuk informasi yang dapat berubah, seperti perpajakan.
+- **Eval** — skenario pengujian untuk memeriksa perilaku paket, bukan sekadar membaca prompt.
+- **GitHub Pages** — tampilan yang lebih mudah digunakan tanpa harus memahami GitHub.
 
-## Kenapa satu mata kuliah = satu Project?
+## Kenapa satu mata kuliah dibuat sebagai satu Project?
 
-Karena satu Project besar untuk seluruh semester cepat berubah menjadi campuran lima konteks, file, dan percakapan. Ramu sengaja memisahkannya supaya:
+Satu Project untuk seluruh semester memang terlihat lebih sederhana pada awalnya, tetapi lama-kelamaan file, percakapan, dan aturan lima mata kuliah akan bercampur. Ramu memisahkannya agar:
 
-- file tiap mata kuliah tidak bercampur;
-- chat lama lebih mudah dicari;
-- instruksi satu mata kuliah tidak bocor ke mata kuliah lain;
-- feedback tutor bisa disimpan di tempat yang tepat;
+- file setiap mata kuliah tetap terpisah;
+- riwayat percakapan lebih mudah dicari;
+- instruksi satu mata kuliah tidak tercampur dengan mata kuliah lain;
+- feedback tutor tersimpan di tempat yang tepat;
 - penggunaan sehari-hari tetap sederhana.
 
-Detail alasan dan dasar risetnya ada di [`docs/RISET-DAN-DASAR-DESAIN.md`](docs/RISET-DAN-DASAR-DESAIN.md).
+Penjelasan lengkap tentang keputusan ini ada di [`docs/RISET-DAN-DASAR-DESAIN.md`](docs/RISET-DAN-DASAR-DESAIN.md).
 
 ## Struktur repo
 
@@ -109,27 +105,27 @@ Detail alasan dan dasar risetnya ada di [`docs/RISET-DAN-DASAR-DESAIN.md`](docs/
 ramu/
 ├── core/       prinsip dasar Ramu
 ├── docs/       panduan, riset, dan validasi
-├── evals/      skenario uji
-├── packs/      paket kampus / prodi / semester
+├── evals/      skenario pengujian
+├── packs/      paket kampus / program studi / semester
 ├── site/       GitHub Pages
 └── .github/    workflow dan aset README
 ```
 
 ## Status paket UT Semester 2
 
-**Sumber terverifikasi** berarti data utama paket sudah dicocokkan dengan sumber resmi yang masih berlaku, tetapi pack belum diberi label **Terverifikasi penuh** sampai eval perilakunya selesai dijalankan.
+**Sumber terverifikasi** berarti data utama paket sudah dicocokkan dengan sumber resmi yang berlaku. Status ini berbeda dari **Terverifikasi penuh**, yang baru diberikan setelah skenario eval perilaku paket selesai diuji.
 
 Acuan utama saat ini:
 
 - Katalog Kurikulum UT 2026/2027 edisi Juli 2026.
 - Pedoman Sistem Penyelenggaraan UT 2026/2027.
 
-Ramu tidak menyertakan salinan BMP atau materi kuliah berhak cipta. Materi yang memang dimiliki mahasiswa dimasukkan sendiri ke Project saat diperlukan.
+Ramu tidak menyertakan salinan BMP atau materi kuliah berhak cipta. Materi yang memang dimiliki atau dapat diakses mahasiswa ditambahkan sendiri ke Project saat diperlukan.
 
 ---
 
 <p align="center">
-  <b>Mulai dari sini → <a href="https://man612.github.io/ramu/setup.html">Setup UT S1 Akuntansi Semester 2</a></b>
+  <b>Mulai dari sini → <a href="https://man612.github.io/ramu/setup.html">Panduan setup UT S1 Akuntansi Semester 2</a></b>
 </p>
 
 <p align="center">
