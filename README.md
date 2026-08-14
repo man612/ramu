@@ -28,11 +28,22 @@ Ramu bukan aplikasi pengganti ChatGPT dan bukan kumpulan jawaban tugas. Anggap s
 
 ### Fondasi Ramu
 
-**R**eferensi — memilih sumber yang sesuai dengan pertanyaan dan memastikan informasi yang digunakan masih berlaku.  
-**I**nstruksi — mengikuti aturan tugas, rubrik, arahan tutor, dan ketentuan kampus sebelum menyusun jawaban.  
-**Z**ona Konteks — menjaga setiap mata kuliah tetap berada di Project-nya sendiri agar materi dan percakapan tidak bercampur.  
-**M**ateri — menggunakan BMP, bahan tutor, soal, dan materi kelas sebagai dasar belajar saat tersedia.  
-**A**sesmen — memeriksa kembali isi, hitungan, sumber, dan format sebelum jawaban dianggap selesai.
+#### **R**eferensi
+Memilih sumber yang sesuai dengan pertanyaan dan memastikan informasi yang digunakan masih berlaku.
+
+#### **I**nstruksi
+Mengikuti aturan tugas, rubrik, arahan tutor, dan ketentuan kampus sebelum menyusun jawaban.
+
+#### **Z**ona Konteks
+Menjaga setiap mata kuliah tetap berada di Project-nya sendiri agar materi dan percakapan tidak bercampur.
+
+#### **M**ateri
+Menggunakan BMP, bahan tutor, soal, dan materi kelas sebagai dasar belajar saat tersedia.
+
+#### **A**sesmen
+Memeriksa kembali isi, hitungan, sumber, dan format sebelum jawaban dianggap selesai.
+
+> *Ada alasan kenapa lima bagian ini selalu ditulis dalam urutan yang sama.*
 
 Kelima bagian ini sudah diterapkan di balik layar melalui **Project Instructions** dan **paket mata kuliah**, jadi pengguna tidak perlu mengaturnya satu per satu.
 
