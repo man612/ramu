@@ -89,5 +89,6 @@
   ],
   "source_registry": "sources/registry.json",
   "eval_contracts": "evals/cases/semester-02.json",
+  "behavior_evals": "evals/behavior/semester-02.json",
   "source_verified_at": "2026-08-14"
 }

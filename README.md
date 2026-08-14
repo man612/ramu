@@ -98,6 +98,7 @@ Paket pertama Ramu disiapkan untuk **Universitas Terbuka · S1 Akuntansi · Seme
 - **State belajar** — template learner state, review queue, misconception log, dan mastery map yang dapat disimpan secara eksplisit di Project.
 - **Source registry** — sumber memiliki fungsi, otoritas, tanggal verifikasi, interval review, dan status.
 - **Eval contracts** — guardrail penting diuji agar tidak hilang saat prompt/course pack diedit.
+- **Behavior evals** — E01–E12 dapat benar-benar dijalankan ke model, lalu dinilai oleh model judge dan disimpan sebagai artifact untuk audit/regresi.
 - **Source freshness watch** — GitHub Actions mengecek kapan sumber aktif perlu diverifikasi ulang.
 - **Panduan Android** — langkah setup dari aplikasi ChatGPT.
 - **GitHub Pages** — tampilan yang lebih mudah digunakan tanpa harus memahami GitHub.
@@ -129,29 +130,38 @@ ramu/
 ├── learning/    template state belajar yang dapat disimpan di Project
 ├── packs/       paket kampus / program studi / semester
 ├── sources/     registry sumber dan kebijakan freshness
-├── evals/       skenario + contract pengujian
+├── evals/       contract + behavior eval
 ├── schemas/     kontrak data terstruktur
-├── scripts/     validator tanpa dependency eksternal
+├── scripts/     validator, freshness check, dan behavior runner
 ├── docs/        panduan, riset, dan validasi
 ├── site/        GitHub Pages
-└── .github/     workflow validasi, source watch, Pages, dan aset
+└── .github/     workflow validasi, behavior eval, source watch, Pages, dan aset
 ```
 
 ## Yang diuji otomatis
 
-`python scripts/validate_repo.py` memeriksa antara lain:
+`python scripts/validate_repo.py` dan `python scripts/run_behavior_evals.py --dry-run` memeriksa antara lain:
 
 - total SKS dan file mata kuliah pada manifest;
 - struktur source registry;
 - ID eval yang unik;
 - keberadaan learner-state templates;
-- contract marker pada Project Instructions/protokol/course pack.
+- contract marker pada Project Instructions/protokol/course pack;
+- seluruh E01–E12 memiliki skenario behavior dan context file yang valid.
 
 Contract test ini **bukan bukti bahwa model pasti selalu berperilaku benar**. Tujuannya mencegah regression sederhana, misalnya aturan “jangan mengarang DOI”, “jangan menebak screenshot”, atau “bedakan modul dengan aturan terbaru” terhapus tanpa sengaja.
 
+## Behavior eval nyata
+
+Workflow **Behavior Evals** dapat dijalankan manual dari GitHub Actions setelah repository secret `OPENAI_API_KEY` tersedia. Model kandidat dan model judge bisa dipilih secara terpisah, case dapat dibatasi misalnya `E01,E05,E08`, dan pass rate minimum dapat diubah tanpa mengubah dataset.
+
+Setiap run menghasilkan ringkasan `PASS/FAIL`, skor per case, alasan judge, penggunaan token, serta artifact JSON yang menyimpan respons kandidat untuk audit. Workflow ini sengaja tidak berjalan pada setiap push agar penggunaan API tetap terkendali dan hasil probabilistik tidak membuat CI rutin menjadi noisy.
+
+Panduan lengkap ada di [`evals/behavior/README.md`](evals/behavior/README.md).
+
 ## Status paket UT Semester 2
 
-**Sumber terverifikasi** berarti data utama paket sudah dicocokkan dengan sumber resmi yang berlaku. Status ini berbeda dari **Terverifikasi penuh**, yang baru diberikan setelah skenario eval perilaku paket selesai diuji.
+**Sumber terverifikasi** berarti data utama paket sudah dicocokkan dengan sumber resmi yang berlaku. Status ini berbeda dari **Terverifikasi penuh**, yang baru diberikan setelah skenario eval perilaku paket selesai diuji dan hasilnya direview.
 
 Acuan utama saat ini:
 
