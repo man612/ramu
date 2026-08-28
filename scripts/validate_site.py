@@ -46,6 +46,11 @@ def main() -> int:
         'id="setup-pack-name"',
         'id="setup-courses"',
         'id="copy-instructions"',
+        "Project-only memory",
+        "Project settings → Memory",
+        "Ramu tidak bergantung pada Study Mode",
+        "Save to project",
+        "Add to project sources",
     ])
     require_text(SITE / "app.js", [
         'const PACK_INDEX_URL = "./packs/index.json"',
@@ -68,6 +73,15 @@ def main() -> int:
     ):
         if forbidden in app_text:
             fail(f"site/app.js masih hardcode/asumsi pack-periode: {forbidden!r}")
+
+    setup_text = (SITE / "setup.html").read_text(encoding="utf-8") if (SITE / "setup.html").is_file() else ""
+    for forbidden in (
+        "kecuali manifest pack menyatakan berbeda",
+        "Add from library</strong> juga bisa dipakai",
+        "Study Mode wajib",
+    ):
+        if forbidden in setup_text:
+            fail(f"site/setup.html masih punya janji produk/schema yang tidak aman: {forbidden!r}")
 
     for entry in catalog.get("packs", []):
         try:
