@@ -51,7 +51,7 @@ Ramu menjaga lima lapisan:
 
 ## Multi-pack dari awal
 
-Pack pertama Ramu adalah **Universitas Terbuka · S1 Akuntansi · Semester 2 · 2026/2027**. Namun tooling tidak mengunci Semester 2 sebagai satu-satunya bentuk Ramu.
+Pack pertama Ramu adalah **Universitas Terbuka · S1 Akuntansi · Semester 2 · 2026/2027**. Tooling tidak mengunci Semester 2 sebagai satu-satunya bentuk Ramu.
 
 ```text
 packs/
@@ -74,17 +74,28 @@ Pack membedakan dua hal:
 
 Istilah “maintained” dipakai agar tidak memberi kesan pack tersebut resmi diterbitkan universitas. Ramu tetap proyek independen.
 
+### Label periode yang tidak ambigu
+
+Manifest punya dua bentuk metadata periode:
+
+- `semester` → nilai terstruktur untuk tooling, misalnya `2`;
+- `period_label` → label yang benar-benar ditampilkan ke manusia, misalnya `Semester 2`.
+
+Nama Project harus diawali `period_label`, sehingga pack awal menggunakan `Semester 2 • AKM I`, **bukan** `S2 • AKM I`. Singkatan `S2` sangat mudah dibaca sebagai jenjang S2/Magister. Identifier internal seperti `.s2`, `semester-02/`, atau `2026-2027.s2.1` tetap boleh ringkas karena bukan label UI.
+
+Desain ini juga membuat pack masa depan tidak harus memaksakan istilah semester: `period_label` dapat berupa label akademik lain yang memang digunakan institusi, misalnya `Trimester 1` atau `Term 2`.
+
 ## Paket yang tersedia sekarang
 
 Pack awal saat ini berisi:
 
 | Project | Mata kuliah | SKS |
 |---|---|---:|
-| `S2 • Perpajakan` | EACC4104 Perpajakan | 3 |
-| `S2 • AKM I` | EACC4103 Akuntansi Keuangan Menengah I | 3 |
-| `S2 • Manajemen Keuangan` | EMBS4210 Manajemen Keuangan | 3 |
-| `S2 • Ekonomi Mikro` | ECON4102 Pengantar Ekonomi Mikro | 3 |
-| `S2 • Manajemen` | EMBS4101 Manajemen | 4 |
+| `Semester 2 • Perpajakan` | EACC4104 Perpajakan | 3 |
+| `Semester 2 • AKM I` | EACC4103 Akuntansi Keuangan Menengah I | 3 |
+| `Semester 2 • Manajemen Keuangan` | EMBS4210 Manajemen Keuangan | 3 |
+| `Semester 2 • Ekonomi Mikro` | ECON4102 Pengantar Ekonomi Mikro | 3 |
+| `Semester 2 • Manajemen` | EMBS4101 Manajemen | 4 |
 
 Data pack dan source dependency ada di [`packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/manifest.json`](packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/manifest.json). Source UT berada di registry institusi, sementara source runtime seperti dokumentasi ChatGPT berada di global registry.
 
@@ -92,12 +103,12 @@ Materi kuliah berhak cipta tidak disalin ke repository.
 
 ## Mulai dari satu mata kuliah
 
-Tidak perlu setup seluruh semester untuk mencoba Ramu.
+Tidak perlu setup seluruh periode untuk mencoba Ramu.
 
 1. buka [site Ramu](https://man612.github.io/ramu/);
 2. pilih pack yang sesuai;
 3. pilih satu mata kuliah;
-4. buat ChatGPT Project;
+4. buat ChatGPT Project dengan nama yang diberikan manifest;
 5. pasang Project Instructions melalui Project settings;
 6. unggah satu course pack melalui Sources;
 7. mulai belajar seperti biasa.
@@ -106,7 +117,7 @@ Kalau satu Project terasa berguna, baru tambahkan Project lain. Progress setup d
 
 ## Core vs pack
 
-Ramu memisahkan aturan yang universal dari konteks akademik tertentu.
+Ramu memisahkan aturan universal dari konteks akademik tertentu.
 
 ```text
 core / protocols / learning
@@ -132,7 +143,7 @@ Ramu memiliki tiga lapisan validation:
 
 | Jalur | API? | Fungsi |
 |---|---:|---|
-| **Static CI** | tidak | manifest, pack catalog, source registry, contract marker, site wiring |
+| **Static CI** | tidak | manifest, pack catalog, display naming, source registry, contract marker, site wiring |
 | **Manual Behavior Validation** | tidak | menjalankan case langsung di ChatGPT Projects asli |
 | **Automated Behavior Eval** | ya, opsional | regression/benchmark melalui Responses API + model judge |
 
@@ -140,6 +151,7 @@ Static validation lokal:
 
 ```bash
 python scripts/validate_repo.py
+python scripts/validate_display_names.py
 python scripts/validate_site.py
 python scripts/check_source_freshness.py
 python scripts/run_behavior_evals.py --dry-run \
@@ -184,10 +196,12 @@ Source Watch mencari seluruh registry tersebut. URL yang hidup bukan bukti fakta
 
 `Validate Ramu` memiliki dua tahap utama:
 
-1. validasi katalog/manifest/source/site secara keseluruhan;
+1. validasi katalog/manifest/display name/source/site secara keseluruhan;
 2. matrix dry-run untuk setiap pack di `packs/index.json`.
 
 Job akhir selalu bernama **`validate`**, sehingga branch protection dapat memakai satu required status check walaupun jumlah pack bertambah.
+
+Validator display name memastikan setiap `project_name` diawali `<period_label> • `. Ini mencegah pack baru kembali memakai singkatan periode yang ambigu tanpa bergantung pada review manual.
 
 Dependency GitHub Actions yang dipakai workflow dipin ke full commit SHA agar tag dependency tidak menjadi bagian supply-chain yang dapat bergerak diam-diam.
 
@@ -212,7 +226,7 @@ ramu/
 ├── core/          prinsip universal
 ├── protocols/     belajar, tugas, review, latihan
 ├── learning/      learner-state contracts/templates
-├── packs/         catalog + institusi/program/semester/course pack
+├── packs/         catalog + institusi/program/periode/course pack
 ├── sources/       source global + freshness policy
 ├── evals/         core eval, manual tooling docs, results ignored
 ├── schemas/       kontrak katalog/manifest/registry/eval
@@ -224,9 +238,9 @@ ramu/
 
 ## Menambah Semester 3 / program / universitas lain
 
-Prinsipnya bukan mengedit `app.js` atau validator. Buat pack + manifest + source/eval yang relevan, lalu daftarkan ke `packs/index.json`. Panduan contributor ada di [`CONTRIBUTING.md`](CONTRIBUTING.md).
+Prinsipnya bukan mengedit `app.js` atau validator. Buat pack + manifest + source/eval yang relevan, tentukan `period_label`, lalu daftarkan ke `packs/index.json`. Panduan contributor ada di [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
-Validator akan menolak manifest yang tidak terdaftar, entry katalog yang menunjuk file hilang, ID source/eval duplikat, course yang tidak self-describing, atau wiring eval yang tidak lengkap.
+Validator akan menolak manifest yang tidak terdaftar, entry katalog yang menunjuk file hilang, ID source/eval duplikat, course yang tidak self-describing, wiring eval yang tidak lengkap, atau nama Project yang tidak sesuai label periode pack.
 
 ## Landasan dan batas klaim
 
