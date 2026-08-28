@@ -4,21 +4,6 @@ on:
   pull_request:
   push:
     branches: [main]
-    paths:
-      - "core/**"
-      - "protocols/**"
-      - "learning/**"
-      - "sources/**"
-      - "schemas/**"
-      - "evals/**"
-      - "scripts/**"
-      - "tests/**"
-      - "packs/**"
-      - "site/**"
-      - "requirements-dev.txt"
-      - ".github/workflows/validate.yml"
-      - ".github/workflows/behavior-evals.yml"
-      - ".github/workflows/manual-eval-kit.yml"
 
 permissions:
   contents: read
@@ -59,6 +44,9 @@ jobs:
 
       - name: Prove critical eval gates
         run: python tests/test_eval_critical_gate.py
+
+      - name: Prove CI and Pages gate contract
+        run: python tests/test_ci_contract.py
 
       - name: Validate human-facing project names
         run: python scripts/validate_display_names.py
