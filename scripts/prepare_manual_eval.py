@@ -25,6 +25,14 @@ def block(text: str) -> str:
     return "\n".join("> " + line for line in text.splitlines())
 
 
+def display_path(path: Path) -> str:
+    resolved = path.resolve()
+    try:
+        return str(resolved.relative_to(ROOT.resolve()))
+    except ValueError:
+        return str(resolved)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Generate manual eval checklist tanpa API.")
     parser.add_argument("--pack", default=None, help="Pack id; default memakai default_pack_id.")
@@ -124,7 +132,7 @@ def main() -> int:
         "",
     ])
     output.write_text("\n".join(lines), encoding="utf-8")
-    print(f"Manual eval kit: {output.relative_to(ROOT)}")
+    print(f"Manual eval kit: {display_path(output)}")
     print(
         f"Pack {ctx['id']}: {len(cases)} case dari {len(suite_order)} suite "
         f"({' -> '.join(suite_order)}); {len(critical_ids)} critical must-pass."
