@@ -18,6 +18,11 @@ REGISTRY = ROOT / "sources/registry.json"
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--online", action="store_true", help="Coba akses URL dengan request ringan.")
+    parser.add_argument(
+        "--fail-on-network",
+        action="store_true",
+        help="Kembalikan exit code non-zero bila watched source tidak dapat dijangkau.",
+    )
     return parser.parse_args()
 
 
@@ -84,9 +89,15 @@ def main() -> int:
         print("\nSumber aktif yang perlu diverifikasi ulang:")
         for source, late in overdue:
             print(f"- {source['id']} — lewat {late} hari")
+
+    if overdue:
         return 1
+    if network_warnings and args.fail_on_network:
+        return 2
 
     print("\nSemua sumber aktif masih dalam interval review.")
+    if network_warnings:
+        print("Ada watched source yang perlu dicek reachability-nya; jalankan dengan --fail-on-network untuk menjadikannya gate.")
     return 0
 
 

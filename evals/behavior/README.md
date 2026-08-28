@@ -9,7 +9,7 @@ Untuk setiap kasus:
 1. runner memuat `PROJECT-INSTRUCTIONS.md`;
 2. runner menambahkan protocol/course context yang ditentukan oleh kasus;
 3. model kandidat menerima percakapan uji;
-4. model judge terpisah menilai respons berdasarkan `expected_behaviors` dan `forbidden_behaviors` dari contract eval;
+4. model judge menilai respons berdasarkan `expected_behaviors` dan `forbidden_behaviors` dari contract eval;
 5. kasus dinyatakan lulus jika judge memberi `pass=true` dan skor memenuhi `min_score`;
 6. seluruh run lulus jika pass rate memenuhi `--fail-under`.
 
@@ -21,43 +21,46 @@ Respons kandidat dan hasil judge disimpan sebagai artifact JSON agar regresi bis
 python scripts/run_behavior_evals.py --dry-run
 ```
 
-Dry-run memeriksa bahwa semua E01–E12 memiliki skenario behavior, context file tersedia, dan hubungan dengan contract eval valid.
+Dry-run memeriksa bahwa semua behavior case memiliki skenario, context file tersedia, dan hubungan dengan contract eval valid. Dry-run tidak membuktikan kualitas respons model.
 
 ## Menjalankan dengan OpenAI API
 
-Set environment variable `OPENAI_API_KEY`, lalu:
+Set environment variable `OPENAI_API_KEY`, lalu pilih model kandidat dan judge secara eksplisit:
 
 ```bash
-python scripts/run_behavior_evals.py
+python scripts/run_behavior_evals.py \
+  --candidate-model <model-kandidat-yang-tersedia-saat-ini> \
+  --grader-model <model-judge-yang-tersedia-saat-ini> \
+  --fail-under 0.80
 ```
 
 Contoh menjalankan beberapa kasus saja:
 
 ```bash
-python scripts/run_behavior_evals.py --only E01,E05,E08
-```
-
-Model dapat diganti tanpa mengubah dataset:
-
-```bash
 python scripts/run_behavior_evals.py \
-  --candidate-model gpt-5-mini \
-  --grader-model gpt-5-mini \
-  --fail-under 0.80
+  --candidate-model <candidate> \
+  --grader-model <judge> \
+  --only E01,E05,E08
 ```
 
-Runner memakai Responses API dengan `store=false`. Kasus yang memang membutuhkan pemeriksaan informasi terkini dapat mengaktifkan built-in `web_search` secara eksplisit pada dataset.
+Ramu sengaja tidak memiliki default nama model permanen. Katalog model API dan model yang tersedia pada paket ChatGPT dapat berubah tanpa mengubah kontrak belajar Ramu.
+
+Runner memakai Responses API dengan `store=false`. Kasus yang membutuhkan pemeriksaan informasi terkini dapat mengaktifkan built-in `web_search` secara eksplisit pada dataset.
 
 ## GitHub Actions
 
-Workflow **Behavior Evals** hanya berjalan manual agar API tidak terpakai setiap push. Tambahkan repository secret bernama `OPENAI_API_KEY`, buka tab **Actions → Behavior Evals → Run workflow**, lalu pilih model/case yang ingin diuji.
+Workflow **Behavior Evals** hanya berjalan manual agar API tidak terpakai setiap push. Tambahkan repository secret bernama `OPENAI_API_KEY`, buka **Actions → Behavior Evals → Run workflow**, lalu isi model kandidat, model judge, case, dan pass rate.
 
-Default pass rate adalah 80%. Nilai ini sengaja menjadi gate awal, bukan klaim bahwa 80% sudah cukup untuk status `Terverifikasi penuh`. Status tersebut tetap memerlukan review kualitas hasil dan kestabilan lintas beberapa run/model snapshot.
+Jika candidate dan judge memakai model yang sama, workflow tetap dapat dijalankan tetapi menghasilkan warning. Untuk hasil yang akan dipakai sebagai bukti public validation, lebih baik gunakan judge berbeda dan review sebagian hasil secara manual.
+
+Default pass rate adalah 80%. Nilai ini adalah gate awal, bukan klaim bahwa 80% otomatis cukup untuk status stabil atau tervalidasi penuh.
 
 ## Prinsip evaluasi
 
 - judge menilai perilaku, bukan sekadar kemiripan kata;
 - `forbidden_behaviors` yang material harus menurunkan nilai secara signifikan;
-- kasus yang berubah karena informasi terkini harus tetap menilai proses verifikasi, bukan mengunci jawaban faktual yang cepat kedaluwarsa;
+- kasus yang berubah karena informasi terkini harus menilai proses verifikasi, bukan mengunci jawaban faktual yang cepat kedaluwarsa;
 - hasil satu run tidak dianggap bukti permanen karena output model bersifat probabilistik;
-- perubahan Project Instructions/protocol sebaiknya dibandingkan dengan baseline run sebelumnya.
+- untuk benchmark yang akan dipublikasikan, ulangi run beberapa kali dan review sampel secara manual;
+- perubahan Project Instructions/protocol sebaiknya dibandingkan dengan baseline run sebelumnya;
+- selalu catat model kandidat/judge yang benar-benar digunakan pada run tersebut.
