@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import re
 import sys
 from pathlib import Path
 
@@ -25,6 +26,7 @@ from ramu_repo import (
 errors: list[str] = []
 warnings: list[str] = []
 pack_stats: list[tuple[str, int, int, int]] = []
+MACHINE_ID_RE = re.compile(r"^[a-z0-9][a-z0-9._-]+$")
 
 
 def fail(message: str) -> None:
@@ -198,7 +200,7 @@ def validate_pack(entry: dict) -> None:
     pack_dir = ctx["pack_dir"]
 
     required = [
-        "schema_version", "id", "name", "institution", "program", "academic_year", "semester", "period_label",
+        "schema_version", "id", "name", "institution", "program", "academic_year", "period_id", "period_label",
         "total_sks", "status", "maintainer", "pack_version", "contract_version",
         "project_instructions", "learning_protocols", "courses", "sources", "source_registries",
         "eval_suites", "source_verified_at",
@@ -209,9 +211,20 @@ def validate_pack(entry: dict) -> None:
 
     if manifest.get("id") != pack_id:
         fail(f"Pack index id {pack_id} tidak sama dengan manifest id {manifest.get('id')}")
-    for key in ("name", "institution", "program", "academic_year", "semester", "period_label", "status", "maintainer"):
+    for key in ("name", "institution", "program", "academic_year", "period_id", "period_label", "status", "maintainer"):
         if entry.get(key) != manifest.get(key):
             fail(f"Pack {pack_id}: index `{key}` berbeda dari manifest.")
+
+    period_id = str(manifest.get("period_id", "")).strip()
+    if not period_id or not MACHINE_ID_RE.fullmatch(period_id):
+        fail(
+            f"Pack {pack_id}: period_id harus machine-safe (huruf kecil/angka/._-), "
+            f"misalnya `semester-02`, `trimester-01`, atau `term-fall`; sekarang {period_id!r}."
+        )
+    period_label = str(manifest.get("period_label", "")).strip()
+    if not period_label:
+        fail(f"Pack {pack_id}: period_label wajib berupa label manusia yang eksplisit.")
+
     if manifest.get("status") not in {"source-verified", "verified", "community", "experimental", "deprecated"}:
         fail(f"Pack {pack_id}: status tidak dikenal: {manifest.get('status')}")
     if manifest.get("maintainer") not in {"ramu", "community"}:
@@ -319,6 +332,16 @@ def main() -> int:
         fail("packs/index.json memiliki path manifest duplikat.")
     if index.get("default_pack_id") not in ids:
         fail("default_pack_id harus menunjuk pack yang terdaftar.")
+
+    for entry in entries:
+        period_id = str(entry.get("period_id", "")).strip()
+        if not period_id or not MACHINE_ID_RE.fullmatch(period_id):
+            fail(
+                f"Pack index {entry.get('id', '<tanpa-id>')}: period_id harus machine-safe; "
+                f"sekarang {period_id!r}."
+            )
+        if not str(entry.get("period_label", "")).strip():
+            fail(f"Pack index {entry.get('id', '<tanpa-id>')}: period_label wajib diisi.")
 
     indexed_paths: set[str] = set()
     for entry in entries:
