@@ -12,7 +12,7 @@
       "minItems": 1,
       "items": {
         "type": "object",
-        "required": ["id", "name", "institution", "program", "academic_year", "semester", "status", "maintainer", "manifest"],
+        "required": ["id", "name", "institution", "program", "academic_year", "semester", "period_label", "status", "maintainer", "manifest"],
         "properties": {
           "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
           "name": {"type": "string", "minLength": 3},
@@ -20,6 +20,7 @@
           "program": {"type": "string", "minLength": 2},
           "academic_year": {"type": "string", "minLength": 4},
           "semester": {"type": ["integer", "string"]},
+          "period_label": {"type": "string", "minLength": 3},
           "status": {"type": "string", "enum": ["source-verified", "verified", "community", "experimental", "deprecated"]},
           "maintainer": {"type": "string", "enum": ["ramu", "community"]},
           "manifest": {"type": "string", "pattern": "^[^/].*manifest\\.json$"}
