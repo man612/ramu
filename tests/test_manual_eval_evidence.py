@@ -80,6 +80,16 @@ def main() -> int:
     if not any("contains_raw_transcript" in error for error in errors):
         raise AssertionError(f"Evidence yang mengaku menyimpan raw transcript harus ditolak schema: {errors}")
 
+    workflow = (ROOT / ".github/workflows/manual-eval-kit.yml").read_text(encoding="utf-8")
+    for marker in (
+        "scripts/manual_eval_evidence.py prepare",
+        "scripts/manual_eval_evidence.py validate",
+        "evals/results/manual-evidence.json",
+        "evals/results/manual-checklist.md",
+    ):
+        if marker not in workflow:
+            raise AssertionError(f"Manual Eval Kit kehilangan evidence wiring: {marker}")
+
     print("Manual Projects evidence regression — OK")
     return 0
 
