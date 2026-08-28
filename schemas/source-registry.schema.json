@@ -7,9 +7,11 @@
   "properties": {
     "version": {"type": "integer", "minimum": 1},
     "scope": {"type": "string", "enum": ["global", "institution", "program", "pack"]},
+    "institution_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
     "institution": {"type": "string"},
+    "program_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
     "program": {"type": "string"},
-    "pack_id": {"type": "string"},
+    "pack_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
     "verified_at": {"type": "string", "format": "date"},
     "sources": {
       "type": "array",
@@ -34,5 +36,37 @@
       }
     }
   },
+  "allOf": [
+    {
+      "if": {"properties": {"scope": {"const": "global"}}, "required": ["scope"]},
+      "then": {
+        "not": {
+          "anyOf": [
+            {"required": ["institution_id"]},
+            {"required": ["program_id"]},
+            {"required": ["pack_id"]}
+          ]
+        }
+      }
+    },
+    {
+      "if": {"properties": {"scope": {"const": "institution"}}, "required": ["scope"]},
+      "then": {
+        "required": ["institution_id", "institution"],
+        "not": {"anyOf": [{"required": ["program_id"]}, {"required": ["pack_id"]}]}
+      }
+    },
+    {
+      "if": {"properties": {"scope": {"const": "program"}}, "required": ["scope"]},
+      "then": {
+        "required": ["institution_id", "institution", "program_id", "program"],
+        "not": {"required": ["pack_id"]}
+      }
+    },
+    {
+      "if": {"properties": {"scope": {"const": "pack"}}, "required": ["scope"]},
+      "then": {"required": ["institution_id", "institution", "program_id", "program", "pack_id"]}
+    }
+  ],
   "additionalProperties": false
 }
