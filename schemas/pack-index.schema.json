@@ -5,7 +5,7 @@
   "type": "object",
   "required": ["version", "default_pack_id", "packs"],
   "properties": {
-    "version": {"type": "integer", "minimum": 1},
+    "version": {"const": 2},
     "default_pack_id": {"type": "string", "minLength": 3},
     "packs": {
       "type": "array",
