@@ -1,11 +1,13 @@
 {
-  "version": 2,
+  "version": 3,
   "default_pack_id": "id.ut.accounting-s1.2026-2027.s2",
   "packs": [
     {
       "id": "id.ut.accounting-s1.2026-2027.s2",
       "name": "UT S1 Akuntansi — Semester 2",
+      "institution_id": "id.ut",
       "institution": "Universitas Terbuka",
+      "program_id": "id.ut.accounting-s1",
       "program": "S1 Akuntansi",
       "academic_year": "2026/2027",
       "period_id": "semester-02",
