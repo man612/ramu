@@ -14,12 +14,15 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 - Stable machine identity `institution_id` + `program_id`, terpisah dari label manusia, beserta cross-file identity gate untuk katalog, manifest, scoped registry, dan eval suite.
 - Scoped source registry agar source global/runtime terpisah dari source institusi/program/pack.
 - **Composable eval suites** dengan urutan `core → institution → program → pack` agar failure mode reusable tidak perlu dicopy ke setiap periode.
-- **Manual Eval Kit** untuk membuat checklist behavior validation tanpa OpenAI API, termasuk provenance suite tiap case.
+- **Manual Eval Kit** untuk membuat checklist behavior validation tanpa OpenAI API, termasuk provenance suite dan critical/must-pass status tiap case.
 - CI matrix yang melakukan dry-run eval wiring untuk setiap pack yang terdaftar.
 - **Synthetic multi-pack foundation proof** yang membangun repo sementara dengan dua institusi, dua program, `Semester 2`, `Trimester 1`, program-level suite, serta positive/negative identity cases tanpa mempublish pack palsu ke katalog utama.
 - Static site contract untuk mencegah front-end kembali hardcode ke satu pack.
 - Metadata periode generic `period_id` + `period_label` agar tooling tidak mengasumsikan semua institusi memakai semester.
 - Validator nama Project yang memastikan label manusia konsisten dengan `period_label`.
+- **Eval trust-boundary regression** yang memastikan Project Instructions tetap berada pada authority `instructions`, reference/course/source content tetap user-level untrusted input, dan candidate output tidak masuk ke judge instructions.
+- **Critical eval gate**: case integritas/security tertentu dapat ditandai `critical: true` dan wajib lulus terlepas dari aggregate pass rate.
+- Regression test yang membuktikan pass rate `13/16 = 81.25%` tetap gagal bila ada critical FAIL, serta memastikan Manual Eval Kit mewarisi semantics critical dari contract yang sama.
 
 ### Changed
 
@@ -28,7 +31,12 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 - Scoped source registry sekarang wajib membawa identity sesuai scope; registry global tidak membawa identity institusi/program/pack.
 - `scope_ref` eval bukan lagi string bebas: institution harus cocok ke `institution_id`, program ke `program_id`, dan pack ke pack `id`.
 - Website Ramu sekarang membaca katalog dan manifest secara dinamis; tidak lagi memiliki `PACK_BASE` Semester 2 ataupun fallback `Semester ${...}` di JavaScript.
-- Behavior eval runner sekarang memilih pack melalui `--pack <pack-id>` dan menggabungkan ordered `eval_suites` dari manifest, bukan fixed `core + pack`.
+- Behavior eval runner memilih pack melalui `--pack <pack-id>` dan menggabungkan ordered `eval_suites` dari manifest, bukan fixed `core + pack`.
+- Automated candidate eval sekarang memisahkan **Project Instructions** dari reference material sesuai trust boundary Responses API; course/source/context tidak lagi digabung ke `instructions`.
+- LLM judge sekarang memperlakukan candidate output, conversation, dan judge notes sebagai **untrusted evidence**, dengan evaluator instructions yang melarang embedded instruction mengubah rubric/verdict.
+- Overall automated eval PASS sekarang membutuhkan pass rate memenuhi threshold **dan** tidak ada critical case yang gagal.
+- Core critical set awal: `E01` (jangan mengarang data), `E05` (sitasi palsu), `E08` (larangan AI pada submission), dan `E13` (prompt injection/secret).
+- Manual Eval Kit menandai critical case dan menganggap satu critical FAIL sebagai blocker overall PASS; `--output` sekarang juga aman menunjuk path di luar repository.
 - Regression case E14 konflik source pusat-vs-regional dipindahkan menjadi suite tingkat Universitas Terbuka agar dapat dipakai ulang oleh pack UT lain.
 - Validator period metadata memastikan `period_id` machine-safe dan sama antara katalog/manifest; site validator melarang asumsi `item.semester`/`manifest.semester` kembali muncul.
 - Validator eval memastikan core berada di awal, pack berada di akhir, scope tidak mundur, `scope_ref` cocok, ID case unik setelah merge, dan contract/behavior tetap berpasangan.
@@ -42,11 +50,12 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 
 ### Notes
 
-- Tidak ada API yang dibutuhkan untuk memakai Ramu, menjalankan static CI, membuat Manual Eval Kit, synthetic multi-pack proof, atau melakukan pilot pengguna.
+- Tidak ada API yang dibutuhkan untuk memakai Ramu, menjalankan static CI, membuat Manual Eval Kit, synthetic multi-pack proof, trust-boundary regression, critical-gate regression, atau melakukan pilot pengguna.
 - `jsonschema[format]` adalah dependency **validation/dev only**, bukan dependency runtime mahasiswa/site.
 - Automated Behavior Evals dengan API tetap tersedia sebagai QA tambahan dan bukan syarat public beta.
+- Responses API automated eval adalah **regression/benchmark approximation**, bukan simulasi identik ChatGPT Projects; manual validation pada Projects asli tetap dibutuhkan untuk product-level evidence.
 - Pack awal tetap Universitas Terbuka · S1 Akuntansi · Semester 2 · 2026/2027; synthetic Alpha/Beta hanya fixture test dan tidak dipublish sebagai pack pengguna.
-- Perubahan metadata/identity repository tidak meminta pengguna ChatGPT Project membuat ulang workspace/course pack; ini adalah migrasi kontrak repository/tooling.
+- Perubahan metadata/identity/eval tooling repository tidak meminta pengguna ChatGPT Project membuat ulang workspace/course pack.
 - Perubahan di bagian `Unreleased` di atas adalah kandidat utama untuk release berikutnya, **`v0.2.0-beta`**.
 
 ## [0.1.0-beta] - 2026-08-28
