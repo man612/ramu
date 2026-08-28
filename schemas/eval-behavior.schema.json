@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://man612.github.io/ramu/schemas/eval-behavior.schema.json",
+  "title": "Ramu behavior eval suite",
+  "type": "object",
+  "required": ["version", "suite_id", "scope", "cases"],
+  "properties": {
+    "version": {"type": "integer", "minimum": 1},
+    "suite_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
+    "scope": {"type": "string", "enum": ["core", "institution", "program", "pack"]},
+    "scope_ref": {"type": "string", "minLength": 1},
+    "defaults": {
+      "type": "object",
+      "properties": {
+        "min_score": {"type": "number", "minimum": 0, "maximum": 1},
+        "max_output_tokens": {"type": "integer", "minimum": 1}
+      },
+      "additionalProperties": false
+    },
+    "cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "turns"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^E[0-9]{2}$"},
+          "context_files": {"type": "array", "items": {"type": "string"}},
+          "tools": {"type": "array", "items": {"type": "string"}},
+          "turns": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["role", "content"],
+              "properties": {
+                "role": {"type": "string", "enum": ["user", "assistant"]},
+                "content": {"type": "string", "minLength": 1}
+              },
+              "additionalProperties": false
+            }
+          },
+          "judge_notes": {"type": "string"},
+          "min_score": {"type": "number", "minimum": 0, "maximum": 1},
+          "max_output_tokens": {"type": "integer", "minimum": 1}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"scope": {"const": "core"}}, "required": ["scope"]},
+      "then": {"not": {"required": ["scope_ref"]}},
+      "else": {"required": ["scope_ref"]}
+    }
+  ],
+  "additionalProperties": false
+}
