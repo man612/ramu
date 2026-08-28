@@ -4,14 +4,16 @@
 
 Ramu menyediakan konfigurasi workspace akademik yang bisa dipasang ke platform AI tanpa memaksa mahasiswa belajar prompt engineering.
 
-Implementasi pertama memakai **ChatGPT Projects**, tetapi format core dan pack tidak dibuat sebagai dokumentasi produk OpenAI semata. Jika platform utama berubah, course context, source governance, dan aturan belajar tetap dapat digunakan kembali melalui adapter/panduan baru.
+Implementasi pertama memakai **ChatGPT Projects**, tetapi format core dan pack tidak dibuat sebagai dokumentasi produk OpenAI semata. Jika platform utama berubah, course context, source governance, aturan belajar, dan kontrak evaluasi tetap dapat digunakan kembali melalui adapter/panduan baru.
 
 ## Arsitektur
 
-Ramu dibagi menjadi dua lapisan besar:
+Secara produk, Ramu tetap punya dua lapisan besar:
 
-1. **Core** — prinsip, protocol, learner-state contract, source rules, dan eval universal yang seharusnya dapat dipakai lintas kampus/prodi.
-2. **Pack** — konteks institusi + program + tahun akademik + semester beserta mata kuliah, sumber, versi, dan eval khususnya.
+1. **Core** — prinsip, protocol, learner-state contract, source rules, dan failure mode universal yang seharusnya dapat dipakai lintas kampus/prodi.
+2. **Pack** — konteks institusi + program + tahun akademik + periode beserta mata kuliah, sumber, versi, dan wiring evaluasinya.
+
+Di dalam pack, evaluasi tidak lagi diasumsikan hanya `core + pack`. Manifest menyusun **ordered `eval_suites`** agar rule yang reusable dapat ditempatkan pada scope yang tepat: `core → institution → program → pack`.
 
 `packs/index.json` adalah katalog machine-readable. Setiap entry menunjuk satu `manifest.json`. Tooling tidak boleh mengunci path satu semester tertentu; validator, website, manual eval, dan automated behavior eval harus menemukan pack melalui katalog/manifest.
 
@@ -20,24 +22,60 @@ packs/
 ├── index.json
 ├── universitas-terbuka/
 │   ├── source-registry.json
+│   ├── evals/                         # rule/eval reusable untuk UT
 │   └── s1-akuntansi/
 │       └── 2026-2027/
 │           ├── semester-02/
-│           └── semester-03/        # saat tersedia
-└── universitas-lain/               # saat ada pack terverifikasi/request
+│           └── semester-03/           # saat tersedia
+└── universitas-lain/                  # saat ada pack terverifikasi/request
 ```
 
 ## Unit utama
 
 - **Core** — prinsip umum yang jarang berubah.
 - **Pack catalog** — daftar pack yang dapat ditemukan tooling/site.
-- **Pack manifest** — metadata institusi/program/semester, course list, source registry, eval suite, dan version.
+- **Pack manifest** — metadata institusi/program/periode, course list, source registry, ordered `eval_suites`, dan version.
 - **Course pack** — konfigurasi siap upload untuk satu mata kuliah.
 - **Project Instructions** — perilaku runtime yang ditempel ke Project.
-- **Core eval** — failure mode universal seperti hallucinated citation, prompt injection, dan state/version conflict.
-- **Pack eval** — behavior yang hanya masuk akal untuk mata kuliah/institusi tertentu.
+- **Eval suite `core`** — failure mode universal seperti hallucinated citation, prompt injection, source freshness, dan state/version conflict.
+- **Eval suite `institution`** — rule yang berlaku lintas pack pada satu institusi, misalnya cara menyelesaikan konflik source pusat-vs-regional UT.
+- **Eval suite `program`** — rule reusable pada satu program studi bila memang ada failure mode yang tidak layak dinaikkan ke institusi.
+- **Eval suite `pack`** — behavior yang benar-benar spesifik periode/mata kuliah pada pack aktif.
 - **Source registry** — dapat berscope global, institusi, program, atau pack agar tidak menjadi satu file raksasa.
 - **Site** — membaca katalog + manifest, bukan hardcode semester tertentu.
+
+## Komposisi eval
+
+Setiap manifest menyusun suite dari scope paling umum ke paling spesifik.
+
+```text
+core
+ ↓
+institution   (opsional)
+ ↓
+program       (opsional)
+ ↓
+pack
+```
+
+Pack UT S1 Akuntansi Semester 2 saat ini memakai:
+
+```text
+core → universitas-terbuka → semester-02
+```
+
+Contohnya, regression case konflik katalog pusat dan halaman regional UT berada pada suite institusi Universitas Terbuka. Semester 3 UT nanti dapat memakai suite yang sama tanpa menyalin case tersebut. Sebaliknya, universitas lain tidak ikut membawa rule UT.
+
+Validator menjaga beberapa invariant:
+
+- suite core harus menjadi lapisan pertama;
+- suite pack harus menjadi lapisan terakhir;
+- scope tidak boleh mundur dari yang lebih spesifik ke lebih umum;
+- `scope_ref` harus cocok dengan identitas scope yang dipakai;
+- ID case harus tetap unik setelah seluruh suite digabung;
+- behavior dan contract case harus tetap berpasangan.
+
+Behavior defaults boleh dioverride oleh suite yang lebih spesifik dan muncul kemudian, tetapi regression case yang memiliki ID sama tidak boleh ditimpa diam-diam.
 
 ## Maintainer pack
 
@@ -50,7 +88,9 @@ Status sumber dan status maintainer adalah dua hal berbeda. Community pack tetap
 
 ## Prinsip versioning
 
-Data akademik selalu ditulis bersama tahun akademik, `pack_version`, dan tanggal verifikasi. Jika kurikulum berubah, pack baru dibuat pada jalur versi/tahun/semester yang sesuai; pack lama tidak diam-diam ditimpa seolah masih berlaku.
+Data akademik selalu ditulis bersama tahun akademik, `pack_version`, dan tanggal verifikasi. Jika kurikulum berubah, pack baru dibuat pada jalur versi/tahun/periode yang sesuai; pack lama tidak diam-diam ditimpa seolah masih berlaku.
+
+`contract_version` dapat berubah ketika wiring/format kontrak evaluasi berubah walaupun isi course pack mahasiswa tidak berubah. Karena itu perubahan arsitektur eval tidak otomatis berarti `pack_version` course material juga harus dinaikkan.
 
 Jika dua course pack untuk konteks yang sama terpasang sekaligus, versi yang sesuai manifest aktif diprioritaskan dan versi lama sebaiknya dihapus dari Project Sources.
 
@@ -72,6 +112,8 @@ Ramu tidak membutuhkan OpenAI API untuk dipakai mahasiswa.
 - manual validation di ChatGPT Projects: gratis dan menguji runtime produk yang sebenarnya;
 - automated API behavior eval: opsional sebagai regression/benchmark tambahan ketika API tersedia.
 
+Static CI menggabungkan ordered eval suites setiap pack dan memeriksa wiring seluruh case. Manual Eval Kit menggunakan suite yang sama untuk menghasilkan checklist tanpa API.
+
 ## Bukan target Ramu
 
 - menyimpan jawaban tugas massal;
@@ -79,4 +121,4 @@ Ramu tidak membutuhkan OpenAI API untuk dipakai mahasiswa.
 - menjadi LMS pengganti kampus;
 - menebak nilai akhir mahasiswa;
 - menjanjikan keluaran AI selalu benar atau kebal prompt injection;
-- mengunci pengguna ke satu model, plan, atau vendor untuk selamanya.
+- mengunci pengguna ke satu model, plan, fitur tambahan, atau vendor untuk selamanya.

@@ -48,13 +48,13 @@ Katalog pusat mencatat Semester 2 sebanyak **16 SKS**:
 - ECON4102 Pengantar Ekonomi Mikro — 3 SKS;
 - EMBS4101 Manajemen — 4 SKS.
 
-Katalog juga menandai EACC4103 AKM I sebagai BP/BPro. Detail akademik seperti ini milik pack, bukan core Ramu; pack semester/program/universitas lain harus mempunyai source dan verifikasi sendiri.
+Katalog juga menandai EACC4103 AKM I sebagai BP/BPro. Detail akademik seperti ini milik pack, bukan core Ramu; pack periode/program/universitas lain harus mempunyai source dan verifikasi sendiri.
 
 ## Contoh konflik source resmi
 
 Saat validasi awal ditemukan halaman UT Banjarmasin masih berbeda dengan katalog pusat untuk beberapa data Semester 2. Karena registry menandai halaman regional sebagai `secondary` dan katalog pusat sebagai source kanonik untuk struktur kurikulum, Ramu tidak menggabungkan kedua nilai secara diam-diam.
 
-Prinsip ini juga menjadi pack-specific regression case. Jika institusi lain memiliki struktur otoritas berbeda, pack institusi tersebut dapat mendefinisikan registry/eval yang sesuai tanpa mengubah aturan generic Ramu.
+Failure mode tersebut sekarang menjadi **regression case tingkat institusi Universitas Terbuka**, bukan case yang harus dicopy ke setiap semester. Pack UT lain dapat reuse suite institusi yang sama; universitas lain dapat mendefinisikan hierarchy source/eval mereka sendiri tanpa mewarisi aturan UT.
 
 ## Source freshness
 
@@ -67,9 +67,17 @@ Workflow **Source Freshness Watch** berjalan mingguan. Source aktif yang overdue
 - perubahan HTML/hash bukan otomatis perubahan aturan;
 - `verified_at` hanya diperbarui setelah maintainer benar-benar membaca/membandingkan source.
 
-## Validasi pack
+## Validasi pack dan eval suites
 
-`python scripts/validate_repo.py` memeriksa semua manifest yang terdaftar di `packs/index.json`, source dependency, course file, total SKS, version marker, Project Instructions, dan core + pack eval.
+`python scripts/validate_repo.py` memeriksa semua manifest yang terdaftar di `packs/index.json`, source dependency, course file, total SKS, version marker, Project Instructions, serta seluruh ordered `eval_suites` yang dipakai pack.
+
+Eval dapat disusun dari scope paling umum ke paling spesifik:
+
+```text
+core → institution → program → pack
+```
+
+Scope `institution` dan `program` bersifat opsional. Validator memastikan core berada di awal, pack berada di akhir, scope tidak mundur, `scope_ref` cocok, ID case tidak duplikat setelah merge, dan setiap contract case mempunyai behavior case yang sesuai.
 
 CI kemudian menjalankan dry-run eval **per pack**. Jadi ketika Semester 3 atau institusi baru ditambahkan ke katalog, pack tersebut ikut menjadi bagian validation matrix tanpa menambah path hardcode di workflow.
 
@@ -77,4 +85,12 @@ CI kemudian menjalankan dry-run eval **per pack**. Jadi ketika Semester 3 atau i
 
 Fitur ChatGPT dapat berubah lebih cepat daripada kurikulum akademik sehingga dokumentasi produk berada di global registry dengan interval review lebih pendek. Ramu tidak menjadikan nama model, Study Mode, atau satu detail UI sebagai dependency permanen bila workflow inti dapat dibuat lebih netral.
 
-Tanggal verifikasi source harus dibaca sebagai snapshot, bukan cap “benar selamanya”.
+Pada review **28 Agustus 2026**:
+
+- dokumentasi resmi Projects masih menempatkan Projects sebagai workspace yang menggabungkan chat, file/source, custom instructions, memory/context, dan tersedia lintas plan;
+- dokumentasi resmi Study Mode secara eksplisit menyatakan Study Mode **tidak tersedia di Projects**;
+- Data Controls FAQ tetap menjadi source utama untuk pengaturan penggunaan percakapan/data ChatGPT.
+
+Karena itu Ramu tidak menyuruh pengguna mengaktifkan Study Mode di dalam Project. Guardrail belajar Ramu berasal dari Project Instructions, protocols, course context, dan eval contract sendiri; Study Mode tetap fitur produk terpisah yang dapat berubah.
+
+Source produk yang direview ada di [`../sources/registry.json`](../sources/registry.json). Tanggal verifikasi source harus dibaca sebagai snapshot, bukan cap “benar selamanya”.
