@@ -54,6 +54,9 @@ jobs:
       - name: Prove multi-pack and non-semester foundation
         run: python tests/test_multipack_foundation.py
 
+      - name: Prove eval trust boundaries
+        run: python tests/test_eval_trust_boundary.py
+
       - name: Validate human-facing project names
         run: python scripts/validate_display_names.py
 
