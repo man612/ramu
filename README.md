@@ -5,17 +5,17 @@
 
 <p align="center">
   <strong>Structured AI learning workspace untuk ChatGPT Projects.</strong><br>
-  Source grounding, pedagogical guardrails, learning context, dan behavior eval dalam satu framework yang bisa diperiksa ulang.
+  Source grounding, learning guardrails, context isolation, source governance, dan eval yang dapat diperiksa ulang.
 </p>
 
 <p align="center">
   <a href="https://man612.github.io/ramu/"><strong>Buka Ramu</strong></a>
   ·
-  <a href="https://man612.github.io/ramu/setup.html">Coba setup</a>
+  <a href="https://man612.github.io/ramu/setup.html">Coba satu mata kuliah</a>
   ·
   <a href="docs/LANDASAN-PEMBELAJARAN.md">Landasan pembelajaran</a>
   ·
-  <a href="docs/PILOT-PUBLIC-BETA.md">Pilot public beta</a>
+  <a href="evals/manual/README.md">Manual validation</a>
 </p>
 
 <p align="center">
@@ -23,53 +23,60 @@
   <img alt="Validasi Ramu" src="https://img.shields.io/github/actions/workflow/status/man612/ramu/validate.yml?label=contracts&style=flat-square">
   <img alt="License MIT" src="https://img.shields.io/badge/license-MIT-4C6B58?style=flat-square">
   <img alt="Status" src="https://img.shields.io/badge/status-public%20beta-BB8C51?style=flat-square">
-  <img alt="Paket pertama" src="https://img.shields.io/badge/paket-UT%20S1%20Akuntansi-405A46?style=flat-square">
 </p>
 
 ---
 
 ## Ramu itu apa?
 
-Ramu adalah **framework konfigurasi untuk ChatGPT Projects** agar setiap mata kuliah memiliki konteks, sumber, aturan belajar, dan cara pemeriksaan yang jelas.
+Ramu adalah **framework workspace belajar untuk ChatGPT Projects**. Satu mata kuliah ditempatkan di satu Project yang memiliki Project Instructions, course pack, source yang sesuai, dan guardrail belajar.
 
-Ramu bukan aplikasi pengganti ChatGPT, bukan model AI baru, dan bukan kumpulan jawaban tugas. Yang diatur Ramu adalah **cara workspace belajar dibentuk dan diuji**: source mana yang dipercaya, informasi apa yang belum diketahui, kapan mahasiswa perlu mencoba sendiri, bagaimana jawaban diperiksa, dan failure mode apa yang harus ditangkap oleh eval.
+Ramu bukan model AI, bukan LMS, bukan backend yang menerima file mahasiswa, dan bukan kumpulan jawaban tugas. Website Ramu bersifat statis; materi pribadi tetap ditambahkan pengguna langsung ke ChatGPT Project masing-masing.
 
-> Nama **Ramu** berasal dari kata *meramu*: menyatukan konteks, sumber, materi, aturan belajar, dan pemeriksaan menjadi satu ruang belajar yang siap dipakai.
+> Nama **Ramu** berasal dari kata *meramu*: menyatukan konteks, sumber, materi, aturan belajar, dan pemeriksaan menjadi ruang belajar yang siap dipakai.
 
-### Masalah yang ingin diselesaikan
+## Kenapa tidak cukup chat biasa?
 
-ChatGPT biasa sudah bisa menjelaskan materi. Masalahnya, percakapan kuliah yang berjalan lama mudah kehilangan struktur: mata kuliah tercampur, aturan tugas harus dijelaskan ulang, sumber terbaru bercampur dengan materi lama, dan AI dapat terlalu cepat menjadi mesin jawaban.
+AI sudah mampu menjelaskan materi, tetapi workspace kuliah yang berjalan lama memiliki masalah lain: konteks antarmata kuliah bisa bercampur, aturan tugas terlupa, source lama dipakai seolah terbaru, versi course pack konflik, atau AI terlalu cepat memberi jawaban akhir.
 
-Ramu menambahkan lapisan yang lebih disiplin:
+Ramu menjaga lima lapisan:
 
 | Lapisan | Yang dijaga |
 |---|---|
-| **Referensi** | sumber resmi, prioritas source, tanggal verifikasi, dan freshness |
-| **Instruksi** | aturan tugas, rubrik, guardrail, dan cara tutor merespons |
-| **Zona konteks** | satu mata kuliah berada di Project-nya sendiri |
-| **Materi** | BMP/materi/screenshot/PDF milik mahasiswa digunakan saat relevan |
-| **Asesmen** | jawaban, hitungan, sumber, dan pemahaman diperiksa sebelum dianggap selesai |
+| **Referensi** | otoritas source, canonical source, tanggal verifikasi, freshness |
+| **Instruksi** | aturan kampus/tutor/rubrik, integritas, prompt-injection boundary |
+| **Zona konteks** | mata kuliah dan learner state tidak tercampur |
+| **Materi** | BMP/materi/screenshot/PDF dipakai sebagai content, bukan instruksi liar |
+| **Asesmen** | bantuan bertahap, checking, review queue, behavior contract |
 
-Folder `protocols`, `learning`, `sources`, `schemas`, dan `evals` adalah lapisan desain/pemeriksaan di belakang runtime. Pengguna sehari-hari cukup memasang **Project Instructions + satu course pack** pada Project mata kuliah.
+## Multi-pack dari awal
 
-## Coba dulu satu mata kuliah
+Pack pertama Ramu adalah **Universitas Terbuka · S1 Akuntansi · Semester 2 · 2026/2027**. Namun tooling tidak mengunci Semester 2 sebagai satu-satunya bentuk Ramu.
 
-Jangan setup seluruh semester hanya untuk mengetahui apakah Ramu cocok.
+```text
+packs/
+├── index.json
+├── universitas-terbuka/
+│   ├── source-registry.json
+│   └── s1-akuntansi/
+│       └── 2026-2027/
+│           ├── semester-02/
+│           └── semester-03/        # ketika tersedia
+└── institusi-lain/                 # ketika ada pack yang layak ditambahkan
+```
 
-**Jalur tercepat:**
+[`packs/index.json`](packs/index.json) adalah katalog machine-readable. Setiap entry menunjuk `manifest.json` pack. Validator, GitHub Pages, Manual Eval Kit, dan Behavior Evals menemukan pack melalui katalog/manifest—bukan melalui path Semester 2 yang ditulis di source code.
 
-1. buka [panduan setup](https://man612.github.io/ramu/setup.html);
-2. pilih **satu** mata kuliah yang ingin dicoba;
-3. buat ChatGPT Project untuk mata kuliah tersebut;
-4. pasang `PROJECT-INSTRUCTIONS.md` melalui Project settings;
-5. unggah satu course pack melalui Sources;
-6. mulai dengan permintaan normal seperti `aku belum paham bagian ini`, `cek jawabanku`, atau `bantu aku latihan tanpa langsung kasih kunci`.
+Pack membedakan dua hal:
 
-Kalau satu Project sudah terasa berguna, baru pasang mata kuliah lain. Ini sengaja menjadi pola onboarding public beta supaya pengguna merasakan manfaat sebelum melakukan setup lebih banyak.
+- `maintainer: ramu` → **Ramu Maintained**;
+- `maintainer: community` → **Community maintained**.
+
+Istilah “maintained” dipakai agar tidak memberi kesan pack tersebut resmi diterbitkan universitas. Ramu tetap proyek independen.
 
 ## Paket yang tersedia sekarang
 
-Paket pertama dibuat untuk **Universitas Terbuka · S1 Akuntansi · Semester 2 · 2026/2027**.
+Pack awal saat ini berisi:
 
 | Project | Mata kuliah | SKS |
 |---|---|---:|
@@ -79,158 +86,167 @@ Paket pertama dibuat untuk **Universitas Terbuka · S1 Akuntansi · Semester 2 �
 | `S2 • Ekonomi Mikro` | ECON4102 Pengantar Ekonomi Mikro | 3 |
 | `S2 • Manajemen` | EMBS4101 Manajemen | 4 |
 
-Sumber akademik utama paket sudah dicocokkan dengan katalog/pedoman resmi yang tercatat di [`sources/registry.json`](sources/registry.json). Materi kuliah berhak cipta tidak disalin ke repo; mahasiswa menambahkan materi yang memang mereka miliki/berhak akses ke Project masing-masing.
+Data pack dan source dependency ada di [`packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/manifest.json`](packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/manifest.json). Source UT berada di registry institusi, sementara source runtime seperti dokumentasi ChatGPT berada di global registry.
 
-## Apa yang terjadi saat dipakai?
+Materi kuliah berhak cipta tidak disalin ke repository.
 
-Contoh sederhananya:
+## Mulai dari satu mata kuliah
 
-**Tanpa struktur khusus**
+Tidak perlu setup seluruh semester untuk mencoba Ramu.
 
-```text
-mahasiswa → kirim soal → AI mencoba menjawab dari konteks yang tersedia
-```
+1. buka [site Ramu](https://man612.github.io/ramu/);
+2. pilih pack yang sesuai;
+3. pilih satu mata kuliah;
+4. buat ChatGPT Project;
+5. pasang Project Instructions melalui Project settings;
+6. unggah satu course pack melalui Sources;
+7. mulai belajar seperti biasa.
 
-**Dengan Ramu**
+Kalau satu Project terasa berguna, baru tambahkan Project lain. Progress setup disimpan lokal di browser berdasarkan `pack id`, bukan dikirim ke server Ramu.
 
-```text
-mahasiswa
-   ↓
-Project mata kuliah
-   ↓
-Project Instructions + course pack
-   ↓
-cek konteks / source / informasi yang hilang
-   ↓
-pilih mode: belajar, tugas, review, atau latihan
-   ↓
-beri bantuan bertahap / minta percobaan mahasiswa
-   ↓
-verifikasi jawaban dan source
-   ↓
-simpan konteks belajar penting bila diperlukan
-```
+## Core vs pack
 
-Ramu tidak menjamin setiap model selalu mengikuti alur ini. Karena itu perilaku penting dibuat sebagai kontrak dan behavior eval, bukan hanya ditulis di README.
-
-## Model AI tidak di-hardcode
-
-Ramu sengaja **tidak menetapkan satu nama model sebagai dependency permanen**.
-
-Katalog model, model default setiap paket ChatGPT, batas penggunaan, dan model API dapat berubah. Project Instructions/course pack harus tetap masuk akal ketika model berganti. Untuk behavior eval nyata, model kandidat dan model judge dipilih **secara eksplisit saat run** dan dicatat di artifact hasil.
-
-Konsekuensinya:
-
-- perubahan model default ChatGPT tidak membutuhkan perubahan course pack hanya karena namanya berganti;
-- hasil eval selalu menyebut model yang benar-benar diuji;
-- candidate dan judge dapat dipilih terpisah;
-- jika candidate dan judge sama, runner memberi warning karena hasil tersebut sebaiknya tidak menjadi satu-satunya bukti validasi.
-
-## Belajarnya tidak cuma “tanya → dapat jawaban”
-
-Ramu menggunakan bantuan bertahap: memberi penjelasan/petunjuk secukupnya, memberi kesempatan mencoba, mengoreksi miskonsepsi, lalu mengurangi bantuan ketika mahasiswa mulai mampu. Untuk latihan ujian, pertanyaan dapat diberikan sebelum kunci dan topik yang masih rapuh dapat masuk ke review queue.
-
-Desain ini bertujuan membuat AI membantu **proses belajar**, bukan otomatis menggantikan proses tersebut. Dasar riset, interpretasi, dan keterbatasannya dibahas di [`docs/LANDASAN-PEMBELAJARAN.md`](docs/LANDASAN-PEMBELAJARAN.md).
-
-Ramu tidak mengklaim penelitian tersebut membuktikan Ramu efektif. Efektivitas framework tetap harus diuji melalui behavior eval dan penggunaan nyata.
-
-## Struktur repo
+Ramu memisahkan aturan yang universal dari konteks akademik tertentu.
 
 ```text
-ramu/
-├── core/        prinsip dasar Ramu
-├── protocols/   spesifikasi perilaku belajar, tugas, review, dan latihan
-├── learning/    template desain state belajar
-├── packs/       paket kampus / program studi / semester
-├── sources/     registry sumber dan kebijakan freshness
-├── evals/       contract + behavior eval
-├── schemas/     kontrak data terstruktur
-├── scripts/     validator, freshness check, dan behavior runner
-├── docs/        panduan, riset, validasi, dan pilot
-├── site/        GitHub Pages
-└── .github/     workflow, issue templates, dan aset
+core / protocols / learning
+        ↓
+   core behavior eval
+        +
+pack manifest / Project Instructions / courses / sources
+        ↓
+   pack behavior eval
+        ↓
+  satu suite untuk pack yang dipilih
 ```
 
-## Yang diuji otomatis
+**Core eval** menangkap failure mode yang seharusnya berlaku luas: data yang hilang, sitasi palsu, integritas tugas, retrieval practice, learner state, source freshness, prompt injection, dan konflik versi pack.
 
-CI rutin menjalankan:
+**Pack eval** menangkap perilaku yang hanya bermakna pada konteks tertentu. Pada UT S1 Akuntansi Semester 2 contohnya: pajak lama vs aturan terbaru, jurnal AKM I, source UT pusat vs regional, dan context isolation antarmata kuliah.
+
+Dengan begitu Semester 3 atau universitas lain tidak perlu menyalin seluruh eval universal.
+
+## Tidak punya API tetap bisa diuji
+
+Ramu memiliki tiga lapisan validation:
+
+| Jalur | API? | Fungsi |
+|---|---:|---|
+| **Static CI** | tidak | manifest, pack catalog, source registry, contract marker, site wiring |
+| **Manual Behavior Validation** | tidak | menjalankan case langsung di ChatGPT Projects asli |
+| **Automated Behavior Eval** | ya, opsional | regression/benchmark melalui Responses API + model judge |
+
+Static validation lokal:
 
 ```bash
 python scripts/validate_repo.py
-python scripts/run_behavior_evals.py --dry-run
+python scripts/validate_site.py
 python scripts/check_source_freshness.py
+python scripts/run_behavior_evals.py --dry-run \
+  --pack id.ut.accounting-s1.2026-2027.s2
 ```
 
-Validator memeriksa antara lain:
+Membuat checklist manual tanpa API:
 
-- total SKS dan file mata kuliah pada manifest;
-- `pack_version` dan metadata verifikasi course pack;
-- struktur source registry;
-- ID eval yang unik;
-- learner-state templates dan format runtime **Catatan Belajar Terbaru**;
-- contract marker pada Project Instructions/protokol/course pack;
-- seluruh behavior case memiliki context file yang valid.
+```bash
+python scripts/prepare_manual_eval.py \
+  --pack id.ut.accounting-s1.2026-2027.s2
+```
 
-Contract test **bukan bukti bahwa model selalu berperilaku benar**. Tujuannya mencegah regresi struktural, misalnya guardrail “jangan mengarang DOI”, “jangan menebak screenshot”, atau “bedakan modul dengan aturan terbaru” hilang tanpa sengaja.
+Atau gunakan **Actions → Manual Eval Kit**. Workflow tersebut tidak membutuhkan secret dan hanya menghasilkan checklist dari core + pack eval yang sama.
 
-## Behavior eval nyata
+Automated API eval tetap tersedia bila suatu saat API digunakan:
 
-Workflow **Behavior Evals** adalah gate manual karena memakai API dan hasil model bersifat probabilistik.
+```bash
+python scripts/run_behavior_evals.py \
+  --pack id.ut.accounting-s1.2026-2027.s2 \
+  --candidate-model <candidate> \
+  --grader-model <judge>
+```
 
-Saat dijalankan, maintainer memilih:
+Ramu sengaja tidak mengunci nama model permanen.
 
-- model kandidat;
-- model judge;
-- case yang akan diuji (`all` atau subset seperti `E01,E05,E08`);
-- minimum pass rate.
+## Source governance
 
-Run menghasilkan respons kandidat, hasil judge, skor, penggunaan token, summary, dan artifact JSON untuk audit.
+Registry source berscope:
 
-**Status public beta saat ini:** wiring/dataset eval divalidasi oleh CI, tetapi hasil behavior eval nyata belum boleh dianggap bukti stabilitas sebelum workflow tersebut benar-benar dijalankan dan hasilnya direview. Panduan eval ada di [`evals/behavior/README.md`](evals/behavior/README.md).
+```text
+sources/registry.json                     global/runtime
+packs/<institusi>/source-registry.json    institusi
+...                                       program/pack bila diperlukan
+```
 
-## Source freshness
+Setiap pack menyebut `source_registries` yang menjadi dependency-nya. Source mempunyai `authority`, `canonical_for`, `verified_at`, `review_interval_days`, `watch`, dan `status`.
 
-`sources/registry.json` membedakan sumber kanonik, sumber sekunder, dan community signal. Setiap sumber memiliki tanggal verifikasi dan interval review.
+Source Watch mencari seluruh registry tersebut. URL yang hidup bukan bukti fakta masih terbaru; URL yang gagal juga bukan bukti fakta berubah. Update `verified_at` harus mengikuti review manusia.
 
-Workflow mingguan memeriksa dua hal:
+## CI yang tumbuh bersama jumlah pack
 
-1. apakah sumber aktif sudah melewati jadwal review;
-2. apakah watched URL masih dapat dijangkau.
+`Validate Ramu` memiliki dua tahap utama:
 
-URL yang tidak dapat dijangkau memicu review, tetapi **tidak otomatis dianggap bukti bahwa isi/fakta sumber berubah**.
+1. validasi katalog/manifest/source/site secara keseluruhan;
+2. matrix dry-run untuk setiap pack di `packs/index.json`.
 
-Dokumentasi produk yang cepat berubah memakai interval review lebih pendek daripada katalog akademik tahunan.
+Job akhir selalu bernama **`validate`**, sehingga branch protection dapat memakai satu required status check walaupun jumlah pack bertambah.
 
-## Status kesiapan
+Dependency GitHub Actions yang dipakai workflow dipin ke full commit SHA agar tag dependency tidak menjadi bagian supply-chain yang dapat bergerak diam-diam.
 
-| Area | Status |
-|---|---|
-| Source akademik paket awal | terverifikasi terhadap sumber yang dicatat |
-| Static contracts / dry-run eval | otomatis di CI |
-| Source freshness monitoring | otomatis mingguan |
-| Behavior eval nyata | tersedia, perlu dijalankan dan direview |
-| Pilot pengguna | public beta; protokol tersedia |
-| License | MIT |
-| Stabil / fully validated | **belum diklaim** |
+## Status pack
 
-Public beta berarti Ramu sudah cukup terstruktur untuk dicoba pengguna lain sambil failure mode dikumpulkan. Itu bukan janji bahwa semua model, semua jenis tugas, atau semua kondisi Project sudah tervalidasi.
+- `source-verified` — source utama sudah diperiksa, behavior belum diklaim penuh;
+- `verified` — source + behavior validation relevan telah direview sesuai standar release saat itu;
+- `community` — kontribusi komunitas yang belum mencapai status maintained/verified;
+- `experimental` — masih diuji;
+- `deprecated` — tidak direkomendasikan untuk penggunaan baru.
 
-Lihat [`docs/PILOT-PUBLIC-BETA.md`](docs/PILOT-PUBLIC-BETA.md) untuk cara menguji activation, setup friction, return use, dan behavior failure pada pengguna nyata.
+Status `verified` tetap snapshot terhadap **pack version + tanggal + runtime/product/model yang diuji**, bukan jaminan AI selalu benar.
 
-## Berkontribusi
+## Prompt injection
 
-Kontribusi dokumentasi, source update, behavior eval, tooling, dan course pack baru diterima melalui pull request. Baca [`CONTRIBUTING.md`](CONTRIBUTING.md) sebelum mengirim perubahan.
+Project Source, PDF, web, screenshot, dan metadata diperlakukan sebagai **content**, bukan otomatis sebagai instruksi yang boleh menimpa Project Instructions. Ramu memiliki contract/eval untuk source injection, tetapi tidak mengklaim “prompt-injection proof”. Failure baru yang ditemukan pengguna sebaiknya diubah menjadi regression case.
 
-Masalah keamanan/prompt injection/secret handling dibahas di [`SECURITY.md`](SECURITY.md).
+## Struktur repository
 
-Ramu dilisensikan dengan [MIT License](LICENSE).
+```text
+ramu/
+├── core/          prinsip universal
+├── protocols/     belajar, tugas, review, latihan
+├── learning/      learner-state contracts/templates
+├── packs/         catalog + institusi/program/semester/course pack
+├── sources/       source global + freshness policy
+├── evals/         core eval, manual tooling docs, results ignored
+├── schemas/       kontrak katalog/manifest/registry/eval
+├── scripts/       discovery, validator, freshness, eval runner
+├── docs/          riset, arah proyek, validasi, pilot
+├── site/          GitHub Pages catalog-driven
+└── .github/       CI, manual/API eval, source watch, Pages
+```
+
+## Menambah Semester 3 / program / universitas lain
+
+Prinsipnya bukan mengedit `app.js` atau validator. Buat pack + manifest + source/eval yang relevan, lalu daftarkan ke `packs/index.json`. Panduan contributor ada di [`CONTRIBUTING.md`](CONTRIBUTING.md).
+
+Validator akan menolak manifest yang tidak terdaftar, entry katalog yang menunjuk file hilang, ID source/eval duplikat, course yang tidak self-describing, atau wiring eval yang tidak lengkap.
+
+## Landasan dan batas klaim
+
+Desain belajar Ramu mengambil inspirasi dari riset active learning, tutoring, self-regulated learning, retrieval practice, dan guardrails penggunaan generative AI. Referensi dan batas interpretasinya ada di [`docs/LANDASAN-PEMBELAJARAN.md`](docs/LANDASAN-PEMBELAJARAN.md).
+
+Riset tersebut bukan bukti bahwa Ramu sendiri otomatis efektif. Public beta tetap membutuhkan penggunaan nyata, manual behavior validation, dan pengumpulan failure mode. Lihat [`docs/PILOT-PUBLIC-BETA.md`](docs/PILOT-PUBLIC-BETA.md).
+
+## Kontribusi dan keamanan
+
+- [`CONTRIBUTING.md`](CONTRIBUTING.md)
+- [`SECURITY.md`](SECURITY.md)
+- [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md)
+- [MIT License](LICENSE)
 
 ---
 
 <p align="center">
-  <b>Mulai kecil → <a href="https://man612.github.io/ramu/setup.html">pasang satu mata kuliah dulu</a></b>
+  <b>Pilih pack → coba satu mata kuliah → nilai perilakunya → perluas kalau memang berguna.</b>
 </p>
 
 <p align="center">
-  <sub>Proyek independen. Bukan layanan resmi Universitas Terbuka maupun OpenAI.</sub>
+  <sub>Proyek independen. Bukan layanan resmi institusi pendidikan mana pun maupun OpenAI.</sub>
 </p>
