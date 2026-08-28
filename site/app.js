@@ -1,45 +1,102 @@
-(() => {
-  ["motion.css", "mobile.css"].forEach(href => {
-    if (document.querySelector(`link[href="${href}"]`)) return;
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = href;
-    document.head.appendChild(link);
-  });
+const PACK_INDEX_URL = "./packs/index.json";
 
-  ["motion.js", "mobile.js"].forEach(src => {
-    if (document.querySelector(`script[src="${src}"]`)) return;
-    const script = document.createElement("script");
-    script.src = src;
-    script.defer = true;
-    document.head.appendChild(script);
-  });
-})();
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
 
-const PACK_BASE = "./packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02";
-
-const COURSE_FOCUS = {
-  EACC4104: "aturan pajak, konsep, dan kasus",
-  EACC4103: "jurnal, hitungan, kasus, dan PRATON",
-  EMBS4210: "rumus, hitungan, dan analisis keuangan",
-  ECON4102: "konsep, grafik, dan analisis ekonomi",
-  EMBS4101: "konsep manajemen dan analisis kasus"
-};
-
-async function getManifest() {
-  const response = await fetch(`${PACK_BASE}/manifest.json`, { cache: "no-store" });
-  if (!response.ok) throw new Error("Manifest tidak dapat dimuat");
+async function fetchJson(url) {
+  const response = await fetch(url, { cache: "no-store" });
+  if (!response.ok) throw new Error(`Tidak dapat memuat ${url}`);
   return response.json();
 }
 
-function renderHomeCourses(manifest) {
+function entryLabel(entry) {
+  return `${entry.institution} · ${entry.program} · ${entry.academic_year} · Semester ${entry.semester}`;
+}
+
+function currentPackEntry(catalog) {
+  const requested = new URLSearchParams(window.location.search).get("pack");
+  return catalog.packs.find(item => item.id === requested)
+    || catalog.packs.find(item => item.id === catalog.default_pack_id)
+    || catalog.packs[0];
+}
+
+function manifestUrl(entry) {
+  return `./packs/${entry.manifest}`;
+}
+
+function packBase(entry) {
+  const parts = entry.manifest.split("/");
+  parts.pop();
+  return `./packs/${parts.join("/")}`;
+}
+
+function setupUrl(packId) {
+  return `setup.html?pack=${encodeURIComponent(packId)}`;
+}
+
+function renderPackSelectors(catalog, active) {
+  document.querySelectorAll("#pack-select").forEach(select => {
+    select.innerHTML = "";
+    catalog.packs.forEach(entry => {
+      const option = document.createElement("option");
+      option.value = entry.id;
+      option.textContent = entryLabel(entry);
+      option.selected = entry.id === active.id;
+      select.appendChild(option);
+    });
+    select.addEventListener("change", () => {
+      const url = new URL(window.location.href);
+      url.searchParams.set("pack", select.value);
+      window.location.assign(url.toString());
+    });
+  });
+}
+
+function setText(selector, value) {
+  const el = document.querySelector(selector);
+  if (el) el.textContent = value;
+}
+
+function statusLabel(status, maintainer) {
+  const statusMap = {
+    "source-verified": "Sumber terverifikasi",
+    verified: "Terverifikasi",
+    community: "Community pack",
+    experimental: "Eksperimental",
+    deprecated: "Kedaluwarsa"
+  };
+  const base = statusMap[status] || status;
+  return maintainer === "ramu" ? `${base} · Ramu Maintained` : `${base} · Community`;
+}
+
+function bindSetupLinks(entry) {
+  document.querySelectorAll("[data-setup-link]").forEach(link => {
+    link.href = setupUrl(entry.id);
+  });
+}
+
+function renderHomePack(entry, manifest) {
+  setText("#hero-course-count", manifest.courses.length);
+  setText("#pack-kicker", entry.maintainer === "ramu" ? "Ramu Maintained pack" : "Community pack");
+  setText("#pack-title", `${manifest.institution} · ${manifest.program} · Semester ${manifest.semester}`);
+  setText("#pack-meta", `${manifest.academic_year} · ${manifest.total_sks} SKS · ${manifest.courses.length} mata kuliah · pack ${manifest.pack_version}`);
+  setText("#pack-status", statusLabel(manifest.status, manifest.maintainer));
+  setText("#closing-pack-label", `${manifest.institution} · ${manifest.program} · Semester ${manifest.semester}`);
+  bindSetupLinks(entry);
+
   const target = document.querySelector("#course-list");
   if (!target) return;
   target.innerHTML = manifest.courses.map(course => `
     <article class="course-card">
-      <div class="course-top"><span>${course.code}</span><span>${course.sks} SKS</span></div>
-      <h3>${course.short_name}</h3>
-      <p class="course-focus">Fokus: ${COURSE_FOCUS[course.code] || "materi dan tugas mata kuliah"}</p>
+      <div class="course-top"><span>${escapeHtml(course.code)}</span><span>${escapeHtml(course.sks)} SKS</span></div>
+      <h3>${escapeHtml(course.short_name)}</h3>
+      <p class="course-focus">Fokus: ${escapeHtml(course.focus || "materi dan tugas mata kuliah")}</p>
     </article>
   `).join("");
 }
@@ -59,10 +116,10 @@ function storageKey(id) { return `ramu:${id}`; }
 function getProgress(id) { try { return JSON.parse(localStorage.getItem(storageKey(id))) || {}; } catch { return {}; } }
 function saveProgress(id, progress) { localStorage.setItem(storageKey(id), JSON.stringify(progress)); }
 
-async function downloadCoursePack(course, button) {
+async function downloadCoursePack(base, course, button) {
   const original = button.textContent;
   try {
-    const response = await fetch(`${PACK_BASE}/${course.file}`, { cache: "no-store" });
+    const response = await fetch(`${base}/${course.file}`, { cache: "no-store" });
     if (!response.ok) throw new Error();
     const text = await response.text();
     const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
@@ -81,14 +138,26 @@ async function downloadCoursePack(course, button) {
   setTimeout(() => button.textContent = original, 1800);
 }
 
-async function renderSetup(manifest) {
+function renderSetupSummary(entry, manifest) {
+  setText("#setup-pack-name", `${manifest.institution} · ${manifest.program} · Semester ${manifest.semester}`);
+  setText("#setup-pack-count", `${manifest.courses.length} course pack`);
+  setText("#setup-pack-meta", `${manifest.academic_year} · ${manifest.total_sks} SKS · ${statusLabel(manifest.status, manifest.maintainer)}`);
+  const list = document.querySelector("#setup-summary-list");
+  if (list) list.innerHTML = manifest.courses.map(course => `<li>${escapeHtml(course.short_name)}</li>`).join("");
+  document.title = `Setup ${manifest.name} — Ramu`;
+}
+
+async function renderSetup(entry, manifest) {
   const target = document.querySelector("#setup-courses");
   if (!target) return;
+  const base = packBase(entry);
   const progress = getProgress(manifest.id);
-  const instructionsUrl = `${PACK_BASE}/${manifest.project_instructions}`;
+  const instructionsUrl = `${base}/${manifest.project_instructions}`;
   const instructionButton = document.querySelector("#copy-instructions");
   const status = document.querySelector("#copy-status");
   const openInstructions = document.querySelector("#open-instructions");
+
+  renderSetupSummary(entry, manifest);
 
   if (instructionButton) {
     instructionButton.addEventListener("click", async () => {
@@ -111,27 +180,28 @@ async function renderSetup(manifest) {
   const courseCards = manifest.courses.map((course, index) => {
     const complete = Boolean(progress[course.code]);
     return `
-      <details class="setup-course" data-course="${course.code}" data-complete="${complete}" ${index === 0 ? "open" : ""}>
+      <details class="setup-course" data-course="${escapeHtml(course.code)}" data-complete="${complete}" ${index === 0 ? "open" : ""}>
         <summary>
           <span class="course-number">${index + 1}</span>
-          <span class="setup-title"><strong>${course.short_name}</strong><span>${course.code} · ${course.sks} SKS · pack ${manifest.pack_version || "Semester 2"}</span></span>
+          <span class="setup-title"><strong>${escapeHtml(course.short_name)}</strong><span>${escapeHtml(course.code)} · ${escapeHtml(course.sks)} SKS · pack ${escapeHtml(manifest.pack_version)}</span></span>
           <span class="done-pill">${complete ? "Selesai" : "Belum"}</span>
         </summary>
         <div class="setup-body">
+          <p class="course-focus"><strong>Fokus:</strong> ${escapeHtml(course.focus || "materi dan tugas mata kuliah")}</p>
           <ol>
             <li>Buka ChatGPT, lalu pilih <strong>New Project</strong>.</li>
-            <li>Beri nama <strong>${course.project_name}</strong>, kemudian pilih <strong>Project-only memory</strong>.</li>
+            <li>Beri nama <strong>${escapeHtml(course.project_name)}</strong>, kemudian pilih <strong>Project-only memory</strong>.</li>
             <li>Buka <strong>⋯ → Project settings → Project Instructions</strong>, lalu tempel instruksi Ramu dari langkah 2.</li>
             <li>Tekan <strong>Unduh paket (.txt)</strong> di bawah.</li>
             <li>Di Project buka <strong>Sources → Add source → Upload files</strong>, lalu pilih file yang baru diunduh. Jika file sudah tersimpan di Library, <strong>Add from library</strong> juga bisa dipakai.</li>
           </ol>
           <div class="inline-actions">
-            <button class="small-button copy-project" type="button" data-text="${course.project_name}">Salin nama Project</button>
-            <button class="small-button download-course-pack" type="button" data-course="${course.code}">Unduh paket (.txt)</button>
+            <button class="small-button copy-project" type="button" data-text="${escapeHtml(course.project_name)}">Salin nama Project</button>
+            <button class="small-button download-course-pack" type="button" data-course="${escapeHtml(course.code)}">Unduh paket (.txt)</button>
             <a class="small-button" href="https://chatgpt.com/" target="_blank" rel="noopener">Buka ChatGPT</a>
           </div>
           <p class="small-note">Course pack menjadi source tetap. Screenshot soal, rubrik, atau materi sementara cukup ditambahkan saat dibutuhkan.</p>
-          <label class="complete-check"><input type="checkbox" data-course-check="${course.code}" ${complete ? "checked" : ""}><span>Project ${course.short_name} sudah selesai disiapkan</span></label>
+          <label class="complete-check"><input type="checkbox" data-course-check="${escapeHtml(course.code)}" ${complete ? "checked" : ""}><span>Project ${escapeHtml(course.short_name)} sudah selesai disiapkan</span></label>
         </div>
       </details>
     `;
@@ -140,7 +210,7 @@ async function renderSetup(manifest) {
   target.innerHTML = `${courseCards}
     <div class="info-box">
       <strong>Kenapa pakai file?</strong>
-      <p>UI Project yang dipakai sebagai acuan Ramu saat ini menampilkan Sources melalui Upload files atau Add from library. Dokumentasi OpenAI juga menyebut paste text sebagai kemampuan Projects, tetapi Ramu tidak bergantung pada opsi itu karena tombolnya tidak selalu terlihat di UI.</p>
+      <p>Ramu memakai jalur Upload files yang stabil untuk memasang course pack. Opsi UI ChatGPT dapat berubah, jadi pack dan panduan tidak bergantung pada satu tombol alternatif yang belum tentu muncul di semua akun.</p>
     </div>`;
 
   target.querySelectorAll(".copy-project").forEach(button => {
@@ -156,7 +226,7 @@ async function renderSetup(manifest) {
   target.querySelectorAll(".download-course-pack").forEach(button => {
     button.addEventListener("click", () => {
       const course = manifest.courses.find(item => item.code === button.dataset.course);
-      if (course) downloadCoursePack(course, button);
+      if (course) downloadCoursePack(base, course, button);
     });
   });
 
@@ -199,13 +269,18 @@ function updateProgress(manifest, progress) {
 
 (async function init() {
   try {
-    const manifest = await getManifest();
-    renderHomeCourses(manifest);
-    await renderSetup(manifest);
-  } catch {
+    const catalog = await fetchJson(PACK_INDEX_URL);
+    if (!Array.isArray(catalog.packs) || !catalog.packs.length) throw new Error("Katalog pack kosong");
+    const entry = currentPackEntry(catalog);
+    const manifest = await fetchJson(manifestUrl(entry));
+    renderPackSelectors(catalog, entry);
+    renderHomePack(entry, manifest);
+    await renderSetup(entry, manifest);
+  } catch (error) {
+    console.error(error);
     const home = document.querySelector("#course-list");
     const setup = document.querySelector("#setup-courses");
-    if (home) home.innerHTML = `<p class="muted">Daftar mata kuliah belum dapat dimuat. Coba muat ulang halaman.</p>`;
-    if (setup) setup.innerHTML = `<p class="muted">Paket mata kuliah belum dapat dimuat. Coba muat ulang halaman.</p>`;
+    if (home) home.innerHTML = `<p class="muted">Katalog Ramu belum dapat dimuat. Coba muat ulang halaman.</p>`;
+    if (setup) setup.innerHTML = `<p class="muted">Paket Ramu belum dapat dimuat. Coba muat ulang halaman.</p>`;
   }
 })();

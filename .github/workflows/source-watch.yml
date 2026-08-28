@@ -14,14 +14,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: "3.12"
 
-      - name: Check freshness and URL reachability
+      - name: Check freshness and URL reachability across registries
         id: freshness
         continue-on-error: true
         run: python scripts/check_source_freshness.py --online --fail-on-network
@@ -35,7 +35,7 @@ jobs:
           if [ "$existing" = "0" ]; then
             gh issue create \
               --title "Source watch perlu ditinjau" \
-              --body "Pemeriksaan mingguan menemukan setidaknya satu sumber aktif melewati interval review atau watched source tidak dapat dijangkau. Buka log workflow ini, jalankan python scripts/check_source_freshness.py --online --fail-on-network, verifikasi sumber kanonik, lalu perbarui sources/registry.json bila diperlukan. Kegagalan reachability sendiri belum berarti fakta sumber berubah."
+              --body "Pemeriksaan mingguan menemukan source aktif melewati interval review atau watched URL tidak dapat dijangkau. Buka log workflow, jalankan python scripts/check_source_freshness.py --online --fail-on-network, lalu periksa registry yang disebut pada output (global atau pack/institusi). Kegagalan reachability sendiri belum berarti fakta sumber berubah."
           fi
 
       - name: Fail job when source watch needs attention

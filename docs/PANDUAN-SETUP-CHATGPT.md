@@ -1,144 +1,141 @@
-# Panduan Setup Ramu di ChatGPT Android
+# Panduan Setup Ramu di ChatGPT
 
-Panduan ini dibuat untuk pengguna yang ingin langsung memakai Ramu tanpa perlu memahami GitHub, prompt engineering, atau cara kerja teknis di belakangnya.
+Panduan ini untuk pengguna yang ingin langsung memakai Ramu tanpa perlu memahami GitHub, prompt engineering, schema, atau tooling di belakangnya.
 
-Tujuannya sederhana: setelah setup selesai, kamu memiliki lima Project ChatGPT untuk Semester 2 dan dapat menggunakannya untuk belajar, mengerjakan tugas, memeriksa jawaban, atau membahas feedback tutor.
+Ramu sekarang memakai **pack**. Satu pack mewakili konteks akademik tertentu—misalnya institusi, program studi, tahun akademik, dan periode belajar. Kamu tidak perlu memasang seluruh pack sekaligus; untuk mencoba Ramu, cukup siapkan **satu mata kuliah dulu**.
 
-## Yang akan dibuat
+## Pilih pack yang sesuai
 
-- `S2 • Perpajakan`
-- `S2 • AKM I`
-- `S2 • Manajemen Keuangan`
-- `S2 • Ekonomi Mikro`
-- `S2 • Manajemen`
+Buka [site Ramu](https://man612.github.io/ramu/) lalu pilih pack yang sesuai.
 
-Satu mata kuliah dibuat sebagai satu Project agar file, percakapan, dan konteksnya tidak bercampur dengan mata kuliah lain.
+Pack awal saat ini adalah:
 
-## Langkah 1 — periksa Memory ChatGPT
+**Universitas Terbuka · S1 Akuntansi · 2026/2027 · Semester 2**
 
-Di aplikasi ChatGPT, buka:
+Nama Project yang disarankan untuk pack tersebut:
 
-`Settings → Personalization → Memory`
+- `Semester 2 • Perpajakan`
+- `Semester 2 • AKM I`
+- `Semester 2 • Manajemen Keuangan`
+- `Semester 2 • Ekonomi Mikro`
+- `Semester 2 • Manajemen`
 
-Pastikan pengaturan Memory yang dibutuhkan Projects aktif. Untuk akun personal, dokumentasi OpenAI saat ini menjelaskan bahwa **Reference saved memories** dan **Reference chat history** perlu aktif agar Project memory dapat digunakan.
+Ramu sengaja menulis **Semester 2** secara penuh pada nama yang dilihat pengguna. Singkatan `S2` tidak dipakai sebagai label Project karena di Indonesia mudah dibaca sebagai jenjang S2/Magister. ID internal seperti `.s2` atau folder `semester-02/` tetap dipakai oleh tooling dan tidak perlu diubah pengguna.
 
-Saat membuat Project nanti, pilih **Project-only memory**. Artinya, konteks Project tersebut dijaga tetap berada di dalam ruang mata kuliah itu dan tidak mengambil percakapan dari luar Project.
+Untuk pack lain, gunakan nama Project yang ditampilkan oleh halaman setup pack tersebut. Manifest pack memiliki `period_label` agar periode dapat ditulis jelas, termasuk bila suatu institusi nanti memakai istilah lain seperti trimester atau term.
 
-### Pilihan privasi
+## Langkah 1 — pilih satu mata kuliah
 
-Kalau ingin mengatur apakah percakapan boleh digunakan untuk membantu peningkatan model, buka:
+Jangan setup seluruh semester hanya untuk mengetes Ramu.
 
-`Settings → Data Controls → Improve the model for everyone`
+Pilih satu mata kuliah yang memang sedang dipakai. Untuk pack awal, misalnya **Perpajakan**.
 
-Pengaturan ini merupakan pilihan akunmu dan bukan syarat untuk menggunakan Ramu.
-
-## Langkah 2 — salin Project Instructions
-
-Buka:
-
-[`PROJECT-INSTRUCTIONS.md`](../packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/PROJECT-INSTRUCTIONS.md)
-
-Salin seluruh isinya.
-
-Project Instructions **bukan Project Source**. Setelah Project dibuat, buka:
-
-`⋯ → Project settings → Project Instructions`
-
-lalu tempel teks Ramu di sana. Instruksi yang sama digunakan untuk kelima mata kuliah.
-
-## Langkah 3 — buat Project pertama
-
-Mulai dari Perpajakan.
+## Langkah 2 — buat ChatGPT Project
 
 1. Buka ChatGPT.
 2. Pilih **New Project**.
-3. Beri nama `S2 • Perpajakan`.
-4. Pilih **Project-only memory**.
-5. Buka `⋯ → Project settings → Project Instructions`.
-6. Tempel Project Instructions dari langkah 2.
-7. Dari panduan setup interaktif Ramu, tekan **Unduh paket (.txt)** untuk Perpajakan.
-8. Kembali ke Project dan buka **Sources → Add source → Upload files**.
-9. Pilih file course pack yang baru diunduh.
+3. Gunakan nama Project yang diberikan Ramu, misalnya `Semester 2 • Perpajakan`.
+4. Gunakan **Project-only memory** agar konteks Project tidak bercampur dengan percakapan di luar Project.
 
-Jika file tersebut sudah tersimpan di Library ChatGPT, **Add from library** juga dapat digunakan.
+Nama menu ChatGPT dapat berubah seiring pembaruan produk. Jika letaknya berbeda, cari pengaturan yang setara di Project settings.
 
-Course pack sumber di repo tetap dapat dilihat di:
+## Langkah 3 — pasang Project Instructions
 
-[`EACC4104-perpajakan.md`](../packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/courses/EACC4104-perpajakan.md)
+Pada halaman setup Ramu untuk pack aktif, tekan **Salin instruksi**.
 
-Setelah itu, Project Perpajakan selesai disiapkan.
+Di ChatGPT buka:
 
-## Langkah 4 — ulangi untuk empat mata kuliah lain
+`Project → ⋯ → Project settings → Project Instructions`
 
-Caranya sama. Yang berubah hanya nama Project dan course pack-nya.
+lalu tempel Project Instructions tersebut.
 
-| Nama Project | Course pack |
-|---|---|
-| `S2 • AKM I` | [`EACC4103-akm-1.md`](../packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/courses/EACC4103-akm-1.md) |
-| `S2 • Manajemen Keuangan` | [`EMBS4210-manajemen-keuangan.md`](../packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/courses/EMBS4210-manajemen-keuangan.md) |
-| `S2 • Ekonomi Mikro` | [`ECON4102-ekonomi-mikro.md`](../packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/courses/ECON4102-ekonomi-mikro.md) |
-| `S2 • Manajemen` | [`EMBS4101-manajemen.md`](../packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/courses/EMBS4101-manajemen.md) |
+Project Instructions **bukan Project Source**. Ia adalah aturan runtime untuk cara Ramu menangani konteks, sumber, tugas, pembelajaran, dan guardrail.
 
-Panduan interaktif menghasilkan file `.txt` dari course pack yang sama supaya lebih aman dipilih melalui menu **Upload files**. Ramu tidak bergantung pada opsi paste-text di Sources, karena pada sebagian UI Project opsi yang terlihat hanya upload file dan Add from library.
+## Langkah 4 — tambahkan course pack
 
-Setelah kelima Project selesai dibuat, setup semester selesai.
+Pada halaman setup Ramu:
 
-## Setelah setup, bagaimana cara menggunakannya?
+1. pilih mata kuliah yang sedang disiapkan;
+2. tekan **Unduh paket (.txt)**;
+3. kembali ke Project ChatGPT;
+4. buka **Sources → Add source → Upload files**;
+5. unggah file course pack yang baru diunduh.
 
-GitHub tidak perlu dibuka setiap kali ada tugas.
+Jika file sudah tersimpan di Library ChatGPT dan opsi **Add from library** tersedia, opsi itu juga dapat digunakan.
 
-### Kalau ada tugas AKM I
+Course pack menjadi source tetap untuk Project tersebut. BMP, materi kelas, screenshot soal, rubrik, atau file pribadi tetap ditambahkan sendiri oleh pengguna ketika diperlukan; materi berhak cipta tidak disimpan di repo Ramu.
 
-1. Buka ChatGPT.
-2. Masuk ke `S2 • AKM I`.
-3. Buat chat baru.
-4. Kirim screenshot, PDF, atau teks soal.
-5. Tulis, misalnya: `bantu aku kerjakan tugas ini`.
+## Langkah 5 — langsung gunakan
 
-### Kalau belum memahami materi
+Begitu satu Project selesai, langsung pakai. Tidak perlu menunggu semua mata kuliah selesai disiapkan.
 
-Kirim bagian materi yang dimaksud, lalu tulis:
+Contoh:
 
-`aku belum paham bagian ini`
+```text
+aku belum paham bagian ini
+```
 
-### Kalau sudah memiliki jawaban
+```text
+bantu aku latihan tanpa langsung kasih kunci
+```
 
-Kirim jawabanmu, lalu tulis:
+```text
+cek jawabanku
+```
 
-`cek jawabanku`
+```text
+ini feedback tutor kemarin
+```
 
-### Kalau tutor memberikan feedback
+Kalau Project pertama terasa berguna, baru ulangi pola yang sama untuk mata kuliah lain.
 
-Kirim feedback tersebut, lalu tulis:
+## Contoh untuk pack UT S1 Akuntansi Semester 2
 
-`ini feedback tutor kemarin`
+| Nama Project | Mata kuliah | Course pack |
+|---|---|---|
+| `Semester 2 • Perpajakan` | EACC4104 Perpajakan | `EACC4104-perpajakan.md` |
+| `Semester 2 • AKM I` | EACC4103 Akuntansi Keuangan Menengah I | `EACC4103-akm-1.md` |
+| `Semester 2 • Manajemen Keuangan` | EMBS4210 Manajemen Keuangan | `EMBS4210-manajemen-keuangan.md` |
+| `Semester 2 • Ekonomi Mikro` | ECON4102 Pengantar Ekonomi Mikro | `ECON4102-ekonomi-mikro.md` |
+| `Semester 2 • Manajemen` | EMBS4101 Manajemen | `EMBS4101-manajemen.md` |
 
-Jika dari sesi belajar/review muncul pola yang berguna untuk dibawa ke chat berikutnya, Ramu dapat membuat **Catatan Belajar Terbaru**. Jika menu respons menyediakan **Save to project / Add to project sources**, simpan respons itu di sana. Jika kemudian dibuat versi yang lebih baru, hapus source lama agar dua catatan yang bertentangan tidak dipakai bersamaan.
+Nama Project berasal dari `project_name` pada manifest pack. Contributor tidak perlu membuat format nama sendiri.
 
-## Mengatur file supaya Project tidak cepat penuh
+## Memory dan pemisahan konteks
 
-Course pack sebaiknya menjadi source tetap. Untuk pekerjaan harian:
+Ramu memakai satu Project per mata kuliah supaya file, riwayat, source, dan learner state tidak bercampur.
 
-- screenshot soal dapat dikirim langsung di chat;
-- rubrik/materi ditambahkan hanya saat relevan;
+Gunakan **Project-only memory** bila tersedia. Jika kamu sedang berada di Project AKM I tetapi ingin membahas Perpajakan, lebih baik pindah ke Project Perpajakan daripada menyimpan progres pajak ke learner state AKM I.
+
+Jika dari suatu sesi muncul konteks belajar yang perlu dibawa ke chat berikutnya, minta Ramu membuat **Catatan Belajar Terbaru**. Bila ChatGPT menyediakan **Save to project / Add to project sources**, catatan itu dapat disimpan ke Project. Ketika catatan baru menggantikan versi lama, hapus versi lama supaya dua state yang bertentangan tidak dipakai bersamaan.
+
+## Mengatur file agar Project tetap bersih
+
+- course pack Ramu dapat menjadi source tetap;
+- BMP/materi kelas ditambahkan bila memang relevan;
+- screenshot soal biasanya cukup dikirim pada chat yang sedang dikerjakan;
+- rubrik sebaiknya ikut dikirim jika tugas memilikinya;
 - file lama yang sudah tidak diperlukan dapat dihapus;
-- potongan materi pendek dapat dikirim di chat bila tidak perlu menjadi source permanen.
+- jangan memasang dua versi course pack untuk mata kuliah yang sama sekaligus.
 
-Batas file per Project bergantung pada paket ChatGPT dan dapat berubah. Dokumentasi resmi OpenAI menjadi acuan terbaru untuk batas tersebut.
+Batas file per Project bergantung pada produk/paket ChatGPT dan dapat berubah. Dokumentasi OpenAI yang tercatat di source registry Ramu menjadi acuan untuk perubahan produk, bukan angka yang di-hardcode permanen di course pack.
 
-## Kebiasaan yang disarankan
+## Privasi
 
-- Gunakan satu chat untuk satu tugas atau satu topik besar.
-- Kalau screenshot soal terpotong, kirim bagian yang kurang. Jangan membiarkan AI menebak isi yang tidak terlihat.
-- Kalau tugas memiliki rubrik, kirim rubriknya juga.
-- Kalau tugas harus dijawab berdasarkan modul, tambahkan bagian modul yang relevan.
-- Untuk informasi yang dapat berubah, seperti aturan pajak, minta pemeriksaan terhadap sumber resmi terbaru.
-- Kalau jawaban berisi hitungan, tetap periksa hasil akhirnya sebelum dikumpulkan.
+Ramu adalah site statis dan tidak memiliki backend untuk menerima file kuliah pribadi. File pribadi ditambahkan langsung oleh pengguna ke ChatGPT.
+
+Pengaturan apakah percakapan boleh digunakan untuk peningkatan model berada di **Data Controls** akun ChatGPT dan bukan syarat penggunaan Ramu.
 
 ## Tentang Study Mode
 
-Ramu tidak bergantung pada Study Mode bawaan ChatGPT. Alur belajar Ramu tetap ditangani oleh Project Instructions. Jika Study Mode tersedia dan nyaman dipakai di Project akunmu, anggap sebagai alat tambahan, bukan syarat Ramu.
+Ramu tidak bergantung pada Study Mode. Pola bantuan belajar utama berasal dari Project Instructions, protocols, dan course pack. Bila Study Mode tersedia dan cocok digunakan, anggap sebagai fitur tambahan.
 
-## Kalau nama menu ChatGPT berbeda
+## Kalau UI ChatGPT berubah
 
-Tampilan dan nama menu ChatGPT dapat berubah seiring pembaruan aplikasi. Kalau nama menu sedikit berbeda, cari fungsi yang setara pada pengaturan Project, Sources, atau Memory. Untuk setup Ramu, patokan praktisnya tetap: **Project Instructions masuk ke Project settings; course pack masuk ke Sources sebagai file**.
+ChatGPT Projects adalah produk yang dapat berubah. Karena itu panduan Ramu berpegang pada fungsi, bukan hanya posisi tombol:
+
+- **Project Instructions** → aturan runtime Ramu;
+- **Sources** → course pack dan materi yang memang perlu menjadi konteks Project;
+- **Project-only memory** → pemisahan konteks antarmata kuliah.
+
+Jika nama atau lokasi menu berubah, gunakan fungsi yang setara dan cek dokumentasi produk terbaru.

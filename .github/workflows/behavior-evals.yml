@@ -3,12 +3,17 @@ name: Behavior Evals
 on:
   workflow_dispatch:
     inputs:
+      pack_id:
+        description: "Pack id dari packs/index.json"
+        required: true
+        default: "id.ut.accounting-s1.2026-2027.s2"
+        type: string
       candidate_model:
         description: "Model kandidat yang diuji (isi model API yang tersedia saat run)"
         required: true
         type: string
       grader_model:
-        description: "Model judge (pilih secara eksplisit; idealnya berbeda dari kandidat)"
+        description: "Model judge (pilih eksplisit; idealnya berbeda dari kandidat)"
         required: true
         type: string
       cases:
@@ -26,7 +31,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: behavior-evals-${{ github.ref }}
+  group: behavior-evals-${{ github.ref }}-${{ inputs.pack_id }}
   cancel-in-progress: false
 
 jobs:
@@ -35,6 +40,7 @@ jobs:
     timeout-minutes: 30
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      RAMU_PACK_ID: ${{ inputs.pack_id }}
       RAMU_CANDIDATE_MODEL: ${{ inputs.candidate_model }}
       RAMU_GRADER_MODEL: ${{ inputs.grader_model }}
       RAMU_EVAL_CASES: ${{ inputs.cases }}
@@ -42,10 +48,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: "3.12"
 
@@ -53,7 +59,7 @@ jobs:
         shell: bash
         run: |
           if [ -z "$OPENAI_API_KEY" ]; then
-            echo "Repository secret OPENAI_API_KEY belum tersedia." >&2
+            echo "Repository secret OPENAI_API_KEY belum tersedia. Gunakan Manual Eval Kit bila belum punya API." >&2
             exit 2
           fi
           if [ -z "$RAMU_CANDIDATE_MODEL" ] || [ -z "$RAMU_GRADER_MODEL" ]; then
@@ -61,11 +67,13 @@ jobs:
             exit 2
           fi
           if [ "$RAMU_CANDIDATE_MODEL" = "$RAMU_GRADER_MODEL" ]; then
-            echo "WARNING: candidate dan judge memakai model yang sama. Run tetap dilanjutkan, tetapi hasil sebaiknya tidak menjadi satu-satunya bukti validasi." >&2
+            echo "WARNING: candidate dan judge memakai model yang sama. Review manusia tetap diperlukan." >&2
           fi
 
-      - name: Validate behavior dataset
-        run: python scripts/run_behavior_evals.py --dry-run --only "$RAMU_EVAL_CASES"
+      - name: Validate selected pack and behavior dataset
+        run: |
+          python scripts/validate_repo.py
+          python scripts/run_behavior_evals.py --dry-run --pack "$RAMU_PACK_ID" --only "$RAMU_EVAL_CASES"
 
       - name: Run behavior evals
         id: behavior
@@ -73,6 +81,7 @@ jobs:
         run: |
           set +e
           python scripts/run_behavior_evals.py \
+            --pack "$RAMU_PACK_ID" \
             --candidate-model "$RAMU_CANDIDATE_MODEL" \
             --grader-model "$RAMU_GRADER_MODEL" \
             --only "$RAMU_EVAL_CASES" \
@@ -89,14 +98,12 @@ jobs:
           if [ -f evals/results/summary.md ]; then
             cat evals/results/summary.md >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "# Ramu Behavior Eval" >> "$GITHUB_STEP_SUMMARY"
-            echo "" >> "$GITHUB_STEP_SUMMARY"
-            echo "Run berhenti sebelum summary dibuat." >> "$GITHUB_STEP_SUMMARY"
+            printf '# Ramu Behavior Eval\n\nRun berhenti sebelum summary dibuat.\n' >> "$GITHUB_STEP_SUMMARY"
           fi
 
       - name: Upload eval artifacts
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: ramu-behavior-evals-${{ github.run_id }}
           path: evals/results/

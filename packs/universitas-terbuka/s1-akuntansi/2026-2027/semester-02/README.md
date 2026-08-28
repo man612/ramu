@@ -12,11 +12,13 @@ Kamu tidak perlu memahami kode mata kuliah atau struktur folder repo.
 
 Di ChatGPT, buat lima Project berikut:
 
-1. `S2 • Perpajakan`
-2. `S2 • AKM I`
-3. `S2 • Manajemen Keuangan`
-4. `S2 • Ekonomi Mikro`
-5. `S2 • Manajemen`
+1. `Semester 2 • Perpajakan`
+2. `Semester 2 • AKM I`
+3. `Semester 2 • Manajemen Keuangan`
+4. `Semester 2 • Ekonomi Mikro`
+5. `Semester 2 • Manajemen`
+
+Ramu sengaja menulis **Semester 2** secara penuh pada nama Project. Singkatan `S2` tidak dipakai sebagai label tampilan karena mudah tertukar dengan jenjang pendidikan S2/Magister. Singkatan `s2` tetap boleh muncul pada ID atau path internal repo karena bagian itu hanya untuk mesin/tooling.
 
 Ikuti [panduan setup dari HP](../../../../../docs/PANDUAN-SETUP-CHATGPT.md). Polanya sama untuk semua mata kuliah: buat Project, tempel Project Instructions, lalu unggah paket mata kuliah yang sesuai.
 

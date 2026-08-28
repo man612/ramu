@@ -1,28 +1,27 @@
 {
+  "schema_version": 1,
   "id": "id.ut.accounting-s1.2026-2027.s2",
   "name": "UT S1 Akuntansi — Semester 2",
   "institution": "Universitas Terbuka",
   "program": "S1 Akuntansi",
   "academic_year": "2026/2027",
   "semester": 2,
+  "period_label": "Semester 2",
   "total_sks": 16,
   "status": "source-verified",
+  "maintainer": "ramu",
   "pack_version": "2026-2027.s2.1",
   "contract_version": "1.0",
   "project_instructions": "PROJECT-INSTRUCTIONS.md",
-  "learning_protocols": [
-    "belajar",
-    "tugas",
-    "review",
-    "latihan-ujian"
-  ],
+  "learning_protocols": ["belajar", "tugas", "review", "latihan-ujian"],
   "courses": [
     {
       "code": "EACC4104",
       "name": "Perpajakan",
       "short_name": "Perpajakan",
-      "project_name": "S2 • Perpajakan",
+      "project_name": "Semester 2 • Perpajakan",
       "sks": 3,
+      "focus": "aturan pajak, konsep, dan kasus",
       "exam_slot": "I.1",
       "material": "EKSI4206 Perpajakan (Edisi 4)",
       "service": "T",
@@ -32,8 +31,9 @@
       "code": "EACC4103",
       "name": "Akuntansi Keuangan Menengah I",
       "short_name": "AKM I",
-      "project_name": "S2 • AKM I",
+      "project_name": "Semester 2 • AKM I",
       "sks": 3,
+      "focus": "jurnal, hitungan, kasus, dan PRATON",
       "exam_slot": "II.2",
       "material": "EACC4103 Akuntansi Keuangan Menengah I",
       "practice": "BP",
@@ -44,8 +44,9 @@
       "code": "EMBS4210",
       "name": "Manajemen Keuangan",
       "short_name": "Manajemen Keuangan",
-      "project_name": "S2 • Manajemen Keuangan",
+      "project_name": "Semester 2 • Manajemen Keuangan",
       "sks": 3,
+      "focus": "rumus, hitungan, dan analisis keuangan",
       "exam_slot": "I.4",
       "material": "EMBS4210 Manajemen Keuangan",
       "service": "T",
@@ -55,8 +56,9 @@
       "code": "ECON4102",
       "name": "Pengantar Ekonomi Mikro",
       "short_name": "Ekonomi Mikro",
-      "project_name": "S2 • Ekonomi Mikro",
+      "project_name": "Semester 2 • Ekonomi Mikro",
       "sks": 3,
+      "focus": "konsep, grafik, dan analisis ekonomi",
       "exam_slot": "II.4",
       "material": "ESPA4111 Pengantar Ekonomi Mikro (Edisi 3)",
       "service": "T",
@@ -66,8 +68,9 @@
       "code": "EMBS4101",
       "name": "Manajemen",
       "short_name": "Manajemen",
-      "project_name": "S2 • Manajemen",
+      "project_name": "Semester 2 • Manajemen",
       "sks": 4,
+      "focus": "konsep manajemen dan analisis kasus",
       "exam_slot": "II.5",
       "material": "EKMA4116 Manajemen (Edisi 3)",
       "service": "WT",
@@ -88,8 +91,15 @@
       "registry_id": "ut-guideline-2026-2027"
     }
   ],
-  "source_registry": "sources/registry.json",
-  "eval_contracts": "evals/cases/semester-02.json",
-  "behavior_evals": "evals/behavior/semester-02.json",
+  "source_registries": [
+    "sources/registry.json",
+    "packs/universitas-terbuka/source-registry.json"
+  ],
+  "evals": {
+    "core_contracts": "evals/core/contracts.json",
+    "core_behavior": "evals/core/behavior.json",
+    "pack_contracts": "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/evals/contracts.json",
+    "pack_behavior": "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/evals/behavior.json"
+  },
   "source_verified_at": "2026-08-14"
 }

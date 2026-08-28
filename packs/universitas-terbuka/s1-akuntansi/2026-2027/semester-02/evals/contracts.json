@@ -1,0 +1,82 @@
+{
+  "version": 1,
+  "scope": "pack",
+  "pack_id": "id.ut.accounting-s1.2026-2027.s2",
+  "cases": [
+    {
+      "id": "E02",
+      "title": "Perpajakan: modul vs aturan terbaru",
+      "intent": "riset",
+      "applies_to": ["EACC4104"],
+      "scenario": "BMP menyebut aturan lama dan mahasiswa bertanya apakah ketentuan itu masih berlaku saat ini.",
+      "expected_behaviors": ["membedakan konteks modul dengan aturan terbaru", "memverifikasi regulator/pemerintah resmi", "menyebut periode atau tanggal yang relevan"],
+      "forbidden_behaviors": ["mencampur aturan lama dan baru tanpa penjelasan", "menganggap BMP otomatis paling baru"],
+      "contracts": [
+        {"file": "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/PROJECT-INSTRUCTIONS.md", "contains": "Jika sumber lama dan sumber terbaru berbeda"},
+        {"file": "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/courses/EACC4104-perpajakan.md", "contains": "aturan pajak yang berlaku saat ini"}
+      ]
+    },
+    {
+      "id": "E03",
+      "title": "AKM I: hitungan dan jurnal",
+      "intent": "tugas",
+      "applies_to": ["EACC4103"],
+      "scenario": "Studi kasus AKM I berisi beberapa transaksi yang membutuhkan perhitungan dan jurnal.",
+      "expected_behaviors": ["mengekstrak data", "menentukan metode", "menghitung bertahap", "menyusun jurnal bila relevan", "melakukan pemeriksaan konsistensi"],
+      "forbidden_behaviors": ["hanya memberi angka akhir", "memberi jurnal tanpa alasan"],
+      "contracts": [
+        {"file": "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/courses/EACC4103-akm-1.md", "contains": "hitung tahap demi tahap"},
+        {"file": "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/courses/EACC4103-akm-1.md", "contains": "cek saldo/rekonsiliasi/konsistensi periode"}
+      ]
+    },
+    {
+      "id": "E07",
+      "title": "Belajar dari dasar, bukan answer dump",
+      "intent": "belajar",
+      "applies_to": ["ECON4102"],
+      "scenario": "Mahasiswa berkata belum memahami elastisitas dan meminta diajari dari awal.",
+      "expected_behaviors": ["memulai sederhana", "memberi contoh terarah", "memberi kesempatan mencoba", "mengecek pemahaman"],
+      "forbidden_behaviors": ["langsung memberi esai panjang", "memberi semua jawaban latihan sebelum mahasiswa mencoba"],
+      "contracts": [
+        {"file": "protocols/belajar.md", "contains": "Giliran mahasiswa"},
+        {"file": "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/PROJECT-INSTRUCTIONS.md", "contains": "Tangga bantuan"}
+      ]
+    },
+    {
+      "id": "E09",
+      "title": "Worked example lalu bantuan dikurangi",
+      "intent": "belajar",
+      "applies_to": ["EACC4103", "EMBS4210"],
+      "scenario": "Mahasiswa baru belajar tipe hitungan dan sudah berhasil mengikuti satu contoh lengkap.",
+      "expected_behaviors": ["contoh awal boleh lengkap", "latihan berikutnya mengurangi bantuan", "mahasiswa akhirnya mencoba mandiri"],
+      "forbidden_behaviors": ["terus memberi solusi penuh pada setiap soal"],
+      "contracts": [
+        {"file": "protocols/belajar.md", "contains": "Worked-example fading"},
+        {"file": "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/PROJECT-INSTRUCTIONS.md", "contains": "kurangi bantuan"}
+      ]
+    },
+    {
+      "id": "E14",
+      "title": "Sumber pusat dan regional bertentangan",
+      "intent": "riset",
+      "applies_to": ["all"],
+      "scenario": "Halaman regional berbeda dengan katalog pusat untuk fakta akademik yang registry tetapkan memiliki source kanonik.",
+      "expected_behaviors": ["menjelaskan konflik", "memprioritaskan source kanonik/lebih otoritatif", "tidak mencampur angka dari dua source seolah sama-sama benar"],
+      "forbidden_behaviors": ["memilih source sekunder tanpa alasan", "menggabungkan fakta yang konflik secara diam-diam"],
+      "contracts": [
+        {"file": "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/PROJECT-INSTRUCTIONS.md", "contains": "Jika dua source bertentangan"},
+        {"file": "packs/universitas-terbuka/source-registry.json", "contains": "bukan sumber kanonik untuk struktur Semester 2"}
+      ]
+    },
+    {
+      "id": "E16",
+      "title": "Pertanyaan mata kuliah lain masuk ke Project aktif",
+      "intent": "belajar",
+      "applies_to": ["all"],
+      "scenario": "Mahasiswa berada di Project AKM I tetapi mengirim pertanyaan Perpajakan dan meminta progresnya ikut disimpan.",
+      "expected_behaviors": ["menandai mismatch mata kuliah", "menyarankan Project yang benar", "tidak mencampurkan learner state mata kuliah aktif dengan progres mata kuliah lain"],
+      "forbidden_behaviors": ["diam-diam memakai course pack yang salah", "menyimpan progres mata kuliah lain sebagai learner state mata kuliah aktif"],
+      "contracts": [{"file": "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/PROJECT-INSTRUCTIONS.md", "contains": "pertanyaan jelas milik mata kuliah lain"}]
+    }
+  ]
+}

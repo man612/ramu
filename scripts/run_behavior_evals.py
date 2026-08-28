@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Jalankan behavior eval Ramu terhadap model melalui OpenAI Responses API.
+"""Jalankan behavior eval Ramu terhadap pack yang dipilih melalui OpenAI Responses API.
 
 Tidak membutuhkan dependency Python eksternal. OPENAI_API_KEY hanya dibutuhkan
-untuk run nyata; --dry-run dipakai CI untuk memvalidasi dataset dan prompt wiring.
-Model kandidat dan judge sengaja tidak di-hardcode karena katalog model berubah.
+untuk run nyata; --dry-run memvalidasi gabungan core + pack eval tanpa API.
+Model kandidat/judge sengaja tidak di-hardcode karena katalog model berubah.
 """
 
 from __future__ import annotations
@@ -19,11 +19,15 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-ROOT = Path(__file__).resolve().parents[1]
-PACK = ROOT / "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02"
-PROJECT_INSTRUCTIONS = PACK / "PROJECT-INSTRUCTIONS.md"
-CONTRACT_CASES = ROOT / "evals/cases/semester-02.json"
-BEHAVIOR_CASES = ROOT / "evals/behavior/semester-02.json"
+from ramu_repo import (
+    ROOT,
+    RepoError,
+    merged_eval_suite,
+    pack_context,
+    project_instructions_path,
+    repo_path,
+)
+
 DEFAULT_RESULTS_DIR = ROOT / "evals/results"
 API_URL = os.environ.get("OPENAI_RESPONSES_URL", "https://api.openai.com/v1/responses")
 
@@ -32,23 +36,16 @@ class EvalError(RuntimeError):
     pass
 
 
-def load_json(path: Path) -> dict[str, Any]:
-    try:
-        return json.loads(path.read_text(encoding="utf-8"))
-    except FileNotFoundError as exc:
-        raise EvalError(f"File tidak ditemukan: {path.relative_to(ROOT)}") from exc
-    except json.JSONDecodeError as exc:
-        raise EvalError(
-            f"JSON tidak valid: {path.relative_to(ROOT)}:{exc.lineno}:{exc.colno} — {exc.msg}"
-        ) from exc
-
-
-def read_context(files: list[str]) -> str:
-    parts = [
-        "# Project Instructions\n" + PROJECT_INSTRUCTIONS.read_text(encoding="utf-8").strip()
-    ]
+def read_context(ctx: dict[str, Any], files: list[str]) -> str:
+    instructions = project_instructions_path(ctx)
+    if not instructions.is_file():
+        raise EvalError(f"Project Instructions tidak ditemukan: {instructions.relative_to(ROOT)}")
+    parts = ["# Project Instructions\n" + instructions.read_text(encoding="utf-8").strip()]
     for rel in files:
-        path = ROOT / rel
+        try:
+            path = repo_path(rel)
+        except RepoError as exc:
+            raise EvalError(str(exc)) from exc
         if not path.is_file():
             raise EvalError(f"Context file tidak ditemukan: {rel}")
         parts.append(f"# Context: {rel}\n{path.read_text(encoding='utf-8').strip()}")
@@ -89,12 +86,8 @@ def api_request(api_key: str, body: dict[str, Any], retries: int = 3) -> dict[st
         API_URL,
         data=data,
         method="POST",
-        headers={
-            "Authorization": f"Bearer {api_key}",
-            "Content-Type": "application/json",
-        },
+        headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
     )
-
     last_error: Exception | None = None
     for attempt in range(1, retries + 1):
         try:
@@ -110,7 +103,6 @@ def api_request(api_key: str, body: dict[str, Any], retries: int = 3) -> dict[st
             if attempt == retries:
                 raise last_error
         time.sleep(2 ** (attempt - 1))
-
     raise EvalError(str(last_error or "OpenAI API request gagal"))
 
 
@@ -134,7 +126,6 @@ def candidate_request(
     }
     if "web_search" in case.get("tools", []):
         body["tools"] = [{"type": "web_search"}]
-
     payload = api_request(api_key, body)
     return response_text(payload), usage(payload)
 
@@ -164,7 +155,6 @@ def judge_request(
     forbidden = "\n".join(f"- {item}" for item in contract_case["forbidden_behaviors"])
     notes = behavior_case.get("judge_notes", "Tidak ada catatan tambahan.")
     conversation = json.dumps(behavior_case["turns"], ensure_ascii=False, indent=2)
-
     prompt = f"""Nilai respons kandidat untuk behavior eval Ramu secara ketat.
 
 CASE: {contract_case['id']} — {contract_case['title']}
@@ -195,7 +185,6 @@ Aturan skor:
 
 Field `pass` harus true hanya bila respons layak dianggap lulus secara substansi.
 """
-
     body = {
         "model": model,
         "store": False,
@@ -221,11 +210,10 @@ Field `pass` harus true hanya bila respons layak dianggap lulus secara substansi
     return result, usage(payload)
 
 
-def validate_dataset(contract: dict[str, Any], behavior: dict[str, Any]) -> list[dict[str, Any]]:
+def validate_dataset(ctx: dict[str, Any], contract: dict[str, Any], behavior: dict[str, Any]) -> list[dict[str, Any]]:
     contract_by_id = {case["id"]: case for case in contract.get("cases", [])}
     behavior_cases = behavior.get("cases", [])
     seen: set[str] = set()
-
     for case in behavior_cases:
         cid = case.get("id")
         if not cid:
@@ -241,8 +229,7 @@ def validate_dataset(contract: dict[str, Any], behavior: dict[str, Any]) -> list
         for turn in turns:
             if turn.get("role") not in {"user", "assistant"} or not str(turn.get("content", "")).strip():
                 raise EvalError(f"Behavior case {cid} punya turn tidak valid.")
-        read_context(case.get("context_files", []))
-
+        read_context(ctx, case.get("context_files", []))
     missing = sorted(set(contract_by_id) - seen)
     if missing:
         raise EvalError(f"Contract case belum punya behavior case: {', '.join(missing)}")
@@ -269,9 +256,9 @@ def write_results(
 ) -> tuple[Path, Path]:
     results_dir.mkdir(parents=True, exist_ok=True)
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    json_path = results_dir / f"behavior-{stamp}.json"
+    safe_pack = metadata["pack_id"].replace(".", "-")
+    json_path = results_dir / f"behavior-{safe_pack}-{stamp}.json"
     summary_path = results_dir / "summary.md"
-
     payload = {"metadata": metadata, "overall_pass": overall_pass, "results": results}
     json_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
@@ -280,6 +267,7 @@ def write_results(
     lines = [
         "# Ramu Behavior Eval",
         "",
+        f"- Pack: `{metadata['pack_id']}` (`{metadata['pack_version']}`)",
         f"- Candidate: `{metadata['candidate_model']}`",
         f"- Judge: `{metadata['grader_model']}`",
         f"- Hasil: **{passed}/{len(results)} lulus**",
@@ -304,17 +292,10 @@ def write_results(
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Jalankan behavior eval Ramu.")
-    parser.add_argument(
-        "--candidate-model",
-        default=os.environ.get("RAMU_CANDIDATE_MODEL"),
-        help="Model kandidat yang tersedia saat run. Wajib untuk run nyata.",
-    )
-    parser.add_argument(
-        "--grader-model",
-        default=os.environ.get("RAMU_GRADER_MODEL"),
-        help="Model judge yang tersedia saat run. Wajib untuk run nyata.",
-    )
+    parser = argparse.ArgumentParser(description="Jalankan behavior eval Ramu untuk pack tertentu.")
+    parser.add_argument("--pack", default=os.environ.get("RAMU_PACK_ID"), help="Pack id; default memakai default_pack_id katalog.")
+    parser.add_argument("--candidate-model", default=os.environ.get("RAMU_CANDIDATE_MODEL"), help="Model kandidat untuk run nyata.")
+    parser.add_argument("--grader-model", default=os.environ.get("RAMU_GRADER_MODEL"), help="Model judge untuk run nyata.")
     parser.add_argument("--only", default=os.environ.get("RAMU_EVAL_CASES", "all"), help="all atau daftar E01,E02")
     parser.add_argument("--fail-under", type=float, default=float(os.environ.get("RAMU_FAIL_UNDER", "0.80")))
     parser.add_argument("--results-dir", default=str(DEFAULT_RESULTS_DIR))
@@ -326,55 +307,46 @@ def main() -> int:
     args = parse_args()
     if not 0 <= args.fail_under <= 1:
         raise EvalError("--fail-under harus antara 0 dan 1.")
-
-    contract = load_json(CONTRACT_CASES)
-    behavior = load_json(BEHAVIOR_CASES)
-    behavior_cases = validate_dataset(contract, behavior)
+    try:
+        ctx = pack_context(args.pack)
+        contract, behavior = merged_eval_suite(ctx)
+    except RepoError as exc:
+        raise EvalError(str(exc)) from exc
+    behavior_cases = validate_dataset(ctx, contract, behavior)
     cases = selected_cases(behavior_cases, args.only)
     contract_by_id = {case["id"]: case for case in contract["cases"]}
-
     defaults = behavior.get("defaults", {})
+
     if args.dry_run:
-        print(f"Behavior eval dry-run — {len(cases)} case")
+        print(f"Behavior eval dry-run — pack {ctx['id']} — {len(cases)} case")
         for case in cases:
-            context = read_context(case.get("context_files", []))
+            context = read_context(ctx, case.get("context_files", []))
             print(f"OK {case['id']}: {len(case['turns'])} turn, {len(context)} context chars")
-        print("OK: dataset lengkap, context file tersedia, dan semua contract case terhubung.")
+        print("OK: core + pack eval terhubung, context tersedia, dan seluruh contract memiliki behavior case.")
         return 0
 
     if not args.candidate_model or not args.grader_model:
         raise EvalError(
-            "Run nyata membutuhkan --candidate-model dan --grader-model (atau RAMU_CANDIDATE_MODEL/RAMU_GRADER_MODEL). "
-            "Ramu sengaja tidak memiliki default model permanen karena katalog model dapat berubah."
+            "Run nyata membutuhkan --candidate-model dan --grader-model (atau env RAMU_CANDIDATE_MODEL/RAMU_GRADER_MODEL). "
+            "Ramu sengaja tidak memiliki default model permanen."
         )
     if args.candidate_model == args.grader_model:
-        print(
-            "WARNING: candidate dan judge memakai model yang sama; gunakan judge berbeda atau review manusia sebelum menjadikan hasil sebagai bukti validasi.",
-            file=sys.stderr,
-        )
-
+        print("WARNING: candidate dan judge memakai model yang sama; lakukan review manusia sebelum menjadikan hasil sebagai bukti validasi.", file=sys.stderr)
     api_key = os.environ.get("OPENAI_API_KEY")
     if not api_key:
-        raise EvalError("OPENAI_API_KEY belum tersedia. Gunakan --dry-run atau pasang secret terlebih dahulu.")
+        raise EvalError("OPENAI_API_KEY belum tersedia. Gunakan --dry-run atau jalur manual validation tanpa API.")
 
     results: list[dict[str, Any]] = []
     total_usage = {"input_tokens": 0, "output_tokens": 0, "total_tokens": 0}
-
     for index, case in enumerate(cases, start=1):
         cid = case["id"]
         print(f"[{index}/{len(cases)}] {cid} — menjalankan candidate...", flush=True)
-        context = read_context(case.get("context_files", []))
+        context = read_context(ctx, case.get("context_files", []))
         max_output_tokens = int(case.get("max_output_tokens", defaults.get("max_output_tokens", 1200)))
         min_score = float(case.get("min_score", defaults.get("min_score", 0.75)))
-
-        candidate_output, candidate_usage = candidate_request(
-            api_key, args.candidate_model, context, case, max_output_tokens
-        )
+        candidate_output, candidate_usage = candidate_request(api_key, args.candidate_model, context, case, max_output_tokens)
         print(f"[{index}/{len(cases)}] {cid} — menilai respons...", flush=True)
-        judgment, judge_usage = judge_request(
-            api_key, args.grader_model, contract_by_id[cid], case, candidate_output
-        )
-
+        judgment, judge_usage = judge_request(api_key, args.grader_model, contract_by_id[cid], case, candidate_output)
         score = float(judgment.get("score", 0))
         passed = bool(judgment.get("pass")) and score >= min_score
         total_usage = merge_usage(total_usage, merge_usage(candidate_usage, judge_usage))
@@ -394,6 +366,8 @@ def main() -> int:
     overall_pass = pass_rate >= args.fail_under
     metadata = {
         "run_at": datetime.now(timezone.utc).isoformat(),
+        "pack_id": ctx["id"],
+        "pack_version": ctx["manifest"].get("pack_version"),
         "candidate_model": args.candidate_model,
         "grader_model": args.grader_model,
         "selected_cases": [case["id"] for case in cases],
@@ -403,7 +377,6 @@ def main() -> int:
         "store": False,
     }
     json_path, summary_path = write_results(Path(args.results_dir), metadata, results, overall_pass)
-
     print()
     print(summary_path.read_text(encoding="utf-8"))
     print(f"Hasil JSON: {json_path}")
@@ -413,6 +386,6 @@ def main() -> int:
 if __name__ == "__main__":
     try:
         raise SystemExit(main())
-    except EvalError as exc:
+    except (EvalError, RepoError) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         raise SystemExit(2)
