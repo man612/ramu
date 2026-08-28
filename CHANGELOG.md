@@ -13,6 +13,7 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 - **JSON Schema Draft 2020-12 validation nyata** di CI: schema Ramu diperiksa terhadap dialect/meta-schema dan seluruh katalog/manifest/registry/eval instance divalidasi terhadap schema yang dipublish.
 - Stable machine identity `institution_id` + `program_id`, terpisah dari label manusia, beserta cross-file identity gate untuk katalog, manifest, scoped registry, dan eval suite.
 - Scoped source registry agar source global/runtime terpisah dari source institusi/program/pack.
+- **Claim-level source governance** dengan status, evidence locator, claim review interval, dan fallback operasional untuk konflik dokumentasi resmi.
 - **Composable eval suites** dengan urutan `core → institution → program → pack` agar failure mode reusable tidak perlu dicopy ke setiap periode.
 - **Manual Eval Kit** untuk membuat checklist behavior validation tanpa OpenAI API, termasuk provenance suite dan critical/must-pass status tiap case.
 - CI matrix yang melakukan dry-run eval wiring untuk setiap pack yang terdaftar.
@@ -31,6 +32,11 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 - `packs/index.json` naik ke **v3**: field universal `semester` sudah diganti `period_id`, dan setiap entry sekarang membawa `institution_id` + `program_id` sebagai identity mesin.
 - Manifest pack awal naik ke **`schema_version: 4`** untuk kontrak identity + period metadata; `pack_version`/`contract_version` tidak berubah karena course content dan behavior contract tidak berubah.
 - Scoped source registry sekarang wajib membawa identity sesuai scope; registry global tidak membawa identity institusi/program/pack.
+- Global source registry OpenAI naik ke **v2** dan sekarang mencatat claim-level evidence. ChatGPT Release Notes ditambahkan sebagai source resmi untuk kronologi perubahan produk.
+- Source freshness checker sekarang memeriksa umur review claim, evidence source IDs, dan fallback `operational_policy` untuk claim conflicted—bukan hanya umur/reachability source.
+- Review OpenAI 29 Agustus 2026 mencatat dua unresolved official-doc conflicts: **Study Mode di Projects** dan **perubahan memory existing Project**. Ramu memakai fallback yang tidak menjadikan keduanya dependency runtime.
+- Setup site dibuat defensif terhadap variasi/rollout UI ChatGPT: Project baru memilih Project-only memory sejak awal; Project lama mencoba Project settings → Memory dan membuat Project baru bila opsi belum tersedia.
+- Setup tidak lagi menjanjikan per-course Project Instructions override yang belum ada di schema dan tidak lagi bergantung pada label `Add from library`; label Project Sources diperlakukan sebagai UI yang dapat berubah.
 - `scope_ref` eval bukan lagi string bebas: institution harus cocok ke `institution_id`, program ke `program_id`, dan pack ke pack `id`.
 - Website Ramu sekarang membaca katalog dan manifest secara dinamis; tidak lagi memiliki `PACK_BASE` Semester 2 ataupun fallback `Semester ${...}` di JavaScript.
 - Behavior eval runner memilih pack melalui `--pack <pack-id>` dan menggabungkan ordered `eval_suites` dari manifest, bukan fixed `core + pack`.
@@ -46,21 +52,19 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 - `validate_display_names.py` memakai shared repository root helper agar ikut dapat diuji terhadap fixture sintetis.
 - **Validate Ramu sekarang berjalan pada setiap push ke `main`**, termasuk docs/release/workflow changes; push validation tidak lagi dibatasi `paths:`.
 - **Deploy Pages sekarang downstream dari successful `Validate Ramu` main-push** dan checkout `workflow_run.head_sha`, sehingga SHA yang diterbitkan persis SHA yang divalidasi.
-- Source freshness checker menemukan registry berdasarkan scope, bukan satu registry global saja.
 - Dependency GitHub Actions dipin ke full commit SHA; workflow lama diperbarui ke checkout/setup-python v6 yang Node 24-native.
 - Nama Project untuk pack awal berubah dari bentuk ambigu seperti `S2 • AKM I` menjadi `Semester 2 • AKM I`.
 - UI katalog/setup menggunakan `period_label` dari metadata, bukan membentuk label periode sendiri.
-- Global source registry OpenAI direview ulang pada 28 Agustus 2026. Karena dokumentasi produk dapat berubah atau sempat tidak konsisten, Study Mode tetap bukan dependency runtime Ramu dan klaim integrasinya diperlakukan secara konservatif.
 
 ### Notes
 
-- Tidak ada API yang dibutuhkan untuk memakai Ramu, menjalankan static CI, membuat Manual Eval Kit, synthetic multi-pack proof, trust-boundary regression, critical-gate regression, CI/Pages contract regression, atau melakukan pilot pengguna.
+- Tidak ada API yang dibutuhkan untuk memakai Ramu, menjalankan static CI, membuat Manual Eval Kit, synthetic multi-pack proof, trust-boundary regression, critical-gate regression, CI/Pages contract regression, source/claim freshness validation, atau melakukan pilot pengguna.
 - `jsonschema[format]` adalah dependency **validation/dev only**, bukan dependency runtime mahasiswa/site.
 - Automated Behavior Evals dengan API tetap tersedia sebagai QA tambahan dan bukan syarat public beta.
 - Responses API automated eval adalah **regression/benchmark approximation**, bukan simulasi identik ChatGPT Projects; manual validation pada Projects asli tetap dibutuhkan untuk product-level evidence.
 - Dependabot hanya mengusulkan dependency update melalui PR; full-SHA action pin dan normal validation/review tetap dipertahankan.
 - Pack awal tetap Universitas Terbuka · S1 Akuntansi · Semester 2 · 2026/2027; synthetic Alpha/Beta hanya fixture test dan tidak dipublish sebagai pack pengguna.
-- Perubahan metadata/identity/eval/CI tooling repository tidak meminta pengguna ChatGPT Project membuat ulang workspace/course pack.
+- Perubahan metadata/identity/eval/CI/source-governance tooling repository tidak meminta pengguna ChatGPT Project membuat ulang workspace/course pack secara otomatis; fallback existing-Project memory dijelaskan terpisah karena UI produk dapat berbeda.
 - Perubahan di bagian `Unreleased` di atas adalah kandidat utama untuk release berikutnya, **`v0.2.0-beta`**.
 
 ## [0.1.0-beta] - 2026-08-28

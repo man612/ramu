@@ -19,6 +19,7 @@ Pack yang tersedia saat release ini tetap **Universitas Terbuka · S1 Akuntansi 
 - `scope_ref` bukan lagi string bebas: institution harus cocok dengan `institution_id`, program dengan `program_id`, dan pack dengan pack `id`.
 - Regression case E14 tentang source pusat-vs-regional dipindahkan menjadi suite tingkat **Universitas Terbuka**, sehingga pack UT berikutnya dapat reuse rule tersebut tanpa copy-paste.
 - Source registry dapat diberi scope global/institusi/program/pack. Scoped registry membawa identity sesuai scope dan cross-file validator menolak registry yang nyasar ke institusi/program lain.
+- Source registry sekarang juga dapat menyimpan **claim-level evidence** dengan status, evidence locator, review interval, dan operational fallback untuk konflik dokumentasi resmi.
 - Schema eval contracts digeneralisasi dan ditambah schema behavior eval agar format publik sesuai file yang benar-benar dipakai tooling.
 - **JSON Schema Draft 2020-12 sekarang benar-benar dijalankan di CI**: schema Ramu diperiksa sebagai schema dan katalog, seluruh manifest, seluruh source registry, serta eval contracts/behavior divalidasi sebagai instance.
 - Semantic validator tetap berjalan sesudah schema validation untuk invariant lintas-file seperti file existence, jumlah SKS, source dependency, suite ordering, dan contract/behavior pairing.
@@ -102,13 +103,30 @@ Validation dan deployment sekarang membentuk chain yang eksplisit.
 
 Dependabot bukan pengganti review. Dependency PR tetap perlu melihat upstream change dan hasil CI sebelum merge.
 
-## Source produk OpenAI
+## Product drift & source governance
 
-Dokumentasi produk OpenAI di global source registry direview pada **28 Agustus 2026**. Projects dan Data Controls tetap menjadi source aktif untuk fungsi masing-masing. Karena dokumentasi produk dapat berubah cepat atau sempat tidak konsisten pada detail integrasi fitur, Ramu tidak menjadikan Study Mode sebagai dependency runtime dan menyimpan catatan source secara konservatif.
+Global OpenAI registry direview ulang pada **29 Agustus 2026** dan naik ke format v2. ChatGPT Release Notes ditambahkan sebagai source resmi untuk kronologi perubahan produk.
+
+Ramu sekarang membedakan freshness **source** dan freshness **claim**. Satu halaman yang masih reachable tidak otomatis membuat setiap klaim di dalamnya dianggap current. Claim dapat mempunyai evidence dari beberapa source, status sendiri, review interval sendiri, dan fallback operasional.
+
+Dua official-doc conflict yang masih dicatat saat release candidate ini:
+
+1. **Study Mode di Projects.** Artikel khusus Study Mode menyatakan Study tidak tersedia di Projects, sementara artikel Projects masih mencantumkan Study Mode sebagai tool.
+2. **Memory existing Project.** Release notes dan guidance Projects terbaru menyatakan memory dapat diubah kemudian lewat Project settings, sementara FAQ Projects yang masih terindeks juga menyimpan wording lama bahwa Project perlu dibuat ulang untuk memakai project-only memory.
+
+Ramu tidak memilih salah satu secara diam-diam. Fallback-nya:
+
+- Study Mode **bukan dependency runtime**; tutoring/scaffolding tetap datang dari Project Instructions + protocols + course context + eval.
+- Untuk setup baru, pilih **Project-only memory** saat membuat Project.
+- Untuk Project lama, coba **Project settings → Memory**; jika opsi belum tersedia pada akun/versi aplikasi tersebut, buat Project baru dengan Project-only memory dan pindahkan chat yang masih diperlukan.
+
+Source Watch sekarang ikut memeriksa evidence source ID, umur `reviewed_at` claim, serta kewajiban `operational_policy` untuk conflicted claim. Hash HTML mentah sengaja tidak dijadikan kebenaran semantik karena halaman dinamis dapat berubah markup tanpa perubahan fakta—atau sebaliknya.
+
+Setup site juga tidak lagi menjanjikan per-course Project Instructions override yang belum ada di schema, tidak bergantung pada label `Add from library`, dan menjelaskan label Project Sources sebagai UI yang dapat berubah. Label `Save to project` / `Add to project sources` hanya dipakai sebagai contoh yang memang didokumentasikan saat review.
 
 ## Tanpa API tetap bisa dipakai dan diuji
 
-OpenAI API bukan dependency Ramu. Mahasiswa tetap memakai ChatGPT Projects seperti biasa, static CI tetap berjalan, JSON Schema + synthetic multi-pack proof berjalan tanpa API, trust-boundary regression dan critical-gate regression juga tidak memanggil API, Manual Eval Kit tidak membutuhkan secret, dan pilot pengguna dapat dilakukan sekarang.
+OpenAI API bukan dependency Ramu. Mahasiswa tetap memakai ChatGPT Projects seperti biasa, static CI tetap berjalan, JSON Schema + synthetic multi-pack proof berjalan tanpa API, trust-boundary regression dan critical-gate regression juga tidak memanggil API, Manual Eval Kit tidak membutuhkan secret, source/claim freshness validation berjalan tanpa API, dan pilot pengguna dapat dilakukan sekarang.
 
 `jsonschema[format]` yang dipakai CI adalah dependency **validation/dev only**. Site dan workflow penggunaan mahasiswa tetap statis dan tidak membutuhkan package Python tersebut.
 
@@ -116,9 +134,9 @@ Automated Behavior Evals melalui API tetap tersedia sebagai lapisan QA tambahan 
 
 ## Existing user
 
-Kalau sudah memiliki Project bernama `S2 • ...`, Project tersebut tidak perlu dibuat ulang hanya karena perubahan naming. Nama dapat diubah menjadi `Semester 2 • ...` bila ingin mengikuti convention baru; course pack dan Project Instructions tetap menjadi bagian yang menentukan workspace Ramu.
+Kalau sudah memiliki Project bernama `S2 • ...`, nama Project tidak perlu dibuat ulang hanya karena perubahan naming. Nama dapat diubah menjadi `Semester 2 • ...` bila ingin mengikuti convention baru; course pack dan Project Instructions tetap menjadi bagian yang menentukan workspace Ramu.
 
-Perubahan repository dari `semester` → `period_id`, penambahan `institution_id`/`program_id`, dan hardening eval/CI hanya menyentuh metadata/tooling. Pengguna yang sudah memasang course pack ke ChatGPT Project tidak perlu mengubah file atau membuat ulang Project karena perubahan ini.
+Perubahan repository dari `semester` → `period_id`, penambahan `institution_id`/`program_id`, dan hardening eval/CI/source governance hanya menyentuh metadata/tooling. Satu pengecualian product-level adalah pilihan **Project-only memory**: untuk Project lama, availability menu Memory dapat berbeda sesuai state akun/app, sehingga ikuti fallback pada panduan setup bila opsi tersebut belum muncul.
 
 ## Status validasi
 
@@ -133,10 +151,11 @@ Perubahan repository dari `semester` → `period_id`, penambahan `institution_id
 - Pages: downstream dari successful validated main push dan checkout validated SHA.
 - Dependabot: weekly untuk GitHub Actions + pip validation dependency.
 - Catalog/site/eval wiring: divalidasi CI.
-- Source freshness monitoring: aktif.
+- Source + claim freshness monitoring: aktif.
+- Global OpenAI source registry: v2 dengan claim-level evidence.
 - Behavior contracts: **E01–E16** tetap tersedia dan digabung dari **3 suite** pada pack awal (`core → Universitas Terbuka → Semester 2`).
 - Core critical must-pass set: **E01, E05, E08, E13**.
 - Manual behavior validation dan pilot pengguna: masih menjadi evidence yang perlu dikumpulkan sebelum klaim stabilitas lebih tinggi.
 - Automated API behavior benchmark: opsional dan belum menjadi syarat release ini.
 
-Ramu tetap **public beta** dan tidak mengklaim semua keluaran model selalu akurat, bahwa prompt injection sudah “terselesaikan”, atau bahwa test sintetis dapat menggantikan validation pengguna nyata.
+Ramu tetap **public beta** dan tidak mengklaim semua keluaran model selalu akurat, bahwa prompt injection sudah “terselesaikan”, bahwa dokumentasi produk tidak akan berubah, atau bahwa test sintetis dapat menggantikan validation pengguna nyata.

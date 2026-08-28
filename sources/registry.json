@@ -1,7 +1,7 @@
 {
-  "version": 1,
+  "version": 2,
   "scope": "global",
-  "verified_at": "2026-08-28",
+  "verified_at": "2026-08-29",
   "sources": [
     {
       "id": "openai-projects",
@@ -11,37 +11,123 @@
       "url": "https://help.openai.com/en/articles/10169521-projects-in-chatgpt",
       "canonical_for": ["fitur ChatGPT Projects"],
       "freshness_class": "product-current",
-      "verified_at": "2026-08-28",
+      "verified_at": "2026-08-29",
       "review_interval_days": 14,
       "watch": true,
-      "status": "active"
+      "status": "active",
+      "notes": "Artikel ini dapat memuat bagian yang diperbarui pada waktu berbeda. Claim-level evidence di registry harus dipakai ketika satu halaman mengandung wording yang tidak konsisten."
     },
     {
       "id": "openai-study-mode",
-      "name": "Study Mode",
+      "name": "Using study mode in ChatGPT",
       "kind": "official-product-doc",
       "authority": "OpenAI",
       "url": "https://help.openai.com/en/articles/11780217-study-mode",
       "canonical_for": ["fitur Study Mode"],
       "freshness_class": "product-current",
-      "verified_at": "2026-08-28",
+      "verified_at": "2026-08-29",
       "review_interval_days": 14,
       "watch": true,
+      "status": "active"
+    },
+    {
+      "id": "openai-release-notes",
+      "name": "ChatGPT Release Notes",
+      "kind": "official-release-notes",
+      "authority": "OpenAI",
+      "url": "https://help.openai.com/en/articles/6825453-chatgpt-release-notes",
+      "canonical_for": ["kronologi perubahan produk ChatGPT"],
+      "freshness_class": "product-current",
+      "verified_at": "2026-08-29",
+      "review_interval_days": 7,
+      "watch": true,
       "status": "active",
-      "notes": "Review 2026-08-28 menemukan konflik dokumentasi resmi: artikel khusus Study Mode menyatakan Study tidak tersedia di Projects, sementara artikel Projects masih mencantumkan Study Mode di daftar tools. Ramu memperlakukan status integrasi ini sebagai unresolved product-doc conflict dan tidak menjadikan Study Mode dependency runtime sampai dokumentasinya konsisten."
+      "notes": "Dipakai sebagai evidence perubahan produk terbaru; current-state guidance tetap dibandingkan dengan artikel fitur terkait."
     },
     {
       "id": "openai-data-controls",
       "name": "Data Controls FAQ",
       "kind": "official-product-doc",
       "authority": "OpenAI",
-      "url": "https://help.openai.com/en/articles/7730893-data-controls-faq",
+      "url": "https://help.openai.com/en/articles/7730893/data-controls-faq",
       "canonical_for": ["pengaturan data ChatGPT"],
       "freshness_class": "product-current",
-      "verified_at": "2026-08-28",
+      "verified_at": "2026-08-29",
       "review_interval_days": 14,
       "watch": true,
       "status": "active"
+    }
+  ],
+  "claims": [
+    {
+      "id": "projects-existing-memory-setting",
+      "topic": "Mengubah memory pada Project yang sudah ada",
+      "status": "conflicted",
+      "summary": "Dokumentasi resmi OpenAI belum sepenuhnya konsisten tentang apakah semua existing Project dapat diubah antara Default dan Project-only memory.",
+      "evidence": [
+        {
+          "source_id": "openai-release-notes",
+          "locator": "August 20, 2026 — Edit memory settings for existing projects",
+          "observation": "Release notes menyatakan existing eligible Project dapat mengubah memory dari Project settings dan perubahan tersedia pada seluruh plan."
+        },
+        {
+          "source_id": "openai-projects",
+          "locator": "Memory in projects / current guidance",
+          "observation": "Bagian guidance terbaru menyatakan memory dapat dipilih saat membuat Project dan diubah kemudian dari Project settings."
+        },
+        {
+          "source_id": "openai-projects",
+          "locator": "FAQ — If I made a project before project-only memory was introduced, can I change it?",
+          "observation": "Bagian FAQ yang masih terindeks menyatakan Project lama perlu dibuat ulang untuk memakai project-only memory."
+        }
+      ],
+      "reviewed_at": "2026-08-29",
+      "review_interval_days": 7,
+      "operational_policy": "Untuk setup Ramu baru, pilih Project-only memory saat membuat Project. Untuk Project lama, coba Project settings → Memory; bila pilihan itu belum muncul pada akun/app tersebut, buat Project baru dengan Project-only memory dan pindahkan chat yang masih diperlukan.",
+      "notes": "Jangan menjadikan availability UI pada existing Project sebagai dependency Ramu."
+    },
+    {
+      "id": "study-mode-inside-projects",
+      "topic": "Ketersediaan Study Mode di dalam Projects",
+      "status": "conflicted",
+      "summary": "Dua dokumentasi resmi OpenAI masih memberikan guidance yang berbeda tentang penggunaan Study Mode di Projects.",
+      "evidence": [
+        {
+          "source_id": "openai-study-mode",
+          "locator": "Turn on study mode",
+          "observation": "Artikel khusus Study Mode menyatakan Study tidak tersedia di Temporary Chats, GPTs, atau Projects."
+        },
+        {
+          "source_id": "openai-projects",
+          "locator": "Work faster and smarter with built-in tools",
+          "observation": "Artikel Projects masih mencantumkan Study mode dalam daftar tools yang dapat digunakan di Projects."
+        }
+      ],
+      "reviewed_at": "2026-08-29",
+      "review_interval_days": 7,
+      "operational_policy": "Ramu tidak menjadikan Study Mode dependency. Semua scaffolding, retrieval practice, dan tutoring behavior harus tetap bekerja melalui Project Instructions + course context meski Study Mode tidak tersedia di Project.",
+      "notes": "Jangan mengklaim Ramu memerlukan atau otomatis mengaktifkan Study Mode."
+    },
+    {
+      "id": "projects-personal-data-controls",
+      "topic": "Data Controls untuk Project pada akun personal",
+      "status": "confirmed",
+      "summary": "Pada akun personal, penggunaan data Project untuk peningkatan model mengikuti pengaturan Improve the model for everyone; Ramu tidak membutuhkan pengaturan ini untuk berfungsi.",
+      "evidence": [
+        {
+          "source_id": "openai-projects",
+          "locator": "FAQ — Does using projects change how my data is handled?",
+          "observation": "Projects menyatakan data Free/Plus/Pro dapat digunakan bila Improve the model for everyone aktif."
+        },
+        {
+          "source_id": "openai-data-controls",
+          "locator": "How do I stop my chats from training ChatGPT?",
+          "observation": "Data Controls menjelaskan toggle Improve the model for everyone dan bahwa chat tetap ada di history saat toggle dimatikan."
+        }
+      ],
+      "reviewed_at": "2026-08-29",
+      "review_interval_days": 14,
+      "operational_policy": "Data Controls tetap pilihan akun pengguna, bukan syarat Ramu. Site Ramu tidak menerima upload file kuliah pribadi."
     }
   ]
 }
