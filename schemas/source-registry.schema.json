@@ -1,10 +1,15 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://man612.github.io/ramu/schemas/source-registry.schema.json",
   "title": "Ramu source registry",
   "type": "object",
-  "required": ["version", "verified_at", "sources"],
+  "required": ["version", "scope", "verified_at", "sources"],
   "properties": {
     "version": {"type": "integer", "minimum": 1},
+    "scope": {"type": "string", "enum": ["global", "institution", "program", "pack"]},
+    "institution": {"type": "string"},
+    "program": {"type": "string"},
+    "pack_id": {"type": "string"},
     "verified_at": {"type": "string", "format": "date"},
     "sources": {
       "type": "array",
