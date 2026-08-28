@@ -15,8 +15,12 @@ async function fetchJson(url) {
   return response.json();
 }
 
+function periodLabel(item) {
+  return item.period_label || `Semester ${item.semester}`;
+}
+
 function entryLabel(entry) {
-  return `${entry.institution} · ${entry.program} · ${entry.academic_year} · Semester ${entry.semester}`;
+  return `${entry.institution} · ${entry.program} · ${entry.academic_year} · ${periodLabel(entry)}`;
 }
 
 function currentPackEntry(catalog) {
@@ -82,12 +86,13 @@ function bindSetupLinks(entry) {
 }
 
 function renderHomePack(entry, manifest) {
+  const period = periodLabel(manifest);
   setText("#hero-course-count", manifest.courses.length);
   setText("#pack-kicker", entry.maintainer === "ramu" ? "Ramu Maintained pack" : "Community pack");
-  setText("#pack-title", `${manifest.institution} · ${manifest.program} · Semester ${manifest.semester}`);
+  setText("#pack-title", `${manifest.institution} · ${manifest.program} · ${period}`);
   setText("#pack-meta", `${manifest.academic_year} · ${manifest.total_sks} SKS · ${manifest.courses.length} mata kuliah · pack ${manifest.pack_version}`);
   setText("#pack-status", statusLabel(manifest.status, manifest.maintainer));
-  setText("#closing-pack-label", `${manifest.institution} · ${manifest.program} · Semester ${manifest.semester}`);
+  setText("#closing-pack-label", `${manifest.institution} · ${manifest.program} · ${period}`);
   bindSetupLinks(entry);
 
   const target = document.querySelector("#course-list");
@@ -139,7 +144,7 @@ async function downloadCoursePack(base, course, button) {
 }
 
 function renderSetupSummary(entry, manifest) {
-  setText("#setup-pack-name", `${manifest.institution} · ${manifest.program} · Semester ${manifest.semester}`);
+  setText("#setup-pack-name", `${manifest.institution} · ${manifest.program} · ${periodLabel(manifest)}`);
   setText("#setup-pack-count", `${manifest.courses.length} course pack`);
   setText("#setup-pack-meta", `${manifest.academic_year} · ${manifest.total_sks} SKS · ${statusLabel(manifest.status, manifest.maintainer)}`);
   const list = document.querySelector("#setup-summary-list");
