@@ -3,25 +3,26 @@
 
 from __future__ import annotations
 
-import json
 import sys
-from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-PACK_INDEX = ROOT / "packs/index.json"
-
-
-def load_json(path: Path) -> dict:
-    return json.loads(path.read_text(encoding="utf-8"))
+from ramu_repo import ROOT, PACK_INDEX, RepoError, load_json
 
 
 def main() -> int:
     errors: list[str] = []
-    index = load_json(PACK_INDEX)
+    try:
+        index = load_json(PACK_INDEX)
+    except RepoError as exc:
+        print(f"Display-name validation — discovery gagal: {exc}", file=sys.stderr)
+        return 2
     index_by_id = {entry["id"]: entry for entry in index.get("packs", [])}
 
     for manifest_path in sorted((ROOT / "packs").glob("**/manifest.json")):
-        manifest = load_json(manifest_path)
+        try:
+            manifest = load_json(manifest_path)
+        except RepoError as exc:
+            errors.append(str(exc))
+            continue
         pack_id = str(manifest.get("id", "<tanpa-id>"))
         period_label = str(manifest.get("period_label", "")).strip()
 
