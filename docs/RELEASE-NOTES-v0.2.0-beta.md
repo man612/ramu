@@ -25,7 +25,7 @@ Pack yang tersedia saat release ini tetap **Universitas Terbuka · S1 Akuntansi 
 - Cross-file identity validator memeriksa konsistensi katalog↔manifest, scoped registry, dan eval suite.
 - Manual Eval Kit dapat membuat checklist behavior validation untuk diuji langsung di ChatGPT Projects tanpa OpenAI API, termasuk provenance suite dan critical/must-pass status tiap case.
 - CI menggunakan matrix per pack dan tetap menyediakan final gate bernama `validate`.
-- GitHub Actions dependency dipin ke full commit SHA; workflow lama sudah dipindahkan ke checkout/setup-python Node 24-native.
+- GitHub Actions dependency dipin ke full commit SHA dan workflow menggunakan action Node 24-native.
 - Schema pack/catalog/source/eval ikut dipublish bersama GitHub Pages.
 
 ## Multi-pack proof
@@ -89,6 +89,19 @@ CI mempunyai regression test yang secara sengaja membuat hasil **13/16 = 81,25%*
 
 Manual Eval Kit memakai contract yang sama. Checklist menandai `Critical / must-pass`, dan satu critical FAIL juga mencegah manual validation dicatat sebagai overall PASS.
 
+## CI, Pages, dan dependency hardening
+
+Validation dan deployment sekarang membentuk chain yang eksplisit.
+
+- **Validate Ramu berjalan pada setiap push ke `main`**, tidak lagi dibatasi path allowlist. Perubahan docs, release metadata, workflow, ataupun file lain di main tidak dapat melewati validation hanya karena path-nya tidak tercantum.
+- **Deploy Pages tidak lagi trigger langsung dari push.** Ia menunggu workflow `Validate Ramu` selesai melalui `workflow_run`.
+- Deploy hanya berjalan bila upstream validation berstatus `success`, event asalnya `push`, dan branch asalnya `main`.
+- Pages checkout `workflow_run.head_sha`, sehingga SHA yang dipublish adalah commit yang benar-benar divalidasi, bukan keadaan `main` yang mungkin sudah bergerak lagi.
+- CI memiliki regression contract yang menolak kembalinya path-filter main, direct-push Pages deploy, atau hilangnya filter success/main/head SHA tersebut.
+- Dependabot dijadwalkan mingguan untuk dependency **GitHub Actions** dan dependency validation **pip**. Immutable full-SHA action pins tetap dipertahankan; pembaruan datang sebagai PR dan melewati validation biasa.
+
+Dependabot bukan pengganti review. Dependency PR tetap perlu melihat upstream change dan hasil CI sebelum merge.
+
 ## Source produk OpenAI
 
 Dokumentasi produk OpenAI di global source registry direview pada **28 Agustus 2026**. Projects dan Data Controls tetap menjadi source aktif untuk fungsi masing-masing. Karena dokumentasi produk dapat berubah cepat atau sempat tidak konsisten pada detail integrasi fitur, Ramu tidak menjadikan Study Mode sebagai dependency runtime dan menyimpan catatan source secara konservatif.
@@ -105,7 +118,7 @@ Automated Behavior Evals melalui API tetap tersedia sebagai lapisan QA tambahan 
 
 Kalau sudah memiliki Project bernama `S2 • ...`, Project tersebut tidak perlu dibuat ulang hanya karena perubahan naming. Nama dapat diubah menjadi `Semester 2 • ...` bila ingin mengikuti convention baru; course pack dan Project Instructions tetap menjadi bagian yang menentukan workspace Ramu.
 
-Perubahan repository dari `semester` → `period_id`, penambahan `institution_id`/`program_id`, dan hardening eval hanya menyentuh metadata/tooling. Pengguna yang sudah memasang course pack ke ChatGPT Project tidak perlu mengubah file atau membuat ulang Project karena perubahan ini.
+Perubahan repository dari `semester` → `period_id`, penambahan `institution_id`/`program_id`, dan hardening eval/CI hanya menyentuh metadata/tooling. Pengguna yang sudah memasang course pack ke ChatGPT Project tidak perlu mengubah file atau membuat ulang Project karena perubahan ini.
 
 ## Status validasi
 
@@ -115,6 +128,10 @@ Perubahan repository dari `semester` → `period_id`, penambahan `institution_id
 - Synthetic multi-pack + non-semester proof: aktif di CI.
 - Eval trust-boundary regression: aktif di CI tanpa API.
 - Critical must-pass gate regression: aktif di CI tanpa API.
+- CI/Pages deployment-chain regression: aktif.
+- Validate: wajib pada setiap main push.
+- Pages: downstream dari successful validated main push dan checkout validated SHA.
+- Dependabot: weekly untuk GitHub Actions + pip validation dependency.
 - Catalog/site/eval wiring: divalidasi CI.
 - Source freshness monitoring: aktif.
 - Behavior contracts: **E01–E16** tetap tersedia dan digabung dari **3 suite** pada pack awal (`core → Universitas Terbuka → Semester 2`).
