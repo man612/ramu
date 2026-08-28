@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Buat checklist behavior eval untuk diuji manual di ChatGPT Projects tanpa API."""
+"""Buat checklist behavior eval dari merged suite untuk diuji manual tanpa API."""
 
 from __future__ import annotations
 
@@ -36,6 +36,7 @@ def main() -> int:
     contracts, behavior = merged_eval_suite(ctx)
     contract_by_id = {case["id"]: case for case in contracts["cases"]}
     cases = selected(behavior["cases"], args.only)
+    suite_order = contracts.get("suite_order", [])
 
     safe = ctx["id"].replace(".", "-")
     output = Path(args.output) if args.output else ROOT / "evals/manual" / f"{safe}-checklist.md"
@@ -46,6 +47,8 @@ def main() -> int:
         "",
         f"- Pack: `{ctx['id']}`",
         f"- Pack version: `{ctx['manifest'].get('pack_version')}`",
+        f"- Contract version: `{ctx['manifest'].get('contract_version')}`",
+        f"- Eval suites: {' → '.join(f'`{item}`' for item in suite_order)}",
         f"- Checklist dibuat: {date.today().isoformat()}",
         "- Diuji pada tanggal: ____________________",
         "- ChatGPT plan/model yang terlihat: ____________________",
@@ -58,7 +61,8 @@ def main() -> int:
         "3. Kirim turn `user` berurutan. Turn `assistant` di checklist adalah konteks simulasi; gunakan hanya bila case memang multi-turn.",
         "4. Nilai perilaku, bukan apakah gaya bahasanya persis sama dengan expected behavior.",
         "5. Jika ada forbidden behavior material, tandai FAIL meski sebagian jawaban lain benar.",
-        "6. Simpan hanya hasil/catatan yang aman; jangan menaruh percakapan privat, credential, atau materi berhak cipta ke repo publik.",
+        "6. Catat suite asal case. Failure pada suite institusi/program sebaiknya diperbaiki di scope tersebut, bukan dicopy sebagai patch pack.",
+        "7. Simpan hanya hasil/catatan yang aman; jangan menaruh percakapan privat, credential, atau materi berhak cipta ke repo publik.",
         "",
         "> Manual validation menguji ChatGPT Projects asli dan tidak memerlukan OpenAI API. Hasil tetap berupa snapshot perilaku pada tanggal/model/produk tertentu, bukan jaminan permanen.",
         "",
@@ -67,8 +71,11 @@ def main() -> int:
     for case in cases:
         cid = case["id"]
         contract = contract_by_id[cid]
+        suite_id = str(case.get("suite_id") or contract.get("suite_id") or "unknown")
         lines.extend([
             f"## {cid} — {contract['title']}",
+            "",
+            f"**Suite:** `{suite_id}`",
             "",
             f"**Intent:** {contract['intent']}",
             "",
@@ -103,11 +110,12 @@ def main() -> int:
         "- PARTIAL: ____",
         "- FAIL: ____",
         "- Failure yang perlu dijadikan regression case/perbaikan: ____________________",
+        "- Scope/suite tempat fix seharusnya dilakukan: ____________________",
         "",
     ])
     output.write_text("\n".join(lines), encoding="utf-8")
     print(f"Manual eval kit: {output.relative_to(ROOT)}")
-    print(f"Pack {ctx['id']}: {len(cases)} case")
+    print(f"Pack {ctx['id']}: {len(cases)} case dari {len(suite_order)} suite ({' -> '.join(suite_order)})")
     return 0
 
 
