@@ -11,7 +11,7 @@ Implementasi pertama memakai **ChatGPT Projects**, tetapi format core dan pack t
 Secara produk, Ramu tetap punya dua lapisan besar:
 
 1. **Core** — prinsip, protocol, learner-state contract, source rules, dan failure mode universal yang seharusnya dapat dipakai lintas kampus/prodi.
-2. **Pack** — konteks institusi + program + tahun akademik + periode beserta mata kuliah, sumber, versi, dan wiring evaluasinya.
+2. **Pack** — konteks institusi + program + tahun akademik + periode beserta mata kuliah, sumber, versi, identity, dan wiring evaluasinya.
 
 Di dalam pack, evaluasi tidak lagi diasumsikan hanya `core + pack`. Manifest menyusun **ordered `eval_suites`** agar rule yang reusable dapat ditempatkan pada scope yang tepat: `core → institution → program → pack`.
 
@@ -36,7 +36,8 @@ Folder `semester-02/` di atas adalah identitas pack UT sekarang, bukan struktur 
 
 - **Core** — prinsip umum yang jarang berubah.
 - **Pack catalog** — daftar pack yang dapat ditemukan tooling/site.
-- **Pack manifest** — metadata institusi/program/periode, course list, source registry, ordered `eval_suites`, dan version.
+- **Pack manifest** — metadata identity institusi/program/periode, course list, source registry, ordered `eval_suites`, dan version.
+- **Machine identity** — `institution_id`, `program_id`, dan pack `id` yang stabil; terpisah dari label manusia.
 - **Period metadata** — `period_id` untuk mesin + `period_label` untuk manusia; tidak ada field universal `semester`.
 - **Course pack** — konfigurasi siap upload untuk satu mata kuliah.
 - **Project Instructions** — perilaku runtime yang ditempel ke Project.
@@ -46,6 +47,29 @@ Folder `semester-02/` di atas adalah identitas pack UT sekarang, bukan struktur 
 - **Eval suite `pack`** — behavior yang benar-benar spesifik periode/mata kuliah pada pack aktif.
 - **Source registry** — dapat berscope global, institusi, program, atau pack agar tidak menjadi satu file raksasa.
 - **Site** — membaca katalog + manifest, bukan hardcode satu semester/jenis kalender tertentu.
+
+## Kontrak identity
+
+Ramu memisahkan identity mesin dari label manusia. Contoh pack pertama:
+
+```text
+institution_id: universitas-terbuka
+institution:    Universitas Terbuka
+
+program_id:     universitas-terbuka.s1-akuntansi
+program:        S1 Akuntansi
+```
+
+Label manusia boleh diperbaiki atau dilokalkan tanpa mengubah identity mesin. Sebaliknya, satu `institution_id`/`program_id` tidak boleh dipakai ulang untuk entitas berbeda. `program_id` dibuat unik secara global karena program scope dapat direferensikan lintas pack dan periode.
+
+Identity tersebut menjadi trust boundary untuk komposisi data:
+
+- eval scope `institution` harus memakai `scope_ref == institution_id`;
+- eval scope `program` harus memakai `scope_ref == program_id`;
+- eval scope `pack` harus memakai `scope_ref == pack id`;
+- scoped source registry harus membawa identity yang cocok dengan pack yang mendeklarasikannya.
+
+Dengan begitu, pack institusi A tidak dapat lolos validation bila tanpa sengaja menarik suite/registry scoped milik institusi B.
 
 ## Kontrak periode akademik
 
@@ -89,7 +113,7 @@ pack
 Pack UT S1 Akuntansi Semester 2 saat ini memakai:
 
 ```text
-core → universitas-terbuka → semester-02
+core → universitas-terbuka → id.ut.accounting-s1.2026-2027.s2
 ```
 
 Contohnya, regression case konflik katalog pusat dan halaman regional UT berada pada suite institusi Universitas Terbuka. Semester 3 UT nanti dapat memakai suite yang sama tanpa menyalin case tersebut. Sebaliknya, universitas lain tidak ikut membawa rule UT.
@@ -99,11 +123,20 @@ Validator menjaga beberapa invariant:
 - suite core harus menjadi lapisan pertama;
 - suite pack harus menjadi lapisan terakhir;
 - scope tidak boleh mundur dari yang lebih spesifik ke lebih umum;
-- `scope_ref` harus cocok dengan identitas scope yang dipakai;
+- `scope_ref` harus cocok dengan `institution_id`, `program_id`, atau pack `id` sesuai scope;
 - ID case harus tetap unik setelah seluruh suite digabung;
 - behavior dan contract case harus tetap berpasangan.
 
 Behavior defaults boleh dioverride oleh suite yang lebih spesifik dan muncul kemudian, tetapi regression case yang memiliki ID sama tidak boleh ditimpa diam-diam.
+
+## Schema dan semantic validation
+
+JSON di Ramu memiliki dua lapis validation yang sengaja dipisahkan:
+
+1. **JSON Schema Draft 2020-12** memeriksa bentuk setiap katalog, manifest, source registry, contract, dan behavior file. Schema Ramu sendiri juga diperiksa terhadap meta-schema Draft 2020-12.
+2. **Semantic/cross-file validation** memeriksa invariant yang membutuhkan hubungan antardokumen: identity catalog↔manifest, identity scoped registry/eval, file existence, source dependency, jumlah SKS, suite ordering, duplicate case ID, dan wiring contract↔behavior.
+
+Schema tidak dianggap dokumentasi dekoratif. CI harus benar-benar menjalankan instance validation terhadap schema yang dipublish. Sebaliknya, JSON Schema tidak dipaksa melakukan pekerjaan lintas-file yang lebih jelas dan auditable di semantic validator.
 
 ## Maintainer pack
 
@@ -118,7 +151,7 @@ Status sumber dan status maintainer adalah dua hal berbeda. Community pack tetap
 
 Data akademik selalu ditulis bersama tahun akademik, `period_id`/`period_label`, `pack_version`, dan tanggal verifikasi. Jika kurikulum berubah, pack baru dibuat pada jalur versi/tahun/periode yang sesuai; pack lama tidak diam-diam ditimpa seolah masih berlaku.
 
-`schema_version` berubah bila bentuk kontrak manifest berubah. `contract_version` dapat berubah ketika wiring/format kontrak evaluasi berubah. `pack_version` mengikuti isi/config course pack yang benar-benar dipakai mahasiswa. Karena itu migrasi metadata seperti `semester` → `period_id` tidak otomatis berarti course pack mahasiswa perlu versi baru.
+`packs/index.json` memiliki version untuk kontrak katalog dan `schema_version` manifest berubah bila bentuk kontrak manifest berubah. `contract_version` dapat berubah ketika wiring/format kontrak evaluasi berubah. `pack_version` mengikuti isi/config course pack yang benar-benar dipakai mahasiswa. Karena itu migrasi metadata/identity tidak otomatis berarti course pack mahasiswa perlu versi baru.
 
 Jika dua course pack untuk konteks yang sama terpasang sekaligus, versi yang sesuai manifest aktif diprioritaskan dan versi lama sebaiknya dihapus dari Project Sources.
 
@@ -136,11 +169,11 @@ Status `verified` tetap berupa snapshot terhadap pack version + tanggal + enviro
 
 Ramu tidak membutuhkan OpenAI API untuk dipakai mahasiswa.
 
-- static validation: otomatis dan gratis;
+- JSON Schema + static semantic validation: otomatis dan gratis;
 - manual validation di ChatGPT Projects: gratis dan menguji runtime produk yang sebenarnya;
 - automated API behavior eval: opsional sebagai regression/benchmark tambahan ketika API tersedia.
 
-Static CI memeriksa period metadata, menggabungkan ordered eval suites setiap pack, dan memeriksa wiring seluruh case. Manual Eval Kit menggunakan suite yang sama untuk menghasilkan checklist tanpa API.
+Static CI memeriksa schema, identity, period metadata, menggabungkan ordered eval suites setiap pack, dan memeriksa wiring seluruh case. Manual Eval Kit menggunakan suite yang sama untuk menghasilkan checklist tanpa API.
 
 ## Bukan target Ramu
 
