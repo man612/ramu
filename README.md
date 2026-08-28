@@ -58,11 +58,12 @@ packs/
 ├── index.json
 ├── universitas-terbuka/
 │   ├── source-registry.json
+│   ├── evals/                     # rule yang dapat dipakai ulang semua pack UT
 │   └── s1-akuntansi/
 │       └── 2026-2027/
 │           ├── semester-02/
-│           └── semester-03/        # ketika tersedia
-└── institusi-lain/                 # ketika ada pack yang layak ditambahkan
+│           └── semester-03/       # ketika source-nya tersedia
+└── institusi-lain/                # ketika ada pack yang layak ditambahkan
 ```
 
 [`packs/index.json`](packs/index.json) adalah katalog machine-readable. Setiap entry menunjuk `manifest.json` pack. Validator, GitHub Pages, Manual Eval Kit, dan Behavior Evals menemukan pack melalui katalog/manifest—bukan melalui path Semester 2 yang ditulis di source code.
@@ -115,27 +116,37 @@ Tidak perlu setup seluruh periode untuk mencoba Ramu.
 
 Kalau satu Project terasa berguna, baru tambahkan Project lain. Progress setup disimpan lokal di browser berdasarkan `pack id`, bukan dikirim ke server Ramu.
 
-## Core vs pack
+## Composable eval suites
 
-Ramu memisahkan aturan universal dari konteks akademik tertentu.
+Ramu tidak lagi menganggap eval hanya terdiri dari `core + pack`. Setiap manifest menyusun ordered `eval_suites` dari aturan paling umum menuju paling spesifik:
 
 ```text
-core / protocols / learning
-        ↓
-   core behavior eval
-        +
-pack manifest / Project Instructions / courses / sources
-        ↓
-   pack behavior eval
-        ↓
-  satu suite untuk pack yang dipilih
+core
+  ↓
+institution      (opsional)
+  ↓
+program          (opsional)
+  ↓
+pack
 ```
 
-**Core eval** menangkap failure mode yang seharusnya berlaku luas: data yang hilang, sitasi palsu, integritas tugas, retrieval practice, learner state, source freshness, prompt injection, dan konflik versi pack.
+Untuk pack yang tersedia sekarang, urutannya adalah:
 
-**Pack eval** menangkap perilaku yang hanya bermakna pada konteks tertentu. Pada UT S1 Akuntansi Semester 2 contohnya: pajak lama vs aturan terbaru, jurnal AKM I, source UT pusat vs regional, dan context isolation antarmata kuliah.
+```text
+core → universitas-terbuka → semester-02
+```
 
-Dengan begitu Semester 3 atau universitas lain tidak perlu menyalin seluruh eval universal.
+**Core eval** menangkap failure mode lintas seluruh Ramu: data yang hilang, sitasi palsu, integritas tugas, retrieval practice, learner state, source freshness, prompt injection, dan konflik versi pack.
+
+**Institution eval** menangkap perilaku yang berlaku untuk banyak pack pada institusi yang sama. E14, misalnya, menguji konflik source pusat vs regional berdasarkan source registry Universitas Terbuka. Karena itu E14 berada di `packs/universitas-terbuka/evals/`, bukan dicopy ke setiap semester.
+
+**Program eval** disediakan untuk aturan yang suatu hari berlaku lintas periode pada satu program tetapi tidak otomatis berlaku ke program lain. Scope ini belum diperlukan oleh pack yang tersedia sekarang.
+
+**Pack eval** tetap menyimpan skenario yang benar-benar membutuhkan course/periode tertentu, seperti aturan pajak vs BMP, jurnal AKM I, dan context isolation mata kuliah Semester 2.
+
+Suite yang lebih spesifik boleh mengubah default runtime behavior eval, tetapi **ID case tidak boleh mengganti/menimpa case suite sebelumnya**. Validator mewajibkan core pertama, pack terakhir, urutan scope tidak boleh mundur, dan ID case harus unik setelah seluruh suite digabung.
+
+Detail format: [`evals/README.md`](evals/README.md).
 
 ## Tidak punya API tetap bisa diuji
 
@@ -143,7 +154,7 @@ Ramu memiliki tiga lapisan validation:
 
 | Jalur | API? | Fungsi |
 |---|---:|---|
-| **Static CI** | tidak | manifest, pack catalog, display naming, source registry, contract marker, site wiring |
+| **Static CI** | tidak | manifest, pack catalog, display naming, source registry, eval-suite wiring, contract marker, site wiring |
 | **Manual Behavior Validation** | tidak | menjalankan case langsung di ChatGPT Projects asli |
 | **Automated Behavior Eval** | ya, opsional | regression/benchmark melalui Responses API + model judge |
 
@@ -165,7 +176,7 @@ python scripts/prepare_manual_eval.py \
   --pack id.ut.accounting-s1.2026-2027.s2
 ```
 
-Atau gunakan **Actions → Manual Eval Kit**. Workflow tersebut tidak membutuhkan secret dan hanya menghasilkan checklist dari core + pack eval yang sama.
+Atau gunakan **Actions → Manual Eval Kit**. Workflow tersebut tidak membutuhkan secret dan menghasilkan checklist dari seluruh eval suite yang dideklarasikan pack. Checklist juga mencatat suite asal tiap case agar failure dapat diperbaiki pada scope yang benar.
 
 Automated API eval tetap tersedia bila suatu saat API digunakan:
 
@@ -201,9 +212,9 @@ Source Watch mencari seluruh registry tersebut. URL yang hidup bukan bukti fakta
 
 Job akhir selalu bernama **`validate`**, sehingga branch protection dapat memakai satu required status check walaupun jumlah pack bertambah.
 
-Validator display name memastikan setiap `project_name` diawali `<period_label> • `. Ini mencegah pack baru kembali memakai singkatan periode yang ambigu tanpa bergantung pada review manual.
+Validator display name memastikan setiap `project_name` diawali `<period_label> • `. Validator eval memastikan suite mengikuti urutan `core → institution → program → pack`, metadata suite cocok dengan file contracts/behavior, dan tidak ada ID regression case yang saling menimpa.
 
-Dependency GitHub Actions yang dipakai workflow dipin ke full commit SHA agar tag dependency tidak menjadi bagian supply-chain yang dapat bergerak diam-diam.
+Dependency GitHub Actions dipin ke full commit SHA agar tag dependency tidak menjadi bagian supply-chain yang dapat bergerak diam-diam.
 
 ## Status pack
 
@@ -213,7 +224,7 @@ Dependency GitHub Actions yang dipakai workflow dipin ke full commit SHA agar ta
 - `experimental` — masih diuji;
 - `deprecated` — tidak direkomendasikan untuk penggunaan baru.
 
-Status `verified` tetap snapshot terhadap **pack version + tanggal + runtime/product/model yang diuji**, bukan jaminan AI selalu benar.
+Status `verified` tetap snapshot terhadap **pack version + contract version + tanggal + runtime/product/model yang diuji**, bukan jaminan AI selalu benar.
 
 ## Prompt injection
 
@@ -226,21 +237,21 @@ ramu/
 ├── core/          prinsip universal
 ├── protocols/     belajar, tugas, review, latihan
 ├── learning/      learner-state contracts/templates
-├── packs/         catalog + institusi/program/periode/course pack
+├── packs/         catalog + institusi/program/periode/course pack + scoped eval
 ├── sources/       source global + freshness policy
 ├── evals/         core eval, manual tooling docs, results ignored
-├── schemas/       kontrak katalog/manifest/registry/eval
+├── schemas/       kontrak katalog/manifest/registry/contracts/behavior eval
 ├── scripts/       discovery, validator, freshness, eval runner
-├── docs/          riset, arah proyek, validasi, pilot
+├── docs/          riset, arah proyek, validasi, pilot, release process
 ├── site/          GitHub Pages catalog-driven
 └── .github/       CI, manual/API eval, source watch, Pages
 ```
 
 ## Menambah Semester 3 / program / universitas lain
 
-Prinsipnya bukan mengedit `app.js` atau validator. Buat pack + manifest + source/eval yang relevan, tentukan `period_label`, lalu daftarkan ke `packs/index.json`. Panduan contributor ada di [`CONTRIBUTING.md`](CONTRIBUTING.md).
+Prinsipnya bukan mengedit `app.js` atau validator. Buat pack + manifest + source yang relevan, tentukan `period_label`, pilih reusable eval suite yang memang berlaku, tambahkan suite pack-nya, lalu daftarkan ke `packs/index.json`. Panduan contributor ada di [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
-Validator akan menolak manifest yang tidak terdaftar, entry katalog yang menunjuk file hilang, ID source/eval duplikat, course yang tidak self-describing, wiring eval yang tidak lengkap, atau nama Project yang tidak sesuai label periode pack.
+Validator akan menolak manifest yang tidak terdaftar, entry katalog yang menunjuk file hilang, ID source/eval duplikat, course yang tidak self-describing, wiring suite yang tidak lengkap/urutannya salah, atau nama Project yang tidak sesuai label periode pack.
 
 ## Landasan dan batas klaim
 
@@ -248,8 +259,10 @@ Desain belajar Ramu mengambil inspirasi dari riset active learning, tutoring, se
 
 Riset tersebut bukan bukti bahwa Ramu sendiri otomatis efektif. Public beta tetap membutuhkan penggunaan nyata, manual behavior validation, dan pengumpulan failure mode. Lihat [`docs/PILOT-PUBLIC-BETA.md`](docs/PILOT-PUBLIC-BETA.md).
 
-## Kontribusi dan keamanan
+## Release dan kontribusi
 
+- [`CHANGELOG.md`](CHANGELOG.md)
+- [`docs/RELEASE-PROCESS.md`](docs/RELEASE-PROCESS.md)
 - [`CONTRIBUTING.md`](CONTRIBUTING.md)
 - [`SECURITY.md`](SECURITY.md)
 - [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md)
