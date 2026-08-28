@@ -3,6 +3,7 @@
 
 Tidak membutuhkan dependency Python eksternal. OPENAI_API_KEY hanya dibutuhkan
 untuk run nyata; --dry-run dipakai CI untuk memvalidasi dataset dan prompt wiring.
+Model kandidat dan judge sengaja tidak di-hardcode karena katalog model berubah.
 """
 
 from __future__ import annotations
@@ -304,8 +305,16 @@ def write_results(
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Jalankan behavior eval Ramu.")
-    parser.add_argument("--candidate-model", default=os.environ.get("RAMU_CANDIDATE_MODEL", "gpt-5-mini"))
-    parser.add_argument("--grader-model", default=os.environ.get("RAMU_GRADER_MODEL", "gpt-5-mini"))
+    parser.add_argument(
+        "--candidate-model",
+        default=os.environ.get("RAMU_CANDIDATE_MODEL"),
+        help="Model kandidat yang tersedia saat run. Wajib untuk run nyata.",
+    )
+    parser.add_argument(
+        "--grader-model",
+        default=os.environ.get("RAMU_GRADER_MODEL"),
+        help="Model judge yang tersedia saat run. Wajib untuk run nyata.",
+    )
     parser.add_argument("--only", default=os.environ.get("RAMU_EVAL_CASES", "all"), help="all atau daftar E01,E02")
     parser.add_argument("--fail-under", type=float, default=float(os.environ.get("RAMU_FAIL_UNDER", "0.80")))
     parser.add_argument("--results-dir", default=str(DEFAULT_RESULTS_DIR))
@@ -332,6 +341,17 @@ def main() -> int:
             print(f"OK {case['id']}: {len(case['turns'])} turn, {len(context)} context chars")
         print("OK: dataset lengkap, context file tersedia, dan semua contract case terhubung.")
         return 0
+
+    if not args.candidate_model or not args.grader_model:
+        raise EvalError(
+            "Run nyata membutuhkan --candidate-model dan --grader-model (atau RAMU_CANDIDATE_MODEL/RAMU_GRADER_MODEL). "
+            "Ramu sengaja tidak memiliki default model permanen karena katalog model dapat berubah."
+        )
+    if args.candidate_model == args.grader_model:
+        print(
+            "WARNING: candidate dan judge memakai model yang sama; gunakan judge berbeda atau review manusia sebelum menjadikan hasil sebagai bukti validasi.",
+            file=sys.stderr,
+        )
 
     api_key = os.environ.get("OPENAI_API_KEY")
     if not api_key:
