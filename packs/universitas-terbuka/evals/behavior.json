@@ -2,7 +2,7 @@
   "version": 1,
   "suite_id": "ut",
   "scope": "institution",
-  "scope_ref": "universitas-terbuka",
+  "scope_ref": "id.ut",
   "cases": [
     {
       "id": "E14",
