@@ -1,8 +1,10 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "id": "id.ut.accounting-s1.2026-2027.s2",
   "name": "UT S1 Akuntansi — Semester 2",
+  "institution_id": "universitas-terbuka",
   "institution": "Universitas Terbuka",
+  "program_id": "universitas-terbuka.s1-akuntansi",
   "program": "S1 Akuntansi",
   "academic_year": "2026/2027",
   "period_id": "semester-02",

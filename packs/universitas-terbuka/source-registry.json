@@ -1,6 +1,7 @@
 {
   "version": 1,
   "scope": "institution",
+  "institution_id": "universitas-terbuka",
   "institution": "Universitas Terbuka",
   "verified_at": "2026-08-14",
   "sources": [
