@@ -66,7 +66,7 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Validate core + pack behavior wiring
+      - name: Validate composable behavior wiring
         run: python scripts/run_behavior_evals.py --dry-run --pack "${{ matrix.pack }}"
 
   validate:
