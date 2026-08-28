@@ -9,8 +9,8 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 PACK_INDEX = ROOT / "packs/index.json"
-PACK_INDEX_VERSION = 2
-PACK_MANIFEST_SCHEMA_VERSION = 3
+PACK_INDEX_VERSION = 3
+PACK_MANIFEST_SCHEMA_VERSION = 4
 VALID_EVAL_SCOPES = {"core", "institution", "program", "pack"}
 
 
@@ -86,6 +86,19 @@ def pack_context(pack_id: str | None = None) -> dict[str, Any]:
     }
 
 
+def scope_identity(ctx: dict[str, Any], scope: str) -> str | None:
+    """Kembalikan identity mesin yang sah untuk satu scope eval/source."""
+    if scope == "core":
+        return None
+    if scope == "institution":
+        return str(ctx["manifest"].get("institution_id", "")).strip()
+    if scope == "program":
+        return str(ctx["manifest"].get("program_id", "")).strip()
+    if scope == "pack":
+        return str(ctx["id"])
+    raise RepoError(f"Scope tidak dikenal: {scope!r}")
+
+
 def project_instructions_path(ctx: dict[str, Any]) -> Path:
     rel = str(ctx["manifest"].get("project_instructions", ""))
     path = (ctx["pack_dir"] / rel).resolve()
@@ -97,7 +110,7 @@ def project_instructions_path(ctx: dict[str, Any]) -> Path:
 
 
 def eval_suite_paths(ctx: dict[str, Any]) -> list[tuple[dict[str, Any], Path, Path]]:
-    """Resolve ordered eval suites declared by one pack manifest."""
+    """Resolve ordered eval suites dan enforce scope_ref terhadap identity pack."""
     suites = ctx["manifest"].get("eval_suites")
     if not isinstance(suites, list) or not suites:
         raise RepoError(f"Pack {ctx['id']} tidak mendeklarasikan eval_suites.")
@@ -120,12 +133,19 @@ def eval_suite_paths(ctx: dict[str, Any]) -> list[tuple[dict[str, Any], Path, Pa
         seen_ids.add(suite_id)
         if scope not in VALID_EVAL_SCOPES:
             raise RepoError(f"Pack {ctx['id']} suite {suite_id} punya scope tidak dikenal: {scope!r}")
-        if scope != "core" and not scope_ref:
-            raise RepoError(f"Pack {ctx['id']} suite {suite_id} scope {scope} membutuhkan scope_ref.")
-        if scope == "pack" and scope_ref != ctx["id"]:
+
+        expected_ref = scope_identity(ctx, scope)
+        if scope == "core":
+            if scope_ref:
+                raise RepoError(f"Pack {ctx['id']} suite {suite_id} scope core tidak boleh punya scope_ref.")
+        elif not expected_ref:
+            raise RepoError(f"Pack {ctx['id']} kehilangan identity untuk scope {scope}.")
+        elif scope_ref != expected_ref:
             raise RepoError(
-                f"Pack {ctx['id']} suite {suite_id} scope_ref harus sama dengan pack id; sekarang {scope_ref!r}."
+                f"Pack {ctx['id']} suite {suite_id} scope {scope} harus memakai scope_ref {expected_ref!r}; "
+                f"sekarang {scope_ref!r}."
             )
+
         if not contracts or not behavior:
             raise RepoError(f"Pack {ctx['id']} suite {suite_id} kehilangan contracts/behavior.")
 
