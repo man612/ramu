@@ -45,6 +45,9 @@ jobs:
       - name: Prove critical eval gates
         run: python tests/test_eval_critical_gate.py
 
+      - name: Prove manual Projects evidence contract
+        run: python tests/test_manual_eval_evidence.py
+
       - name: Prove CI and Pages gate contract
         run: python tests/test_ci_contract.py
 
