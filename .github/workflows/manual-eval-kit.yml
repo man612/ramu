@@ -1,0 +1,52 @@
+name: Manual Eval Kit
+
+on:
+  workflow_dispatch:
+    inputs:
+      pack_id:
+        description: "Pack id dari packs/index.json"
+        required: true
+        default: "id.ut.accounting-s1.2026-2027.s2"
+        type: string
+      cases:
+        description: "all atau E01,E05,E13"
+        required: true
+        default: "all"
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate selected pack and eval wiring
+        run: |
+          python scripts/validate_repo.py
+          python scripts/run_behavior_evals.py --dry-run --pack "${{ inputs.pack_id }}" --only "${{ inputs.cases }}"
+
+      - name: Generate manual checklist
+        run: |
+          mkdir -p evals/results
+          python scripts/prepare_manual_eval.py \
+            --pack "${{ inputs.pack_id }}" \
+            --only "${{ inputs.cases }}" \
+            --output evals/results/manual-checklist.md
+          cat evals/results/manual-checklist.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload checklist
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: ramu-manual-eval-${{ github.run_id }}
+          path: evals/results/manual-checklist.md
+          if-no-files-found: error
+          retention-days: 30
