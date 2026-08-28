@@ -28,25 +28,37 @@ jobs:
         uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
         with:
           python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: requirements-dev.txt
+
+      - name: Install validation dependencies
+        run: python -m pip install --disable-pip-version-check -r requirements-dev.txt
 
       - name: Validate selected pack and eval wiring
         run: |
           python scripts/validate_repo.py
           python scripts/run_behavior_evals.py --dry-run --pack "${{ inputs.pack_id }}" --only "${{ inputs.cases }}"
 
-      - name: Generate manual checklist
+      - name: Generate manual checklist and evidence template
         run: |
           mkdir -p evals/results
           python scripts/prepare_manual_eval.py \
             --pack "${{ inputs.pack_id }}" \
             --only "${{ inputs.cases }}" \
             --output evals/results/manual-checklist.md
+          python scripts/manual_eval_evidence.py prepare \
+            --pack "${{ inputs.pack_id }}" \
+            --only "${{ inputs.cases }}" \
+            --output evals/results/manual-evidence.json
+          python scripts/manual_eval_evidence.py validate evals/results/manual-evidence.json
           cat evals/results/manual-checklist.md >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Upload checklist
+      - name: Upload manual eval kit
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: ramu-manual-eval-${{ github.run_id }}
-          path: evals/results/manual-checklist.md
+          path: |
+            evals/results/manual-checklist.md
+            evals/results/manual-evidence.json
           if-no-files-found: error
           retention-days: 30
