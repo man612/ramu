@@ -9,6 +9,7 @@ Terima kasih sudah ingin membantu Ramu. Kontribusi paling berguna adalah perubah
 3. Pisahkan fakta terverifikasi dari asumsi, pengalaman komunitas, dan keputusan desain.
 4. Jangan mengunci runtime ke satu nama model AI. Model/plan dapat berubah; kontrak Ramu harus tetap masuk akal ketika model berganti.
 5. Jangan menyebut pack Ramu sebagai pack “resmi” dari universitas. Gunakan `maintainer: ramu` (Ramu Maintained) atau `maintainer: community`.
+6. Gunakan label periode yang jelas untuk pengguna. Jangan memakai `S2`, `S3`, dan bentuk singkat serupa sebagai pengganti “Semester 2/3” pada nama Project karena dapat tertukar dengan jenjang pendidikan.
 
 ## Jalur kontribusi
 
@@ -25,22 +26,28 @@ Tooling Ramu menemukan pack melalui [`packs/index.json`](packs/index.json). Jang
 
 Untuk pack baru:
 
-1. buat struktur `packs/<institusi>/<program>/<tahun>/<semester>/`;
+1. buat struktur `packs/<institusi>/<program>/<tahun>/<periode>/`;
 2. buat `manifest.json` mengikuti `schemas/pack-manifest.schema.json`;
-3. taruh course pack di folder `courses/` dan Project Instructions di pack tersebut;
-4. pakai registry yang sudah ada atau buat scoped `source-registry.json` jika source-nya belum punya tempat yang tepat;
-5. buat eval khusus pack di `<pack>/evals/contracts.json` dan `<pack>/evals/behavior.json`;
-6. jangan copy eval universal tanpa alasan—failure mode umum berasal dari `evals/core/`;
-7. daftarkan pack di `packs/index.json`;
-8. jalankan validasi. Validator akan gagal jika menemukan `manifest.json` yang belum masuk katalog atau entry katalog yang menunjuk file yang tidak ada.
+3. tentukan `period_label` yang manusiawi, misalnya `Semester 3`, `Trimester 1`, atau istilah resmi lain yang dipakai institusi;
+4. taruh course pack di folder `courses/` dan Project Instructions di pack tersebut;
+5. pakai registry yang sudah ada atau buat scoped `source-registry.json` jika source-nya belum punya tempat yang tepat;
+6. buat eval khusus pack di `<pack>/evals/contracts.json` dan `<pack>/evals/behavior.json`;
+7. jangan copy eval universal tanpa alasan—failure mode umum berasal dari `evals/core/`;
+8. daftarkan pack di `packs/index.json`;
+9. jalankan validasi. Validator akan gagal jika menemukan `manifest.json` yang belum masuk katalog, entry katalog yang menunjuk file yang tidak ada, atau nama Project yang tidak mengikuti `period_label`.
 
 Field penting:
 
 - `status`: `source-verified`, `verified`, `community`, `experimental`, atau `deprecated`;
 - `maintainer`: `ramu` atau `community`;
+- `semester`: nilai terstruktur untuk periode bila format pack memang memakai semester;
+- `period_label`: label yang dilihat manusia, misalnya `Semester 2`;
+- `project_name`: harus diawali `<period_label> • `, misalnya `Semester 2 • AKM I`;
 - `source_registries`: registry yang memang menjadi dependency pack;
 - `evals`: lokasi core + pack eval yang harus digabung runner;
 - `focus`: deskripsi pendek setiap mata kuliah untuk site; jangan hardcode focus di front-end.
+
+`id`, folder, atau versi internal boleh tetap ringkas seperti `.s2`, `semester-02/`, atau `2026-2027.s2.1`. Aturan label eksplisit berlaku untuk teks yang ditampilkan ke pengguna, bukan identifier mesin.
 
 ## Memilih scope source
 
@@ -56,6 +63,8 @@ Gunakan Python 3.12 atau versi kompatibel:
 
 ```bash
 python scripts/validate_repo.py
+python scripts/validate_display_names.py
+python scripts/validate_site.py
 python scripts/check_source_freshness.py
 python scripts/run_behavior_evals.py --dry-run --pack <pack-id>
 ```
@@ -94,4 +103,4 @@ Jika perubahan menyentuh guardrail, source routing, state, atau perilaku tutor, 
 
 ## Prinsip review
 
-Perubahan tidak dinilai dari panjang prompt atau dokumentasinya. Yang dicari adalah perilaku yang jelas, sumber yang dapat ditelusuri, manifest yang self-describing, setup yang mudah, dan cara yang nyata untuk menguji ulang perubahan tersebut.
+Perubahan tidak dinilai dari panjang prompt atau dokumentasinya. Yang dicari adalah perilaku yang jelas, sumber yang dapat ditelusuri, manifest yang self-describing, label yang tidak membingungkan pengguna, setup yang mudah, dan cara nyata untuk menguji ulang perubahan tersebut.
