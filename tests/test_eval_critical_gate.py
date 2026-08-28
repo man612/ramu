@@ -4,7 +4,9 @@
 from __future__ import annotations
 
 import json
+import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -53,6 +55,34 @@ def main() -> int:
     overall, rate, critical = evaluate_overall(healthy, 0.80)
     if not overall or rate != 1.0 or critical:
         raise AssertionError("Run sehat dengan semua critical PASS harus lulus")
+
+    # Manual Eval Kit harus membawa semantics critical dari contract yang sama.
+    with tempfile.TemporaryDirectory(prefix="ramu-critical-checklist-") as temp:
+        output = Path(temp) / "checklist.md"
+        completed = subprocess.run(
+            [
+                sys.executable,
+                str(ROOT / "scripts/prepare_manual_eval.py"),
+                "--pack",
+                "id.ut.accounting-s1.2026-2027.s2",
+                "--only",
+                "E01",
+                "--output",
+                str(output),
+            ],
+            cwd=ROOT,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            check=False,
+        )
+        if completed.returncode != 0:
+            raise AssertionError(f"Manual Eval Kit gagal dibuat:\n{completed.stdout}")
+        checklist = output.read_text(encoding="utf-8")
+        if "**Critical / must-pass:** YES" not in checklist:
+            raise AssertionError("Manual checklist tidak menandai E01 sebagai critical must-pass")
+        if "Satu critical FAIL" not in checklist:
+            raise AssertionError("Manual checklist kehilangan overall critical-fail rule")
 
     print("Critical eval gate regression — OK")
     return 0
