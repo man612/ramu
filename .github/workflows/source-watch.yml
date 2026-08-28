@@ -24,20 +24,20 @@ jobs:
       - name: Check freshness and URL reachability
         id: freshness
         continue-on-error: true
-        run: python scripts/check_source_freshness.py --online
+        run: python scripts/check_source_freshness.py --online --fail-on-network
 
-      - name: Open review issue when a source is overdue
+      - name: Open review issue when source watch needs attention
         if: steps.freshness.outcome == 'failure'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          existing="$(gh issue list --state open --search 'Source review jatuh tempo in:title' --json number --jq 'length')"
+          existing="$(gh issue list --state open --search 'Source watch perlu ditinjau in:title' --json number --jq 'length')"
           if [ "$existing" = "0" ]; then
             gh issue create \
-              --title "Source review jatuh tempo" \
-              --body "Pemeriksaan mingguan menemukan setidaknya satu sumber aktif melewati interval review. Jalankan python scripts/check_source_freshness.py --online, verifikasi sumber kanonik, lalu perbarui sources/registry.json jika sudah dicek."
+              --title "Source watch perlu ditinjau" \
+              --body "Pemeriksaan mingguan menemukan setidaknya satu sumber aktif melewati interval review atau watched source tidak dapat dijangkau. Buka log workflow ini, jalankan python scripts/check_source_freshness.py --online --fail-on-network, verifikasi sumber kanonik, lalu perbarui sources/registry.json bila diperlukan. Kegagalan reachability sendiri belum berarti fakta sumber berubah."
           fi
 
-      - name: Fail job when review is due
+      - name: Fail job when source watch needs attention
         if: steps.freshness.outcome == 'failure'
         run: exit 1
