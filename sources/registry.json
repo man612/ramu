@@ -28,7 +28,7 @@
       "review_interval_days": 14,
       "watch": true,
       "status": "active",
-      "notes": "Review 2026-08-28: dokumentasi OpenAI menyatakan Study Mode tidak tersedia di Projects. Ramu tidak menjadikannya dependency runtime; guardrail dan protocol belajar Ramu berdiri sendiri."
+      "notes": "Review 2026-08-28 menemukan konflik dokumentasi resmi: artikel khusus Study Mode menyatakan Study tidak tersedia di Projects, sementara artikel Projects masih mencantumkan Study Mode di daftar tools. Ramu memperlakukan status integrasi ini sebagai unresolved product-doc conflict dan tidak menjadikan Study Mode dependency runtime sampai dokumentasinya konsisten."
     },
     {
       "id": "openai-data-controls",
