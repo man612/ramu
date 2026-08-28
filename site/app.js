@@ -16,7 +16,7 @@ async function fetchJson(url) {
 }
 
 function periodLabel(item) {
-  return item.period_label || `Semester ${item.semester}`;
+  return item.period_label || item.period_id || "Periode";
 }
 
 function entryLabel(entry) {
