@@ -1,60 +1,8 @@
 {
   "version": 1,
+  "scope": "global",
   "verified_at": "2026-08-14",
   "sources": [
-    {
-      "id": "ut-catalog-2026-2027",
-      "name": "Katalog Kurikulum UT 2026/2027 — Juli 2026",
-      "kind": "official",
-      "authority": "Universitas Terbuka",
-      "url": "https://www.ut.ac.id/wp-content/uploads/2026/07/01-Katalog-NON-PENDAS-TAHUN-2026-2027-21-07-2026_22072026.pdf",
-      "canonical_for": ["struktur kurikulum", "SKS", "bahan ajar", "layanan tutorial", "slot ujian"],
-      "freshness_class": "academic-year",
-      "verified_at": "2026-08-14",
-      "review_interval_days": 60,
-      "watch": true,
-      "status": "active"
-    },
-    {
-      "id": "ut-guideline-2026-2027",
-      "name": "Pedoman Sistem Penyelenggaraan UT 2026/2027",
-      "kind": "official",
-      "authority": "Universitas Terbuka",
-      "url": "https://www.ut.ac.id/wp-content/uploads/2026/06/03-PEDOMAN-PENYELENGGARAAN-2026-2027-080626_compressed.pdf",
-      "canonical_for": ["aturan penyelenggaraan", "praktik/PRATON", "komponen penilaian"],
-      "freshness_class": "academic-year",
-      "verified_at": "2026-08-14",
-      "review_interval_days": 60,
-      "watch": true,
-      "status": "active"
-    },
-    {
-      "id": "ut-accounting-program",
-      "name": "Program Studi S1 Akuntansi FEB UT",
-      "kind": "official",
-      "authority": "Universitas Terbuka",
-      "url": "https://feb.ut.ac.id/program-studi-akuntansi-s1/",
-      "canonical_for": ["informasi program studi"],
-      "freshness_class": "institution-page",
-      "verified_at": "2026-08-14",
-      "review_interval_days": 45,
-      "watch": true,
-      "status": "active"
-    },
-    {
-      "id": "ut-regional-accounting-banjarmasin",
-      "name": "UT Banjarmasin — Program Studi Akuntansi S1",
-      "kind": "official-regional",
-      "authority": "Universitas Terbuka Daerah Banjarmasin",
-      "url": "https://banjarmasin.ut.ac.id/program-studi-akuntansi-s1/",
-      "canonical_for": [],
-      "freshness_class": "regional-page",
-      "verified_at": "2026-08-14",
-      "review_interval_days": 45,
-      "watch": false,
-      "status": "secondary",
-      "notes": "Pernah ditemukan berbeda dengan katalog pusat; bukan sumber kanonik untuk struktur Semester 2."
-    },
     {
       "id": "openai-projects",
       "name": "Projects in ChatGPT",
@@ -80,7 +28,7 @@
       "review_interval_days": 14,
       "watch": true,
       "status": "active",
-      "notes": "Pada 14 Agustus 2026 dokumentasi resmi Projects dan Study Mode belum konsisten tentang ketersediaan Study Mode di percakapan Project. Ramu tidak menjadikannya dependency runtime."
+      "notes": "Ramu tidak menjadikan Study Mode dependency runtime karena dukungan fitur di dalam Projects dapat berubah."
     },
     {
       "id": "openai-data-controls",
@@ -94,20 +42,6 @@
       "review_interval_days": 14,
       "watch": true,
       "status": "active"
-    },
-    {
-      "id": "pojokut-community",
-      "name": "PojokUT",
-      "kind": "community",
-      "authority": "Komunitas",
-      "url": "https://pojokut.com/",
-      "canonical_for": [],
-      "freshness_class": "community-signal",
-      "verified_at": "2026-08-14",
-      "review_interval_days": 90,
-      "watch": false,
-      "status": "signal-only",
-      "notes": "Dipakai untuk sinyal masalah mahasiswa, bukan aturan akademik."
     }
   ]
 }
