@@ -9,6 +9,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 PACK_INDEX = ROOT / "packs/index.json"
+VALID_EVAL_SCOPES = {"core", "institution", "program", "pack"}
 
 
 class RepoError(RuntimeError):
@@ -83,46 +84,103 @@ def project_instructions_path(ctx: dict[str, Any]) -> Path:
     return path
 
 
-def eval_paths(ctx: dict[str, Any]) -> list[tuple[str, Path, Path]]:
-    config = ctx["manifest"].get("evals") or {}
-    pairs = [
-        ("core", config.get("core_contracts"), config.get("core_behavior")),
-        ("pack", config.get("pack_contracts"), config.get("pack_behavior")),
-    ]
-    resolved: list[tuple[str, Path, Path]] = []
-    for scope, contracts, behavior in pairs:
+def eval_suite_paths(ctx: dict[str, Any]) -> list[tuple[dict[str, Any], Path, Path]]:
+    """Resolve ordered eval suites declared by one pack manifest."""
+    suites = ctx["manifest"].get("eval_suites")
+    if not isinstance(suites, list) or not suites:
+        raise RepoError(f"Pack {ctx['id']} tidak mendeklarasikan eval_suites.")
+
+    seen_ids: set[str] = set()
+    resolved: list[tuple[dict[str, Any], Path, Path]] = []
+    for index, raw in enumerate(suites, start=1):
+        if not isinstance(raw, dict):
+            raise RepoError(f"Pack {ctx['id']} eval_suites[{index}] harus object.")
+        suite_id = str(raw.get("id", "")).strip()
+        scope = str(raw.get("scope", "")).strip()
+        scope_ref = str(raw.get("scope_ref", "")).strip()
+        contracts = str(raw.get("contracts", "")).strip()
+        behavior = str(raw.get("behavior", "")).strip()
+
+        if not suite_id:
+            raise RepoError(f"Pack {ctx['id']} eval_suites[{index}] kehilangan id.")
+        if suite_id in seen_ids:
+            raise RepoError(f"Pack {ctx['id']} memiliki eval suite id duplikat: {suite_id}")
+        seen_ids.add(suite_id)
+        if scope not in VALID_EVAL_SCOPES:
+            raise RepoError(f"Pack {ctx['id']} suite {suite_id} punya scope tidak dikenal: {scope!r}")
+        if scope != "core" and not scope_ref:
+            raise RepoError(f"Pack {ctx['id']} suite {suite_id} scope {scope} membutuhkan scope_ref.")
+        if scope == "pack" and scope_ref != ctx["id"]:
+            raise RepoError(
+                f"Pack {ctx['id']} suite {suite_id} scope_ref harus sama dengan pack id; sekarang {scope_ref!r}."
+            )
         if not contracts or not behavior:
-            raise RepoError(f"Pack {ctx['id']} kehilangan eval {scope} contracts/behavior.")
-        resolved.append((scope, repo_path(contracts), repo_path(behavior)))
+            raise RepoError(f"Pack {ctx['id']} suite {suite_id} kehilangan contracts/behavior.")
+
+        suite = {
+            "id": suite_id,
+            "scope": scope,
+            "scope_ref": scope_ref or None,
+        }
+        resolved.append((suite, repo_path(contracts), repo_path(behavior)))
     return resolved
 
 
 def merged_eval_suite(ctx: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Merge ordered eval suites. Later behavior defaults override earlier defaults."""
     contract_cases: list[dict[str, Any]] = []
     behavior_cases: list[dict[str, Any]] = []
     defaults: dict[str, Any] = {"min_score": 0.75, "max_output_tokens": 1200}
+    suite_order: list[str] = []
 
-    for scope, contract_path, behavior_path in eval_paths(ctx):
+    for suite, contract_path, behavior_path in eval_suite_paths(ctx):
         contracts = load_json(contract_path)
         behavior = load_json(behavior_path)
-        if contracts.get("scope") not in {None, scope}:
-            raise RepoError(f"Scope eval tidak cocok: {contract_path.relative_to(ROOT)}")
-        if behavior.get("scope") not in {None, scope}:
-            raise RepoError(f"Scope behavior tidak cocok: {behavior_path.relative_to(ROOT)}")
-        if scope == "pack":
-            for data, path in ((contracts, contract_path), (behavior, behavior_path)):
-                declared = data.get("pack_id")
-                if declared and declared != ctx["id"]:
-                    raise RepoError(
-                        f"pack_id eval {path.relative_to(ROOT)} adalah {declared}, bukan {ctx['id']}"
-                    )
-        contract_cases.extend(contracts.get("cases", []))
-        behavior_cases.extend(behavior.get("cases", []))
+        suite_id = suite["id"]
+        scope = suite["scope"]
+        scope_ref = suite["scope_ref"]
+        suite_order.append(suite_id)
+
+        for data, path, kind in (
+            (contracts, contract_path, "contracts"),
+            (behavior, behavior_path, "behavior"),
+        ):
+            if data.get("suite_id") != suite_id:
+                raise RepoError(
+                    f"Eval {kind} {path.relative_to(ROOT)} suite_id {data.get('suite_id')!r} tidak sama dengan {suite_id!r}."
+                )
+            if data.get("scope") != scope:
+                raise RepoError(
+                    f"Eval {kind} {path.relative_to(ROOT)} scope {data.get('scope')!r} tidak sama dengan {scope!r}."
+                )
+            declared_ref = data.get("scope_ref")
+            if scope == "core":
+                if declared_ref not in {None, ""}:
+                    raise RepoError(f"Eval core {path.relative_to(ROOT)} tidak boleh memiliki scope_ref.")
+            elif declared_ref != scope_ref:
+                raise RepoError(
+                    f"Eval {kind} {path.relative_to(ROOT)} scope_ref {declared_ref!r} tidak sama dengan {scope_ref!r}."
+                )
+
+        for case in contracts.get("cases", []):
+            item = dict(case)
+            item["suite_id"] = suite_id
+            contract_cases.append(item)
+        for case in behavior.get("cases", []):
+            item = dict(case)
+            item["suite_id"] = suite_id
+            behavior_cases.append(item)
         defaults.update(behavior.get("defaults") or {})
 
     return (
-        {"version": 1, "pack_id": ctx["id"], "cases": contract_cases},
-        {"version": 1, "pack_id": ctx["id"], "defaults": defaults, "cases": behavior_cases},
+        {"version": 1, "pack_id": ctx["id"], "suite_order": suite_order, "cases": contract_cases},
+        {
+            "version": 1,
+            "pack_id": ctx["id"],
+            "suite_order": suite_order,
+            "defaults": defaults,
+            "cases": behavior_cases,
+        },
     )
 
 
