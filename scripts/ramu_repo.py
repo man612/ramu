@@ -110,10 +110,17 @@ def expected_eval_scope_ref(ctx: dict[str, Any], scope: str) -> str | None:
     raise RepoError(f"Scope eval tidak dikenal: {scope!r}")
 
 
+def normalized_scope_ref(value: Any) -> str:
+    """Normalisasi scope_ref tanpa mengubah None menjadi string literal 'None'."""
+    if value is None:
+        return ""
+    return str(value).strip()
+
+
 def validate_eval_scope_identity(ctx: dict[str, Any], suite: dict[str, Any]) -> None:
     """Pastikan scope_ref suite menunjuk identity milik pack, bukan sekadar slug bebas."""
     scope = str(suite.get("scope", "")).strip()
-    scope_ref = str(suite.get("scope_ref", "")).strip()
+    scope_ref = normalized_scope_ref(suite.get("scope_ref"))
     expected = expected_eval_scope_ref(ctx, scope)
     if scope == "core":
         if scope_ref:
@@ -141,7 +148,7 @@ def eval_suite_paths(ctx: dict[str, Any]) -> list[tuple[dict[str, Any], Path, Pa
             raise RepoError(f"Pack {ctx['id']} eval_suites[{index}] harus object.")
         suite_id = str(raw.get("id", "")).strip()
         scope = str(raw.get("scope", "")).strip()
-        scope_ref = str(raw.get("scope_ref", "")).strip()
+        scope_ref = normalized_scope_ref(raw.get("scope_ref"))
         contracts = str(raw.get("contracts", "")).strip()
         behavior = str(raw.get("behavior", "")).strip()
 
