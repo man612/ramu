@@ -1,5 +1,6 @@
 {
   "version": 1,
+  "suite_id": "core",
   "scope": "core",
   "defaults": {"min_score": 0.75, "max_output_tokens": 1200},
   "cases": [
