@@ -58,6 +58,8 @@ Saat validasi awal ditemukan halaman UT Banjarmasin masih berbeda dengan katalog
 
 Failure mode tersebut sekarang menjadi **regression case tingkat institusi Universitas Terbuka**, bukan case yang harus dicopy ke setiap periode. Pack UT lain dapat reuse suite institusi yang sama; universitas lain dapat mendefinisikan hierarchy source/eval mereka sendiri tanpa mewarisi aturan UT.
 
+Konflik source juga bisa terjadi **di dalam authority yang sama**. Pada review 28 Agustus 2026, artikel khusus Study Mode milik OpenAI menyatakan Study tidak tersedia di Projects, sementara artikel Projects masih mencantumkan Study Mode pada daftar tools. Ramu tidak memilih salah satunya secara diam-diam untuk membuat klaim integrasi yang pasti; konflik itu dicatat di registry dan fitur tersebut tidak dijadikan dependency runtime sampai dokumentasinya konsisten.
+
 ## Source freshness
 
 `python scripts/check_source_freshness.py` menemukan seluruh registry global dan `packs/**/source-registry.json`, lalu memeriksa umur verifikasi dan—untuk `watch: true`—reachability URL.
@@ -91,10 +93,11 @@ Fitur ChatGPT dapat berubah lebih cepat daripada kurikulum akademik sehingga dok
 
 Pada review **28 Agustus 2026**:
 
-- dokumentasi resmi Projects masih menempatkan Projects sebagai workspace yang menggabungkan chat, file/source, custom instructions, memory/context, dan tersedia lintas plan;
-- dokumentasi resmi Study Mode secara eksplisit menyatakan Study Mode **tidak tersedia di Projects**;
+- dokumentasi Projects tetap menjadi source utama untuk workspace Project, files/sources, Project Instructions, dan memory;
+- Project memory saat ini dapat dipilih saat membuat Project dan dapat diubah kemudian melalui **Project settings → Memory**; perubahan dapat memerlukan waktu beberapa jam untuk berlaku;
+- artikel khusus Study Mode menyatakan Study tidak tersedia di Projects, tetapi artikel Projects masih mencantumkan Study Mode sebagai tool—sehingga status integrasinya diperlakukan sebagai **unresolved official-doc conflict**;
 - Data Controls FAQ tetap menjadi source utama untuk pengaturan penggunaan percakapan/data ChatGPT.
 
-Karena itu Ramu tidak menyuruh pengguna mengaktifkan Study Mode di dalam Project. Guardrail belajar Ramu berasal dari Project Instructions, protocols, course context, dan eval contract sendiri; Study Mode tetap fitur produk terpisah yang dapat berubah.
+Karena konflik tersebut, Ramu tidak menyuruh pengguna mengaktifkan Study Mode di dalam Project dan tidak menjadikannya bagian dari kontrak runtime. Guardrail belajar Ramu berasal dari Project Instructions, protocols, course context, dan eval contract sendiri.
 
 Source produk yang direview ada di [`../sources/registry.json`](../sources/registry.json). Tanggal verifikasi source harus dibaca sebagai snapshot, bukan cap “benar selamanya”.
