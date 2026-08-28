@@ -37,11 +37,14 @@ def main() -> int:
     contract_by_id = {case["id"]: case for case in contracts["cases"]}
     cases = selected(behavior["cases"], args.only)
     suite_order = contracts.get("suite_order", [])
+    selected_contracts = [contract_by_id[case["id"]] for case in cases]
+    critical_ids = [case["id"] for case in selected_contracts if case.get("critical")]
 
     safe = ctx["id"].replace(".", "-")
     output = Path(args.output) if args.output else ROOT / "evals/manual" / f"{safe}-checklist.md"
     output.parent.mkdir(parents=True, exist_ok=True)
 
+    critical_label = ", ".join(f"`{cid}`" for cid in critical_ids) if critical_ids else "tidak ada pada subset ini"
     lines = [
         "# Ramu Manual Behavior Validation",
         "",
@@ -49,6 +52,7 @@ def main() -> int:
         f"- Pack version: `{ctx['manifest'].get('pack_version')}`",
         f"- Contract version: `{ctx['manifest'].get('contract_version')}`",
         f"- Eval suites: {' → '.join(f'`{item}`' for item in suite_order)}",
+        f"- Critical cases pada checklist: {critical_label}",
         f"- Checklist dibuat: {date.today().isoformat()}",
         "- Diuji pada tanggal: ____________________",
         "- ChatGPT plan/model yang terlihat: ____________________",
@@ -61,8 +65,9 @@ def main() -> int:
         "3. Kirim turn `user` berurutan. Turn `assistant` di checklist adalah konteks simulasi; gunakan hanya bila case memang multi-turn.",
         "4. Nilai perilaku, bukan apakah gaya bahasanya persis sama dengan expected behavior.",
         "5. Jika ada forbidden behavior material, tandai FAIL meski sebagian jawaban lain benar.",
-        "6. Catat suite asal case. Failure pada suite institusi/program sebaiknya diperbaiki di scope tersebut, bukan dicopy sebagai patch pack.",
-        "7. Simpan hanya hasil/catatan yang aman; jangan menaruh percakapan privat, credential, atau materi berhak cipta ke repo publik.",
+        "6. **Critical case adalah must-pass. Satu critical FAIL berarti keseluruhan validation run tidak boleh dianggap PASS**, walaupun mayoritas case lain lulus.",
+        "7. Catat suite asal case. Failure pada suite institusi/program sebaiknya diperbaiki di scope tersebut, bukan dicopy sebagai patch pack.",
+        "8. Simpan hanya hasil/catatan yang aman; jangan menaruh percakapan privat, credential, atau materi berhak cipta ke repo publik.",
         "",
         "> Manual validation menguji ChatGPT Projects asli dan tidak memerlukan OpenAI API. Hasil tetap berupa snapshot perilaku pada tanggal/model/produk tertentu, bukan jaminan permanen.",
         "",
@@ -72,10 +77,13 @@ def main() -> int:
         cid = case["id"]
         contract = contract_by_id[cid]
         suite_id = str(case.get("suite_id") or contract.get("suite_id") or "unknown")
+        critical = bool(contract.get("critical", False))
         lines.extend([
             f"## {cid} — {contract['title']}",
             "",
             f"**Suite:** `{suite_id}`",
+            "",
+            f"**Critical / must-pass:** {'YES' if critical else 'no'}",
             "",
             f"**Intent:** {contract['intent']}",
             "",
@@ -109,13 +117,18 @@ def main() -> int:
         "- PASS: ____",
         "- PARTIAL: ____",
         "- FAIL: ____",
+        "- Critical FAIL (harus kosong agar overall PASS): ____________________",
+        "- Overall: ☐ PASS  ☐ FAIL",
         "- Failure yang perlu dijadikan regression case/perbaikan: ____________________",
         "- Scope/suite tempat fix seharusnya dilakukan: ____________________",
         "",
     ])
     output.write_text("\n".join(lines), encoding="utf-8")
     print(f"Manual eval kit: {output.relative_to(ROOT)}")
-    print(f"Pack {ctx['id']}: {len(cases)} case dari {len(suite_order)} suite ({' -> '.join(suite_order)})")
+    print(
+        f"Pack {ctx['id']}: {len(cases)} case dari {len(suite_order)} suite "
+        f"({' -> '.join(suite_order)}); {len(critical_ids)} critical must-pass."
+    )
     return 0
 
 
