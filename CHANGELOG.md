@@ -23,6 +23,8 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 - **Eval trust-boundary regression** yang memastikan Project Instructions tetap berada pada authority `instructions`, reference/course/source content tetap user-level untrusted input, dan candidate output tidak masuk ke judge instructions.
 - **Critical eval gate**: case integritas/security tertentu dapat ditandai `critical: true` dan wajib lulus terlepas dari aggregate pass rate.
 - Regression test yang membuktikan pass rate `13/16 = 81.25%` tetap gagal bila ada critical FAIL, serta memastikan Manual Eval Kit mewarisi semantics critical dari contract yang sama.
+- **CI/Pages contract regression** yang mencegah main validation kembali memakai path allowlist atau Pages kembali deploy langsung tanpa validated SHA.
+- Dependabot weekly untuk immutable GitHub Actions pins dan dependency validation Python.
 
 ### Changed
 
@@ -42,6 +44,8 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 - Validator eval memastikan core berada di awal, pack berada di akhir, scope tidak mundur, `scope_ref` cocok, ID case unik setelah merge, dan contract/behavior tetap berpasangan.
 - Validation tooling mendukung `RAMU_REPO_ROOT` untuk fixture/test repo sementara; penggunaan normal tetap memakai root repository aktual.
 - `validate_display_names.py` memakai shared repository root helper agar ikut dapat diuji terhadap fixture sintetis.
+- **Validate Ramu sekarang berjalan pada setiap push ke `main`**, termasuk docs/release/workflow changes; push validation tidak lagi dibatasi `paths:`.
+- **Deploy Pages sekarang downstream dari successful `Validate Ramu` main-push** dan checkout `workflow_run.head_sha`, sehingga SHA yang diterbitkan persis SHA yang divalidasi.
 - Source freshness checker menemukan registry berdasarkan scope, bukan satu registry global saja.
 - Dependency GitHub Actions dipin ke full commit SHA; workflow lama diperbarui ke checkout/setup-python v6 yang Node 24-native.
 - Nama Project untuk pack awal berubah dari bentuk ambigu seperti `S2 • AKM I` menjadi `Semester 2 • AKM I`.
@@ -50,12 +54,13 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 
 ### Notes
 
-- Tidak ada API yang dibutuhkan untuk memakai Ramu, menjalankan static CI, membuat Manual Eval Kit, synthetic multi-pack proof, trust-boundary regression, critical-gate regression, atau melakukan pilot pengguna.
+- Tidak ada API yang dibutuhkan untuk memakai Ramu, menjalankan static CI, membuat Manual Eval Kit, synthetic multi-pack proof, trust-boundary regression, critical-gate regression, CI/Pages contract regression, atau melakukan pilot pengguna.
 - `jsonschema[format]` adalah dependency **validation/dev only**, bukan dependency runtime mahasiswa/site.
 - Automated Behavior Evals dengan API tetap tersedia sebagai QA tambahan dan bukan syarat public beta.
 - Responses API automated eval adalah **regression/benchmark approximation**, bukan simulasi identik ChatGPT Projects; manual validation pada Projects asli tetap dibutuhkan untuk product-level evidence.
+- Dependabot hanya mengusulkan dependency update melalui PR; full-SHA action pin dan normal validation/review tetap dipertahankan.
 - Pack awal tetap Universitas Terbuka · S1 Akuntansi · Semester 2 · 2026/2027; synthetic Alpha/Beta hanya fixture test dan tidak dipublish sebagai pack pengguna.
-- Perubahan metadata/identity/eval tooling repository tidak meminta pengguna ChatGPT Project membuat ulang workspace/course pack.
+- Perubahan metadata/identity/eval/CI tooling repository tidak meminta pengguna ChatGPT Project membuat ulang workspace/course pack.
 - Perubahan di bagian `Unreleased` di atas adalah kandidat utama untuk release berikutnya, **`v0.2.0-beta`**.
 
 ## [0.1.0-beta] - 2026-08-28
