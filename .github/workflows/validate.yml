@@ -12,8 +12,10 @@ on:
       - "schemas/**"
       - "evals/**"
       - "scripts/**"
+      - "tests/**"
       - "packs/**"
       - "site/**"
+      - "requirements-ci.txt"
       - ".github/workflows/validate.yml"
       - ".github/workflows/behavior-evals.yml"
       - ".github/workflows/manual-eval-kit.yml"
@@ -34,6 +36,18 @@ jobs:
         uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
         with:
           python-version: "3.12"
+
+      - name: Install validation dependencies
+        run: python -m pip install --disable-pip-version-check -r requirements-ci.txt
+
+      - name: Validate JSON Schema instances
+        run: python scripts/validate_schemas.py
+
+      - name: Validate stable scope identities
+        run: python scripts/validate_scope_identity.py
+
+      - name: Prove multi-pack architecture contracts
+        run: python scripts/test_architecture_contracts.py
 
       - name: Validate catalog, manifests, contracts, and registries
         run: python scripts/validate_repo.py
