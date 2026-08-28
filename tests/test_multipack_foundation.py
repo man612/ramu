@@ -432,8 +432,8 @@ def main() -> int:
             raise AssertionError(f"Pack matrix tidak memuat kedua fixture:\n{matrix}")
         run(root, "scripts/run_behavior_evals.py", "--dry-run", "--pack", alpha_id)
         beta_dry = run(root, "scripts/run_behavior_evals.py", "--dry-run", "--pack", beta_id)
-        if "15 case" not in beta_dry:
-            raise AssertionError(f"Beta fixture seharusnya merge 11 core + 3 scoped + 1 pack = 15 case:\n{beta_dry}")
+        if "13 case" not in beta_dry:
+            raise AssertionError(f"Beta fixture seharusnya merge 10 core + 3 scoped = 13 case:\n{beta_dry}")
 
         print("[negative] program scope_ref milik institusi lain harus ditolak")
         beta_manifest = read_json(root, beta_manifest_rel)
