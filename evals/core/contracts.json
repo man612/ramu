@@ -1,5 +1,6 @@
 {
   "version": 1,
+  "suite_id": "core",
   "scope": "core",
   "cases": [
     {
