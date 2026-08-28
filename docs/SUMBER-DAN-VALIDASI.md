@@ -50,11 +50,13 @@ Katalog pusat mencatat Semester 2 sebanyak **16 SKS**:
 
 Katalog juga menandai EACC4103 AKM I sebagai BP/BPro. Detail akademik seperti ini milik pack, bukan core Ramu; pack periode/program/universitas lain harus mempunyai source dan verifikasi sendiri.
 
+Pack tersebut memakai `period_id: semester-02` dan `period_label: Semester 2`. Field generic Ramu tidak bernama `semester`; institusi yang memakai trimester, quarter, term, atau academic session lain tetap menggunakan `period_id` + `period_label` sesuai sistem mereka.
+
 ## Contoh konflik source resmi
 
 Saat validasi awal ditemukan halaman UT Banjarmasin masih berbeda dengan katalog pusat untuk beberapa data Semester 2. Karena registry menandai halaman regional sebagai `secondary` dan katalog pusat sebagai source kanonik untuk struktur kurikulum, Ramu tidak menggabungkan kedua nilai secara diam-diam.
 
-Failure mode tersebut sekarang menjadi **regression case tingkat institusi Universitas Terbuka**, bukan case yang harus dicopy ke setiap semester. Pack UT lain dapat reuse suite institusi yang sama; universitas lain dapat mendefinisikan hierarchy source/eval mereka sendiri tanpa mewarisi aturan UT.
+Failure mode tersebut sekarang menjadi **regression case tingkat institusi Universitas Terbuka**, bukan case yang harus dicopy ke setiap periode. Pack UT lain dapat reuse suite institusi yang sama; universitas lain dapat mendefinisikan hierarchy source/eval mereka sendiri tanpa mewarisi aturan UT.
 
 ## Source freshness
 
@@ -67,9 +69,11 @@ Workflow **Source Freshness Watch** berjalan mingguan. Source aktif yang overdue
 - perubahan HTML/hash bukan otomatis perubahan aturan;
 - `verified_at` hanya diperbarui setelah maintainer benar-benar membaca/membandingkan source.
 
-## Validasi pack dan eval suites
+## Validasi pack, period metadata, dan eval suites
 
-`python scripts/validate_repo.py` memeriksa semua manifest yang terdaftar di `packs/index.json`, source dependency, course file, total SKS, version marker, Project Instructions, serta seluruh ordered `eval_suites` yang dipakai pack.
+`python scripts/validate_repo.py` memeriksa semua manifest yang terdaftar di `packs/index.json`, `period_id`/`period_label`, source dependency, course file, total SKS, version marker, Project Instructions, serta seluruh ordered `eval_suites` yang dipakai pack.
+
+`period_id` harus machine-safe dan sama antara katalog dengan manifest. `period_label` wajib eksplisit untuk UI. Site validator juga menolak asumsi `item.semester`/`manifest.semester` atau fallback yang membentuk `Semester ...`, supaya generic tooling tidak kembali mengunci satu jenis kalender akademik.
 
 Eval dapat disusun dari scope paling umum ke paling spesifik:
 
@@ -79,7 +83,7 @@ core → institution → program → pack
 
 Scope `institution` dan `program` bersifat opsional. Validator memastikan core berada di awal, pack berada di akhir, scope tidak mundur, `scope_ref` cocok, ID case tidak duplikat setelah merge, dan setiap contract case mempunyai behavior case yang sesuai.
 
-CI kemudian menjalankan dry-run eval **per pack**. Jadi ketika Semester 3 atau institusi baru ditambahkan ke katalog, pack tersebut ikut menjadi bagian validation matrix tanpa menambah path hardcode di workflow.
+CI kemudian menjalankan dry-run eval **per pack**. Jadi ketika periode berikutnya atau institusi baru ditambahkan ke katalog, pack tersebut ikut menjadi bagian validation matrix tanpa menambah path hardcode di workflow.
 
 ## ChatGPT/OpenAI sebagai source produk
 

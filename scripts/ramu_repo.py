@@ -9,6 +9,8 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 PACK_INDEX = ROOT / "packs/index.json"
+PACK_INDEX_VERSION = 2
+PACK_MANIFEST_SCHEMA_VERSION = 3
 VALID_EVAL_SCOPES = {"core", "institution", "program", "pack"}
 
 
@@ -41,6 +43,11 @@ def repo_path(value: str) -> Path:
 
 def load_pack_index() -> dict[str, Any]:
     data = load_json(PACK_INDEX)
+    if data.get("version") != PACK_INDEX_VERSION:
+        raise RepoError(
+            f"packs/index.json version {data.get('version')!r} tidak didukung; "
+            f"tooling ini membutuhkan version {PACK_INDEX_VERSION}."
+        )
     packs = data.get("packs")
     if not isinstance(packs, list) or not packs:
         raise RepoError("packs/index.json harus memiliki daftar pack non-empty.")
@@ -65,6 +72,11 @@ def pack_context(pack_id: str | None = None) -> dict[str, Any]:
     entry = matches[0]
     manifest_path = repo_path(f"packs/{entry['manifest']}")
     manifest = load_json(manifest_path)
+    if manifest.get("schema_version") != PACK_MANIFEST_SCHEMA_VERSION:
+        raise RepoError(
+            f"Manifest {manifest_path.relative_to(ROOT)} schema_version {manifest.get('schema_version')!r} "
+            f"tidak didukung; tooling ini membutuhkan schema_version {PACK_MANIFEST_SCHEMA_VERSION}."
+        )
     return {
         "id": selected_id,
         "entry": entry,

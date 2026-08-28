@@ -75,16 +75,16 @@ Pack membedakan dua hal:
 
 Istilah “maintained” dipakai agar tidak memberi kesan pack tersebut resmi diterbitkan universitas. Ramu tetap proyek independen.
 
-### Label periode yang tidak ambigu
+### Periode akademik yang tidak mengunci “semester”
 
-Manifest punya dua bentuk metadata periode:
+Manifest/katalog punya dua metadata periode yang sengaja dipisahkan:
 
-- `semester` → nilai terstruktur untuk tooling, misalnya `2`;
-- `period_label` → label yang benar-benar ditampilkan ke manusia, misalnya `Semester 2`.
+- `period_id` → identifier machine-safe dan stabil, misalnya `semester-02`, `trimester-01`, atau `term-fall`;
+- `period_label` → label yang benar-benar ditampilkan ke manusia, misalnya `Semester 2`, `Trimester 1`, atau `Fall Term`.
 
-Nama Project harus diawali `period_label`, sehingga pack awal menggunakan `Semester 2 • AKM I`, **bukan** `S2 • AKM I`. Singkatan `S2` sangat mudah dibaca sebagai jenjang S2/Magister. Identifier internal seperti `.s2`, `semester-02/`, atau `2026-2027.s2.1` tetap boleh ringkas karena bukan label UI.
+Ramu **tidak memiliki field universal bernama `semester`**. Semester hanyalah salah satu bentuk academic period. Pack UT sekarang kebetulan memakai semester, sehingga `period_id`-nya `semester-02`; institusi yang memakai trimester, quarter, term, summer session, atau struktur lain tidak perlu dipaksa ke konsep semester.
 
-Desain ini juga membuat pack masa depan tidak harus memaksakan istilah semester: `period_label` dapat berupa label akademik lain yang memang digunakan institusi, misalnya `Trimester 1` atau `Term 2`.
+Nama Project harus diawali `period_label`, sehingga pack awal menggunakan `Semester 2 • AKM I`, **bukan** `S2 • AKM I`. Singkatan `S2` sangat mudah dibaca sebagai jenjang S2/Magister. Identifier internal seperti `.s2`, folder `semester-02/`, atau versi `2026-2027.s2.1` tetap boleh ringkas karena itu identitas pack UT saat ini, bukan kontrak generic Ramu.
 
 ## Paket yang tersedia sekarang
 
@@ -138,7 +138,7 @@ core → universitas-terbuka → semester-02
 
 **Core eval** menangkap failure mode lintas seluruh Ramu: data yang hilang, sitasi palsu, integritas tugas, retrieval practice, learner state, source freshness, prompt injection, dan konflik versi pack.
 
-**Institution eval** menangkap perilaku yang berlaku untuk banyak pack pada institusi yang sama. E14, misalnya, menguji konflik source pusat vs regional berdasarkan source registry Universitas Terbuka. Karena itu E14 berada di `packs/universitas-terbuka/evals/`, bukan dicopy ke setiap semester.
+**Institution eval** menangkap perilaku yang berlaku untuk banyak pack pada institusi yang sama. E14, misalnya, menguji konflik source pusat vs regional berdasarkan source registry Universitas Terbuka. Karena itu E14 berada di `packs/universitas-terbuka/evals/`, bukan dicopy ke setiap periode.
 
 **Program eval** disediakan untuk aturan yang suatu hari berlaku lintas periode pada satu program tetapi tidak otomatis berlaku ke program lain. Scope ini belum diperlukan oleh pack yang tersedia sekarang.
 
@@ -154,7 +154,7 @@ Ramu memiliki tiga lapisan validation:
 
 | Jalur | API? | Fungsi |
 |---|---:|---|
-| **Static CI** | tidak | manifest, pack catalog, display naming, source registry, eval-suite wiring, contract marker, site wiring |
+| **Static CI** | tidak | manifest, pack catalog, period metadata, display naming, source registry, eval-suite wiring, contract marker, site wiring |
 | **Manual Behavior Validation** | tidak | menjalankan case langsung di ChatGPT Projects asli |
 | **Automated Behavior Eval** | ya, opsional | regression/benchmark melalui Responses API + model judge |
 
@@ -207,12 +207,12 @@ Source Watch mencari seluruh registry tersebut. URL yang hidup bukan bukti fakta
 
 `Validate Ramu` memiliki dua tahap utama:
 
-1. validasi katalog/manifest/display name/source/site secara keseluruhan;
+1. validasi katalog/manifest/period metadata/display name/source/site secara keseluruhan;
 2. matrix dry-run untuk setiap pack di `packs/index.json`.
 
 Job akhir selalu bernama **`validate`**, sehingga branch protection dapat memakai satu required status check walaupun jumlah pack bertambah.
 
-Validator display name memastikan setiap `project_name` diawali `<period_label> • `. Validator eval memastikan suite mengikuti urutan `core → institution → program → pack`, metadata suite cocok dengan file contracts/behavior, dan tidak ada ID regression case yang saling menimpa.
+Validator memastikan `period_id` machine-safe dan sama antara katalog/manifest, setiap `project_name` diawali `<period_label> • `, serta site generic tidak kembali membentuk label `Semester ...` dari field khusus semester. Validator eval memastikan suite mengikuti urutan `core → institution → program → pack`, metadata suite cocok dengan file contracts/behavior, dan tidak ada ID regression case yang saling menimpa.
 
 Dependency GitHub Actions dipin ke full commit SHA agar tag dependency tidak menjadi bagian supply-chain yang dapat bergerak diam-diam.
 
@@ -247,11 +247,11 @@ ramu/
 └── .github/       CI, manual/API eval, source watch, Pages
 ```
 
-## Menambah Semester 3 / program / universitas lain
+## Menambah periode / program / universitas lain
 
-Prinsipnya bukan mengedit `app.js` atau validator. Buat pack + manifest + source yang relevan, tentukan `period_label`, pilih reusable eval suite yang memang berlaku, tambahkan suite pack-nya, lalu daftarkan ke `packs/index.json`. Panduan contributor ada di [`CONTRIBUTING.md`](CONTRIBUTING.md).
+Prinsipnya bukan mengedit `app.js` atau validator. Buat pack + manifest + source yang relevan, tentukan `period_id` + `period_label`, pilih reusable eval suite yang memang berlaku, tambahkan suite pack-nya, lalu daftarkan ke `packs/index.json`. Semester 3 UT hanyalah salah satu contoh; sistem kalender lain menggunakan metadata periode mereka sendiri. Panduan contributor ada di [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
-Validator akan menolak manifest yang tidak terdaftar, entry katalog yang menunjuk file hilang, ID source/eval duplikat, course yang tidak self-describing, wiring suite yang tidak lengkap/urutannya salah, atau nama Project yang tidak sesuai label periode pack.
+Validator akan menolak manifest yang tidak terdaftar, entry katalog yang menunjuk file hilang, `period_id` tidak valid/berbeda dengan manifest, ID source/eval duplikat, course yang tidak self-describing, wiring suite yang tidak lengkap/urutannya salah, atau nama Project yang tidak sesuai label periode pack.
 
 ## Landasan dan batas klaim
 
