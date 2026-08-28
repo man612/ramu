@@ -4,10 +4,12 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 from typing import Any
 
-ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(os.environ.get("RAMU_REPO_ROOT", DEFAULT_ROOT)).resolve()
 PACK_INDEX = ROOT / "packs/index.json"
 PACK_INDEX_VERSION = 3
 PACK_MANIFEST_SCHEMA_VERSION = 4
@@ -22,10 +24,18 @@ def load_json(path: Path) -> dict[str, Any]:
     try:
         return json.loads(path.read_text(encoding="utf-8"))
     except FileNotFoundError as exc:
-        raise RepoError(f"File tidak ditemukan: {path.relative_to(ROOT)}") from exc
+        try:
+            rel = path.relative_to(ROOT)
+        except ValueError:
+            rel = path
+        raise RepoError(f"File tidak ditemukan: {rel}") from exc
     except json.JSONDecodeError as exc:
+        try:
+            rel = path.relative_to(ROOT)
+        except ValueError:
+            rel = path
         raise RepoError(
-            f"JSON tidak valid: {path.relative_to(ROOT)}:{exc.lineno}:{exc.colno} — {exc.msg}"
+            f"JSON tidak valid: {rel}:{exc.lineno}:{exc.colno} — {exc.msg}"
         ) from exc
 
 
@@ -35,7 +45,7 @@ def repo_path(value: str) -> Path:
         raise RepoError(f"Path repo tidak valid: {value!r}")
     path = (ROOT / value).resolve()
     try:
-        path.relative_to(ROOT.resolve())
+        path.relative_to(ROOT)
     except ValueError as exc:
         raise RepoError(f"Path keluar dari repository: {value}") from exc
     return path
