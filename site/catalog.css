@@ -1,0 +1,71 @@
+.pack-picker-panel {
+  margin-bottom: 28px;
+  padding: 18px 20px;
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) minmax(240px, .8fr);
+  gap: 20px;
+  align-items: end;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: rgba(255, 253, 248, .72);
+}
+
+.pack-picker-panel label {
+  display: grid;
+  gap: 8px;
+  color: var(--muted);
+  font-size: .74rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.pack-picker-panel select {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 42px 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: var(--white);
+  color: var(--ink);
+  font: inherit;
+  font-size: .9rem;
+  font-weight: 720;
+  letter-spacing: normal;
+  text-transform: none;
+  cursor: pointer;
+}
+
+.pack-picker-panel select:focus-visible {
+  outline: 3px solid rgba(73, 99, 84, .18);
+  outline-offset: 2px;
+  border-color: var(--sage);
+}
+
+.pack-picker-panel > p {
+  margin: 0;
+  color: var(--muted);
+  font-size: .88rem;
+}
+
+.setup-pack-picker {
+  margin-top: 26px;
+  margin-bottom: 34px;
+}
+
+#setup-pack-count {
+  display: block;
+  margin: 6px 0 10px;
+}
+
+@media (max-width: 720px) {
+  .pack-picker-panel {
+    grid-template-columns: 1fr;
+    padding: 15px;
+    gap: 10px;
+  }
+
+  .pack-picker-panel select {
+    min-height: 46px;
+  }
+}
