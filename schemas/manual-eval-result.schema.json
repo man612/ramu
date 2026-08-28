@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://man612.github.io/ramu/schemas/manual-eval-result.schema.json",
+  "title": "Ramu manual ChatGPT Projects evaluation evidence",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "evidence_type",
+    "pack_id",
+    "pack_version",
+    "contract_version",
+    "ramu_revision",
+    "generated_at",
+    "tested_at",
+    "run_scope",
+    "policy",
+    "runtime",
+    "setup_checks",
+    "privacy",
+    "cases",
+    "overall",
+    "limitations"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "evidence_type": {"const": "manual-chatgpt-projects"},
+    "pack_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
+    "pack_version": {"type": "string", "minLength": 1},
+    "contract_version": {"type": "string", "minLength": 1},
+    "ramu_revision": {"type": ["string", "null"], "pattern": "^[0-9a-f]{7,64}$"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "tested_at": {"type": ["string", "null"], "format": "date-time"},
+    "run_scope": {"type": "string", "enum": ["full", "subset"]},
+    "policy": {
+      "type": "object",
+      "required": ["fail_under", "critical_must_pass", "full_run_required_for_overall_pass"],
+      "properties": {
+        "fail_under": {"type": "number", "minimum": 0, "maximum": 1},
+        "critical_must_pass": {"const": true},
+        "full_run_required_for_overall_pass": {"const": true}
+      },
+      "additionalProperties": false
+    },
+    "runtime": {
+      "type": "object",
+      "required": ["product", "plan", "model_label", "app_surface", "app_version", "project_memory_mode", "environment_notes"],
+      "properties": {
+        "product": {"const": "ChatGPT Projects"},
+        "plan": {"type": "string", "minLength": 1},
+        "model_label": {"type": "string", "minLength": 1},
+        "app_surface": {"type": "string", "enum": ["web", "android", "ios", "desktop", "unknown"]},
+        "app_version": {"type": ["string", "null"]},
+        "project_memory_mode": {"type": "string", "enum": ["project-only", "default", "unknown"]},
+        "environment_notes": {"type": "string", "maxLength": 2000}
+      },
+      "additionalProperties": false
+    },
+    "setup_checks": {
+      "type": "object",
+      "required": ["project_instructions_confirmed", "pack_sources_confirmed", "fresh_chat_per_case", "protocol_followed_or_deviations_documented"],
+      "properties": {
+        "project_instructions_confirmed": {"type": "boolean"},
+        "pack_sources_confirmed": {"type": "boolean"},
+        "fresh_chat_per_case": {"type": "boolean"},
+        "protocol_followed_or_deviations_documented": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
+    "privacy": {
+      "type": "object",
+      "required": ["contains_raw_transcript", "contains_personal_data", "contains_credentials", "notes"],
+      "properties": {
+        "contains_raw_transcript": {"const": false},
+        "contains_personal_data": {"const": false},
+        "contains_credentials": {"const": false},
+        "notes": {"type": "string", "maxLength": 1000}
+      },
+      "additionalProperties": false
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "suite_id", "critical", "result", "notes"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^E[0-9]{2}$"},
+          "title": {"type": "string", "minLength": 1},
+          "suite_id": {"type": "string", "minLength": 1},
+          "critical": {"type": "boolean"},
+          "result": {"type": "string", "enum": ["PASS", "PARTIAL", "FAIL", "NOT_RUN"]},
+          "notes": {"type": "string", "maxLength": 2000}
+        },
+        "additionalProperties": false
+      }
+    },
+    "overall": {
+      "type": "object",
+      "required": ["status", "full_case_set", "pass_count", "partial_count", "fail_count", "not_run_count", "pass_rate", "critical_blockers", "validity_blockers"],
+      "properties": {
+        "status": {"type": "string", "enum": ["PASS", "FAIL", "INCOMPLETE"]},
+        "full_case_set": {"type": "boolean"},
+        "pass_count": {"type": "integer", "minimum": 0},
+        "partial_count": {"type": "integer", "minimum": 0},
+        "fail_count": {"type": "integer", "minimum": 0},
+        "not_run_count": {"type": "integer", "minimum": 0},
+        "pass_rate": {"type": "number", "minimum": 0, "maximum": 1},
+        "critical_blockers": {"type": "array", "items": {"type": "string", "pattern": "^E[0-9]{2}$"}, "uniqueItems": true},
+        "validity_blockers": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+      },
+      "additionalProperties": false
+    },
+    "limitations": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": false
+}
