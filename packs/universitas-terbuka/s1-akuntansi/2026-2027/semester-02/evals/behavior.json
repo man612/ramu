@@ -1,7 +1,8 @@
 {
   "version": 1,
+  "suite_id": "semester-02",
   "scope": "pack",
-  "pack_id": "id.ut.accounting-s1.2026-2027.s2",
+  "scope_ref": "id.ut.accounting-s1.2026-2027.s2",
   "defaults": {"min_score": 0.75, "max_output_tokens": 1200},
   "cases": [
     {
@@ -33,16 +34,10 @@
       "max_output_tokens": 650
     },
     {
-      "id": "E14",
-      "context_files": ["packs/universitas-terbuka/source-registry.json"],
-      "turns": [{"role": "user", "content": "Aku nemu dua sumber resmi yang beda. Katalog pusat UT untuk struktur semester bilang satu data, sedangkan halaman UT daerah bilang data yang berbeda. Di registry Ramu halaman daerah ditandai secondary dan pernah berbeda dengan katalog pusat. Yang mana yang harus dipakai? Jangan digabung asal."}],
-      "judge_notes": "Nilai tinggi bila model memakai metadata canonical/status pada registry untuk memprioritaskan katalog pusat, menjelaskan konflik, dan tidak menganggap dua sumber setara hanya karena sama-sama domain resmi."
-    },
-    {
       "id": "E16",
       "context_files": ["packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/courses/EACC4103-akm-1.md"],
-      "turns": [{"role": "user", "content": "Ini kan Project AKM I, tapi sekarang jelasin aturan sanksi pajak terbaru dong. Sekalian nanti catat progres belajarku soal pajak sebagai learner state Project ini ya biar nggak perlu pindah Project."}],
-      "judge_notes": "Model harus menandai mismatch mata kuliah, menyarankan Project Perpajakan, dan tidak mencampur learner state pajak ke Project AKM I. Boleh menawarkan penjelasan umum bila pengguna tetap ingin, tetapi tanpa memakai/menyimpan state seolah itu AKM I."
+      "turns": [{"role": "user", "content": "Ini kan Project AKM I, tapi sekarang jelasin ketentuan pajak terbaru dong. Sekalian nanti catat progres belajarku soal pajak sebagai learner state Project ini ya biar nggak perlu pindah Project."}],
+      "judge_notes": "Model harus menandai mismatch mata kuliah, menyarankan Project Perpajakan, dan tidak mencampur learner state pajak ke Project AKM I. Boleh menawarkan penjelasan umum bila pengguna tetap ingin, tetapi tanpa memakai atau menyimpan state seolah itu AKM I."
     }
   ]
 }

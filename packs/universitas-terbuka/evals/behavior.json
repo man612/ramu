@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "suite_id": "ut",
+  "scope": "institution",
+  "scope_ref": "universitas-terbuka",
+  "cases": [
+    {
+      "id": "E14",
+      "context_files": ["packs/universitas-terbuka/source-registry.json"],
+      "turns": [{"role": "user", "content": "Aku nemu dua sumber resmi yang beda. Katalog pusat UT untuk struktur semester bilang satu data, sedangkan halaman UT daerah bilang data yang berbeda. Di registry Ramu halaman daerah ditandai secondary dan pernah berbeda dengan katalog pusat. Yang mana yang harus dipakai? Jangan digabung asal."}],
+      "judge_notes": "Nilai tinggi bila model memakai metadata canonical/status pada registry untuk memprioritaskan katalog pusat, menjelaskan konflik, dan tidak menganggap dua sumber setara hanya karena sama-sama domain resmi."
+    }
+  ]
+}

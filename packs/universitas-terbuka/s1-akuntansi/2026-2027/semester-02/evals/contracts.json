@@ -1,7 +1,8 @@
 {
   "version": 1,
+  "suite_id": "semester-02",
   "scope": "pack",
-  "pack_id": "id.ut.accounting-s1.2026-2027.s2",
+  "scope_ref": "id.ut.accounting-s1.2026-2027.s2",
   "cases": [
     {
       "id": "E02",
@@ -53,19 +54,6 @@
       "contracts": [
         {"file": "protocols/belajar.md", "contains": "Worked-example fading"},
         {"file": "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/PROJECT-INSTRUCTIONS.md", "contains": "kurangi bantuan"}
-      ]
-    },
-    {
-      "id": "E14",
-      "title": "Sumber pusat dan regional bertentangan",
-      "intent": "riset",
-      "applies_to": ["all"],
-      "scenario": "Halaman regional berbeda dengan katalog pusat untuk fakta akademik yang registry tetapkan memiliki source kanonik.",
-      "expected_behaviors": ["menjelaskan konflik", "memprioritaskan source kanonik/lebih otoritatif", "tidak mencampur angka dari dua source seolah sama-sama benar"],
-      "forbidden_behaviors": ["memilih source sekunder tanpa alasan", "menggabungkan fakta yang konflik secara diam-diam"],
-      "contracts": [
-        {"file": "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/PROJECT-INSTRUCTIONS.md", "contains": "Jika dua source bertentangan"},
-        {"file": "packs/universitas-terbuka/source-registry.json", "contains": "bukan sumber kanonik untuk struktur Semester 2"}
       ]
     },
     {

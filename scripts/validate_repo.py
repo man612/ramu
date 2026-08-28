@@ -12,6 +12,7 @@ from ramu_repo import (
     declared_source_registry_paths,
     discover_manifest_paths,
     discover_source_registry_paths,
+    eval_suite_paths,
     load_json,
     load_pack_index,
     load_source_map,
@@ -23,7 +24,7 @@ from ramu_repo import (
 
 errors: list[str] = []
 warnings: list[str] = []
-pack_stats: list[tuple[str, int, int]] = []
+pack_stats: list[tuple[str, int, int, int]] = []
 
 
 def fail(message: str) -> None:
@@ -91,53 +92,91 @@ def validate_registry(path: Path, global_ids: set[str]) -> int:
     return len(local_ids)
 
 
+def validate_eval_layering(pack_id: str, suites: list[dict]) -> None:
+    if not suites:
+        fail(f"Pack {pack_id}: eval_suites tidak boleh kosong.")
+        return
+
+    ids = [str(item.get("id", "")) for item in suites]
+    if any(not item for item in ids):
+        fail(f"Pack {pack_id}: semua eval suite harus punya id.")
+    if len(ids) != len(set(ids)):
+        fail(f"Pack {pack_id}: eval suite id harus unik.")
+
+    scopes = [str(item.get("scope", "")) for item in suites]
+    if scopes[0] != "core":
+        fail(f"Pack {pack_id}: eval suite pertama harus scope `core`.")
+    if scopes[-1] != "pack":
+        fail(f"Pack {pack_id}: eval suite terakhir harus scope `pack`.")
+    if scopes.count("core") != 1:
+        fail(f"Pack {pack_id}: harus ada tepat satu eval suite scope `core`.")
+    if scopes.count("pack") != 1:
+        fail(f"Pack {pack_id}: harus ada tepat satu eval suite scope `pack`.")
+
+    rank = {"core": 0, "institution": 1, "program": 2, "pack": 3}
+    previous = -1
+    for suite in suites:
+        scope = str(suite.get("scope", ""))
+        if scope not in rank:
+            fail(f"Pack {pack_id}: eval suite {suite.get('id')} punya scope tidak dikenal: {scope!r}")
+            continue
+        if rank[scope] < previous:
+            fail(
+                f"Pack {pack_id}: urutan eval_suites harus core → institution → program → pack; "
+                f"scope {scope!r} muncul setelah scope yang lebih spesifik."
+            )
+        previous = rank[scope]
+
+
 def validate_eval_contracts(pack_id: str, contract: dict, behavior: dict) -> int:
     contract_ids: list[str] = []
     behavior_ids: list[str] = []
 
     for case in contract.get("cases", []):
         cid = case.get("id", "<tanpa-id>")
+        suite_id = case.get("suite_id", "<tanpa-suite>")
         contract_ids.append(cid)
         for key in ("title", "intent", "scenario", "expected_behaviors", "forbidden_behaviors", "contracts"):
             if not case.get(key):
-                fail(f"Pack {pack_id} eval {cid} kehilangan/empty field `{key}`")
+                fail(f"Pack {pack_id} suite {suite_id} eval {cid} kehilangan/empty field `{key}`")
         for item in case.get("contracts", []):
             try:
                 target = repo_path(item.get("file", ""))
             except RepoError as exc:
-                fail(f"Pack {pack_id} eval {cid}: {exc}")
+                fail(f"Pack {pack_id} suite {suite_id} eval {cid}: {exc}")
                 continue
             marker = item.get("contains", "")
             if not target.is_file():
-                fail(f"Pack {pack_id} eval {cid}: contract file tidak ditemukan: {relative(target)}")
+                fail(f"Pack {pack_id} suite {suite_id} eval {cid}: contract file tidak ditemukan: {relative(target)}")
             elif not marker:
-                fail(f"Pack {pack_id} eval {cid}: contract marker kosong untuk {relative(target)}")
+                fail(f"Pack {pack_id} suite {suite_id} eval {cid}: contract marker kosong untuk {relative(target)}")
             elif not contains_casefold(target, marker):
-                fail(f"Pack {pack_id} eval {cid}: marker tidak ditemukan di {relative(target)}: {marker!r}")
+                fail(f"Pack {pack_id} suite {suite_id} eval {cid}: marker tidak ditemukan di {relative(target)}: {marker!r}")
 
     for case in behavior.get("cases", []):
         cid = case.get("id", "<tanpa-id>")
+        suite_id = case.get("suite_id", "<tanpa-suite>")
         behavior_ids.append(cid)
         turns = case.get("turns")
         if not isinstance(turns, list) or not turns:
-            fail(f"Pack {pack_id} behavior {cid} tidak punya turns.")
+            fail(f"Pack {pack_id} suite {suite_id} behavior {cid} tidak punya turns.")
         else:
             for turn in turns:
                 if turn.get("role") not in {"user", "assistant"} or not str(turn.get("content", "")).strip():
-                    fail(f"Pack {pack_id} behavior {cid} punya turn tidak valid.")
+                    fail(f"Pack {pack_id} suite {suite_id} behavior {cid} punya turn tidak valid.")
         for rel in case.get("context_files", []):
             try:
                 target = repo_path(rel)
             except RepoError as exc:
-                fail(f"Pack {pack_id} behavior {cid}: {exc}")
+                fail(f"Pack {pack_id} suite {suite_id} behavior {cid}: {exc}")
                 continue
             if not target.is_file():
-                fail(f"Pack {pack_id} behavior {cid}: context file tidak ditemukan: {relative(target)}")
+                fail(f"Pack {pack_id} suite {suite_id} behavior {cid}: context file tidak ditemukan: {relative(target)}")
 
     if len(contract_ids) != len(set(contract_ids)):
-        fail(f"Pack {pack_id}: ID eval contract harus unik setelah core + pack digabung.")
+        fail(f"Pack {pack_id}: ID eval contract harus unik setelah semua suite digabung.")
     if len(behavior_ids) != len(set(behavior_ids)):
-        fail(f"Pack {pack_id}: ID behavior eval harus unik setelah core + pack digabung.")
+        fail(f"Pack {pack_id}: ID behavior eval harus unik setelah semua suite digabung.")
     if set(contract_ids) != set(behavior_ids):
         missing_behavior = sorted(set(contract_ids) - set(behavior_ids))
         missing_contract = sorted(set(behavior_ids) - set(contract_ids))
@@ -159,10 +198,10 @@ def validate_pack(entry: dict) -> None:
     pack_dir = ctx["pack_dir"]
 
     required = [
-        "schema_version", "id", "name", "institution", "program", "academic_year", "semester",
+        "schema_version", "id", "name", "institution", "program", "academic_year", "semester", "period_label",
         "total_sks", "status", "maintainer", "pack_version", "contract_version",
         "project_instructions", "learning_protocols", "courses", "sources", "source_registries",
-        "evals", "source_verified_at",
+        "eval_suites", "source_verified_at",
     ]
     for key in required:
         if key not in manifest:
@@ -170,7 +209,7 @@ def validate_pack(entry: dict) -> None:
 
     if manifest.get("id") != pack_id:
         fail(f"Pack index id {pack_id} tidak sama dengan manifest id {manifest.get('id')}")
-    for key in ("name", "institution", "program", "academic_year", "semester", "status", "maintainer"):
+    for key in ("name", "institution", "program", "academic_year", "semester", "period_label", "status", "maintainer"):
         if entry.get(key) != manifest.get(key):
             fail(f"Pack {pack_id}: index `{key}` berbeda dari manifest.")
     if manifest.get("status") not in {"source-verified", "verified", "community", "experimental", "deprecated"}:
@@ -244,14 +283,24 @@ def validate_pack(entry: dict) -> None:
     except RepoError as exc:
         fail(f"Pack {pack_id}: {exc}")
 
+    suite_count = 0
     try:
+        suites = manifest.get("eval_suites") or []
+        validate_eval_layering(pack_id, suites)
+        resolved_suites = eval_suite_paths(ctx)
+        suite_count = len(resolved_suites)
+        for suite, contracts_path, behavior_path in resolved_suites:
+            if not contracts_path.is_file():
+                fail(f"Pack {pack_id} suite {suite['id']}: contracts tidak ditemukan: {relative(contracts_path)}")
+            if not behavior_path.is_file():
+                fail(f"Pack {pack_id} suite {suite['id']}: behavior tidak ditemukan: {relative(behavior_path)}")
         contract, behavior = merged_eval_suite(ctx)
         eval_count = validate_eval_contracts(pack_id, contract, behavior)
     except RepoError as exc:
         fail(f"Pack {pack_id}: {exc}")
         eval_count = 0
 
-    pack_stats.append((pack_id, len(courses), eval_count))
+    pack_stats.append((pack_id, len(courses), eval_count, suite_count))
 
 
 def main() -> int:
@@ -293,6 +342,7 @@ def main() -> int:
 
     for required_file in (
         "schemas/pack-index.schema.json", "schemas/pack-manifest.schema.json", "schemas/source-registry.schema.json",
+        "schemas/eval-cases.schema.json", "schemas/eval-behavior.schema.json",
         "learning/learner-state.template.md", "learning/review-queue.template.md",
         "learning/misconception-log.template.md", "learning/mastery-map.template.md",
         "protocols/belajar.md", "protocols/tugas.md", "protocols/review.md", "protocols/latihan-ujian.md",
@@ -309,8 +359,8 @@ def main() -> int:
         return 1
 
     print(f"OK: {len(entries)} pack terdaftar, {source_count} source lintas registry.")
-    for pack_id, courses, evals in pack_stats:
-        print(f"OK {pack_id}: {courses} course, {evals} eval contract (core + pack).")
+    for pack_id, courses, evals, suites in pack_stats:
+        print(f"OK {pack_id}: {courses} course, {evals} eval contract dari {suites} suite.")
     return 0
 
 
