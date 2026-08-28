@@ -1,7 +1,7 @@
 {
   "version": 1,
   "scope": "global",
-  "verified_at": "2026-08-14",
+  "verified_at": "2026-08-28",
   "sources": [
     {
       "id": "openai-projects",
@@ -11,7 +11,7 @@
       "url": "https://help.openai.com/en/articles/10169521-projects-in-chatgpt",
       "canonical_for": ["fitur ChatGPT Projects"],
       "freshness_class": "product-current",
-      "verified_at": "2026-08-14",
+      "verified_at": "2026-08-28",
       "review_interval_days": 14,
       "watch": true,
       "status": "active"
@@ -24,11 +24,11 @@
       "url": "https://help.openai.com/en/articles/11780217-study-mode",
       "canonical_for": ["fitur Study Mode"],
       "freshness_class": "product-current",
-      "verified_at": "2026-08-14",
+      "verified_at": "2026-08-28",
       "review_interval_days": 14,
       "watch": true,
       "status": "active",
-      "notes": "Ramu tidak menjadikan Study Mode dependency runtime karena dukungan fitur di dalam Projects dapat berubah."
+      "notes": "Review 2026-08-28: dokumentasi OpenAI menyatakan Study Mode tidak tersedia di Projects. Ramu tidak menjadikannya dependency runtime; guardrail dan protocol belajar Ramu berdiri sendiri."
     },
     {
       "id": "openai-data-controls",
@@ -38,7 +38,7 @@
       "url": "https://help.openai.com/en/articles/7730893-data-controls-faq",
       "canonical_for": ["pengaturan data ChatGPT"],
       "freshness_class": "product-current",
-      "verified_at": "2026-08-14",
+      "verified_at": "2026-08-28",
       "review_interval_days": 14,
       "watch": true,
       "status": "active"
