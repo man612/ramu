@@ -12,6 +12,7 @@ on:
       - "schemas/**"
       - "evals/**"
       - "scripts/**"
+      - "tests/**"
       - "packs/**"
       - "site/**"
       - "requirements-dev.txt"
@@ -49,6 +50,9 @@ jobs:
 
       - name: Validate cross-file scope identities
         run: python scripts/validate_scope_identities.py
+
+      - name: Prove multi-pack architecture contracts
+        run: python scripts/test_architecture_contracts.py
 
       - name: Validate human-facing project names
         run: python scripts/validate_display_names.py
