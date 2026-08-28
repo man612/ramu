@@ -15,7 +15,7 @@ Secara produk, Ramu tetap punya dua lapisan besar:
 
 Di dalam pack, evaluasi tidak lagi diasumsikan hanya `core + pack`. Manifest menyusun **ordered `eval_suites`** agar rule yang reusable dapat ditempatkan pada scope yang tepat: `core → institution → program → pack`.
 
-`packs/index.json` adalah katalog machine-readable. Setiap entry menunjuk satu `manifest.json`. Tooling tidak boleh mengunci path satu semester tertentu; validator, website, manual eval, dan automated behavior eval harus menemukan pack melalui katalog/manifest.
+`packs/index.json` adalah katalog machine-readable. Setiap entry menunjuk satu `manifest.json`. Tooling tidak boleh mengunci path atau jenis periode tertentu; validator, website, manual eval, dan automated behavior eval harus menemukan pack melalui katalog/manifest.
 
 ```text
 packs/
@@ -30,11 +30,14 @@ packs/
 └── universitas-lain/                  # saat ada pack terverifikasi/request
 ```
 
+Folder `semester-02/` di atas adalah identitas pack UT sekarang, bukan struktur yang diwajibkan Ramu untuk semua institusi.
+
 ## Unit utama
 
 - **Core** — prinsip umum yang jarang berubah.
 - **Pack catalog** — daftar pack yang dapat ditemukan tooling/site.
 - **Pack manifest** — metadata institusi/program/periode, course list, source registry, ordered `eval_suites`, dan version.
+- **Period metadata** — `period_id` untuk mesin + `period_label` untuk manusia; tidak ada field universal `semester`.
 - **Course pack** — konfigurasi siap upload untuk satu mata kuliah.
 - **Project Instructions** — perilaku runtime yang ditempel ke Project.
 - **Eval suite `core`** — failure mode universal seperti hallucinated citation, prompt injection, source freshness, dan state/version conflict.
@@ -42,7 +45,32 @@ packs/
 - **Eval suite `program`** — rule reusable pada satu program studi bila memang ada failure mode yang tidak layak dinaikkan ke institusi.
 - **Eval suite `pack`** — behavior yang benar-benar spesifik periode/mata kuliah pada pack aktif.
 - **Source registry** — dapat berscope global, institusi, program, atau pack agar tidak menjadi satu file raksasa.
-- **Site** — membaca katalog + manifest, bukan hardcode semester tertentu.
+- **Site** — membaca katalog + manifest, bukan hardcode satu semester/jenis kalender tertentu.
+
+## Kontrak periode akademik
+
+Ramu membedakan identitas mesin dari label pengguna:
+
+```text
+period_id:    semester-02
+period_label: Semester 2
+```
+
+Pack lain dapat memakai bentuk seperti:
+
+```text
+period_id:    trimester-01
+period_label: Trimester 1
+```
+
+atau:
+
+```text
+period_id:    term-fall
+period_label: Fall Term
+```
+
+`period_id` harus lower-case/machine-safe dan stabil untuk tooling. `period_label` mengikuti istilah resmi/manusiawi yang digunakan institusi dan menjadi prefix nama Project. Generic tooling tidak boleh menyimpulkan bahwa seluruh academic period adalah semester.
 
 ## Komposisi eval
 
@@ -88,9 +116,9 @@ Status sumber dan status maintainer adalah dua hal berbeda. Community pack tetap
 
 ## Prinsip versioning
 
-Data akademik selalu ditulis bersama tahun akademik, `pack_version`, dan tanggal verifikasi. Jika kurikulum berubah, pack baru dibuat pada jalur versi/tahun/periode yang sesuai; pack lama tidak diam-diam ditimpa seolah masih berlaku.
+Data akademik selalu ditulis bersama tahun akademik, `period_id`/`period_label`, `pack_version`, dan tanggal verifikasi. Jika kurikulum berubah, pack baru dibuat pada jalur versi/tahun/periode yang sesuai; pack lama tidak diam-diam ditimpa seolah masih berlaku.
 
-`contract_version` dapat berubah ketika wiring/format kontrak evaluasi berubah walaupun isi course pack mahasiswa tidak berubah. Karena itu perubahan arsitektur eval tidak otomatis berarti `pack_version` course material juga harus dinaikkan.
+`schema_version` berubah bila bentuk kontrak manifest berubah. `contract_version` dapat berubah ketika wiring/format kontrak evaluasi berubah. `pack_version` mengikuti isi/config course pack yang benar-benar dipakai mahasiswa. Karena itu migrasi metadata seperti `semester` → `period_id` tidak otomatis berarti course pack mahasiswa perlu versi baru.
 
 Jika dua course pack untuk konteks yang sama terpasang sekaligus, versi yang sesuai manifest aktif diprioritaskan dan versi lama sebaiknya dihapus dari Project Sources.
 
@@ -112,7 +140,7 @@ Ramu tidak membutuhkan OpenAI API untuk dipakai mahasiswa.
 - manual validation di ChatGPT Projects: gratis dan menguji runtime produk yang sebenarnya;
 - automated API behavior eval: opsional sebagai regression/benchmark tambahan ketika API tersedia.
 
-Static CI menggabungkan ordered eval suites setiap pack dan memeriksa wiring seluruh case. Manual Eval Kit menggunakan suite yang sama untuk menghasilkan checklist tanpa API.
+Static CI memeriksa period metadata, menggabungkan ordered eval suites setiap pack, dan memeriksa wiring seluruh case. Manual Eval Kit menggunakan suite yang sama untuk menghasilkan checklist tanpa API.
 
 ## Bukan target Ramu
 
@@ -121,4 +149,4 @@ Static CI menggabungkan ordered eval suites setiap pack dan memeriksa wiring sel
 - menjadi LMS pengganti kampus;
 - menebak nilai akhir mahasiswa;
 - menjanjikan keluaran AI selalu benar atau kebal prompt injection;
-- mengunci pengguna ke satu model, plan, fitur tambahan, atau vendor untuk selamanya.
+- mengunci pengguna ke satu sistem kalender akademik, model, plan, fitur tambahan, atau vendor untuk selamanya.
