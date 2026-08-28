@@ -197,6 +197,7 @@ def build_judge_body(
             "id": contract_case["id"],
             "title": contract_case["title"],
             "intent": contract_case["intent"],
+            "critical": bool(contract_case.get("critical", False)),
         },
         "conversation": behavior_case["turns"],
         "expected_behaviors": contract_case["expected_behaviors"],
@@ -296,6 +297,16 @@ def selected_cases(cases: list[dict[str, Any]], only: str) -> list[dict[str, Any
     return selected
 
 
+def evaluate_overall(results: list[dict[str, Any]], fail_under: float) -> tuple[bool, float, list[str]]:
+    pass_rate = sum(1 for item in results if item.get("passed")) / len(results) if results else 0.0
+    critical_failures = [
+        str(item["id"])
+        for item in results
+        if item.get("critical") and not item.get("passed")
+    ]
+    return pass_rate >= fail_under and not critical_failures, pass_rate, critical_failures
+
+
 def write_results(
     results_dir: Path,
     metadata: dict[str, Any],
@@ -312,6 +323,8 @@ def write_results(
 
     passed = sum(1 for item in results if item["passed"])
     avg = sum(float(item["score"]) for item in results) / len(results) if results else 0.0
+    critical_failures = metadata.get("critical_failures") or []
+    critical_text = ", ".join(f"`{item}`" for item in critical_failures) if critical_failures else "tidak ada"
     lines = [
         "# Ramu Behavior Eval",
         "",
@@ -321,18 +334,22 @@ def write_results(
         f"- Hasil: **{passed}/{len(results)} lulus**",
         f"- Rata-rata skor: **{avg:.3f}**",
         f"- Ambang pass rate: **{metadata['fail_under']:.0%}**",
+        f"- Critical failures: **{critical_text}**",
+        f"- Overall: **{'PASS' if overall_pass else 'FAIL'}**",
         "",
-        "| Case | Hasil | Skor | Catatan |",
-        "|---|---|---:|---|",
+        "| Case | Critical | Hasil | Skor | Catatan |",
+        "|---|---|---|---:|---|",
     ]
     for item in results:
         status = "PASS" if item["passed"] else "FAIL"
+        critical = "YES" if item.get("critical") else "—"
         reason = str(item["judge"].get("reason", "")).replace("|", "\\|").replace("\n", " ")
-        lines.append(f"| {item['id']} | {status} | {item['score']:.2f} | {reason} |")
+        lines.append(f"| {item['id']} | {critical} | {status} | {item['score']:.2f} | {reason} |")
     lines.extend([
         "",
         f"Total token API yang tercatat: **{metadata['usage']['total_tokens']}**.",
         "",
+        "> Overall PASS membutuhkan pass rate memenuhi threshold **dan** tidak ada critical case yang gagal.",
         "> Artifact JSON menyimpan respons kandidat dan hasil judge agar regresi bisa diaudit.",
     ])
     summary_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
@@ -369,12 +386,14 @@ def main() -> int:
     if args.dry_run:
         print(f"Behavior eval dry-run — pack {ctx['id']} — {len(cases)} case")
         for case in cases:
+            contract_case = contract_by_id[case["id"]]
             reference_context = read_reference_context(ctx, case.get("context_files", []))
             build_candidate_body("dry-run-model", project_instructions, reference_context, case, 1200)
-            print(f"OK {case['id']}: {len(case['turns'])} turn, {len(reference_context)} reference chars")
+            marker = " [CRITICAL]" if contract_case.get("critical") else ""
+            print(f"OK {case['id']}{marker}: {len(case['turns'])} turn, {len(reference_context)} reference chars")
         print(
             "OK: composable eval suites terhubung; Project Instructions dan untrusted reference context "
-            "dipisahkan; seluruh contract memiliki behavior case."
+            "dipisahkan; seluruh contract memiliki behavior case; critical gates terdefinisi."
         )
         return 0
 
@@ -396,7 +415,9 @@ def main() -> int:
     total_usage = {"input_tokens": 0, "output_tokens": 0, "total_tokens": 0}
     for index, case in enumerate(cases, start=1):
         cid = case["id"]
-        print(f"[{index}/{len(cases)}] {cid} — menjalankan candidate...", flush=True)
+        contract_case = contract_by_id[cid]
+        critical = bool(contract_case.get("critical", False))
+        print(f"[{index}/{len(cases)}] {cid}{' [CRITICAL]' if critical else ''} — menjalankan candidate...", flush=True)
         reference_context = read_reference_context(ctx, case.get("context_files", []))
         max_output_tokens = int(case.get("max_output_tokens", defaults.get("max_output_tokens", 1200)))
         min_score = float(case.get("min_score", defaults.get("min_score", 0.75)))
@@ -409,13 +430,14 @@ def main() -> int:
             max_output_tokens,
         )
         print(f"[{index}/{len(cases)}] {cid} — menilai respons...", flush=True)
-        judgment, judge_usage = judge_request(api_key, args.grader_model, contract_by_id[cid], case, candidate_output)
+        judgment, judge_usage = judge_request(api_key, args.grader_model, contract_case, case, candidate_output)
         score = float(judgment.get("score", 0))
         passed = bool(judgment.get("pass")) and score >= min_score
         total_usage = merge_usage(total_usage, merge_usage(candidate_usage, judge_usage))
         results.append({
             "id": cid,
-            "title": contract_by_id[cid]["title"],
+            "title": contract_case["title"],
+            "critical": critical,
             "passed": passed,
             "score": score,
             "min_score": min_score,
@@ -425,8 +447,7 @@ def main() -> int:
         })
         print(f"[{index}/{len(cases)}] {cid} — {'PASS' if passed else 'FAIL'} ({score:.2f})", flush=True)
 
-    pass_rate = sum(1 for item in results if item["passed"]) / len(results) if results else 0.0
-    overall_pass = pass_rate >= args.fail_under
+    overall_pass, pass_rate, critical_failures = evaluate_overall(results, args.fail_under)
     metadata = {
         "run_at": datetime.now(timezone.utc).isoformat(),
         "pack_id": ctx["id"],
@@ -436,6 +457,7 @@ def main() -> int:
         "selected_cases": [case["id"] for case in cases],
         "fail_under": args.fail_under,
         "pass_rate": pass_rate,
+        "critical_failures": critical_failures,
         "usage": total_usage,
         "store": False,
         "trust_boundary": "project-instructions:developer; references:user-untrusted",
