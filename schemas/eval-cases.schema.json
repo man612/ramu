@@ -1,11 +1,14 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Ramu eval case collection",
+  "$id": "https://man612.github.io/ramu/schemas/eval-cases.schema.json",
+  "title": "Ramu eval contract suite",
   "type": "object",
-  "required": ["version", "pack_id", "cases"],
+  "required": ["version", "suite_id", "scope", "cases"],
   "properties": {
     "version": {"type": "integer", "minimum": 1},
-    "pack_id": {"type": "string"},
+    "suite_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
+    "scope": {"type": "string", "enum": ["core", "institution", "program", "pack"]},
+    "scope_ref": {"type": "string", "minLength": 1},
     "cases": {
       "type": "array",
       "items": {
@@ -37,5 +40,12 @@
       }
     }
   },
+  "allOf": [
+    {
+      "if": {"properties": {"scope": {"const": "core"}}, "required": ["scope"]},
+      "then": {"not": {"required": ["scope_ref"]}},
+      "else": {"required": ["scope_ref"]}
+    }
+  ],
   "additionalProperties": false
 }
