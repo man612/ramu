@@ -28,6 +28,7 @@ SCHEMAS = {
     "source-registry": ROOT / "schemas/source-registry.schema.json",
     "eval-cases": ROOT / "schemas/eval-cases.schema.json",
     "eval-behavior": ROOT / "schemas/eval-behavior.schema.json",
+    "manual-eval-result": ROOT / "schemas/manual-eval-result.schema.json",
 }
 
 
@@ -65,6 +66,9 @@ def instance_map() -> dict[str, list[Path]]:
         "source-registry": discover_source_registry_paths(),
         "eval-cases": contracts,
         "eval-behavior": behavior,
+        # Manual evidence bersifat local/private by default. Generated evidence diuji oleh
+        # tests/test_manual_eval_evidence.py; schema tetap diperiksa sebagai Draft 2020-12 di sini.
+        "manual-eval-result": [],
     }
 
 
