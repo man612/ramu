@@ -1,0 +1,48 @@
+name: Bug atau perilaku tidak sesuai
+description: Laporkan masalah pada setup, tooling, atau behavior Ramu.
+title: "[Bug] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Jangan kirim API key, data pribadi, materi kuliah privat, atau dokumen berhak cipta ke issue publik.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Setup / onboarding
+        - Project Instructions
+        - Course pack
+        - Source / freshness
+        - Behavior eval
+        - Validator / tooling
+        - GitHub Pages
+        - Lainnya
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Apa yang terjadi?
+      description: Jelaskan hasil aktual dan hasil yang diharapkan.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Cara reproduksi
+      description: Berikan langkah minimal. Hapus data sensitif sebelum dikirim.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Lingkungan
+      description: Platform, device, paket ChatGPT bila relevan, dan model yang benar-benar digunakan saat kejadian. Jangan menganggap nama model tertentu selalu menjadi default.
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Bukti tambahan
+      description: Log, screenshot yang sudah disensor, atau link source resmi bila relevan.
