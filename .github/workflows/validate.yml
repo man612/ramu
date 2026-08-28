@@ -57,6 +57,9 @@ jobs:
       - name: Prove eval trust boundaries
         run: python tests/test_eval_trust_boundary.py
 
+      - name: Prove critical eval gates
+        run: python tests/test_eval_critical_gate.py
+
       - name: Validate human-facing project names
         run: python scripts/validate_display_names.py
 
