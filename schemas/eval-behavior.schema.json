@@ -8,7 +8,7 @@
     "version": {"type": "integer", "minimum": 1},
     "suite_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
     "scope": {"type": "string", "enum": ["core", "institution", "program", "pack"]},
-    "scope_ref": {"type": "string", "minLength": 1},
+    "scope_ref": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
     "defaults": {
       "type": "object",
       "properties": {
