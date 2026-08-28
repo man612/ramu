@@ -51,6 +51,7 @@ def main() -> int:
         'const PACK_INDEX_URL = "./packs/index.json"',
         "currentPackEntry(catalog)",
         "manifestUrl(entry)",
+        "item.period_label || item.period_id",
         "course.focus",
         "manifest.project_instructions",
     ])
@@ -61,9 +62,12 @@ def main() -> int:
         "const PACK_BASE",
         "const COURSE_FOCUS",
         "universitas-terbuka/s1-akuntansi/2026-2027/semester-02",
+        "item.semester",
+        "manifest.semester",
+        "Semester ${",
     ):
         if forbidden in app_text:
-            fail(f"site/app.js masih hardcode pack: {forbidden!r}")
+            fail(f"site/app.js masih hardcode/asumsi pack-periode: {forbidden!r}")
 
     for entry in catalog.get("packs", []):
         try:
@@ -72,6 +76,10 @@ def main() -> int:
             fail(str(exc))
             continue
         manifest = ctx["manifest"]
+        if not str(entry.get("period_id", "")).strip() or not str(entry.get("period_label", "")).strip():
+            fail(f"Pack catalog {entry.get('id')} harus punya period_id + period_label untuk site.")
+        if not str(manifest.get("period_id", "")).strip() or not str(manifest.get("period_label", "")).strip():
+            fail(f"Pack {ctx['id']} harus punya period_id + period_label untuk site.")
         for course in manifest.get("courses", []):
             if not str(course.get("focus", "")).strip():
                 fail(f"Pack {ctx['id']} course {course.get('code')} tidak punya focus untuk site.")
