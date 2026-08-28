@@ -31,10 +31,11 @@ Untuk pack baru:
 3. tentukan `period_label` yang manusiawi, misalnya `Semester 3`, `Trimester 1`, atau istilah resmi lain yang dipakai institusi;
 4. taruh course pack di folder `courses/` dan Project Instructions di pack tersebut;
 5. pakai registry yang sudah ada atau buat scoped `source-registry.json` jika source-nya belum punya tempat yang tepat;
-6. buat eval khusus pack di `<pack>/evals/contracts.json` dan `<pack>/evals/behavior.json`;
-7. jangan copy eval universal tanpa alasan—failure mode umum berasal dari `evals/core/`;
-8. daftarkan pack di `packs/index.json`;
-9. jalankan validasi. Validator akan gagal jika menemukan `manifest.json` yang belum masuk katalog, entry katalog yang menunjuk file yang tidak ada, atau nama Project yang tidak mengikuti `period_label`.
+6. tentukan eval suite yang benar-benar berlaku untuk pack tersebut;
+7. buat eval khusus pack di `<pack>/evals/contracts.json` dan `<pack>/evals/behavior.json`;
+8. daftarkan semua suite berurutan pada `eval_suites` di manifest;
+9. daftarkan pack di `packs/index.json`;
+10. jalankan validasi. Validator akan gagal jika menemukan manifest yang belum masuk katalog, wiring suite yang salah, entry yang menunjuk file hilang, atau nama Project yang tidak mengikuti `period_label`.
 
 Field penting:
 
@@ -44,10 +45,35 @@ Field penting:
 - `period_label`: label yang dilihat manusia, misalnya `Semester 2`;
 - `project_name`: harus diawali `<period_label> • `, misalnya `Semester 2 • AKM I`;
 - `source_registries`: registry yang memang menjadi dependency pack;
-- `evals`: lokasi core + pack eval yang harus digabung runner;
+- `eval_suites`: ordered suite `core → institution → program → pack` yang memang berlaku untuk pack;
 - `focus`: deskripsi pendek setiap mata kuliah untuk site; jangan hardcode focus di front-end.
 
 `id`, folder, atau versi internal boleh tetap ringkas seperti `.s2`, `semester-02/`, atau `2026-2027.s2.1`. Aturan label eksplisit berlaku untuk teks yang ditampilkan ke pengguna, bukan identifier mesin.
+
+## Memilih scope eval
+
+Jangan copy sebuah regression case hanya karena pack baru membutuhkan perilaku yang sama. Tempatkan case pada scope paling sempit yang masih benar-benar reusable:
+
+- `core` → berlaku untuk semua pack Ramu, misalnya sitasi palsu atau prompt injection;
+- `institution` → berlaku lintas program/periode pada satu institusi, misalnya aturan source governance Universitas Terbuka;
+- `program` → berlaku lintas periode pada satu program, tetapi tidak otomatis untuk program lain;
+- `pack` → membutuhkan mata kuliah/periode/course pack tertentu.
+
+Setiap suite memiliki `suite_id`, `scope`, dan—selain core—`scope_ref`. File contracts dan behavior harus mendeklarasikan metadata yang sama dengan manifest. ID case harus unik setelah semua suite digabung; suite yang lebih spesifik **tidak mengganti** case milik suite sebelumnya.
+
+Urutan di manifest harus dari umum ke spesifik. Contoh:
+
+```text
+core → institution:universitas-terbuka → pack:Semester-2
+```
+
+atau bila suatu hari ada rule khusus S1 Akuntansi lintas semester:
+
+```text
+core → institution:universitas-terbuka → program:s1-akuntansi → pack:Semester-3
+```
+
+Behavior `defaults` diproses berurutan, sehingga suite yang lebih spesifik boleh mengubah default runtime seperti threshold/token untuk case berikutnya. Perubahan default harus disengaja dan dijelaskan di PR.
 
 ## Memilih scope source
 
@@ -94,12 +120,12 @@ Jangan memasukkan API key ke commit, issue, artifact, screenshot, atau log publi
 Buat PR sekecil mungkin dan jelaskan:
 
 - masalah yang diperbaiki;
-- pack/core yang terpengaruh;
+- scope eval/source/pack yang terpengaruh;
 - source yang digunakan bila mengubah fakta akademik;
 - cara memverifikasi perubahan;
 - risiko atau hal yang belum diuji.
 
-Jika perubahan menyentuh guardrail, source routing, state, atau perilaku tutor, tambahkan/perbarui eval yang relevan. Jika failure mode berlaku untuk semua pack, tempatkan kontraknya di core; bila spesifik institusi/mata kuliah, tempatkan dekat pack.
+Jika perubahan menyentuh guardrail, source routing, state, atau perilaku tutor, tambahkan/perbarui eval yang relevan pada scope yang tepat. Failure mode universal masuk core; aturan institusi/program jangan diduplikasi ke setiap pack; skenario yang benar-benar membutuhkan course pack tertentu tetap dekat dengan pack.
 
 ## Prinsip review
 
