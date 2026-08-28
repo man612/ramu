@@ -4,15 +4,17 @@
   "title": "Ramu pack manifest",
   "type": "object",
   "required": [
-    "schema_version", "id", "name", "institution", "program", "academic_year", "period_id", "period_label",
+    "schema_version", "id", "name", "institution_id", "institution", "program_id", "program", "academic_year", "period_id", "period_label",
     "total_sks", "status", "maintainer", "pack_version", "contract_version", "project_instructions",
     "learning_protocols", "courses", "sources", "source_registries", "eval_suites", "source_verified_at"
   ],
   "properties": {
-    "schema_version": {"const": 3},
+    "schema_version": {"const": 4},
     "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
     "name": {"type": "string", "minLength": 3},
+    "institution_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
     "institution": {"type": "string", "minLength": 2},
+    "program_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
     "program": {"type": "string", "minLength": 2},
     "academic_year": {"type": "string", "minLength": 4},
     "period_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
@@ -75,7 +77,7 @@
       "properties": {
         "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
         "scope": {"type": "string", "enum": ["core", "institution", "program", "pack"]},
-        "scope_ref": {"type": "string", "minLength": 1},
+        "scope_ref": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
         "contracts": {"type": "string", "minLength": 3},
         "behavior": {"type": "string", "minLength": 3}
       },
