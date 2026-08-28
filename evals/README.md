@@ -1,37 +1,68 @@
 # Evals
 
-Ramu memakai dua lapisan evaluasi:
+Ramu memisahkan **scope evaluasi** dan **cara menjalankannya**.
 
-1. **contract tests** — berjalan tanpa model/API. Tes ini memastikan guardrail penting tidak hilang dari Project Instructions, protokol, atau course pack ketika file diedit;
-2. **behavior evals** — skenario konkret benar-benar dikirim ke model kandidat, lalu responsnya dinilai model judge terhadap expected dan forbidden behavior.
+## Scope eval
 
-Contract cases ada di [`cases/semester-02.json`](cases/semester-02.json). Skenario executable ada di [`behavior/semester-02.json`](behavior/semester-02.json), dengan panduan lengkap di [`behavior/README.md`](behavior/README.md).
+### Core eval
+
+`evals/core/` berisi failure mode yang harus masuk akal lintas institusi/program, misalnya:
+
+- data/screenshot tidak lengkap;
+- referensi/DOI palsu;
+- precedence rubrik;
+- integritas tugas;
+- retrieval practice;
+- learner state;
+- source freshness;
+- prompt injection dari Project Source;
+- konflik versi course pack.
+
+### Pack eval
+
+Setiap pack dapat memiliki `<pack>/evals/` untuk skenario yang bergantung pada institusi, program, semester, atau mata kuliah tertentu. Contoh UT S1 Akuntansi Semester 2: aturan pajak yang berubah, jurnal AKM I, konflik source pusat/regional, dan context isolation antarmata kuliah.
+
+`manifest.json` menunjuk lokasi core + pack contract/behavior. `scripts/run_behavior_evals.py` menggabungkannya saat runtime. ID case harus unik setelah kedua scope digabung.
+
+## Tiga jalur pemeriksaan
+
+1. **Static validation** — gratis/deterministik; memeriksa manifest, source registry, contract marker, file, dan wiring.
+2. **Manual behavior validation** — gratis; case dijalankan manusia langsung di ChatGPT Projects.
+3. **Automated API behavior eval** — opsional; model kandidat dijalankan via API dan respons dinilai judge model.
+
+Tidak memiliki API tidak membuat Ramu gagal atau tidak dapat dipakai. API hanya menambah automation/reproducibility pada satu lapisan QA.
 
 ## Pemeriksaan tanpa API
 
 ```bash
 python scripts/validate_repo.py
-python scripts/run_behavior_evals.py --dry-run
+python scripts/run_behavior_evals.py --dry-run --pack id.ut.accounting-s1.2026-2027.s2
+python scripts/check_source_freshness.py
 ```
 
-Validator memeriksa manifest, total SKS, course file, source registry, ID eval, contract marker, template belajar, serta wiring seluruh behavior case E01–E12.
+CI mengambil seluruh pack dari `packs/index.json` dan menjalankan dry-run per pack melalui matrix.
 
-## Behavior eval nyata
+## Manual validation di ChatGPT Projects
+
+```bash
+python scripts/prepare_manual_eval.py \
+  --pack id.ut.accounting-s1.2026-2027.s2
+```
+
+Atau buka **Actions → Manual Eval Kit**. Workflow itu tidak membutuhkan secret/API dan menghasilkan checklist sebagai artifact.
+
+Panduan: [`manual/README.md`](manual/README.md).
+
+## Automated behavior eval — opsional
 
 ```bash
 export OPENAI_API_KEY="..."
-python scripts/run_behavior_evals.py
+python scripts/run_behavior_evals.py \
+  --pack id.ut.accounting-s1.2026-2027.s2 \
+  --candidate-model <candidate> \
+  --grader-model <judge>
 ```
 
-Runner akan:
+Runner akan memuat manifest pack, Project Instructions, core + pack eval/context, menjalankan kandidat, meminta judge structured verdict, lalu menyimpan summary/artifact ke `evals/results/`.
 
-- memuat Project Instructions dan context yang relevan;
-- menjalankan model kandidat melalui Responses API;
-- mengaktifkan `web_search` hanya pada case yang memang membutuhkannya;
-- meminta model judge mengeluarkan penilaian terstruktur;
-- menghasilkan skor per case, pass rate, penggunaan token, respons kandidat, dan alasan judge;
-- menyimpan laporan ke `evals/results/` untuk artifact/audit, bukan untuk dikomit.
-
-Di GitHub, workflow **Behavior Evals** sengaja hanya manual agar API tidak terpakai setiap push. Run memerlukan repository secret `OPENAI_API_KEY`.
-
-Contract tests tetap penting karena murah dan deterministik, sedangkan behavior eval menguji sesuatu yang contract test tidak bisa buktikan: **apakah model benar-benar mengikuti guardrail saat menghadapi percakapan nyata**. Karena output model probabilistik, satu run tidak dianggap bukti permanen; regression penting sebaiknya dibandingkan pada beberapa run atau model snapshot.
+Workflow **Behavior Evals** sengaja manual agar API tidak terpakai pada setiap push. Satu run probabilistik bukan bukti permanen; hasil penting perlu direview manusia dan dikaitkan dengan pack version + tanggal + model yang benar-benar diuji.
