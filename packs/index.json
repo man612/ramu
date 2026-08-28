@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "default_pack_id": "id.ut.accounting-s1.2026-2027.s2",
   "packs": [
     {
@@ -8,7 +8,7 @@
       "institution": "Universitas Terbuka",
       "program": "S1 Akuntansi",
       "academic_year": "2026/2027",
-      "semester": 2,
+      "period_id": "semester-02",
       "period_label": "Semester 2",
       "status": "source-verified",
       "maintainer": "ramu",
