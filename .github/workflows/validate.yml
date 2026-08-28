@@ -38,6 +38,9 @@ jobs:
       - name: Validate catalog, manifests, contracts, and registries
         run: python scripts/validate_repo.py
 
+      - name: Validate human-facing project names
+        run: python scripts/validate_display_names.py
+
       - name: Validate catalog-driven public site
         run: python scripts/validate_site.py
 
