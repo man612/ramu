@@ -1,0 +1,138 @@
+{
+  "catalog": {
+    "version": 3,
+    "default_pack_id": "id.alpha.business.2026-2027.s2",
+    "packs": [
+      {
+        "id": "id.alpha.business.2026-2027.s2",
+        "name": "Alpha Business — Semester 2",
+        "institution_id": "id.alpha",
+        "institution": "Alpha University",
+        "program_id": "id.alpha.business",
+        "program": "Business",
+        "academic_year": "2026/2027",
+        "period_id": "semester-02",
+        "period_label": "Semester 2",
+        "status": "experimental",
+        "maintainer": "community",
+        "manifest": "alpha/business/2026-2027/semester-02/manifest.json"
+      },
+      {
+        "id": "id.alpha.business.2026-2027.t1",
+        "name": "Alpha Business — Trimester 1",
+        "institution_id": "id.alpha",
+        "institution": "Alpha University",
+        "program_id": "id.alpha.business",
+        "program": "Business",
+        "academic_year": "2026/2027",
+        "period_id": "trimester-01",
+        "period_label": "Trimester 1",
+        "status": "experimental",
+        "maintainer": "community",
+        "manifest": "alpha/business/2026-2027/trimester-01/manifest.json"
+      },
+      {
+        "id": "id.beta.engineering.2026.term-fall",
+        "name": "Beta Engineering — Fall Term",
+        "institution_id": "id.beta",
+        "institution": "Beta Institute",
+        "program_id": "id.beta.engineering",
+        "program": "Engineering",
+        "academic_year": "2026",
+        "period_id": "term-fall",
+        "period_label": "Fall Term",
+        "status": "experimental",
+        "maintainer": "community",
+        "manifest": "beta/engineering/2026/term-fall/manifest.json"
+      }
+    ]
+  },
+  "manifests": [
+    {
+      "schema_version": 4,
+      "id": "id.alpha.business.2026-2027.s2",
+      "name": "Alpha Business — Semester 2",
+      "institution_id": "id.alpha",
+      "institution": "Alpha University",
+      "program_id": "id.alpha.business",
+      "program": "Business",
+      "academic_year": "2026/2027",
+      "period_id": "semester-02",
+      "period_label": "Semester 2",
+      "total_sks": 3,
+      "status": "experimental",
+      "maintainer": "community",
+      "pack_version": "fixture.s2.1",
+      "contract_version": "fixture.1",
+      "project_instructions": "PROJECT-INSTRUCTIONS.md",
+      "learning_protocols": ["belajar"],
+      "courses": [{"code": "BUS101", "name": "Business Basics", "short_name": "Business", "project_name": "Semester 2 • Business", "sks": 3, "focus": "business fundamentals", "file": "courses/BUS101.md"}],
+      "sources": [],
+      "source_registries": ["sources/registry.json"],
+      "eval_suites": [
+        {"id": "core", "scope": "core", "contracts": "evals/core/contracts.json", "behavior": "evals/core/behavior.json"},
+        {"id": "alpha", "scope": "institution", "scope_ref": "id.alpha", "contracts": "fixtures/alpha/contracts.json", "behavior": "fixtures/alpha/behavior.json"},
+        {"id": "alpha-business", "scope": "program", "scope_ref": "id.alpha.business", "contracts": "fixtures/alpha-business/contracts.json", "behavior": "fixtures/alpha-business/behavior.json"},
+        {"id": "alpha-s2", "scope": "pack", "scope_ref": "id.alpha.business.2026-2027.s2", "contracts": "fixtures/alpha-s2/contracts.json", "behavior": "fixtures/alpha-s2/behavior.json"}
+      ],
+      "source_verified_at": "2026-08-01"
+    },
+    {
+      "schema_version": 4,
+      "id": "id.alpha.business.2026-2027.t1",
+      "name": "Alpha Business — Trimester 1",
+      "institution_id": "id.alpha",
+      "institution": "Alpha University",
+      "program_id": "id.alpha.business",
+      "program": "Business",
+      "academic_year": "2026/2027",
+      "period_id": "trimester-01",
+      "period_label": "Trimester 1",
+      "total_sks": 4,
+      "status": "experimental",
+      "maintainer": "community",
+      "pack_version": "fixture.t1.1",
+      "contract_version": "fixture.1",
+      "project_instructions": "PROJECT-INSTRUCTIONS.md",
+      "learning_protocols": ["belajar"],
+      "courses": [{"code": "BUS201", "name": "Business Lab", "short_name": "Business Lab", "project_name": "Trimester 1 • Business Lab", "sks": 4, "focus": "applied business", "file": "courses/BUS201.md"}],
+      "sources": [],
+      "source_registries": ["sources/registry.json"],
+      "eval_suites": [
+        {"id": "core", "scope": "core", "contracts": "evals/core/contracts.json", "behavior": "evals/core/behavior.json"},
+        {"id": "alpha", "scope": "institution", "scope_ref": "id.alpha", "contracts": "fixtures/alpha/contracts.json", "behavior": "fixtures/alpha/behavior.json"},
+        {"id": "alpha-business", "scope": "program", "scope_ref": "id.alpha.business", "contracts": "fixtures/alpha-business/contracts.json", "behavior": "fixtures/alpha-business/behavior.json"},
+        {"id": "alpha-t1", "scope": "pack", "scope_ref": "id.alpha.business.2026-2027.t1", "contracts": "fixtures/alpha-t1/contracts.json", "behavior": "fixtures/alpha-t1/behavior.json"}
+      ],
+      "source_verified_at": "2026-08-01"
+    },
+    {
+      "schema_version": 4,
+      "id": "id.beta.engineering.2026.term-fall",
+      "name": "Beta Engineering — Fall Term",
+      "institution_id": "id.beta",
+      "institution": "Beta Institute",
+      "program_id": "id.beta.engineering",
+      "program": "Engineering",
+      "academic_year": "2026",
+      "period_id": "term-fall",
+      "period_label": "Fall Term",
+      "total_sks": 3,
+      "status": "experimental",
+      "maintainer": "community",
+      "pack_version": "fixture.fall.1",
+      "contract_version": "fixture.1",
+      "project_instructions": "PROJECT-INSTRUCTIONS.md",
+      "learning_protocols": ["belajar"],
+      "courses": [{"code": "ENG101", "name": "Engineering Basics", "short_name": "Engineering", "project_name": "Fall Term • Engineering", "sks": 3, "focus": "engineering fundamentals", "file": "courses/ENG101.md"}],
+      "sources": [],
+      "source_registries": ["sources/registry.json"],
+      "eval_suites": [
+        {"id": "core", "scope": "core", "contracts": "evals/core/contracts.json", "behavior": "evals/core/behavior.json"},
+        {"id": "beta", "scope": "institution", "scope_ref": "id.beta", "contracts": "fixtures/beta/contracts.json", "behavior": "fixtures/beta/behavior.json"},
+        {"id": "beta-fall", "scope": "pack", "scope_ref": "id.beta.engineering.2026.term-fall", "contracts": "fixtures/beta-fall/contracts.json", "behavior": "fixtures/beta-fall/behavior.json"}
+      ],
+      "source_verified_at": "2026-08-01"
+    }
+  ]
+}
