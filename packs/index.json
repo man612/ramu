@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "default_pack_id": "id.ut.accounting-s1.2026-2027.s2",
+  "packs": [
+    {
+      "id": "id.ut.accounting-s1.2026-2027.s2",
+      "name": "UT S1 Akuntansi — Semester 2",
+      "institution": "Universitas Terbuka",
+      "program": "S1 Akuntansi",
+      "academic_year": "2026/2027",
+      "semester": 2,
+      "status": "source-verified",
+      "maintainer": "ramu",
+      "manifest": "universitas-terbuka/s1-akuntansi/2026-2027/semester-02/manifest.json"
+    }
+  ]
+}
