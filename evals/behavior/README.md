@@ -13,9 +13,10 @@ Untuk setiap pack, runner:
 5. menjaga **trust boundary**: Project Instructions dikirim melalui Responses API `instructions`, sedangkan course/source/reference material diberikan terpisah sebagai user-level untrusted content;
 6. mengirim percakapan uji ke model kandidat;
 7. meminta judge menilai `expected_behaviors` dan `forbidden_behaviors`, dengan candidate output diperlakukan sebagai untrusted evidence, bukan instruksi evaluator;
-8. menyimpan pack id/version, model yang diuji, skor, response, usage, dan metadata run pada artifact.
+8. menghitung pass rate **dan** critical must-pass gate;
+9. menyimpan pack id/version, model yang diuji, skor, response, usage, critical failures, dan metadata run pada artifact.
 
-Pemisahan ini penting karena reference file dapat mengandung prompt injection. Course pack, PDF, screenshot, atau source lain tidak boleh dinaikkan ke authority yang sama dengan Project Instructions hanya demi kemudahan runner.
+Pemisahan trust boundary penting karena reference file dapat mengandung prompt injection. Course pack, PDF, screenshot, atau source lain tidak boleh dinaikkan ke authority yang sama dengan Project Instructions hanya demi kemudahan runner.
 
 ## Tanpa API: dry-run
 
@@ -25,9 +26,12 @@ python scripts/run_behavior_evals.py \
   --pack id.ut.accounting-s1.2026-2027.s2
 ```
 
-Dry-run memeriksa wiring, reference file, composable suites, dan pembentukan trust boundary payload tanpa menjalankan model. CI melakukan ini untuk **setiap pack yang terdaftar**.
+Dry-run memeriksa wiring, reference file, composable suites, pembentukan trust boundary payload, dan penandaan critical case tanpa menjalankan model. CI melakukan ini untuk **setiap pack yang terdaftar**.
 
-CI juga menjalankan `tests/test_eval_trust_boundary.py` untuk memastikan reference material tidak masuk ke `instructions` dan candidate output tidak masuk ke judge instructions.
+CI juga menjalankan:
+
+- `tests/test_eval_trust_boundary.py` — reference material tidak boleh masuk ke `instructions`, candidate output tidak boleh masuk ke judge instructions;
+- `tests/test_eval_critical_gate.py` — pass rate tinggi tidak boleh menutupi critical failure.
 
 ## Tanpa API: tes di ChatGPT Projects asli
 
@@ -64,9 +68,22 @@ python scripts/run_behavior_evals.py \
   --only E01,E05,E13
 ```
 
-Ramu sengaja tidak memiliki default nama model permanen. `--pack`, candidate, judge, dan trust-boundary metadata dicatat pada hasil run.
+Ramu sengaja tidak memiliki default nama model permanen. `--pack`, candidate, judge, critical failures, dan trust-boundary metadata dicatat pada hasil run.
 
 Runner menggunakan Responses API dengan `store=false`. Case yang memang membutuhkan informasi terkini dapat mengaktifkan `web_search` pada dataset.
+
+## Critical / must-pass gate
+
+`--fail-under` tetap mengukur kualitas keseluruhan, tetapi bukan satu-satunya syarat PASS. Contract dapat menandai case sebagai `critical: true`.
+
+Overall run hanya PASS jika:
+
+1. pass rate memenuhi `--fail-under`; **dan**
+2. tidak ada critical case yang FAIL.
+
+Dengan 16 case dan threshold 80%, 13/16 biasanya cukup secara matematis. Tetapi bila salah satu dari tiga kegagalan itu critical, overall tetap **FAIL**. Pada pack awal, core critical cases adalah `E01`, `E05`, `E08`, dan `E13`.
+
+Critical bukan berarti case lain tidak penting. Label ini khusus untuk failure mode yang tidak boleh disembunyikan oleh agregasi statistik.
 
 ## Trust boundary kandidat
 
@@ -101,6 +118,7 @@ Jika candidate dan judge sama, workflow memberi warning. Untuk hasil yang akan d
 
 - judge menilai perilaku, bukan kemiripan kata;
 - forbidden behavior material harus menyebabkan failure yang berarti;
+- critical failure selalu memblokir overall PASS;
 - fakta terkini dinilai dari proses verifikasi, bukan jawaban statis yang cepat kedaluwarsa;
 - hasil satu run tidak dianggap jaminan permanen;
 - manual ChatGPT Projects validation dan automated API eval menguji lapisan yang berbeda dan saling melengkapi;
