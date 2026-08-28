@@ -1,8 +1,10 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "id": "id.ut.accounting-s1.2026-2027.s2",
   "name": "UT S1 Akuntansi — Semester 2",
+  "institution_id": "id.ut",
   "institution": "Universitas Terbuka",
+  "program_id": "id.ut.accounting-s1",
   "program": "S1 Akuntansi",
   "academic_year": "2026/2027",
   "period_id": "semester-02",
@@ -11,7 +13,7 @@
   "status": "source-verified",
   "maintainer": "ramu",
   "pack_version": "2026-2027.s2.1",
-  "contract_version": "1.1",
+  "contract_version": "1.2",
   "project_instructions": "PROJECT-INSTRUCTIONS.md",
   "learning_protocols": ["belajar", "tugas", "review", "latihan-ujian"],
   "courses": [
@@ -105,7 +107,7 @@
     {
       "id": "ut",
       "scope": "institution",
-      "scope_ref": "universitas-terbuka",
+      "scope_ref": "id.ut",
       "contracts": "packs/universitas-terbuka/evals/contracts.json",
       "behavior": "packs/universitas-terbuka/evals/behavior.json"
     },
