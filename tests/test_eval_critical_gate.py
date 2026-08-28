@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -17,6 +18,14 @@ def item(cid: str, passed: bool, critical: bool = False) -> dict:
 
 
 def main() -> int:
+    contracts = json.loads((ROOT / "evals/core/contracts.json").read_text(encoding="utf-8"))
+    actual_critical = {case["id"] for case in contracts["cases"] if case.get("critical")}
+    expected_critical = {"E01", "E05", "E08", "E13"}
+    if actual_critical != expected_critical:
+        raise AssertionError(
+            f"Critical core set drift: expected {sorted(expected_critical)}, got {sorted(actual_critical)}"
+        )
+
     # 13/16 = 81.25% seharusnya melewati threshold 80%, tetapi critical failure wajib menggagalkan run.
     with_critical_failure = [item(f"E{i:02}", True) for i in range(1, 17)]
     with_critical_failure[0] = item("E01", False, critical=True)
