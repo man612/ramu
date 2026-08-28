@@ -208,6 +208,8 @@ def validate_pack(entry: dict) -> None:
     for key in required:
         if key not in manifest:
             fail(f"Pack {pack_id} manifest kehilangan field `{key}`")
+    if "semester" in manifest:
+        fail(f"Pack {pack_id}: field legacy `semester` tidak boleh ada; gunakan period_id + period_label.")
 
     if manifest.get("id") != pack_id:
         fail(f"Pack index id {pack_id} tidak sama dengan manifest id {manifest.get('id')}")
@@ -334,6 +336,11 @@ def main() -> int:
         fail("default_pack_id harus menunjuk pack yang terdaftar.")
 
     for entry in entries:
+        if "semester" in entry:
+            fail(
+                f"Pack index {entry.get('id', '<tanpa-id>')}: field legacy `semester` tidak boleh ada; "
+                "gunakan period_id + period_label."
+            )
         period_id = str(entry.get("period_id", "")).strip()
         if not period_id or not MACHINE_ID_RE.fullmatch(period_id):
             fail(
