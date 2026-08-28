@@ -18,7 +18,7 @@ Terima kasih sudah ingin membantu Ramu. Kontribusi paling berguna adalah perubah
 - perubahan/kerusakan source resmi;
 - behavior eval untuk failure mode realistis;
 - validator, source watcher, site, atau tooling eval;
-- pack semester/program/institusi baru.
+- pack periode/program/institusi baru.
 
 ## Menambah pack baru
 
@@ -28,27 +28,28 @@ Untuk pack baru:
 
 1. buat struktur `packs/<institusi>/<program>/<tahun>/<periode>/`;
 2. buat `manifest.json` mengikuti `schemas/pack-manifest.schema.json`;
-3. tentukan `period_label` yang manusiawi, misalnya `Semester 3`, `Trimester 1`, atau istilah resmi lain yang dipakai institusi;
-4. taruh course pack di folder `courses/` dan Project Instructions di pack tersebut;
-5. pakai registry yang sudah ada atau buat scoped `source-registry.json` jika source-nya belum punya tempat yang tepat;
-6. tentukan eval suite yang benar-benar berlaku untuk pack tersebut;
-7. buat eval khusus pack di `<pack>/evals/contracts.json` dan `<pack>/evals/behavior.json`;
-8. daftarkan semua suite berurutan pada `eval_suites` di manifest;
-9. daftarkan pack di `packs/index.json`;
-10. jalankan validasi. Validator akan gagal jika menemukan manifest yang belum masuk katalog, wiring suite yang salah, entry yang menunjuk file hilang, atau nama Project yang tidak mengikuti `period_label`.
+3. tentukan `period_id` machine-safe, misalnya `semester-03`, `trimester-01`, `quarter-fall`, atau `term-02`;
+4. tentukan `period_label` yang manusiawi sesuai istilah institusi, misalnya `Semester 3`, `Trimester 1`, `Fall Quarter`, atau `Term 2`;
+5. taruh course pack di folder `courses/` dan Project Instructions di pack tersebut;
+6. pakai registry yang sudah ada atau buat scoped `source-registry.json` jika source-nya belum punya tempat yang tepat;
+7. tentukan eval suite yang benar-benar berlaku untuk pack tersebut;
+8. buat eval khusus pack di `<pack>/evals/contracts.json` dan `<pack>/evals/behavior.json`;
+9. daftarkan semua suite berurutan pada `eval_suites` di manifest;
+10. daftarkan pack di `packs/index.json` dengan `period_id` + `period_label` yang sama;
+11. jalankan validasi. Validator akan gagal jika menemukan manifest yang belum masuk katalog, wiring suite yang salah, entry yang menunjuk file hilang, `period_id` tidak machine-safe, atau nama Project yang tidak mengikuti `period_label`.
 
 Field penting:
 
 - `status`: `source-verified`, `verified`, `community`, `experimental`, atau `deprecated`;
 - `maintainer`: `ramu` atau `community`;
-- `semester`: nilai terstruktur untuk periode bila format pack memang memakai semester;
-- `period_label`: label yang dilihat manusia, misalnya `Semester 2`;
+- `period_id`: ID periode untuk mesin, lower-case dan stabil, misalnya `semester-02`, `trimester-01`, atau `term-fall`;
+- `period_label`: label periode yang dilihat manusia, misalnya `Semester 2`, `Trimester 1`, atau `Fall Term`;
 - `project_name`: harus diawali `<period_label> • `, misalnya `Semester 2 • AKM I`;
 - `source_registries`: registry yang memang menjadi dependency pack;
 - `eval_suites`: ordered suite `core → institution → program → pack` yang memang berlaku untuk pack;
 - `focus`: deskripsi pendek setiap mata kuliah untuk site; jangan hardcode focus di front-end.
 
-`id`, folder, atau versi internal boleh tetap ringkas seperti `.s2`, `semester-02/`, atau `2026-2027.s2.1`. Aturan label eksplisit berlaku untuk teks yang ditampilkan ke pengguna, bukan identifier mesin.
+Ramu sengaja tidak memiliki field universal bernama `semester`. Semester hanyalah salah satu bentuk academic period. Pack yang memang memakai semester cukup merepresentasikannya melalui `period_id`/`period_label`. Identifier pack, folder, atau versi internal boleh tetap ringkas seperti `.s2`, `semester-02/`, atau `2026-2027.s2.1` bila itu memang identitas pack tersebut; generic tooling tidak boleh mengasumsikan semua pack mengikuti bentuk itu.
 
 ## Memilih scope eval
 
@@ -64,13 +65,13 @@ Setiap suite memiliki `suite_id`, `scope`, dan—selain core—`scope_ref`. File
 Urutan di manifest harus dari umum ke spesifik. Contoh:
 
 ```text
-core → institution:universitas-terbuka → pack:Semester-2
+core → institution:universitas-terbuka → pack:semester-02
 ```
 
-atau bila suatu hari ada rule khusus S1 Akuntansi lintas semester:
+atau bila suatu hari ada rule khusus S1 Akuntansi lintas periode:
 
 ```text
-core → institution:universitas-terbuka → program:s1-akuntansi → pack:Semester-3
+core → institution:universitas-terbuka → program:s1-akuntansi → pack:semester-03
 ```
 
 Behavior `defaults` diproses berurutan, sehingga suite yang lebih spesifik boleh mengubah default runtime seperti threshold/token untuk case berikutnya. Perubahan default harus disengaja dan dijelaskan di PR.
@@ -129,4 +130,4 @@ Jika perubahan menyentuh guardrail, source routing, state, atau perilaku tutor, 
 
 ## Prinsip review
 
-Perubahan tidak dinilai dari panjang prompt atau dokumentasinya. Yang dicari adalah perilaku yang jelas, sumber yang dapat ditelusuri, manifest yang self-describing, label yang tidak membingungkan pengguna, setup yang mudah, dan cara nyata untuk menguji ulang perubahan tersebut.
+Perubahan tidak dinilai dari panjang prompt atau dokumentasinya. Yang dicari adalah perilaku yang jelas, sumber yang dapat ditelusuri, manifest yang self-describing, period metadata yang tidak mengunci satu sistem kalender, label yang tidak membingungkan pengguna, setup yang mudah, dan cara nyata untuk menguji ulang perubahan tersebut.
