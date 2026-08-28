@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "id": "id.ut.accounting-s1.2026-2027.s2",
   "name": "UT S1 Akuntansi — Semester 2",
   "institution": "Universitas Terbuka",
@@ -11,7 +11,7 @@
   "status": "source-verified",
   "maintainer": "ramu",
   "pack_version": "2026-2027.s2.1",
-  "contract_version": "1.0",
+  "contract_version": "1.1",
   "project_instructions": "PROJECT-INSTRUCTIONS.md",
   "learning_protocols": ["belajar", "tugas", "review", "latihan-ujian"],
   "courses": [
@@ -95,11 +95,27 @@
     "sources/registry.json",
     "packs/universitas-terbuka/source-registry.json"
   ],
-  "evals": {
-    "core_contracts": "evals/core/contracts.json",
-    "core_behavior": "evals/core/behavior.json",
-    "pack_contracts": "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/evals/contracts.json",
-    "pack_behavior": "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/evals/behavior.json"
-  },
+  "eval_suites": [
+    {
+      "id": "core",
+      "scope": "core",
+      "contracts": "evals/core/contracts.json",
+      "behavior": "evals/core/behavior.json"
+    },
+    {
+      "id": "ut",
+      "scope": "institution",
+      "scope_ref": "universitas-terbuka",
+      "contracts": "packs/universitas-terbuka/evals/contracts.json",
+      "behavior": "packs/universitas-terbuka/evals/behavior.json"
+    },
+    {
+      "id": "semester-02",
+      "scope": "pack",
+      "scope_ref": "id.ut.accounting-s1.2026-2027.s2",
+      "contracts": "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/evals/contracts.json",
+      "behavior": "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/evals/behavior.json"
+    }
+  ],
   "source_verified_at": "2026-08-14"
 }
