@@ -4,14 +4,12 @@ on:
   workflow_dispatch:
     inputs:
       candidate_model:
-        description: "Model yang diuji"
+        description: "Model kandidat yang diuji (isi model API yang tersedia saat run)"
         required: true
-        default: "gpt-5-mini"
         type: string
       grader_model:
-        description: "Model judge"
+        description: "Model judge (pilih secara eksplisit; idealnya berbeda dari kandidat)"
         required: true
-        default: "gpt-5-mini"
         type: string
       cases:
         description: "all atau E01,E05,E08"
@@ -51,12 +49,19 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Verify API secret
+      - name: Verify API secret and model inputs
         shell: bash
         run: |
           if [ -z "$OPENAI_API_KEY" ]; then
             echo "Repository secret OPENAI_API_KEY belum tersedia." >&2
             exit 2
+          fi
+          if [ -z "$RAMU_CANDIDATE_MODEL" ] || [ -z "$RAMU_GRADER_MODEL" ]; then
+            echo "candidate_model dan grader_model wajib dipilih saat workflow dijalankan." >&2
+            exit 2
+          fi
+          if [ "$RAMU_CANDIDATE_MODEL" = "$RAMU_GRADER_MODEL" ]; then
+            echo "WARNING: candidate dan judge memakai model yang sama. Run tetap dilanjutkan, tetapi hasil sebaiknya tidak menjadi satu-satunya bukti validasi." >&2
           fi
 
       - name: Validate behavior dataset
