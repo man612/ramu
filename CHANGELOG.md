@@ -6,7 +6,22 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 
 ## [Unreleased]
 
-Belum ada perubahan produk yang dijadwalkan untuk release berikutnya.
+### Added
+
+- `SUPPORT.md` sebagai jalur bantuan publik dan panduan memilih jenis laporan yang tepat.
+- Issue form **Minta pack baru** untuk usulan periode, program, atau institusi baru tanpa mendorong pengguna mengunggah materi privat/berhak cipta.
+
+### Changed
+
+- `.gitignore` sekarang mencakup virtual environment, Python cache, local `.env`, metadata editor/OS, dan log agar workspace contributor tidak mudah ikut ter-commit.
+- Pull request template disinkronkan dengan validation stack saat ini dan meminta dry-run pada pack yang terdampak.
+- Panduan setup tidak lagi bergantung pada label UI ChatGPT seperti `Add from library`; instruksi mengikuti fungsi Sources/Library yang setara bila label berubah.
+- Security policy sekarang menjelaskan bahwa security fix diprioritaskan untuk current `main` dan public-beta release terbaru.
+- Wording pack README dibuat device-neutral dan aset setup lama yang sudah tidak dipakai dihapus.
+
+### Notes
+
+- Final public-readiness cleanup ini tidak mengubah data akademik, course pack, behavior contract, critical eval, atau arsitektur multi-pack.
 
 ## [0.2.1-beta] - 2026-08-29
 
