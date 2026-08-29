@@ -6,6 +6,26 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 
 ## [Unreleased]
 
+Belum ada perubahan produk yang dijadwalkan untuk release berikutnya.
+
+## [0.2.1-beta] - 2026-08-29
+
+### Changed
+
+- Copy homepage dan halaman setup dibuat lebih langsung dan tidak terlalu editorial/marketing.
+- Native browser `<select>` untuk pack diganti custom pack picker dengan keyboard navigation, focus state, `aria-expanded`, `aria-selected`, dan listbox semantics.
+- Bila katalog hanya berisi satu pack, pack picker tampil sebagai field statis; pada mobile, menu multi-pack memakai panel yang lebih sesuai untuk touch interaction.
+- Petunjuk upload source dibuat lebih defensif terhadap perubahan label UI ChatGPT dan tidak lagi bergantung pada label `Add from library`.
+- Overall visual scale desktop dipadatkan sekitar 10–15% melalui ukuran layout aktual, bukan browser zoom atau `transform: scale()`; mobile tetap mempertahankan ukuran baca dan touch target yang nyaman.
+- Site regression guard sekarang menolak native pack `<select>` dan beberapa copy lama yang sengaja dihapus.
+
+### Validation
+
+- `Validate Ramu` dan downstream `Deploy Pages` berhasil untuk release snapshot `036a970bfa49a1e8318444e61c6eefd646107bb0`.
+- Tidak ada perubahan data akademik, course pack, behavior contract, critical eval, atau arsitektur multi-pack pada patch ini.
+
+## [0.2.0-beta] - 2026-08-29
+
 ### Added
 
 - Arsitektur **catalog-driven multi-pack** melalui `packs/index.json` dan `manifest.json` yang self-describing.
@@ -79,7 +99,6 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 - Dependabot hanya mengusulkan dependency update melalui PR; full-SHA action pin dan normal validation/review tetap dipertahankan.
 - Pack awal tetap Universitas Terbuka · S1 Akuntansi · Semester 2 · 2026/2027; synthetic Alpha/Beta hanya fixture test dan tidak dipublish sebagai pack pengguna.
 - Perubahan metadata/identity/eval/CI/source-governance tooling repository tidak meminta pengguna ChatGPT Project membuat ulang workspace/course pack secara otomatis; fallback existing-Project memory dijelaskan terpisah karena UI produk dapat berbeda.
-- Perubahan di bagian `Unreleased` di atas adalah kandidat utama untuk release berikutnya, **`v0.2.0-beta`**.
 
 ## [0.1.0-beta] - 2026-08-28
 
@@ -102,5 +121,7 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 - Behavior validation aktual belum menjadi klaim penuh pada release ini.
 - Pilot pengguna nyata masih diperlukan sebelum Ramu dapat dianggap stabil.
 
-[Unreleased]: https://github.com/man612/ramu/compare/v0.1.0-beta...HEAD
+[Unreleased]: https://github.com/man612/ramu/compare/v0.2.1-beta...HEAD
+[0.2.1-beta]: https://github.com/man612/ramu/compare/v0.2.0-beta...v0.2.1-beta
+[0.2.0-beta]: https://github.com/man612/ramu/compare/v0.1.0-beta...v0.2.0-beta
 [0.1.0-beta]: https://github.com/man612/ramu/releases/tag/v0.1.0-beta
