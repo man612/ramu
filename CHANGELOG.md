@@ -9,8 +9,8 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 ### Added
 
 - Arsitektur **catalog-driven multi-pack** melalui `packs/index.json` dan `manifest.json` yang self-describing.
-- Schema untuk pack catalog, manifest, source registry, eval contracts, behavior eval, dan **manual ChatGPT Projects evidence**.
-- **JSON Schema Draft 2020-12 validation nyata** di CI: schema Ramu diperiksa terhadap dialect/meta-schema dan seluruh katalog/manifest/registry/eval instance divalidasi terhadap schema yang dipublish.
+- Schema untuk pack catalog, manifest, source registry, eval contracts, behavior eval, **manual ChatGPT Projects evidence**, dan **aggregate pilot evidence**.
+- **JSON Schema Draft 2020-12 validation nyata** di CI: schema Ramu diperiksa terhadap dialect/meta-schema dan seluruh katalog/manifest/registry/eval serta published pilot summary divalidasi terhadap schema yang dipublish.
 - Stable machine identity `institution_id` + `program_id`, terpisah dari label manusia, beserta cross-file identity gate untuk katalog, manifest, scoped registry, dan eval suite.
 - Scoped source registry agar source global/runtime terpisah dari source institusi/program/pack.
 - **Claim-level source governance** dengan status, evidence locator, claim review interval, dan fallback operasional untuk konflik dokumentasi resmi.
@@ -18,6 +18,10 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 - **Manual Eval Kit** untuk membuat checklist behavior validation tanpa OpenAI API, termasuk provenance suite dan critical/must-pass status tiap case.
 - **Structured manual Projects evidence** melalui `scripts/manual_eval_evidence.py`: template terikat pack/version/contract/revision, runtime/harness metadata, per-case result, privacy contract, automatic overall calculation, dan semantic validation terhadap contract saat ini.
 - Regression proof yang memastikan full manual evidence sehat dapat PASS, critical failure memblokir PASS, subset tidak dapat menjadi full-validation PASS, metadata contract yang dimanipulasi ditolak, dan evidence yang mengaku memuat transcript mentah ditolak schema.
+- **Aggregate pilot evidence** melalui `scripts/pilot_evidence.py`: sample target, protocol checks, funnel peserta agregat, time-to-first-value buckets, failure categories, sanitized feedback themes, regression linkage, privacy contract, calculated metrics, readiness, dan limitations.
+- Pilot readiness hanya memiliki `INCOMPLETE`, `INSUFFICIENT_SAMPLE`, `BLOCKED`, atau `REVIEW_READY`; tooling tidak mempunyai status `PASS`/`STABLE` otomatis.
+- Regression proof pilot yang menguji healthy review-ready summary, critical blocker, sample minimum, invalid protocol, tampered metrics, impossible participant funnel, dan raw-transcript privacy violation.
+- `evidence/pilots/` sebagai lokasi khusus sanitized aggregate summary yang memang sengaja dipublish; CI memvalidasi seluruh `*.json` di sana.
 - CI matrix yang melakukan dry-run eval wiring untuk setiap pack yang terdaftar.
 - **Synthetic multi-pack foundation proof** yang membangun repo sementara dengan dua institusi, dua program, `Semester 2`, `Trimester 1`, program-level suite, serta positive/negative identity cases tanpa mempublish pack palsu ke katalog utama.
 - Static site contract untuk mencegah front-end kembali hardcode ke satu pack.
@@ -49,6 +53,9 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 - Manual Eval Kit sekarang meng-upload **checklist + JSON evidence template**. Template selalu dimulai `INCOMPLETE`/`NOT_RUN`; subset tetap `INCOMPLETE` walaupun seluruh selected case PASS.
 - Manual evidence individual disimpan lokal/private secara default melalui `evals/manual/results/` yang di-ignore Git; raw transcript, data pribadi, dan credential tidak menjadi payload evidence publik.
 - Manual Eval Kit menandai critical case dan menganggap satu critical FAIL sebagai blocker overall PASS; `--output` checklist juga aman menunjuk path di luar repository.
+- Pilot plan sekarang memakai aggregate evidence workflow. Participant-level row, direct identifier, raw transcript, exact assignment content, dan credential dilarang dari published pilot evidence.
+- Pilot metrics/readiness dihitung tooling dari aggregate counts; impossible funnel, time-to-first-value total yang tidak konsisten, atau metrics/readiness yang diedit manual ditolak validation.
+- Open reproducible critical pilot regression membuat readiness `BLOCKED`; `REVIEW_READY` hanya berarti evidence cukup lengkap untuk review manusia, bukan klaim stabilitas/statistik/efektivitas.
 - Regression case E14 konflik source pusat-vs-regional dipindahkan menjadi suite tingkat Universitas Terbuka agar dapat dipakai ulang oleh pack UT lain.
 - Validator period metadata memastikan `period_id` machine-safe dan sama antara katalog/manifest; site validator melarang asumsi `item.semester`/`manifest.semester` kembali muncul.
 - Validator eval memastikan core berada di awal, pack berada di akhir, scope tidak mundur, `scope_ref` cocok, ID case unik setelah merge, dan contract/behavior tetap berpasangan.
@@ -62,11 +69,13 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 
 ### Notes
 
-- Tidak ada API yang dibutuhkan untuk memakai Ramu, menjalankan static CI, membuat Manual Eval Kit + manual evidence template, synthetic multi-pack proof, trust-boundary regression, critical-gate regression, CI/Pages contract regression, source/claim freshness validation, atau melakukan pilot pengguna.
+- Tidak ada API yang dibutuhkan untuk memakai Ramu, menjalankan static CI, membuat Manual Eval Kit + manual evidence template, synthetic multi-pack proof, trust-boundary regression, critical-gate regression, CI/Pages contract regression, source/claim freshness validation, atau menyiapkan/memvalidasi pilot aggregate evidence.
 - `jsonschema[format]` adalah dependency **validation/dev only**, bukan dependency runtime mahasiswa/site.
 - Automated Behavior Evals dengan API tetap tersedia sebagai QA tambahan dan bukan syarat public beta.
 - Responses API automated eval adalah **regression/benchmark approximation**, bukan simulasi identik ChatGPT Projects; manual validation pada Projects asli tetap dibutuhkan untuk product-level evidence.
 - Full manual evidence PASS hanya mendukung claim pada runtime/harness/tanggal/pack/contract yang tercatat. Subset regression tidak boleh dipromosikan menjadi full-validation claim.
+- Pilot kecil 5–10 pengguna ditujukan untuk menemukan friction/failure dan bukan estimasi statistik populasi atau causal proof hasil belajar.
+- Individual manual/pilot data tetap private/local secara default; hanya sanitized aggregate pilot summary yang boleh dipublish setelah review manusia.
 - Dependabot hanya mengusulkan dependency update melalui PR; full-SHA action pin dan normal validation/review tetap dipertahankan.
 - Pack awal tetap Universitas Terbuka · S1 Akuntansi · Semester 2 · 2026/2027; synthetic Alpha/Beta hanya fixture test dan tidak dipublish sebagai pack pengguna.
 - Perubahan metadata/identity/eval/CI/source-governance tooling repository tidak meminta pengguna ChatGPT Project membuat ulang workspace/course pack secara otomatis; fallback existing-Project memory dijelaskan terpisah karena UI produk dapat berbeda.
