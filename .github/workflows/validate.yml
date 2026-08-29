@@ -48,6 +48,12 @@ jobs:
       - name: Prove manual Projects evidence contract
         run: python tests/test_manual_eval_evidence.py
 
+      - name: Prove aggregate pilot evidence contract
+        run: python tests/test_pilot_evidence.py
+
+      - name: Validate published aggregate pilot evidence
+        run: python scripts/pilot_evidence.py validate-published
+
       - name: Prove CI and Pages gate contract
         run: python tests/test_ci_contract.py
 
