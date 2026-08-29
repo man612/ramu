@@ -1,0 +1,189 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://man612.github.io/ramu/schemas/pilot-summary.schema.json",
+  "title": "Ramu public beta pilot aggregate summary",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "evidence_type",
+    "pack_id",
+    "pack_version",
+    "contract_version",
+    "ramu_revision",
+    "generated_at",
+    "pilot_started_at",
+    "pilot_ended_at",
+    "pilot_status",
+    "sample_target",
+    "protocol_checks",
+    "participants",
+    "time_to_first_value",
+    "setup_failures",
+    "behavior_failures",
+    "feedback_themes",
+    "regressions",
+    "privacy",
+    "metrics",
+    "readiness",
+    "limitations"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "evidence_type": {"const": "public-beta-pilot-summary"},
+    "pack_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
+    "pack_version": {"type": "string", "minLength": 1},
+    "contract_version": {"type": "string", "minLength": 1},
+    "ramu_revision": {"type": ["string", "null"], "pattern": "^[0-9a-f]{7,64}$"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "pilot_started_at": {"type": ["string", "null"], "format": "date-time"},
+    "pilot_ended_at": {"type": ["string", "null"], "format": "date-time"},
+    "pilot_status": {"type": "string", "enum": ["planned", "running", "completed"]},
+    "sample_target": {
+      "type": "object",
+      "required": ["minimum", "maximum"],
+      "properties": {
+        "minimum": {"type": "integer", "minimum": 1},
+        "maximum": {"type": "integer", "minimum": 1}
+      },
+      "additionalProperties": false
+    },
+    "protocol_checks": {
+      "type": "object",
+      "required": ["target_population_matches_pack", "one_course_first", "participant_level_data_excluded", "raw_course_material_excluded"],
+      "properties": {
+        "target_population_matches_pack": {"type": "boolean"},
+        "one_course_first": {"type": "boolean"},
+        "participant_level_data_excluded": {"const": true},
+        "raw_course_material_excluded": {"const": true}
+      },
+      "additionalProperties": false
+    },
+    "participants": {
+      "type": "object",
+      "required": ["recruited", "started", "setup_completed", "first_value_reached", "return_7d_eligible", "returned_within_7d", "multi_course_adopted", "setup_completed_without_live_help"],
+      "properties": {
+        "recruited": {"type": "integer", "minimum": 0},
+        "started": {"type": "integer", "minimum": 0},
+        "setup_completed": {"type": "integer", "minimum": 0},
+        "first_value_reached": {"type": "integer", "minimum": 0},
+        "return_7d_eligible": {"type": "integer", "minimum": 0},
+        "returned_within_7d": {"type": "integer", "minimum": 0},
+        "multi_course_adopted": {"type": "integer", "minimum": 0},
+        "setup_completed_without_live_help": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "time_to_first_value": {
+      "type": "object",
+      "required": ["under_5m", "m5_to_15", "m15_to_30", "over_30m", "unknown"],
+      "properties": {
+        "under_5m": {"type": "integer", "minimum": 0},
+        "m5_to_15": {"type": "integer", "minimum": 0},
+        "m15_to_30": {"type": "integer", "minimum": 0},
+        "over_30m": {"type": "integer", "minimum": 0},
+        "unknown": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "setup_failures": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/failureAggregate"}
+    },
+    "behavior_failures": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/behaviorFailureAggregate"}
+    },
+    "feedback_themes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["theme", "sentiment", "mentions", "summary"],
+        "properties": {
+          "theme": {"type": "string", "minLength": 2, "maxLength": 80},
+          "sentiment": {"type": "string", "enum": ["positive", "negative", "mixed", "neutral"]},
+          "mentions": {"type": "integer", "minimum": 1},
+          "summary": {"type": "string", "minLength": 3, "maxLength": 1000}
+        },
+        "additionalProperties": false
+      }
+    },
+    "regressions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "category", "critical", "reproducible", "linked_eval_case", "disposition", "notes"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^P[0-9]{3}$"},
+          "category": {"type": "string", "enum": ["setup", "fabrication", "source-selection", "academic-integrity", "prompt-injection", "context-leak", "over-answering", "learner-state", "other"]},
+          "critical": {"type": "boolean"},
+          "reproducible": {"type": "boolean"},
+          "linked_eval_case": {"type": ["string", "null"], "pattern": "^E[0-9]{2}$"},
+          "disposition": {"type": "string", "enum": ["open", "fixed", "not-reproducible", "documented-limitation"]},
+          "notes": {"type": "string", "maxLength": 1500}
+        },
+        "additionalProperties": false
+      }
+    },
+    "privacy": {
+      "type": "object",
+      "required": ["contains_direct_identifiers", "contains_participant_rows", "contains_raw_transcripts", "contains_exact_assignment_content", "contains_credentials", "notes"],
+      "properties": {
+        "contains_direct_identifiers": {"const": false},
+        "contains_participant_rows": {"const": false},
+        "contains_raw_transcripts": {"const": false},
+        "contains_exact_assignment_content": {"const": false},
+        "contains_credentials": {"const": false},
+        "notes": {"type": "string", "maxLength": 1000}
+      },
+      "additionalProperties": false
+    },
+    "metrics": {
+      "type": "object",
+      "required": ["activation_rate", "setup_success_rate", "return_7d_rate", "multi_course_adoption_rate", "unassisted_setup_rate"],
+      "properties": {
+        "activation_rate": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "setup_success_rate": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "return_7d_rate": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "multi_course_adoption_rate": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "unassisted_setup_rate": {"type": ["number", "null"], "minimum": 0, "maximum": 1}
+      },
+      "additionalProperties": false
+    },
+    "readiness": {
+      "type": "object",
+      "required": ["status", "sample_minimum_met", "protocol_valid", "open_critical_regressions", "notes"],
+      "properties": {
+        "status": {"type": "string", "enum": ["INCOMPLETE", "INSUFFICIENT_SAMPLE", "BLOCKED", "REVIEW_READY"]},
+        "sample_minimum_met": {"type": "boolean"},
+        "protocol_valid": {"type": "boolean"},
+        "open_critical_regressions": {"type": "array", "items": {"type": "string", "pattern": "^P[0-9]{3}$"}, "uniqueItems": true},
+        "notes": {"type": "string", "maxLength": 1000}
+      },
+      "additionalProperties": false
+    },
+    "limitations": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+  },
+  "$defs": {
+    "failureAggregate": {
+      "type": "object",
+      "required": ["category", "incidents", "notes"],
+      "properties": {
+        "category": {"type": "string", "enum": ["memory-setting", "project-instructions", "source-upload", "pack-selection", "navigation", "other"]},
+        "incidents": {"type": "integer", "minimum": 1},
+        "notes": {"type": "string", "maxLength": 1000}
+      },
+      "additionalProperties": false
+    },
+    "behaviorFailureAggregate": {
+      "type": "object",
+      "required": ["category", "incidents", "notes"],
+      "properties": {
+        "category": {"type": "string", "enum": ["fabrication", "source-selection", "academic-integrity", "prompt-injection", "context-leak", "over-answering", "learner-state", "other"]},
+        "incidents": {"type": "integer", "minimum": 1},
+        "notes": {"type": "string", "maxLength": 1000}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

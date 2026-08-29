@@ -29,6 +29,7 @@ SCHEMAS = {
     "eval-cases": ROOT / "schemas/eval-cases.schema.json",
     "eval-behavior": ROOT / "schemas/eval-behavior.schema.json",
     "manual-eval-result": ROOT / "schemas/manual-eval-result.schema.json",
+    "pilot-summary": ROOT / "schemas/pilot-summary.schema.json",
 }
 
 
@@ -60,6 +61,7 @@ def eval_instance_paths() -> tuple[list[Path], list[Path]]:
 
 def instance_map() -> dict[str, list[Path]]:
     contracts, behavior = eval_instance_paths()
+    published_pilots = sorted((ROOT / "evidence/pilots").glob("*.json"))
     return {
         "pack-index": [PACK_INDEX],
         "pack-manifest": discover_manifest_paths(),
@@ -69,6 +71,8 @@ def instance_map() -> dict[str, list[Path]]:
         # Manual evidence bersifat local/private by default. Generated evidence diuji oleh
         # tests/test_manual_eval_evidence.py; schema tetap diperiksa sebagai Draft 2020-12 di sini.
         "manual-eval-result": [],
+        # Hanya summary pilot agregat yang sengaja dipublish ke repository yang divalidasi sebagai instance.
+        "pilot-summary": published_pilots,
     }
 
 
