@@ -58,10 +58,10 @@ Pada halaman setup Ramu:
 1. pilih mata kuliah yang sedang disiapkan;
 2. tekan **Unduh paket (.txt)**;
 3. kembali ke Project ChatGPT;
-4. buka **Sources → Add source → Upload files**;
-5. unggah file course pack yang baru diunduh.
+4. buka area **Sources** atau **Project Sources**;
+5. gunakan kontrol untuk menambahkan atau mengunggah file, lalu pilih course pack yang baru diunduh.
 
-Jika file sudah tersimpan di Library ChatGPT dan opsi **Add from library** tersedia, opsi itu juga dapat digunakan.
+Nama tombol dan opsi untuk menambahkan source dapat berbeda antar akun, plan, atau versi aplikasi. Jika ChatGPT menyediakan cara untuk memakai ulang file yang sudah tersimpan di Library atau source lain, opsi yang setara tersebut juga dapat digunakan.
 
 Course pack menjadi source tetap untuk Project tersebut. BMP, materi kelas, screenshot soal, rubrik, atau file pribadi tetap ditambahkan sendiri oleh pengguna ketika diperlukan; materi berhak cipta tidak disimpan di repo Ramu.
 
@@ -107,7 +107,7 @@ Ramu memakai satu Project per mata kuliah supaya file, riwayat, source, dan lear
 
 Gunakan **Project-only memory** bila tersedia. Jika kamu sedang berada di Project AKM I tetapi ingin membahas Perpajakan, lebih baik pindah ke Project Perpajakan daripada menyimpan progres pajak ke learner state AKM I.
 
-Jika dari suatu sesi muncul konteks belajar yang perlu dibawa ke chat berikutnya, minta Ramu membuat **Catatan Belajar Terbaru**. Bila ChatGPT menyediakan **Save to project / Add to project sources**, catatan itu dapat disimpan ke Project. Ketika catatan baru menggantikan versi lama, hapus versi lama supaya dua state yang bertentangan tidak dipakai bersamaan.
+Jika dari suatu sesi muncul konteks belajar yang perlu dibawa ke chat berikutnya, minta Ramu membuat **Catatan Belajar Terbaru**. Bila ChatGPT menyediakan opsi untuk menyimpan hasil ke Project atau menjadikannya Project Source, catatan itu dapat disimpan ke Project. Ketika catatan baru menggantikan versi lama, hapus versi lama supaya dua state yang bertentangan tidak dipakai bersamaan.
 
 ## Mengatur file agar Project tetap bersih
 
