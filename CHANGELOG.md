@@ -63,7 +63,7 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 - `validate_display_names.py` memakai shared repository root helper agar ikut dapat diuji terhadap fixture sintetis.
 - **Validate Ramu sekarang berjalan pada setiap push ke `main`**, termasuk docs/release/workflow changes; push validation tidak lagi dibatasi `paths:`.
 - **Deploy Pages sekarang downstream dari successful `Validate Ramu` main-push** dan checkout `workflow_run.head_sha`, sehingga SHA yang diterbitkan persis SHA yang divalidasi.
-- Dependency GitHub Actions dipin ke full commit SHA; workflow lama diperbarui ke checkout/setup-python v6 yang Node 24-native.
+- Dependency GitHub Actions tetap dipin ke full commit SHA dan direfresh ke current major releases: checkout v7.0.1, setup-python v7.0.0, upload-artifact v7.0.1, configure-pages v6.0.0, upload-pages-artifact v5.0.0, dan deploy-pages v5.0.0.
 - Nama Project untuk pack awal berubah dari bentuk ambigu seperti `S2 • AKM I` menjadi `Semester 2 • AKM I`.
 - UI katalog/setup menggunakan `period_label` dari metadata, bukan membentuk label periode sendiri.
 
