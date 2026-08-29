@@ -20,7 +20,7 @@ Di ChatGPT, buat lima Project berikut:
 
 Ramu sengaja menulis **Semester 2** secara penuh pada nama Project. Singkatan `S2` tidak dipakai sebagai label tampilan karena mudah tertukar dengan jenjang pendidikan S2/Magister. Singkatan `s2` tetap boleh muncul pada ID atau path internal repo karena bagian itu hanya untuk mesin/tooling.
 
-Ikuti [panduan setup dari HP](../../../../../docs/PANDUAN-SETUP-CHATGPT.md). Polanya sama untuk semua mata kuliah: buat Project, tempel Project Instructions, lalu unggah paket mata kuliah yang sesuai.
+Ikuti [panduan setup Ramu](../../../../../docs/PANDUAN-SETUP-CHATGPT.md). Polanya sama untuk semua mata kuliah: buat Project, tempel Project Instructions, lalu unggah paket mata kuliah yang sesuai.
 
 ## File yang digunakan
 
