@@ -4,10 +4,10 @@ Ramu masih berstatus **Public Beta**. Dukungan diberikan secara best-effort mela
 
 ## Sebelum membuka issue
 
-- Untuk mulai memakai Ramu, buka https://man612.github.io/ramu/setup.html.
-- Untuk detail setup ChatGPT Projects, baca `docs/PANDUAN-SETUP-CHATGPT.md`.
-- Untuk aturan kontribusi, baca `CONTRIBUTING.md`.
-- Untuk masalah keamanan, baca `SECURITY.md` sebelum membagikan detail.
+- Untuk mulai memakai Ramu, buka [halaman setup](https://man612.github.io/ramu/setup.html).
+- Untuk detail setup ChatGPT Projects, baca [Panduan Setup Ramu](docs/PANDUAN-SETUP-CHATGPT.md).
+- Untuk aturan kontribusi, baca [CONTRIBUTING.md](CONTRIBUTING.md).
+- Untuk masalah keamanan, baca [SECURITY.md](SECURITY.md) sebelum membagikan detail.
 
 ## Pilih jalur yang tepat
 
