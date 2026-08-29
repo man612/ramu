@@ -2,6 +2,12 @@
 
 Ramu tidak menjalankan server atau menyimpan akun mahasiswa sendiri, tetapi tetap memiliki risiko keamanan pada prompt, sumber, file yang diunggah, dan tooling evaluasi.
 
+## Versi yang didukung
+
+Security fix diprioritaskan untuk **current `main`** dan **public-beta release terbaru**. Tag beta lama tetap dipertahankan sebagai snapshot yang dapat ditelusuri, tetapi tidak dijanjikan menerima backport untuk setiap perbaikan.
+
+Jika masalah hanya muncul pada release lama, periksa dulu apakah masalah tersebut masih ada pada release terbaru sebelum membuat laporan publik.
+
 ## Yang termasuk isu keamanan
 
 Contohnya:

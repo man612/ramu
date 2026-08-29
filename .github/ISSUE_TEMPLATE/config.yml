@@ -1,5 +1,11 @@
 blank_issues_enabled: true
 contact_links:
+  - name: Panduan setup Ramu
+    url: https://man612.github.io/ramu/setup.html
+    about: Mulai dari sini bila pertanyaannya tentang cara memasang atau memakai Ramu.
+  - name: Dukungan dan jalur laporan
+    url: https://github.com/man612/ramu/blob/main/SUPPORT.md
+    about: Pilih jalur yang tepat untuk bug, source drift, permintaan pack, atau pertanyaan umum.
   - name: Security policy
     url: https://github.com/man612/ramu/blob/main/SECURITY.md
     about: Baca ini sebelum melaporkan isu yang berisi detail sensitif.

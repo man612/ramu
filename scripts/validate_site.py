@@ -41,6 +41,9 @@ def main() -> int:
         'href="catalog.css"',
         'id="course-list"',
         'id="pack-title"',
+        'rel="canonical" href="https://man612.github.io/ramu/"',
+        'property="og:url" content="https://man612.github.io/ramu/"',
+        'href="https://github.com/man612/ramu/blob/main/SUPPORT.md"',
     ])
     require_text(SITE / "setup.html", [
         'data-pack-picker',
@@ -55,6 +58,8 @@ def main() -> int:
         "Ramu tidak bergantung pada Study Mode",
         "Save to project",
         "Add to project sources",
+        'rel="canonical" href="https://man612.github.io/ramu/setup.html"',
+        'property="og:url" content="https://man612.github.io/ramu/setup.html"',
     ])
     require_text(SITE / "app.js", [
         'const PACK_INDEX_URL = "./packs/index.json"',

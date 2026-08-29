@@ -1,3 +1,27 @@
+# Generated eval output
 evals/results/
 evals/manual/*-checklist.md
 evals/manual/results/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local secrets / environment
+.env
+.env.*
+!.env.example
+
+# Editors and OS metadata
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local logs
+*.log
