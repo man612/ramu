@@ -10,6 +10,357 @@
   font-size: 1.2rem;
 }
 
+/* Keep desktop Ramu visually compact without scaling the document itself. */
+@media (min-width: 981px) {
+  .shell {
+    width: min(1080px, calc(100% - 56px));
+  }
+
+  .section {
+    padding: 86px 0;
+  }
+
+  .site-header {
+    width: min(1120px, calc(100% - 34px));
+    min-height: 60px;
+    margin-top: 10px;
+    padding-inline: 16px;
+    border-radius: 16px;
+  }
+
+  .brand {
+    font-size: 1.12rem;
+  }
+
+  .brand-mark {
+    width: 22px;
+    height: 18px;
+  }
+
+  nav {
+    gap: 18px;
+  }
+
+  nav a {
+    font-size: .84rem;
+  }
+
+  .nav-github {
+    padding: 8px 12px;
+  }
+
+  h1 {
+    margin-bottom: 20px;
+    font-size: clamp(3.2rem, 6vw, 5.65rem);
+    line-height: .94;
+  }
+
+  h2 {
+    font-size: clamp(2.05rem, 3.9vw, 3.85rem);
+  }
+
+  h3 {
+    font-size: 1.15rem;
+  }
+
+  .hero {
+    min-height: 650px;
+    padding: 70px 0 60px;
+    grid-template-columns: minmax(0, 1.08fr) minmax(320px, .92fr);
+    gap: 46px;
+  }
+
+  .hero-copy-block {
+    max-width: 650px;
+  }
+
+  .hero-copy {
+    max-width: 610px;
+    font-size: clamp(1rem, 1.45vw, 1.12rem);
+  }
+
+  .hero-actions {
+    margin-top: 24px;
+  }
+
+  .button {
+    min-height: 46px;
+    padding-inline: 16px;
+    font-size: .86rem;
+  }
+
+  .hero-facts {
+    margin-top: 42px;
+    padding-top: 18px;
+    gap: 30px;
+  }
+
+  .hero-facts strong {
+    font-size: 1.3rem;
+  }
+
+  .phone-stage {
+    min-height: 540px;
+  }
+
+  .phone-card {
+    width: min(330px, 88%);
+    height: 520px;
+    border-radius: 30px;
+  }
+
+  .phone-back {
+    transform: translate(32px, 15px) rotate(4deg);
+  }
+
+  .floating-note {
+    padding: 8px 11px;
+    font-size: .68rem;
+  }
+
+  .note-one {
+    top: 82px;
+  }
+
+  .note-two {
+    bottom: 86px;
+  }
+
+  .section-kicker {
+    margin-bottom: 20px;
+  }
+
+  .intro-grid {
+    gap: 52px;
+  }
+
+  .intro-grid h2 {
+    font-size: clamp(2.25rem, 3.9vw, 3.85rem);
+  }
+
+  .plain-copy {
+    font-size: 1rem;
+  }
+
+  .before-after {
+    margin-top: 48px;
+    gap: 16px;
+  }
+
+  .comparison {
+    min-height: 260px;
+    padding: 24px;
+    border-radius: 21px;
+  }
+
+  .comparison-tag {
+    margin-bottom: 30px;
+  }
+
+  .comparison h3 {
+    font-size: 1.48rem;
+  }
+
+  .comparison ul {
+    margin-top: 18px;
+  }
+
+  .comparison li {
+    padding-block: 6px;
+    font-size: .92rem;
+  }
+
+  .split-heading {
+    margin-bottom: 38px;
+    gap: 42px;
+  }
+
+  .heading-note {
+    font-size: .92rem;
+  }
+
+  .use-grid {
+    gap: 16px;
+  }
+
+  .use-card {
+    min-height: 350px;
+    padding: 24px;
+    grid-template-columns: 48px 1fr;
+    gap: 16px;
+    border-radius: 24px;
+  }
+
+  .use-label {
+    margin-bottom: 38px;
+  }
+
+  .use-card h3 {
+    font-size: clamp(1.8rem, 2.8vw, 2.7rem);
+  }
+
+  .use-card li {
+    margin: 9px 0;
+  }
+
+  .daily-flow {
+    margin: 20px 0;
+  }
+
+  .prompt-examples span {
+    padding: 10px 11px;
+    font-size: .78rem;
+  }
+
+  .foundation-heading {
+    max-width: 740px;
+    margin-bottom: 34px;
+  }
+
+  .foundation-grid {
+    gap: 9px;
+  }
+
+  .foundation-card,
+  .foundation-card:last-child {
+    min-height: 190px;
+    padding: 19px;
+    border-radius: 19px;
+  }
+
+  .foundation-card h3 {
+    font-size: 1.08rem;
+  }
+
+  .foundation-card p {
+    font-size: .82rem;
+  }
+
+  .pack-picker-panel {
+    margin-bottom: 22px;
+    padding: 15px 17px;
+    border-radius: 17px;
+  }
+
+  .pack-picker-trigger {
+    min-height: 44px;
+    font-size: .84rem;
+  }
+
+  .pack-header {
+    margin-bottom: 28px;
+  }
+
+  .course-card {
+    padding: 21px;
+    min-height: 190px;
+  }
+
+  .pack-bottom {
+    margin-top: 26px;
+  }
+
+  .trust-grid {
+    gap: 14px;
+  }
+
+  .trust-grid article {
+    padding: 22px;
+  }
+
+  .closing-section {
+    padding: 72px 0;
+  }
+
+  .site-footer {
+    padding-top: 28px;
+    padding-bottom: 28px;
+  }
+
+  .setup-main {
+    padding-top: 42px;
+  }
+
+  .setup-pack-picker {
+    margin-top: 20px;
+    margin-bottom: 28px;
+  }
+
+  .setup-intro {
+    margin-bottom: 44px;
+    gap: 34px;
+  }
+
+  .setup-intro h1 {
+    font-size: clamp(2.9rem, 5vw, 4.8rem);
+  }
+
+  .setup-summary-card {
+    padding: 22px;
+  }
+
+  .setup-layout {
+    gap: 24px;
+  }
+
+  .setup-nav {
+    top: 88px;
+  }
+
+  .setup-step-card {
+    padding: 28px;
+    border-radius: 22px;
+  }
+
+  .step-heading {
+    grid-template-columns: 54px 1fr;
+    gap: 15px;
+  }
+
+  .big-step {
+    width: 50px;
+    height: 50px;
+    border-radius: 14px;
+    font-size: 1.1rem;
+  }
+
+  .setup-step-card h2 {
+    font-size: clamp(1.75rem, 2.65vw, 2.55rem);
+  }
+
+  .step-explain {
+    margin: 15px 0 22px 69px;
+    max-width: 720px;
+    font-size: .94rem;
+  }
+
+  .settings-path,
+  .check-list,
+  .info-box,
+  .copy-panel,
+  .copy-status,
+  .setup-courses,
+  .phone-mini-flow,
+  .prompt-grid,
+  .small-note {
+    margin-left: 69px;
+  }
+
+  .copy-panel {
+    padding: 17px;
+  }
+
+  .setup-course summary {
+    min-height: 68px;
+    padding: 13px 16px;
+  }
+
+  .setup-body {
+    padding: 0 16px 17px 61px;
+    font-size: .92rem;
+  }
+}
+
 @media (max-width: 980px) {
   .foundation-grid { grid-template-columns: 1fr 1fr; gap: 12px; position: relative; }
   .foundation-card, .foundation-card:last-child { grid-column: auto; min-height: 180px; padding: 20px 22px; display: flex; }
