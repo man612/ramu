@@ -34,14 +34,18 @@ def main() -> int:
         catalog = {"packs": []}
 
     require_text(SITE / "index.html", [
-        'id="pack-select"',
+        'data-pack-picker',
+        'data-pack-picker-trigger',
+        'data-pack-picker-menu',
         'data-setup-link',
         'href="catalog.css"',
         'id="course-list"',
         'id="pack-title"',
     ])
     require_text(SITE / "setup.html", [
-        'id="pack-select"',
+        'data-pack-picker',
+        'data-pack-picker-trigger',
+        'data-pack-picker-menu',
         'href="catalog.css"',
         'id="setup-pack-name"',
         'id="setup-courses"',
@@ -59,8 +63,18 @@ def main() -> int:
         "item.period_label || item.period_id",
         "course.focus",
         "manifest.project_instructions",
+        "renderPackPickers(catalog, entry)",
+        'aria-selected',
+        'event.key === "ArrowDown"',
+        'event.key === "Escape"',
     ])
-    require_text(SITE / "catalog.css", [".pack-picker-panel", "#setup-pack-count"])
+    require_text(SITE / "catalog.css", [
+        ".pack-picker-panel",
+        ".pack-picker-trigger",
+        ".pack-picker-menu",
+        ".pack-picker-option",
+        "#setup-pack-count",
+    ])
 
     app_text = (SITE / "app.js").read_text(encoding="utf-8") if (SITE / "app.js").is_file() else ""
     for forbidden in (
@@ -70,11 +84,19 @@ def main() -> int:
         "item.semester",
         "manifest.semester",
         "Semester ${",
+        "renderPackSelectors",
+        "Add from library",
     ):
         if forbidden in app_text:
-            fail(f"site/app.js masih hardcode/asumsi pack-periode: {forbidden!r}")
+            fail(f"site/app.js masih punya hardcode/asumsi/UI contract lama: {forbidden!r}")
 
+    index_text = (SITE / "index.html").read_text(encoding="utf-8") if (SITE / "index.html").is_file() else ""
     setup_text = (SITE / "setup.html").read_text(encoding="utf-8") if (SITE / "setup.html").is_file() else ""
+
+    for path_name, text in (("site/index.html", index_text), ("site/setup.html", setup_text)):
+        if "<select" in text.lower():
+            fail(f"{path_name} masih memakai native browser select untuk pack picker.")
+
     for forbidden in (
         "kecuali manifest pack menyatakan berbeda",
         "Add from library</strong> juga bisa dipakai",
@@ -82,6 +104,15 @@ def main() -> int:
     ):
         if forbidden in setup_text:
             fail(f"site/setup.html masih punya janji produk/schema yang tidak aman: {forbidden!r}")
+
+    for stale_copy in (
+        "workspace belajar yang sudah diramu",
+        "Coba kecil dulu",
+        "Kalau sudah terasa berguna",
+        "dijaga di belakang layar",
+    ):
+        if stale_copy.lower() in index_text.lower() or stale_copy.lower() in setup_text.lower():
+            fail(f"Site masih memuat marketing copy lama yang sengaja dihapus: {stale_copy!r}")
 
     for entry in catalog.get("packs", []):
         try:
@@ -105,7 +136,7 @@ def main() -> int:
         print(f"ERROR: {error}")
     if errors:
         return 1
-    print(f"OK: site catalog-driven untuk {len(catalog.get('packs', []))} pack.")
+    print(f"OK: site catalog-driven untuk {len(catalog.get('packs', []))} pack dengan custom pack picker.")
     return 0
 
 
