@@ -44,21 +44,124 @@ function setupUrl(packId) {
   return `setup.html?pack=${encodeURIComponent(packId)}`;
 }
 
-function renderPackSelectors(catalog, active) {
-  document.querySelectorAll("#pack-select").forEach(select => {
-    select.innerHTML = "";
-    catalog.packs.forEach(entry => {
-      const option = document.createElement("option");
-      option.value = entry.id;
-      option.textContent = entryLabel(entry);
-      option.selected = entry.id === active.id;
-      select.appendChild(option);
-    });
-    select.addEventListener("change", () => {
-      const url = new URL(window.location.href);
-      url.searchParams.set("pack", select.value);
-      window.location.assign(url.toString());
-    });
+function packPickerOptions(root) {
+  return Array.from(root.querySelectorAll(".pack-picker-option"));
+}
+
+function closePackPicker(root, returnFocus = false) {
+  const trigger = root.querySelector("[data-pack-picker-trigger]");
+  const menu = root.querySelector("[data-pack-picker-menu]");
+  if (!trigger || !menu) return;
+  trigger.setAttribute("aria-expanded", "false");
+  menu.hidden = true;
+  if (returnFocus) trigger.focus();
+}
+
+function openPackPicker(root, focusMode = "selected") {
+  const trigger = root.querySelector("[data-pack-picker-trigger]");
+  const menu = root.querySelector("[data-pack-picker-menu]");
+  if (!trigger || !menu || trigger.disabled) return;
+  trigger.setAttribute("aria-expanded", "true");
+  menu.hidden = false;
+  const options = packPickerOptions(root);
+  if (!options.length) return;
+  const selected = options.find(option => option.getAttribute("aria-selected") === "true");
+  const target = focusMode === "last" ? options.at(-1) : (selected || options[0]);
+  requestAnimationFrame(() => target?.focus());
+}
+
+function navigateToPack(packId) {
+  const url = new URL(window.location.href);
+  url.searchParams.set("pack", packId);
+  window.location.assign(url.toString());
+}
+
+function bindPackPickerKeyboard(root) {
+  const trigger = root.querySelector("[data-pack-picker-trigger]");
+  const menu = root.querySelector("[data-pack-picker-menu]");
+  if (!trigger || !menu) return;
+
+  trigger.addEventListener("keydown", event => {
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      openPackPicker(root, "selected");
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      openPackPicker(root, "last");
+    } else if (event.key === "Escape") {
+      closePackPicker(root);
+    }
+  });
+
+  menu.addEventListener("keydown", event => {
+    const options = packPickerOptions(root);
+    const index = options.indexOf(document.activeElement);
+    if (!options.length) return;
+
+    let nextIndex = index;
+    if (event.key === "ArrowDown") nextIndex = Math.min(index + 1, options.length - 1);
+    else if (event.key === "ArrowUp") nextIndex = Math.max(index - 1, 0);
+    else if (event.key === "Home") nextIndex = 0;
+    else if (event.key === "End") nextIndex = options.length - 1;
+    else if (event.key === "Escape") {
+      event.preventDefault();
+      closePackPicker(root, true);
+      return;
+    } else return;
+
+    event.preventDefault();
+    options[nextIndex]?.focus();
+  });
+}
+
+function renderPackPickers(catalog, active) {
+  document.querySelectorAll("[data-pack-picker]").forEach((root, index) => {
+    const trigger = root.querySelector("[data-pack-picker-trigger]");
+    const value = root.querySelector("[data-pack-picker-value]");
+    const menu = root.querySelector("[data-pack-picker-menu]");
+    if (!trigger || !value || !menu) return;
+
+    const menuId = `pack-picker-menu-${index + 1}`;
+    menu.id = menuId;
+    trigger.setAttribute("aria-controls", menuId);
+    trigger.setAttribute("aria-expanded", "false");
+    value.textContent = entryLabel(active);
+
+    menu.innerHTML = catalog.packs.map(entry => {
+      const selected = entry.id === active.id;
+      return `<button class="pack-picker-option" type="button" role="option" aria-selected="${selected}" data-pack-id="${escapeHtml(entry.id)}">
+        <span>${escapeHtml(entryLabel(entry))}</span>
+        ${selected ? '<span class="pack-picker-option-state">Aktif</span>' : ""}
+      </button>`;
+    }).join("");
+
+    if (catalog.packs.length <= 1) {
+      root.querySelector(".pack-picker")?.classList.add("is-single");
+      trigger.disabled = true;
+      trigger.setAttribute("aria-label", `${entryLabel(active)}. Satu pack tersedia.`);
+    } else {
+      trigger.addEventListener("click", () => {
+        const open = trigger.getAttribute("aria-expanded") === "true";
+        if (open) closePackPicker(root);
+        else openPackPicker(root);
+      });
+
+      menu.querySelectorAll(".pack-picker-option").forEach(option => {
+        option.addEventListener("click", () => {
+          const packId = option.dataset.packId;
+          if (!packId || packId === active.id) {
+            closePackPicker(root, true);
+            return;
+          }
+          navigateToPack(packId);
+        });
+      });
+
+      bindPackPickerKeyboard(root);
+      document.addEventListener("click", event => {
+        if (!root.contains(event.target)) closePackPicker(root);
+      });
+    }
   });
 }
 
@@ -198,14 +301,14 @@ async function renderSetup(entry, manifest) {
             <li>Beri nama <strong>${escapeHtml(course.project_name)}</strong>, kemudian pilih <strong>Project-only memory</strong>.</li>
             <li>Buka <strong>⋯ → Project settings → Project Instructions</strong>, lalu tempel instruksi Ramu dari langkah 2.</li>
             <li>Tekan <strong>Unduh paket (.txt)</strong> di bawah.</li>
-            <li>Di Project buka <strong>Sources → Add source → Upload files</strong>, lalu pilih file yang baru diunduh. Jika file sudah tersimpan di Library, <strong>Add from library</strong> juga bisa dipakai.</li>
+            <li>Di Project, buka area <strong>Sources</strong> atau <strong>Project Sources</strong>, pilih tombol untuk menambahkan source, lalu unggah file yang baru diunduh. Nama tombol dapat berbeda antar versi ChatGPT.</li>
           </ol>
           <div class="inline-actions">
             <button class="small-button copy-project" type="button" data-text="${escapeHtml(course.project_name)}">Salin nama Project</button>
             <button class="small-button download-course-pack" type="button" data-course="${escapeHtml(course.code)}">Unduh paket (.txt)</button>
             <a class="small-button" href="https://chatgpt.com/" target="_blank" rel="noopener">Buka ChatGPT</a>
           </div>
-          <p class="small-note">Course pack menjadi source tetap. Screenshot soal, rubrik, atau materi sementara cukup ditambahkan saat dibutuhkan.</p>
+          <p class="small-note">Course pack menjadi source Project. Screenshot soal, rubrik, atau materi tambahan cukup dimasukkan saat dibutuhkan.</p>
           <label class="complete-check"><input type="checkbox" data-course-check="${escapeHtml(course.code)}" ${complete ? "checked" : ""}><span>Project ${escapeHtml(course.short_name)} sudah selesai disiapkan</span></label>
         </div>
       </details>
@@ -214,8 +317,8 @@ async function renderSetup(entry, manifest) {
 
   target.innerHTML = `${courseCards}
     <div class="info-box">
-      <strong>Kenapa pakai file?</strong>
-      <p>Ramu memakai jalur Upload files yang stabil untuk memasang course pack. Opsi UI ChatGPT dapat berubah, jadi pack dan panduan tidak bergantung pada satu tombol alternatif yang belum tentu muncul di semua akun.</p>
+      <strong>Kenapa course pack berupa file?</strong>
+      <p>Course pack dibuat sebagai file teks agar dapat diunggah langsung ke Project Sources tanpa bergantung pada satu label tombol ChatGPT tertentu.</p>
     </div>`;
 
   target.querySelectorAll(".copy-project").forEach(button => {
@@ -278,7 +381,7 @@ function updateProgress(manifest, progress) {
     if (!Array.isArray(catalog.packs) || !catalog.packs.length) throw new Error("Katalog pack kosong");
     const entry = currentPackEntry(catalog);
     const manifest = await fetchJson(manifestUrl(entry));
-    renderPackSelectors(catalog, entry);
+    renderPackPickers(catalog, entry);
     renderHomePack(entry, manifest);
     await renderSetup(entry, manifest);
   } catch (error) {
