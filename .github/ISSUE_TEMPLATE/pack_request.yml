@@ -1,0 +1,52 @@
+name: Minta pack baru
+description: Usulkan periode, program, atau institusi baru untuk Ramu.
+title: "[Pack] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Gunakan form ini untuk mengusulkan pack baru. Jangan unggah BMP, modul berbayar, tugas privat, data pribadi, atau materi berhak cipta ke issue publik.
+  - type: input
+    id: institution
+    attributes:
+      label: Institusi
+      placeholder: contoh: Universitas Terbuka
+    validations:
+      required: true
+  - type: input
+    id: program
+    attributes:
+      label: Program studi
+      placeholder: contoh: S1 Akuntansi
+    validations:
+      required: true
+  - type: input
+    id: period
+    attributes:
+      label: Tahun akademik dan periode
+      placeholder: contoh: 2026/2027 · Semester 3
+    validations:
+      required: true
+  - type: textarea
+    id: official_sources
+    attributes:
+      label: Sumber resmi yang tersedia
+      description: Cantumkan link katalog, kurikulum, pedoman, atau halaman institusi resmi yang relevan. Jika belum menemukan, tulis belum ditemukan.
+      placeholder: https://...
+    validations:
+      required: true
+  - type: textarea
+    id: need
+    attributes:
+      label: Kebutuhan
+      description: Jelaskan mata kuliah/periode yang dibutuhkan dan kenapa pack ini berguna.
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Konfirmasi
+      options:
+        - label: Saya tidak menyertakan data pribadi, credential, raw transcript, atau materi kuliah yang tidak boleh dipublikasikan.
+          required: true
