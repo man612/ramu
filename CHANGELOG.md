@@ -6,22 +6,36 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 
 ## [Unreleased]
 
+## [0.2.2-beta] - 2026-08-29
+
 ### Added
 
 - `SUPPORT.md` sebagai jalur bantuan publik dan panduan memilih jenis laporan yang tepat.
 - Issue form **Minta pack baru** untuk usulan periode, program, atau institusi baru tanpa mendorong pengguna mengunggah materi privat/berhak cipta.
+- Canonical URL dan Open Graph metadata dasar pada homepage serta halaman setup.
 
 ### Changed
 
+- Histori release, changelog, release process, dan snapshot release notes disinkronkan setelah `v0.2.1-beta`.
 - `.gitignore` sekarang mencakup virtual environment, Python cache, local `.env`, metadata editor/OS, dan log agar workspace contributor tidak mudah ikut ter-commit.
 - Pull request template disinkronkan dengan validation stack saat ini dan meminta dry-run pada pack yang terdampak.
 - Panduan setup tidak lagi bergantung pada label UI ChatGPT seperti `Add from library`; instruksi mengikuti fungsi Sources/Library yang setara bila label berubah.
 - Security policy sekarang menjelaskan bahwa security fix diprioritaskan untuk current `main` dan public-beta release terbaru.
 - Wording pack README dibuat device-neutral dan aset setup lama yang sudah tidak dipakai dihapus.
+- Jalur dukungan publik ditampilkan dari site, dan site validator menjaga canonical/Open Graph/support surface agar tidak hilang diam-diam pada refactor berikutnya.
+
+### Repository security at release preparation
+
+- Ruleset `Protect main` mewajibkan pull request, required check `validate`, branch up-to-date, resolved review conversation, serta memblokir deletion dan force push tanpa bypass.
+- CodeQL default setup aktif untuk GitHub Actions, JavaScript/TypeScript, dan Python; ruleset menggunakan threshold security `High or higher` dan standard alert `Errors`.
+- Dependency Graph dan Dependabot telah diaktifkan; secret protection, push protection, serta private vulnerability reporting digunakan untuk repository publik.
+- Merged head branches otomatis dihapus, sedangkan Wiki dan GitHub Projects yang tidak digunakan dimatikan.
+- Konfigurasi GitHub tersebut adalah state repository saat release disiapkan dan bukan bagian dari source tree yang ditag.
 
 ### Notes
 
 - Final public-readiness cleanup ini tidak mengubah data akademik, course pack, behavior contract, critical eval, atau arsitektur multi-pack.
+- Manual E01–E16, pilot 5–10 mahasiswa, dan automated API benchmark tetap dipisahkan sebagai evidence lanjutan dan belum menjadi klaim full validation.
 
 ## [0.2.1-beta] - 2026-08-29
 
@@ -136,7 +150,8 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 - Behavior validation aktual belum menjadi klaim penuh pada release ini.
 - Pilot pengguna nyata masih diperlukan sebelum Ramu dapat dianggap stabil.
 
-[Unreleased]: https://github.com/man612/ramu/compare/v0.2.1-beta...HEAD
+[Unreleased]: https://github.com/man612/ramu/compare/v0.2.2-beta...HEAD
+[0.2.2-beta]: https://github.com/man612/ramu/compare/v0.2.1-beta...v0.2.2-beta
 [0.2.1-beta]: https://github.com/man612/ramu/compare/v0.2.0-beta...v0.2.1-beta
 [0.2.0-beta]: https://github.com/man612/ramu/compare/v0.1.0-beta...v0.2.0-beta
 [0.1.0-beta]: https://github.com/man612/ramu/releases/tag/v0.1.0-beta
