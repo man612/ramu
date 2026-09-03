@@ -5,23 +5,27 @@ from __future__ import annotations
 
 import argparse
 import sys
+import time
 import urllib.error
 import urllib.request
 from datetime import date, datetime
-from typing import Any
+from typing import Any, Callable
 
 from ramu_repo import ROOT, RepoError, discover_source_registry_paths, load_json
+
+PROBE_ATTEMPTS = 3
+PROBE_RETRY_DELAYS = (1, 3)
 
 
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--online", action="store_true", help="Coba akses watched URL dengan request ringan.")
-    parser.add_argument("--fail-on-network", action="store_true", help="Exit non-zero bila watched source tidak dapat dijangkau.")
+    parser.add_argument("--fail-on-network", action="store_true", help="Exit non-zero bila watched source tetap tidak dapat dijangkau setelah retry.")
     return parser.parse_args()
 
 
-def probe(url: str) -> tuple[bool, str]:
-    headers = {"User-Agent": "ramu-source-watch/3.0 (+https://github.com/man612/ramu)"}
+def probe_once(url: str) -> tuple[bool, str]:
+    headers = {"User-Agent": "ramu-source-watch/3.1 (+https://github.com/man612/ramu)"}
     request = urllib.request.Request(url, headers=headers, method="HEAD")
     try:
         with urllib.request.urlopen(request, timeout=15) as response:
@@ -40,6 +44,31 @@ def probe(url: str) -> tuple[bool, str]:
         return False, f"HTTP {exc.code}"
     except Exception as exc:
         return False, type(exc).__name__
+
+
+def probe(
+    url: str,
+    *,
+    attempts: int = PROBE_ATTEMPTS,
+    sleep_fn: Callable[[float], None] = time.sleep,
+) -> tuple[bool, str]:
+    if attempts < 1:
+        raise ValueError("attempts harus >= 1")
+
+    last_detail = "unknown"
+    for attempt in range(1, attempts + 1):
+        ok, detail = probe_once(url)
+        if ok:
+            if attempt == 1:
+                return True, detail
+            return True, f"{detail} (attempt {attempt}/{attempts})"
+
+        last_detail = detail
+        if attempt < attempts:
+            delay_index = min(attempt - 1, len(PROBE_RETRY_DELAYS) - 1)
+            sleep_fn(PROBE_RETRY_DELAYS[delay_index])
+
+    return False, f"{last_detail} after {attempts} attempts"
 
 
 def parsed_age(raw_date: str, today: date) -> int:
