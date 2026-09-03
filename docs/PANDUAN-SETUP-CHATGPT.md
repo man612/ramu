@@ -1,78 +1,66 @@
 # Panduan Setup Ramu di ChatGPT
 
-Panduan ini untuk pengguna yang ingin langsung memakai Ramu tanpa perlu memahami GitHub, prompt engineering, schema, atau tooling di belakangnya.
+Panduan ini untuk pengguna yang ingin langsung memakai Ramu tanpa perlu memahami schema, eval, atau struktur repository.
 
-Ramu memakai **pack**. Satu pack mewakili konteks akademik tertentu—misalnya institusi, program studi, tahun akademik, dan periode belajar. Kamu tidak perlu memasang seluruh pack sekaligus; untuk mencoba Ramu, cukup siapkan **satu mata kuliah dulu**.
+Satu **pack** mewakili konteks akademik tertentu: institusi, program studi, tahun akademik, dan periode. Tidak perlu memasang seluruh pack sekaligus. Mulai dari satu mata kuliah yang benar-benar sedang dipakai.
 
-## Pilih pack yang sesuai
+## Pilih pack
 
 Buka [site Ramu](https://man612.github.io/ramu/) lalu pilih pack yang sesuai.
 
-Pack Ramu Maintained yang tersedia untuk UT S1 Akuntansi 2026/2027 saat ini:
+Pack yang tersedia untuk UT S1 Akuntansi 2026/2027:
 
 - **Semester 2** — 5 mata kuliah, 16 SKS;
 - **Semester 3** — 7 mata kuliah, 20 SKS.
 
-Nama Project selalu memakai label periode secara penuh. Contoh Semester 3:
+Nama Project memakai label periode secara penuh, misalnya:
 
-- `Semester 3 • Lab Perpajakan`
-- `Semester 3 • Kewirausahaan Digital`
-- `Semester 3 • Akuntansi Manajemen`
-- `Semester 3 • SIA`
-- `Semester 3 • Bahasa Inggris`
+- `Semester 2 • Perpajakan`
 - `Semester 3 • AKM II`
-- `Semester 3 • Belajar di Era Digital`
+- `Semester 3 • Bahasa Inggris`
 
-Ramu sengaja menulis **Semester 2/3** secara penuh pada nama yang dilihat pengguna. Singkatan `S2` atau `S3` tidak dipakai sebagai label Project karena di Indonesia mudah dibaca sebagai jenjang pendidikan. ID internal seperti `.s2`, `.s3`, `semester-02/`, atau `semester-03/` tetap boleh dipakai oleh tooling.
+Bentuk `S2`/`S3` dihindari pada nama yang dilihat pengguna karena mudah terbaca sebagai jenjang pendidikan. ID internal tetap boleh ringkas, misalnya `.s3` atau `semester-03/`.
 
-Untuk pack lain, gunakan nama Project yang ditampilkan oleh halaman setup pack tersebut. Manifest pack memiliki `period_label` agar periode dapat ditulis jelas, termasuk bila suatu institusi memakai istilah lain seperti trimester atau term.
+## 1. Pilih satu mata kuliah
 
-## Langkah 1 — pilih satu mata kuliah
+Pilih mata kuliah yang memang sedang digunakan. Tidak perlu menyiapkan seluruh semester hanya untuk mencoba workflow-nya.
 
-Jangan setup seluruh periode hanya untuk mengetes Ramu.
-
-Pilih satu mata kuliah yang memang sedang dipakai. Misalnya **Perpajakan** pada Semester 2 atau **AKM II** pada Semester 3.
-
-## Langkah 2 — buat ChatGPT Project
+## 2. Buat ChatGPT Project
 
 1. Buka ChatGPT.
 2. Pilih **New Project**.
-3. Gunakan nama Project yang diberikan Ramu, misalnya `Semester 3 • AKM II`.
-4. Gunakan **Project-only memory** agar konteks Project tidak bercampur dengan percakapan di luar Project.
+3. Gunakan nama Project yang ditampilkan Ramu, misalnya `Semester 3 • AKM II`.
+4. Pilih **Project-only memory** agar konteks Project tetap terpisah dari percakapan di luar Project.
 
-Nama menu ChatGPT dapat berubah seiring pembaruan produk. Jika letaknya berbeda, cari pengaturan yang setara di Project settings.
+Pada eligible Project yang sudah ada, pengaturan memory dapat diubah melalui **Project settings → Memory**. Shared Project tetap memakai Project-only memory. Nama atau posisi menu dapat berubah mengikuti versi aplikasi; yang dicari adalah fungsi yang setara.
 
-## Langkah 3 — pasang Project Instructions
+## 3. Pasang Project Instructions
 
-Pada halaman setup Ramu untuk pack aktif, tekan **Salin instruksi**.
+Di halaman setup pack, tekan **Salin instruksi**.
 
-Di ChatGPT buka:
+Kemudian buka:
 
 `Project → ⋯ → Project settings → Project Instructions`
 
-lalu tempel Project Instructions tersebut.
+Tempel instruksi tersebut di sana.
 
-Project Instructions **bukan Project Source**. Ia adalah aturan runtime untuk cara Ramu menangani konteks, sumber, tugas, pembelajaran, dan guardrail.
+Project Instructions adalah aturan runtime untuk cara AI menangani konteks, sumber, tugas, dan pola bantuan. Ia berbeda dari Project Source.
 
-## Langkah 4 — tambahkan course pack
+## 4. Tambahkan course pack
 
-Pada halaman setup Ramu:
+Di halaman setup:
 
-1. pilih mata kuliah yang sedang disiapkan;
+1. pilih mata kuliah;
 2. tekan **Unduh paket (.txt)**;
-3. kembali ke Project ChatGPT;
-4. buka area **Sources** atau **Project Sources**;
-5. gunakan kontrol untuk menambahkan atau mengunggah file, lalu pilih course pack yang baru diunduh.
+3. kembali ke ChatGPT Project;
+4. buka **Sources** atau **Project Sources**;
+5. unggah course pack yang baru diunduh.
 
-Nama tombol dan opsi untuk menambahkan source dapat berbeda antar akun, plan, atau versi aplikasi. Jika ChatGPT menyediakan cara untuk memakai ulang file yang sudah tersimpan di Library atau source lain, opsi yang setara tersebut juga dapat digunakan.
+Course pack menjadi konteks tetap untuk mata kuliah tersebut. BMP, materi kelas, screenshot soal, rubrik, atau file pribadi ditambahkan sendiri ketika memang dibutuhkan.
 
-Course pack menjadi source tetap untuk Project tersebut. BMP, materi kelas, screenshot soal, rubrik, atau file pribadi tetap ditambahkan sendiri oleh pengguna ketika diperlukan; materi berhak cipta tidak disimpan di repo Ramu.
+## 5. Mulai gunakan
 
-## Langkah 5 — langsung gunakan
-
-Begitu satu Project selesai, langsung pakai. Tidak perlu menunggu semua mata kuliah selesai disiapkan.
-
-Contoh:
+Begitu satu Project siap, langsung pakai seperti chat biasa.
 
 ```text
 aku belum paham bagian ini
@@ -90,9 +78,9 @@ cek jawabanku
 ini feedback tutor kemarin
 ```
 
-Kalau Project pertama terasa berguna, baru ulangi pola yang sama untuk mata kuliah lain.
+Kalau Project pertama terasa berguna, baru ulangi langkah yang sama untuk mata kuliah lain.
 
-## Course pack UT S1 Akuntansi Semester 2
+## Course pack Semester 2
 
 | Nama Project | Mata kuliah | Course pack |
 |---|---|---|
@@ -102,7 +90,7 @@ Kalau Project pertama terasa berguna, baru ulangi pola yang sama untuk mata kuli
 | `Semester 2 • Ekonomi Mikro` | ECON4102 Pengantar Ekonomi Mikro | `ECON4102-ekonomi-mikro.md` |
 | `Semester 2 • Manajemen` | EMBS4101 Manajemen | `EMBS4101-manajemen.md` |
 
-## Course pack UT S1 Akuntansi Semester 3
+## Course pack Semester 3
 
 | Nama Project | Mata kuliah | Course pack |
 |---|---|---|
@@ -114,49 +102,47 @@ Kalau Project pertama terasa berguna, baru ulangi pola yang sama untuk mata kuli
 | `Semester 3 • AKM II` | EACC4205 Akuntansi Keuangan Menengah II | `EACC4205-akm-2.md` |
 | `Semester 3 • Belajar di Era Digital` | MKDI4202 Belajar di Era Digital | `MKDI4202-belajar-era-digital.md` |
 
-Nama Project berasal dari `project_name` pada manifest pack. Contributor tidak perlu membuat format nama sendiri.
+Nama Project berasal dari `project_name` pada manifest pack, jadi formatnya tidak perlu dibuat sendiri.
 
 ### Catatan Semester 3 2026/2027
 
-Semester 3 tidak dibuat dengan menyalin metadata tahun sebelumnya. Katalog pusat UT 2026/2027 dan halaman BMP aktif menunjukkan beberapa perubahan, terutama **AKM II** yang sekarang memakai bahan ajar `EACC4205` baru dan berstatus BP/BPro. Laboratorium Perpajakan juga memakai metadata current 2026/2027 dan mempunyai prasyarat EACC4104.
+Semester 3 direview dari source 2026/2027, bukan disalin dari metadata tahun sebelumnya. Perubahan paling besar ada pada **AKM II**: bahan ajar current memakai `EACC4205`, dan mata kuliahnya sekarang berstatus BP/BPro. Laboratorium Perpajakan juga memakai metadata current 2026/2027 serta memiliki prasyarat EACC4104.
 
-Karena itu, jangan memakai course pack atau metadata Semester 3 lama untuk Project 2026/2027 hanya karena nama mata kuliahnya sama.
+Gunakan pack yang sesuai tahun akademik aktif walaupun nama mata kuliahnya terlihat sama dengan tahun sebelumnya.
 
 ## Memory dan pemisahan konteks
 
-Ramu memakai satu Project per mata kuliah supaya file, riwayat, source, dan learner state tidak bercampur.
+Satu mata kuliah ditempatkan di satu Project supaya source, file, riwayat tugas, dan progres belajarnya tidak bercampur dengan mata kuliah lain.
 
-Gunakan **Project-only memory**. Pada eligible Project yang sudah ada, pengaturan memory dapat diubah melalui **Project settings → Memory**; perubahan dapat membutuhkan beberapa jam untuk berlaku. Shared Project tetap memakai Project-only memory. Jika kamu sedang berada di Project AKM II tetapi ingin membahas Lab Perpajakan, lebih baik pindah Project daripada menyimpan progres pajak ke learner state AKM II.
+Jika sesi menghasilkan konteks yang perlu dibawa ke chat berikutnya, minta **Catatan Belajar Terbaru**. Bila ChatGPT menyediakan opsi untuk menyimpannya ke Project atau Project Sources, catatan tersebut bisa dipakai sebagai state eksplisit. Hapus versi lama setelah digantikan supaya dua state yang bertentangan tidak aktif bersamaan.
 
-Jika dari suatu sesi muncul konteks belajar yang perlu dibawa ke chat berikutnya, minta Ramu membuat **Catatan Belajar Terbaru**. Bila ChatGPT menyediakan opsi untuk menyimpan hasil ke Project atau menjadikannya Project Source, catatan itu dapat disimpan ke Project. Ketika catatan baru menggantikan versi lama, hapus versi lama supaya dua state yang bertentangan tidak dipakai bersamaan.
+## Menjaga Project tetap rapi
 
-## Mengatur file agar Project tetap bersih
-
-- course pack Ramu dapat menjadi source tetap;
-- BMP/materi kelas ditambahkan bila memang relevan;
-- screenshot soal biasanya cukup dikirim pada chat yang sedang dikerjakan;
+- course pack dapat menjadi source tetap;
+- BMP dan materi kelas ditambahkan bila relevan;
+- screenshot soal biasanya cukup dikirim di chat yang sedang dikerjakan;
 - rubrik sebaiknya ikut dikirim jika tugas memilikinya;
-- file lama yang sudah tidak diperlukan dapat dihapus;
-- jangan memasang dua versi course pack untuk mata kuliah yang sama sekaligus.
+- file yang sudah tidak dipakai dapat dihapus;
+- hindari memasang dua versi course pack untuk mata kuliah yang sama sekaligus.
 
-Batas file per Project bergantung pada produk/paket ChatGPT dan dapat berubah. Dokumentasi OpenAI yang tercatat di source registry Ramu menjadi acuan untuk perubahan produk, bukan angka yang di-hardcode permanen di course pack.
+Batas file dan detail UI ChatGPT dapat berubah. Dokumentasi produk yang dicatat di source registry dipakai untuk memantau perubahan tersebut, bukan angka atau posisi tombol yang di-hardcode ke course pack.
 
 ## Privasi
 
-Ramu adalah site statis dan tidak memiliki backend untuk menerima file kuliah pribadi. File pribadi ditambahkan langsung oleh pengguna ke ChatGPT.
+Website Ramu bersifat statis. File kuliah pribadi masuk langsung ke ChatGPT Project, bukan ke server Ramu.
 
-Pengaturan apakah percakapan boleh digunakan untuk peningkatan model berada di **Data Controls** akun ChatGPT dan bukan syarat penggunaan Ramu.
+Pengaturan penggunaan percakapan untuk peningkatan model berada di **Data Controls** akun ChatGPT dan terpisah dari setup Ramu.
 
-## Tentang Study Mode
+## Study Mode
 
-Dokumentasi OpenAI saat ini menyatakan **Study Mode tidak berlaku pada Project conversations**. Ramu tidak bergantung pada Study Mode: pola bantuan belajar berasal dari Project Instructions, protocols, dan course pack, sehingga scaffolding, retrieval practice, dan tutoring behavior tetap tersedia di dalam Project tanpa Study Mode.
+Dokumentasi OpenAI yang direview saat ini menyatakan **Study Mode tidak berlaku pada Project conversations**. Workflow belajar di Ramu berasal dari Project Instructions, protocols, dan course pack, jadi Project tetap dapat memakai scaffolding dan retrieval practice tanpa Study Mode.
 
-## Kalau UI ChatGPT berubah
+## Jika UI ChatGPT berubah
 
-ChatGPT Projects adalah produk yang dapat berubah. Karena itu panduan Ramu berpegang pada fungsi, bukan hanya posisi tombol:
+Fokus pada fungsinya:
 
-- **Project Instructions** → aturan runtime Ramu;
-- **Sources** → course pack dan materi yang memang perlu menjadi konteks Project;
-- **Project-only memory** → pemisahan konteks antarmata kuliah.
+- **Project Instructions** → aturan runtime;
+- **Sources / Project Sources** → course pack dan materi yang perlu menjadi konteks;
+- **Project-only memory** → pemisahan konteks Project.
 
-Jika nama atau lokasi menu berubah, gunakan fungsi yang setara dan cek dokumentasi produk terbaru.
+Jika label atau posisi menu berubah, gunakan fungsi yang setara dan cek dokumentasi produk terbaru.
