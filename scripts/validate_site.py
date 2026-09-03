@@ -55,7 +55,7 @@ def main() -> int:
         'id="copy-instructions"',
         "Project-only memory",
         "Project settings → Memory",
-        "Ramu tidak bergantung pada Study Mode",
+        "Study Mode tidak berlaku pada Project conversations",
         "Save to project",
         "Add to project sources",
         'rel="canonical" href="https://man612.github.io/ramu/setup.html"',
