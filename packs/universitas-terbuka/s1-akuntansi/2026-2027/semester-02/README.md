@@ -1,16 +1,14 @@
 # UT S1 Akuntansi — Semester 2
 
-Paket ini disiapkan untuk **Semester 2 S1 Akuntansi Universitas Terbuka tahun akademik 2026/2027**.
+Pack ini untuk **Semester 2 S1 Akuntansi Universitas Terbuka tahun akademik 2026/2027**.
 
-**Status:** Sumber terverifikasi  
+**Status:** source-verified  
 **Terakhir diperiksa:** 14 Agustus 2026  
 **Total:** 16 SKS
 
-## Kalau ingin langsung menggunakan Ramu
+## Mulai pakai
 
-Kamu tidak perlu memahami kode mata kuliah atau struktur folder repo.
-
-Di ChatGPT, buat lima Project berikut:
+Tidak perlu memahami struktur repository. Pilih mata kuliah yang sedang dipakai, lalu buat ChatGPT Project dengan nama berikut:
 
 1. `Semester 2 • Perpajakan`
 2. `Semester 2 • AKM I`
@@ -18,18 +16,19 @@ Di ChatGPT, buat lima Project berikut:
 4. `Semester 2 • Ekonomi Mikro`
 5. `Semester 2 • Manajemen`
 
-Ramu sengaja menulis **Semester 2** secara penuh pada nama Project. Singkatan `S2` tidak dipakai sebagai label tampilan karena mudah tertukar dengan jenjang pendidikan S2/Magister. Singkatan `s2` tetap boleh muncul pada ID atau path internal repo karena bagian itu hanya untuk mesin/tooling.
+Label **Semester 2** ditulis penuh supaya tidak tertukar dengan jenjang S2/Magister. Singkatan `s2` tetap dipakai pada ID atau path internal yang hanya dibaca tooling.
 
-Ikuti [panduan setup Ramu](../../../../../docs/PANDUAN-SETUP-CHATGPT.md). Polanya sama untuk semua mata kuliah: buat Project, tempel Project Instructions, lalu unggah paket mata kuliah yang sesuai.
+Ikuti [panduan setup](../../../../../docs/PANDUAN-SETUP-CHATGPT.md): buat satu Project, pasang Project Instructions, lalu unggah course pack mata kuliahnya sebagai Project Source.
 
-## File yang digunakan
+## File pack
 
-**Project Instructions — digunakan pada semua Project**  
+Project Instructions yang dipakai seluruh mata kuliah Semester 2:
+
 [PROJECT-INSTRUCTIONS.md](PROJECT-INSTRUCTIONS.md)
 
-**Paket mata kuliah — satu file untuk setiap mata kuliah**
+Course pack:
 
-| Mata kuliah | Paket mata kuliah |
+| Mata kuliah | File |
 |---|---|
 | Perpajakan | [EACC4104-perpajakan.md](courses/EACC4104-perpajakan.md) |
 | AKM I | [EACC4103-akm-1.md](courses/EACC4103-akm-1.md) |
@@ -37,9 +36,9 @@ Ikuti [panduan setup Ramu](../../../../../docs/PANDUAN-SETUP-CHATGPT.md). Polany
 | Ekonomi Mikro | [ECON4102-ekonomi-mikro.md](courses/ECON4102-ekonomi-mikro.md) |
 | Manajemen | [EMBS4101-manajemen.md](courses/EMBS4101-manajemen.md) |
 
-Setelah setup selesai, repo GitHub ini tidak perlu dibuka setiap kali ada tugas. Kegiatan sehari-hari tetap dilakukan di ChatGPT.
+Setelah setup selesai, aktivitas sehari-hari tetap dilakukan di ChatGPT Project. Repository hanya perlu dibuka lagi ketika ingin memperbarui pack atau memeriksa dokumentasi.
 
-## Mata kuliah Semester 2
+## Mata kuliah
 
 | Mata kuliah | Kode | SKS |
 |---|---|---:|
@@ -49,19 +48,17 @@ Setelah setup selesai, repo GitHub ini tidak perlu dibuka setiap kali ada tugas.
 | Pengantar Ekonomi Mikro | ECON4102 | 3 |
 | Manajemen | EMBS4101 | 4 |
 
-Data tersebut mengikuti **Katalog Kurikulum UT 2026/2027 edisi Juli 2026**.
+Data mengikuti **Katalog Kurikulum UT 2026/2027 edisi Juli 2026**.
 
-## Catatan penting untuk AKM I
+## Catatan AKM I
 
-AKM I ditandai dalam katalog pusat UT sebagai mata kuliah berpraktik dengan bimbingan online. Pedoman penyelenggaraan UT 2026/2027 juga menjelaskan PRATON yang berbasis studi kasus dan pemecahan masalah.
+AKM I ditandai katalog pusat sebagai mata kuliah berpraktik dengan bimbingan online. Pedoman Penyelenggaraan UT 2026/2027 juga menjelaskan PRATON berbasis studi kasus dan problem solving.
 
-Karena itu, paket AKM I memiliki pemeriksaan yang lebih ketat untuk jurnal, perhitungan, dan soal kasus dibanding mata kuliah yang lebih banyak berisi teori.
+Course pack AKM I karena itu memberi perhatian lebih pada jurnal, perhitungan, konsistensi kasus, dan state yang dibutuhkan dari pekerjaan sebelumnya.
 
-Untuk detail aturan PRATON, perbedaan data antarhalaman UT, dan sumber yang digunakan Ramu, lihat [Sumber dan Validasi](../../../../../docs/SUMBER-DAN-VALIDASI.md).
+Detail source, PRATON, serta cara menangani perbedaan antarhalaman UT ada di [Sumber dan Validasi](../../../../../docs/SUMBER-DAN-VALIDASI.md).
 
-## Keterangan teknis UT
-
-Bagian ini hanya diperlukan kalau ingin memahami kode layanan pada katalog UT:
+## Kode layanan UT
 
 - `T` — layanan TTM/Tuweb untuk SIPAS Semi;
 - `WT` — wajib Tuton untuk SIPAS Penuh/Plus;
