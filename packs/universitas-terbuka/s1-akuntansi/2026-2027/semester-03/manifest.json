@@ -1,0 +1,148 @@
+{
+  "schema_version": 4,
+  "id": "id.ut.accounting-s1.2026-2027.s3",
+  "name": "UT S1 Akuntansi — Semester 3",
+  "institution_id": "universitas-terbuka",
+  "institution": "Universitas Terbuka",
+  "program_id": "universitas-terbuka.s1-akuntansi",
+  "program": "S1 Akuntansi",
+  "academic_year": "2026/2027",
+  "period_id": "semester-03",
+  "period_label": "Semester 3",
+  "total_sks": 20,
+  "status": "source-verified",
+  "maintainer": "ramu",
+  "pack_version": "2026-2027.s3.1",
+  "contract_version": "1.1",
+  "project_instructions": "PROJECT-INSTRUCTIONS.md",
+  "learning_protocols": ["belajar", "tugas", "review", "latihan-ujian"],
+  "courses": [
+    {
+      "code": "EACC4206",
+      "name": "Laboratorium Perpajakan",
+      "short_name": "Lab Perpajakan",
+      "project_name": "Semester 3 • Lab Perpajakan",
+      "sks": 2,
+      "focus": "praktik pajak, PRATON, perhitungan, dan aturan sensitif waktu",
+      "exam_slot": "II.1",
+      "material": "EACC4206 Laboratorium Perpajakan",
+      "practice": "BPr",
+      "service": "BPro",
+      "file": "courses/EACC4206-laboratorium-perpajakan.md"
+    },
+    {
+      "code": "MKDI4203",
+      "name": "Kewirausahaan di Era Digital",
+      "short_name": "Kewirausahaan Digital",
+      "project_name": "Semester 3 • Kewirausahaan Digital",
+      "sks": 3,
+      "focus": "peluang, hipotesis bisnis, model bisnis, validasi, dan strategi digital",
+      "exam_slot": "I.1",
+      "material": "MKWI4203 Kewirausahaan di Era Digital (Edisi 2)",
+      "file": "courses/MKDI4203-kewirausahaan-era-digital.md"
+    },
+    {
+      "code": "EMBS4326",
+      "name": "Akuntansi Manajemen",
+      "short_name": "Akuntansi Manajemen",
+      "project_name": "Semester 3 • Akuntansi Manajemen",
+      "sks": 3,
+      "focus": "cost behavior, budgeting, variance, dan keputusan manajerial",
+      "exam_slot": "I.2",
+      "material": "EKMA4314 Akuntansi Manajemen (Edisi 4)",
+      "service": "T",
+      "file": "courses/EMBS4326-akuntansi-manajemen.md"
+    },
+    {
+      "code": "EACC4207",
+      "name": "Sistem Informasi Akuntansi",
+      "short_name": "SIA",
+      "project_name": "Semester 3 • SIA",
+      "sks": 3,
+      "focus": "proses bisnis, flowchart, database, siklus transaksi, dan pengendalian",
+      "exam_slot": "I.3",
+      "material": "EKSI4312 Sistem Informasi Akuntansi (Edisi 4)",
+      "service": "T",
+      "file": "courses/EACC4207-sistem-informasi-akuntansi.md"
+    },
+    {
+      "code": "MKDI4201",
+      "name": "Bahasa Inggris",
+      "short_name": "Bahasa Inggris",
+      "project_name": "Semester 3 • Bahasa Inggris",
+      "sks": 3,
+      "focus": "business English, grammar, reading, writing, correspondence, dan TOEIC",
+      "exam_slot": "II.2",
+      "material": "MKWI4201 Bahasa Inggris (Edisi 2)",
+      "service": "T",
+      "file": "courses/MKDI4201-bahasa-inggris.md"
+    },
+    {
+      "code": "EACC4205",
+      "name": "Akuntansi Keuangan Menengah II",
+      "short_name": "AKM II",
+      "project_name": "Semester 3 • AKM II",
+      "sks": 3,
+      "focus": "pelaporan keuangan, PSAK, jurnal, hitungan, kasus, dan PRATON",
+      "exam_slot": "II.3",
+      "material": "EACC4205 Akuntansi Keuangan Menengah II",
+      "practice": "BP",
+      "service": "BPro",
+      "file": "courses/EACC4205-akm-2.md"
+    },
+    {
+      "code": "MKDI4202",
+      "name": "Belajar di Era Digital",
+      "short_name": "Belajar di Era Digital",
+      "project_name": "Semester 3 • Belajar di Era Digital",
+      "sks": 3,
+      "focus": "literasi informasi/media, open education, copyright, keamanan, dan digital citizenship",
+      "exam_slot": "II.5",
+      "material": "MKWI4202 Belajar di Era Digital (Edisi 2)",
+      "service": "WT",
+      "file": "courses/MKDI4202-belajar-era-digital.md"
+    }
+  ],
+  "sources": [
+    {
+      "type": "official",
+      "name": "Katalog Kurikulum UT 2026/2027 — Juli 2026",
+      "url": "https://www.ut.ac.id/wp-content/uploads/2026/07/01-Katalog-NON-PENDAS-TAHUN-2026-2027-21-07-2026_22072026.pdf",
+      "registry_id": "ut-catalog-2026-2027"
+    },
+    {
+      "type": "official",
+      "name": "Pedoman Sistem Penyelenggaraan UT 2026/2027",
+      "url": "https://www.ut.ac.id/wp-content/uploads/2026/06/03-PEDOMAN-PENYELENGGARAAN-2026-2027-080626_compressed.pdf",
+      "registry_id": "ut-guideline-2026-2027"
+    }
+  ],
+  "source_registries": [
+    "sources/registry.json",
+    "packs/universitas-terbuka/source-registry.json",
+    "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-03/source-registry.json"
+  ],
+  "eval_suites": [
+    {
+      "id": "core",
+      "scope": "core",
+      "contracts": "evals/core/contracts.json",
+      "behavior": "evals/core/behavior.json"
+    },
+    {
+      "id": "ut",
+      "scope": "institution",
+      "scope_ref": "universitas-terbuka",
+      "contracts": "packs/universitas-terbuka/evals/contracts.json",
+      "behavior": "packs/universitas-terbuka/evals/behavior.json"
+    },
+    {
+      "id": "semester-03",
+      "scope": "pack",
+      "scope_ref": "id.ut.accounting-s1.2026-2027.s3",
+      "contracts": "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-03/evals/contracts.json",
+      "behavior": "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-03/evals/behavior.json"
+    }
+  ],
+  "source_verified_at": "2026-09-03"
+}

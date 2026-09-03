@@ -1,0 +1,156 @@
+{
+  "version": 1,
+  "scope": "pack",
+  "institution_id": "universitas-terbuka",
+  "institution": "Universitas Terbuka",
+  "program_id": "universitas-terbuka.s1-akuntansi",
+  "program": "S1 Akuntansi",
+  "pack_id": "id.ut.accounting-s1.2026-2027.s3",
+  "verified_at": "2026-09-03",
+  "sources": [
+    {
+      "id": "ut-s3-eacc4206-bmp",
+      "name": "EACC4206 Laboratorium Perpajakan — Perpustakaan UT",
+      "kind": "official-course-material",
+      "authority": "Universitas Terbuka",
+      "url": "https://pustaka.ut.ac.id/lib/eacc4206-laboratorium-perpajakan/",
+      "canonical_for": ["metadata BMP EACC4206", "deskripsi materi Laboratorium Perpajakan"],
+      "freshness_class": "institution-page",
+      "verified_at": "2026-09-03",
+      "review_interval_days": 60,
+      "watch": true,
+      "status": "active"
+    },
+    {
+      "id": "ut-s3-mkdi4203-bmp",
+      "name": "MKWI4203 Kewirausahaan di Era Digital (Edisi 2) — Perpustakaan UT",
+      "kind": "official-course-material",
+      "authority": "Universitas Terbuka",
+      "url": "https://pustaka.ut.ac.id/lib/mkwi4203-kewirausahaan-di-era-digital-edisi-2/",
+      "canonical_for": ["metadata BMP MKDI4203", "deskripsi materi Kewirausahaan di Era Digital"],
+      "freshness_class": "institution-page",
+      "verified_at": "2026-09-03",
+      "review_interval_days": 60,
+      "watch": true,
+      "status": "active"
+    },
+    {
+      "id": "ut-s3-embs4326-bmp",
+      "name": "EKMA4314 Akuntansi Manajemen (Edisi 4) — Perpustakaan UT",
+      "kind": "official-course-material",
+      "authority": "Universitas Terbuka",
+      "url": "https://pustaka.ut.ac.id/lib/ekma4314-akuntansi-manajemen-edisi-4/",
+      "canonical_for": ["metadata BMP EMBS4326", "deskripsi materi Akuntansi Manajemen"],
+      "freshness_class": "institution-page",
+      "verified_at": "2026-09-03",
+      "review_interval_days": 60,
+      "watch": true,
+      "status": "active"
+    },
+    {
+      "id": "ut-s3-eacc4207-bmp",
+      "name": "EKSI4312 Sistem Informasi Akuntansi (Edisi 4) — Perpustakaan UT",
+      "kind": "official-course-material",
+      "authority": "Universitas Terbuka",
+      "url": "https://pustaka.ut.ac.id/lib/eksi4312-sistem-informasi-akuntansi-edisi-4/",
+      "canonical_for": ["metadata BMP EACC4207", "deskripsi materi Sistem Informasi Akuntansi"],
+      "freshness_class": "institution-page",
+      "verified_at": "2026-09-03",
+      "review_interval_days": 60,
+      "watch": true,
+      "status": "active"
+    },
+    {
+      "id": "ut-s3-mkdi4201-bmp",
+      "name": "MKWI4201 Bahasa Inggris (Edisi 2) — Perpustakaan UT",
+      "kind": "official-course-material",
+      "authority": "Universitas Terbuka",
+      "url": "https://pustaka.ut.ac.id/lib/mkwi4201-bahasa-inggris-edisi-2/",
+      "canonical_for": ["metadata BMP MKDI4201", "deskripsi materi Bahasa Inggris"],
+      "freshness_class": "institution-page",
+      "verified_at": "2026-09-03",
+      "review_interval_days": 60,
+      "watch": true,
+      "status": "active"
+    },
+    {
+      "id": "ut-s3-eacc4205-bmp",
+      "name": "EACC4205 Akuntansi Keuangan Menengah II (Edisi 1) — Perpustakaan UT",
+      "kind": "official-course-material",
+      "authority": "Universitas Terbuka",
+      "url": "https://pustaka.ut.ac.id/lib/eacc4205-akuntansi-keuangan-menengah-ii-edisi-1/",
+      "canonical_for": ["metadata BMP EACC4205", "deskripsi materi Akuntansi Keuangan Menengah II"],
+      "freshness_class": "institution-page",
+      "verified_at": "2026-09-03",
+      "review_interval_days": 60,
+      "watch": true,
+      "status": "active"
+    },
+    {
+      "id": "ut-s3-mkdi4202-bmp",
+      "name": "MKWI4202 Belajar di Era Digital (Edisi 2) — Perpustakaan UT",
+      "kind": "official-course-material",
+      "authority": "Universitas Terbuka",
+      "url": "https://pustaka.ut.ac.id/lib/mkwi4202-belajar-di-era-digital-edisi-2/",
+      "canonical_for": ["metadata BMP MKDI4202", "deskripsi materi Belajar di Era Digital"],
+      "freshness_class": "institution-page",
+      "verified_at": "2026-09-03",
+      "review_interval_days": 60,
+      "watch": true,
+      "status": "active"
+    }
+  ],
+  "claims": [
+    {
+      "id": "ut-s3-akm2-current-redesign",
+      "topic": "AKM II Semester 3 pada kurikulum UT 2026/2027",
+      "status": "confirmed",
+      "summary": "AKM II Semester 3 2026/2027 memakai BMP EACC4205 yang baru dan sekarang berstatus BP/BPro; metadata EKMA4313 lama tidak boleh dipakai sebagai current pack truth.",
+      "evidence": [
+        {
+          "source_id": "ut-catalog-2026-2027",
+          "locator": "Program Studi 83/Akuntansi (S1), Semester 3, baris EACC4205 dan keterangan BPro",
+          "observation": "Katalog Juli 2026 mencatat EACC4205 Akuntansi Keuangan Menengah II, 3 SKS, slot II.3, bahan ajar EACC4205, BP dan BPro."
+        },
+        {
+          "source_id": "ut-s3-eacc4205-bmp",
+          "locator": "Metadata dan Deskripsi Mata Kuliah",
+          "observation": "Perpustakaan UT memuat BMP EACC4205 Edisi 1 tahun 2026 dengan 9 modul dan pembahasan pelaporan keuangan berbasis PSAK."
+        },
+        {
+          "source_id": "ut-guideline-2026-2027",
+          "locator": "Tabel 5.37–5.38 Praktik Program Studi S1 Akuntansi",
+          "observation": "Pedoman 2026/2027 memasukkan EACC4205 ke kelompok mata kuliah praktik/berpraktik Semester 3 yang menggunakan workflow PRATON."
+        }
+      ],
+      "reviewed_at": "2026-09-03",
+      "review_interval_days": 60,
+      "notes": "Arsip OPAC, halaman regional, atau dokumen mahasiswa yang masih menyebut EKMA4313 dapat dipakai sebagai bukti historis, bukan metadata current 2026/2027."
+    },
+    {
+      "id": "ut-s3-lab-tax-praton",
+      "topic": "Laboratorium Perpajakan Semester 3 dan PRATON",
+      "status": "confirmed",
+      "summary": "EACC4206 Semester 3 adalah mata kuliah berpraktikum BPr/BPro dengan prasyarat EACC4104 dan workflow PRATON yang wajib diikuti.",
+      "evidence": [
+        {
+          "source_id": "ut-catalog-2026-2027",
+          "locator": "Program Studi 83/Akuntansi (S1), baris EACC4206 dan catatan prasyarat/PRATON",
+          "observation": "Katalog Juli 2026 mencatat EACC4206 2 SKS, slot II.1, BPr/BPro; prasyaratnya EACC4104 dan catatan BPro menetapkan PRATON wajib, minimal 5 dari 8 tugas, serta kontribusi PRATON 60%."
+        },
+        {
+          "source_id": "ut-guideline-2026-2027",
+          "locator": "Tabel 5.38 Metode Pelaksanaan Praktik Program Studi S1 Akuntansi",
+          "observation": "Pedoman menjelaskan kegiatan praktik dirancang melalui PRATON, studi kasus/problem solving berkesinambungan, dengan PRATON dan UAS sebagai komponen pelaksanaan."
+        },
+        {
+          "source_id": "ut-s3-eacc4206-bmp",
+          "locator": "Deskripsi Mata Kuliah",
+          "observation": "BMP EACC4206 menekankan aplikasi penghitungan, pemotongan/pemungutan, penyetoran, pelaporan, dan administrasi perpajakan."
+        }
+      ],
+      "reviewed_at": "2026-09-03",
+      "review_interval_days": 60
+    }
+  ]
+}

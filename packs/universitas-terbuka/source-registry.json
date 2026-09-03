@@ -3,7 +3,7 @@
   "scope": "institution",
   "institution_id": "universitas-terbuka",
   "institution": "Universitas Terbuka",
-  "verified_at": "2026-08-14",
+  "verified_at": "2026-09-03",
   "sources": [
     {
       "id": "ut-catalog-2026-2027",
@@ -13,7 +13,7 @@
       "url": "https://www.ut.ac.id/wp-content/uploads/2026/07/01-Katalog-NON-PENDAS-TAHUN-2026-2027-21-07-2026_22072026.pdf",
       "canonical_for": ["struktur kurikulum", "SKS", "bahan ajar", "layanan tutorial", "slot ujian"],
       "freshness_class": "academic-year",
-      "verified_at": "2026-08-14",
+      "verified_at": "2026-09-03",
       "review_interval_days": 60,
       "watch": true,
       "status": "active"
@@ -26,7 +26,7 @@
       "url": "https://www.ut.ac.id/wp-content/uploads/2026/06/03-PEDOMAN-PENYELENGGARAAN-2026-2027-080626_compressed.pdf",
       "canonical_for": ["aturan penyelenggaraan", "praktik/PRATON", "komponen penilaian"],
       "freshness_class": "academic-year",
-      "verified_at": "2026-08-14",
+      "verified_at": "2026-09-03",
       "review_interval_days": 60,
       "watch": true,
       "status": "active"
@@ -39,7 +39,7 @@
       "url": "https://feb.ut.ac.id/program-studi-akuntansi-s1/",
       "canonical_for": ["informasi program studi"],
       "freshness_class": "institution-page",
-      "verified_at": "2026-08-14",
+      "verified_at": "2026-09-03",
       "review_interval_days": 45,
       "watch": true,
       "status": "active"
@@ -52,11 +52,11 @@
       "url": "https://banjarmasin.ut.ac.id/program-studi-akuntansi-s1/",
       "canonical_for": [],
       "freshness_class": "regional-page",
-      "verified_at": "2026-08-14",
+      "verified_at": "2026-09-03",
       "review_interval_days": 45,
       "watch": false,
       "status": "secondary",
-      "notes": "Pernah ditemukan berbeda dengan katalog pusat; bukan sumber kanonik untuk struktur Semester 2."
+      "notes": "Pernah ditemukan berbeda atau tertinggal dari katalog pusat, termasuk metadata bahan ajar. Bukan sumber kanonik untuk struktur kurikulum atau metadata mata kuliah ketika berbeda dari katalog pusat."
     },
     {
       "id": "pojokut-community",

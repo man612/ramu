@@ -2,39 +2,42 @@
 
 Panduan ini untuk pengguna yang ingin langsung memakai Ramu tanpa perlu memahami GitHub, prompt engineering, schema, atau tooling di belakangnya.
 
-Ramu sekarang memakai **pack**. Satu pack mewakili konteks akademik tertentu—misalnya institusi, program studi, tahun akademik, dan periode belajar. Kamu tidak perlu memasang seluruh pack sekaligus; untuk mencoba Ramu, cukup siapkan **satu mata kuliah dulu**.
+Ramu memakai **pack**. Satu pack mewakili konteks akademik tertentu—misalnya institusi, program studi, tahun akademik, dan periode belajar. Kamu tidak perlu memasang seluruh pack sekaligus; untuk mencoba Ramu, cukup siapkan **satu mata kuliah dulu**.
 
 ## Pilih pack yang sesuai
 
 Buka [site Ramu](https://man612.github.io/ramu/) lalu pilih pack yang sesuai.
 
-Pack awal saat ini adalah:
+Pack Ramu Maintained yang tersedia untuk UT S1 Akuntansi 2026/2027 saat ini:
 
-**Universitas Terbuka · S1 Akuntansi · 2026/2027 · Semester 2**
+- **Semester 2** — 5 mata kuliah, 16 SKS;
+- **Semester 3** — 7 mata kuliah, 20 SKS.
 
-Nama Project yang disarankan untuk pack tersebut:
+Nama Project selalu memakai label periode secara penuh. Contoh Semester 3:
 
-- `Semester 2 • Perpajakan`
-- `Semester 2 • AKM I`
-- `Semester 2 • Manajemen Keuangan`
-- `Semester 2 • Ekonomi Mikro`
-- `Semester 2 • Manajemen`
+- `Semester 3 • Lab Perpajakan`
+- `Semester 3 • Kewirausahaan Digital`
+- `Semester 3 • Akuntansi Manajemen`
+- `Semester 3 • SIA`
+- `Semester 3 • Bahasa Inggris`
+- `Semester 3 • AKM II`
+- `Semester 3 • Belajar di Era Digital`
 
-Ramu sengaja menulis **Semester 2** secara penuh pada nama yang dilihat pengguna. Singkatan `S2` tidak dipakai sebagai label Project karena di Indonesia mudah dibaca sebagai jenjang S2/Magister. ID internal seperti `.s2` atau folder `semester-02/` tetap dipakai oleh tooling dan tidak perlu diubah pengguna.
+Ramu sengaja menulis **Semester 2/3** secara penuh pada nama yang dilihat pengguna. Singkatan `S2` atau `S3` tidak dipakai sebagai label Project karena di Indonesia mudah dibaca sebagai jenjang pendidikan. ID internal seperti `.s2`, `.s3`, `semester-02/`, atau `semester-03/` tetap boleh dipakai oleh tooling.
 
-Untuk pack lain, gunakan nama Project yang ditampilkan oleh halaman setup pack tersebut. Manifest pack memiliki `period_label` agar periode dapat ditulis jelas, termasuk bila suatu institusi nanti memakai istilah lain seperti trimester atau term.
+Untuk pack lain, gunakan nama Project yang ditampilkan oleh halaman setup pack tersebut. Manifest pack memiliki `period_label` agar periode dapat ditulis jelas, termasuk bila suatu institusi memakai istilah lain seperti trimester atau term.
 
 ## Langkah 1 — pilih satu mata kuliah
 
-Jangan setup seluruh semester hanya untuk mengetes Ramu.
+Jangan setup seluruh periode hanya untuk mengetes Ramu.
 
-Pilih satu mata kuliah yang memang sedang dipakai. Untuk pack awal, misalnya **Perpajakan**.
+Pilih satu mata kuliah yang memang sedang dipakai. Misalnya **Perpajakan** pada Semester 2 atau **AKM II** pada Semester 3.
 
 ## Langkah 2 — buat ChatGPT Project
 
 1. Buka ChatGPT.
 2. Pilih **New Project**.
-3. Gunakan nama Project yang diberikan Ramu, misalnya `Semester 2 • Perpajakan`.
+3. Gunakan nama Project yang diberikan Ramu, misalnya `Semester 3 • AKM II`.
 4. Gunakan **Project-only memory** agar konteks Project tidak bercampur dengan percakapan di luar Project.
 
 Nama menu ChatGPT dapat berubah seiring pembaruan produk. Jika letaknya berbeda, cari pengaturan yang setara di Project settings.
@@ -89,7 +92,7 @@ ini feedback tutor kemarin
 
 Kalau Project pertama terasa berguna, baru ulangi pola yang sama untuk mata kuliah lain.
 
-## Contoh untuk pack UT S1 Akuntansi Semester 2
+## Course pack UT S1 Akuntansi Semester 2
 
 | Nama Project | Mata kuliah | Course pack |
 |---|---|---|
@@ -99,13 +102,31 @@ Kalau Project pertama terasa berguna, baru ulangi pola yang sama untuk mata kuli
 | `Semester 2 • Ekonomi Mikro` | ECON4102 Pengantar Ekonomi Mikro | `ECON4102-ekonomi-mikro.md` |
 | `Semester 2 • Manajemen` | EMBS4101 Manajemen | `EMBS4101-manajemen.md` |
 
+## Course pack UT S1 Akuntansi Semester 3
+
+| Nama Project | Mata kuliah | Course pack |
+|---|---|---|
+| `Semester 3 • Lab Perpajakan` | EACC4206 Laboratorium Perpajakan | `EACC4206-laboratorium-perpajakan.md` |
+| `Semester 3 • Kewirausahaan Digital` | MKDI4203 Kewirausahaan di Era Digital | `MKDI4203-kewirausahaan-era-digital.md` |
+| `Semester 3 • Akuntansi Manajemen` | EMBS4326 Akuntansi Manajemen | `EMBS4326-akuntansi-manajemen.md` |
+| `Semester 3 • SIA` | EACC4207 Sistem Informasi Akuntansi | `EACC4207-sistem-informasi-akuntansi.md` |
+| `Semester 3 • Bahasa Inggris` | MKDI4201 Bahasa Inggris | `MKDI4201-bahasa-inggris.md` |
+| `Semester 3 • AKM II` | EACC4205 Akuntansi Keuangan Menengah II | `EACC4205-akm-2.md` |
+| `Semester 3 • Belajar di Era Digital` | MKDI4202 Belajar di Era Digital | `MKDI4202-belajar-era-digital.md` |
+
 Nama Project berasal dari `project_name` pada manifest pack. Contributor tidak perlu membuat format nama sendiri.
+
+### Catatan Semester 3 2026/2027
+
+Semester 3 tidak dibuat dengan menyalin metadata tahun sebelumnya. Katalog pusat UT 2026/2027 dan halaman BMP aktif menunjukkan beberapa perubahan, terutama **AKM II** yang sekarang memakai bahan ajar `EACC4205` baru dan berstatus BP/BPro. Laboratorium Perpajakan juga memakai metadata current 2026/2027 dan mempunyai prasyarat EACC4104.
+
+Karena itu, jangan memakai course pack atau metadata Semester 3 lama untuk Project 2026/2027 hanya karena nama mata kuliahnya sama.
 
 ## Memory dan pemisahan konteks
 
 Ramu memakai satu Project per mata kuliah supaya file, riwayat, source, dan learner state tidak bercampur.
 
-Gunakan **Project-only memory**. Pada eligible Project yang sudah ada, pengaturan memory dapat diubah melalui **Project settings → Memory**; perubahan dapat membutuhkan beberapa jam untuk berlaku. Shared Project tetap memakai Project-only memory. Jika kamu sedang berada di Project AKM I tetapi ingin membahas Perpajakan, lebih baik pindah ke Project Perpajakan daripada menyimpan progres pajak ke learner state AKM I.
+Gunakan **Project-only memory**. Pada eligible Project yang sudah ada, pengaturan memory dapat diubah melalui **Project settings → Memory**; perubahan dapat membutuhkan beberapa jam untuk berlaku. Shared Project tetap memakai Project-only memory. Jika kamu sedang berada di Project AKM II tetapi ingin membahas Lab Perpajakan, lebih baik pindah Project daripada menyimpan progres pajak ke learner state AKM II.
 
 Jika dari suatu sesi muncul konteks belajar yang perlu dibawa ke chat berikutnya, minta Ramu membuat **Catatan Belajar Terbaru**. Bila ChatGPT menyediakan opsi untuk menyimpan hasil ke Project atau menjadikannya Project Source, catatan itu dapat disimpan ke Project. Ketika catatan baru menggantikan versi lama, hapus versi lama supaya dua state yang bertentangan tidak dipakai bersamaan.
 

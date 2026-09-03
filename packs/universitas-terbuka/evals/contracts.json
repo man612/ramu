@@ -14,7 +14,7 @@
       "forbidden_behaviors": ["memilih source sekunder tanpa alasan", "menggabungkan fakta yang konflik secara diam-diam"],
       "contracts": [
         {"file": "core/referensi.md", "contains": "Jika sumber saling bertentangan"},
-        {"file": "packs/universitas-terbuka/source-registry.json", "contains": "bukan sumber kanonik untuk struktur Semester 2"}
+        {"file": "packs/universitas-terbuka/source-registry.json", "contains": "Bukan sumber kanonik untuk struktur kurikulum atau metadata mata kuliah"}
       ]
     }
   ]
