@@ -1,16 +1,16 @@
 # UT S1 Akuntansi — Semester 3
 
-Paket ini disiapkan untuk **Semester 3 S1 Akuntansi Universitas Terbuka tahun akademik 2026/2027**.
+Pack ini untuk **Semester 3 S1 Akuntansi Universitas Terbuka tahun akademik 2026/2027**.
 
-**Status:** Sumber terverifikasi  
+**Status:** source-verified  
 **Terakhir diperiksa:** 3 September 2026  
 **Total:** 20 SKS
 
-## Kalau ingin langsung menggunakan Ramu
+## Mulai pakai
 
-Di ChatGPT, buat Project sesuai mata kuliah yang sedang dipakai. Tidak perlu menyiapkan semuanya sekaligus.
+Pilih mata kuliah yang sedang digunakan. Tidak perlu menyiapkan seluruh Semester 3 sekaligus.
 
-Nama Project Semester 3:
+Nama Project:
 
 1. `Semester 3 • Lab Perpajakan`
 2. `Semester 3 • Kewirausahaan Digital`
@@ -20,14 +20,17 @@ Nama Project Semester 3:
 6. `Semester 3 • AKM II`
 7. `Semester 3 • Belajar di Era Digital`
 
-Ikuti [panduan setup Ramu](../../../../../docs/PANDUAN-SETUP-CHATGPT.md): buat Project, pasang Project Instructions, lalu unggah **satu** course pack yang sesuai sebagai Project Source.
+Ikuti [panduan setup](../../../../../docs/PANDUAN-SETUP-CHATGPT.md): buat satu Project, pasang Project Instructions, lalu unggah course pack yang sesuai sebagai Project Source.
 
-## File yang digunakan
+## File pack
 
-**Project Instructions — digunakan pada semua Project Semester 3**  
+Project Instructions:
+
 [PROJECT-INSTRUCTIONS.md](PROJECT-INSTRUCTIONS.md)
 
-| Mata kuliah | Course pack |
+Course pack:
+
+| Mata kuliah | File |
 |---|---|
 | Laboratorium Perpajakan | [EACC4206-laboratorium-perpajakan.md](courses/EACC4206-laboratorium-perpajakan.md) |
 | Kewirausahaan di Era Digital | [MKDI4203-kewirausahaan-era-digital.md](courses/MKDI4203-kewirausahaan-era-digital.md) |
@@ -37,7 +40,7 @@ Ikuti [panduan setup Ramu](../../../../../docs/PANDUAN-SETUP-CHATGPT.md): buat P
 | Akuntansi Keuangan Menengah II | [EACC4205-akm-2.md](courses/EACC4205-akm-2.md) |
 | Belajar di Era Digital | [MKDI4202-belajar-era-digital.md](courses/MKDI4202-belajar-era-digital.md) |
 
-## Mata kuliah Semester 3 — current 2026/2027
+## Mata kuliah 2026/2027
 
 | Kode | Mata kuliah | SKS | Ujian | Praktik/layanan |
 |---|---|---:|---|---|
@@ -49,58 +52,61 @@ Ikuti [panduan setup Ramu](../../../../../docs/PANDUAN-SETUP-CHATGPT.md): buat P
 | EACC4205 | Akuntansi Keuangan Menengah II | 3 | II.3 | BP · BPro |
 | MKDI4202 | Belajar di Era Digital | 3 | II.5 | WT |
 
-Data mengikuti **Katalog Kurikulum UT 2026/2027 edisi Juli 2026**. Metadata course material juga dibandingkan dengan halaman BMP aktif Perpustakaan UT dan aturan praktik dibandingkan dengan **Pedoman Sistem Penyelenggaraan UT 2026/2027**.
+Data mengikuti **Katalog Kurikulum UT 2026/2027 edisi Juli 2026**. Metadata bahan ajar dibandingkan dengan halaman BMP aktif Perpustakaan UT, sedangkan aturan praktik mengacu pada **Pedoman Sistem Penyelenggaraan UT 2026/2027**.
 
-## Yang berubah dibanding data Semester 3 sebelumnya
+## Perubahan dibanding data lama
 
-Jangan menyalin metadata Semester 3 tahun lalu ke pack ini. Review 3 September 2026 menemukan beberapa perubahan yang memengaruhi workflow Ramu:
+Semester 3 direview ulang dari source current karena beberapa metadata sudah berubah dari tahun sebelumnya:
 
-- **AKM II berubah besar:** current 2026/2027 memakai bahan ajar `EACC4205 Akuntansi Keuangan Menengah II`, BMP Edisi 1 tahun 2026, dan sekarang ditandai **BP/BPro**. Metadata lama `EKMA4313 Edisi 3` adalah konteks historis, bukan current pack truth.
-- **Laboratorium Perpajakan:** current slot ujian `II.1`, tetap BPr/BPro, dan mempunyai prasyarat EACC4104 Perpajakan.
-- **Bahasa Inggris:** current row S1 Akuntansi mencantumkan layanan `T`.
-- **Belajar di Era Digital:** current row mencantumkan `WT`.
-- halaman regional/arsip dapat tertinggal dari katalog pusat; source registry Ramu karena itu tetap menjadikan katalog pusat sebagai kanonik untuk struktur dan metadata kurikulum.
+- **AKM II** sekarang memakai `EACC4205 Akuntansi Keuangan Menengah II`, BMP Edisi 1 tahun 2026, dan berstatus **BP/BPro**. `EKMA4313 Edisi 3` tetap berguna sebagai konteks historis, tetapi bukan current pack truth.
+- **Laboratorium Perpajakan** memakai slot ujian `II.1`, BPr/BPro, dengan prasyarat EACC4104 Perpajakan.
+- **Bahasa Inggris** mencantumkan layanan `T` pada row S1 Akuntansi current.
+- **Belajar di Era Digital** mencantumkan `WT`.
 
-## Dua mata kuliah praktik Semester 3
+Halaman regional atau arsip dapat tertinggal dari katalog pusat. Untuk struktur dan metadata kurikulum, source pusat current tetap menjadi rujukan utama.
+
+## Mata kuliah praktik
 
 ### EACC4206 — Laboratorium Perpajakan
 
-Mata kuliah ini menekankan aplikasi perpajakan. Untuk BPro, PRATON wajib; katalog/pedoman 2026/2027 mencatat minimal 5 dari 8 tugas, kontribusi PRATON 60%, dan UAS 40%. Kasus dapat berkesinambungan, sehingga course pack tidak boleh mengarang state tugas sebelumnya.
+Fokusnya aplikasi perpajakan. Pada pola BPro, PRATON wajib; pedoman 2026/2027 mencatat minimal 5 dari 8 tugas, kontribusi PRATON 60%, dan UAS 40%.
 
-Karena perpajakan sensitif waktu, Ramu juga memisahkan konteks **BMP/soal** dari **aturan pajak terkini**.
+Kasus dapat berkesinambungan. Bila tugas lanjutan membutuhkan state sebelumnya, course pack meminta data yang benar daripada mengisi opening state dengan asumsi.
+
+Perpajakan juga sensitif terhadap waktu, jadi konteks **BMP/soal** dipisahkan dari **aturan pajak terkini** ketika keduanya berbeda.
 
 ### EACC4205 — AKM II
 
-AKM II sekarang menggunakan BMP EACC4205 yang baru dan masuk workflow BP/BPro. Course pack menekankan jurnal, pengukuran, penyajian/pengungkapan, perhitungan, PSAK, dan konsistensi kasus PRATON.
+AKM II memakai BMP EACC4205 yang baru dan masuk workflow BP/BPro. Course pack memberi perhatian pada jurnal, pengukuran, penyajian/pengungkapan, perhitungan, PSAK, dan konsistensi state kasus PRATON.
 
 AKM II juga termasuk mata kuliah prasyarat TAPS.
 
-## Mata kuliah Semester 3 yang menjadi prasyarat TAPS
+## Prasyarat TAPS dari Semester 3
 
-Katalog UT 2026/2027 mencantumkan tiga mata kuliah Semester 3 dalam daftar prasyarat TAPS S1 Akuntansi:
+Katalog UT 2026/2027 mencantumkan:
 
 - EACC4205 Akuntansi Keuangan Menengah II;
 - EMBS4326 Akuntansi Manajemen;
 - EACC4207 Sistem Informasi Akuntansi.
 
-Metadata ini dipakai untuk memberi konteks pentingnya mata kuliah, bukan untuk mengubah syarat kelulusan secara otomatis jika katalog UT di masa depan berubah.
+Informasi ini memberi konteks pentingnya mata kuliah pada kurikulum current. Jika katalog berubah, source terbaru tetap menjadi acuan.
 
 ## Source registry dan eval
 
-Semester 3 memiliki [source-registry.json](source-registry.json) sendiri untuk halaman BMP aktif dan claim yang memang spesifik pada pack ini. Source institusi tetap berada di [`../../../source-registry.json`](../../../source-registry.json).
+[source-registry.json](source-registry.json) menyimpan halaman BMP aktif dan claim yang spesifik pada Semester 3. Source tingkat institusi tetap berada di [`../../../source-registry.json`](../../../source-registry.json).
 
-Regression suite Semester 3 menambahkan E17–E24 untuk menguji antara lain:
+Regression E17–E24 mencakup antara lain:
 
-- Lab Perpajakan: konteks soal/BMP vs aturan terkini;
-- AKM II: metadata lama vs current 2026/2027;
-- dependency state pada kasus PRATON lanjutan;
-- SIA: requirement/control sebelum flowchart;
-- Akuntansi Manajemen: relevant cost untuk keputusan;
-- Kewirausahaan Digital: hipotesis vs evidence pasar;
-- Bahasa Inggris: tutoring sebelum rewrite penuh;
-- Belajar di Era Digital: tidak mengarang isi kebijakan GenAI UT.
+- BMP/soal pajak vs aturan terkini;
+- metadata lama vs current AKM II;
+- state kasus PRATON lanjutan;
+- requirement/control sebelum flowchart SIA;
+- relevant cost pada Akuntansi Manajemen;
+- hipotesis vs evidence pasar pada Kewirausahaan Digital;
+- tutoring sebelum full rewrite pada Bahasa Inggris;
+- ketidakpastian isi kebijakan GenAI UT pada Belajar di Era Digital.
 
-## Keterangan teknis UT
+## Kode layanan UT
 
 - `T` — layanan TTM/Tuweb untuk SIPAS Semi;
 - `WT` — wajib Tuton untuk SIPAS Penuh/Plus;
@@ -108,4 +114,4 @@ Regression suite Semester 3 menambahkan E17–E24 untuk menguji antara lain:
 - `BPr` — mata kuliah berpraktikum;
 - `BPro` — mata kuliah berpraktik/berpraktikum dengan bimbingan online wajib.
 
-Ramu adalah proyek independen dan bukan layanan resmi Universitas Terbuka. Materi kuliah berhak cipta tidak disalin ke repository.
+Pack ini dipelihara sebagai bagian dari proyek independen dan bukan layanan resmi Universitas Terbuka. Materi kuliah berhak cipta tidak disalin ke repository.
