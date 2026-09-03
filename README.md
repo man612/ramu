@@ -43,17 +43,17 @@ Karena itu, urutan pack di katalog mengikuti **urutan akademik**, bukan urutan k
 
 ## Cara kerjanya
 
-Satu mata kuliah ditempatkan di satu Project. Di dalamnya ada beberapa lapisan yang punya tugas berbeda:
+Satu mata kuliah ditempatkan di satu Project. Supaya peran tiap bagiannya tetap gampang dibaca, Ramu membaginya menjadi lima lapisan:
 
-| Bagian | Fungsinya |
+| Lapisan | Fungsinya |
 |---|---|
-| **Project Instructions** | aturan dasar saat AI membantu belajar atau mengerjakan tugas |
-| **Course pack** | konteks, karakter materi, workflow, dan pemeriksaan khusus mata kuliah |
-| **Project Sources** | BMP, materi tutor, rubrik, screenshot, atau file lain yang memang dibutuhkan |
-| **Source registry** | mencatat sumber resmi, fungsi sumber, tanggal review, dan konflik yang perlu diawasi |
-| **Behavior eval** | menyimpan failure mode penting supaya perubahan prompt/pack bisa diuji ulang |
+| **Referensi** | source registry dan rujukan resmi membantu memilih sumber yang tepat serta membedakan informasi lama, baru, atau masih perlu diverifikasi |
+| **Instruksi** | Project Instructions membawa aturan dasar, batas bantuan, prioritas instruksi tutor/rubrik, dan guardrail yang berlaku selama Project dipakai |
+| **Zona konteks** | satu mata kuliah tetap berada di satu Project supaya riwayat tugas, learner state, file, dan konteks mata kuliah tidak mudah bercampur |
+| **Materi** | course pack memberi konteks khusus mata kuliah, sedangkan BMP, materi tutor, rubrik, screenshot, dan file lain masuk melalui Project Sources saat dibutuhkan |
+| **Asesmen** | checking, review, learner-state workflow, dan behavior eval membantu menguji jawaban maupun perubahan konfigurasi dari waktu ke waktu |
 
-Website hanya membantu memilih pack, menyalin instruksi, dan mengunduh course pack. File kuliah pribadi tetap masuk langsung ke ChatGPT Project pengguna.
+Secara implementasi, lima lapisan itu tersebar di Project Instructions, course pack, Project Sources, source registry, serta eval yang tersimpan di repository. Website hanya membantu memilih pack, menyalin instruksi, dan mengunduh course pack. File kuliah pribadi tetap masuk langsung ke ChatGPT Project pengguna.
 
 ## Pack yang tersedia
 
