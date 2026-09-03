@@ -14,7 +14,8 @@ Release yang sudah terbit:
 
 - `v0.1.0-beta` — baseline public beta pertama;
 - `v0.2.0-beta` — fondasi multi-pack, identity/schema validation, eval/security hardening, dan Pages yang gated oleh validation;
-- `v0.2.1-beta` — patch website/UX dan setup copy.
+- `v0.2.1-beta` — patch website/UX dan setup copy;
+- `v0.2.2-beta` — public-readiness cleanup, support surface, repository security, dan sinkronisasi release workflow.
 
 Tag release yang sudah dipublikasikan tidak dipindahkan atau dipakai ulang. Perubahan setelah release tetap berada di `Unreleased` sampai versi berikutnya dibuat.
 
