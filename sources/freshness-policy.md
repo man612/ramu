@@ -44,10 +44,13 @@ Workflow mingguan menemukan seluruh `sources/registry.json` dan `packs/**/source
 1. ID source tidak duplikat lintas registry;
 2. tanggal verifikasi source belum melewati interval review;
 3. untuk source dengan `watch: true`, URL dicoba diakses;
-4. kegagalan jaringan dicatat terpisah dari perubahan fakta;
-5. setiap claim menunjuk source ID yang benar;
-6. claim conflicted wajib punya fallback `operational_policy`;
-7. tanggal review claim belum melewati interval review;
-8. source atau claim yang overdue membuat workflow meminta review.
+4. satu kegagalan reachability tidak langsung dianggap final: probe diulang terbatas sebelum network warning dicatat;
+5. kegagalan jaringan tetap dicatat terpisah dari perubahan fakta;
+6. setiap claim menunjuk source ID yang benar;
+7. claim conflicted wajib punya fallback `operational_policy`;
+8. tanggal review claim belum melewati interval review;
+9. source/claim yang overdue atau watched URL yang tetap gagal setelah retry membuat workflow meminta review.
+
+Jika source watch gagal, output checker dipublikasikan pada GitHub Actions Job Summary dan dibawa ke issue review agar source/registry yang bermasalah dapat diidentifikasi tanpa menebak. Retry hanya mengurangi false alarm akibat gangguan sesaat; kegagalan yang bertahan tetap membuat scheduled watch merah ketika workflow memakai `--fail-on-network`.
 
 Ramu sengaja **tidak memakai hash HTML mentah sebagai kebenaran semantik**. Halaman web dinamis dapat berubah karena navigasi, timestamp, personalisasi, atau markup tanpa perubahan klaim. Sebaliknya, URL yang tidak berubah juga dapat menyimpan fakta yang sudah direvisi. Maintainer tetap harus membaca evidence yang relevan dan memperbarui `verified_at`/`reviewed_at` hanya setelah review nyata.
