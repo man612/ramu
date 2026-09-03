@@ -37,22 +37,28 @@ Setiap claim mencatat:
 
 Dengan struktur ini, Ramu dapat mengatakan “dua halaman resmi masih berbeda” tanpa harus menjadikan seluruh domain/source sebagai tidak tepercaya.
 
-## Contoh pack pertama: UT S1 Akuntansi 2026/2027 Semester 2
+## Source hierarchy Universitas Terbuka
 
 Untuk data kurikulum/aturan UT, prioritasnya:
 
 1. katalog/pedoman pusat Universitas Terbuka untuk tahun akademik yang sesuai;
-2. laman fakultas/program studi pusat;
+2. laman fakultas/program studi pusat dan halaman BMP resmi;
 3. laman UT Daerah sebagai pelengkap bila tidak bertentangan dengan source kanonik;
 4. forum/komunitas sebagai sinyal masalah UX, bukan aturan akademik.
 
 Registry institusinya berada di [`../packs/universitas-terbuka/source-registry.json`](../packs/universitas-terbuka/source-registry.json).
 
-Sumber utama pack saat verifikasi 14 Agustus 2026:
+Sumber pusat 2026/2027 yang menjadi dependency pack UT saat review 3 September 2026:
 
 - **Katalog Kurikulum Program Studi FEB, FHISIP, FKIP, FST UT 2026/2027**, cetakan Juli 2026;
 - **Pedoman Sistem Penyelenggaraan Universitas Terbuka 2026/2027**, Juni 2026;
 - laman resmi Program Studi S1 Akuntansi FEB UT.
+
+Halaman regional tetap dicatat sebagai `secondary`. Pada review Semester 3, halaman UT Daerah yang masih memuat metadata AKM II lama menjadi bukti nyata bahwa domain resmi regional dapat tertinggal dari katalog pusat. Karena itu regression E14 sekarang bersifat **period-neutral**: source regional tidak menjadi kanonik untuk struktur kurikulum atau metadata mata kuliah ketika berbeda dari katalog pusat.
+
+## Pack UT S1 Akuntansi 2026/2027
+
+### Semester 2
 
 Katalog pusat mencatat Semester 2 sebanyak **16 SKS**:
 
@@ -62,36 +68,68 @@ Katalog pusat mencatat Semester 2 sebanyak **16 SKS**:
 - ECON4102 Pengantar Ekonomi Mikro — 3 SKS;
 - EMBS4101 Manajemen — 4 SKS.
 
-Katalog juga menandai EACC4103 AKM I sebagai BP/BPro. Detail akademik seperti ini milik pack, bukan core Ramu; pack periode/program/universitas lain harus mempunyai source dan verifikasi sendiri.
+Katalog menandai EACC4103 AKM I sebagai BP/BPro. Detail akademik seperti ini milik pack, bukan core Ramu.
 
-Pack tersebut memakai `period_id: semester-02` dan `period_label: Semester 2`. Field generic Ramu tidak bernama `semester`; institusi yang memakai trimester, quarter, term, atau academic session lain tetap menggunakan `period_id` + `period_label` sesuai sistem mereka.
+### Semester 3
 
-## Contoh konflik source resmi
+Semester 3 adalah **real second-pack test** pertama Ramu. Katalog pusat Juli 2026 mencatat **20 SKS**:
 
-Saat validasi awal ditemukan halaman UT Banjarmasin masih berbeda dengan katalog pusat untuk beberapa data Semester 2. Karena registry menandai halaman regional sebagai `secondary` dan katalog pusat sebagai source kanonik untuk struktur kurikulum, Ramu tidak menggabungkan kedua nilai secara diam-diam.
+- EACC4206 Laboratorium Perpajakan — 2 SKS — II.1 — BPr/BPro;
+- MKDI4203 Kewirausahaan di Era Digital — 3 SKS — I.1;
+- EMBS4326 Akuntansi Manajemen — 3 SKS — I.2 — T;
+- EACC4207 Sistem Informasi Akuntansi — 3 SKS — I.3 — T;
+- MKDI4201 Bahasa Inggris — 3 SKS — II.2 — T;
+- EACC4205 Akuntansi Keuangan Menengah II — 3 SKS — II.3 — BP/BPro;
+- MKDI4202 Belajar di Era Digital — 3 SKS — II.5 — WT.
 
-Failure mode tersebut sekarang menjadi **regression case tingkat institusi Universitas Terbuka**, bukan case yang harus dicopy ke setiap periode. Pack UT lain dapat reuse suite institusi yang sama; universitas lain dapat mendefinisikan hierarchy source/eval mereka sendiri tanpa mewarisi aturan UT.
+Review tidak memakai Semester 3 tahun sebelumnya sebagai template fakta. Perbandingan current-vs-old menemukan perubahan operasional yang material:
 
-Konflik source juga bisa terjadi **di dalam authority yang sama**. Pada review 29 Agustus 2026, dua kasus produk OpenAI masih relevan:
+- **EACC4205 AKM II** current 2026/2027 memakai BMP baru `EACC4205` Edisi 1 tahun 2026 dan berstatus BP/BPro; metadata historis `EKMA4313 Edisi 3` tidak dipakai sebagai current truth;
+- **EACC4206 Laboratorium Perpajakan** current slot ujian II.1, BPr/BPro, dan mempunyai prasyarat EACC4104 Perpajakan;
+- **MKDI4201 Bahasa Inggris** current row S1 Akuntansi mencantumkan T;
+- **MKDI4202 Belajar di Era Digital** current row mencantumkan WT.
 
-- artikel khusus Study Mode menyatakan Study tidak tersedia di Projects, sementara artikel Projects masih mencantumkan Study Mode pada daftar tools;
-- release notes dan guidance Projects terbaru menyatakan memory existing Project dapat diubah lewat Project settings, tetapi bagian FAQ Projects yang masih terindeks juga menyimpan wording lama bahwa Project lama harus dibuat ulang untuk memakai project-only memory.
+Pedoman 2026/2027 mengonfirmasi EACC4205 dan EACC4206 berada dalam kelompok praktik/berpraktik S1 Akuntansi. Pembelajaran diarahkan pada PRATON, studi kasus/problem solving berkesinambungan; untuk pola BPro terkait, PRATON berkontribusi 60%, UAS 40%, dan mahasiswa minimal mengerjakan 5 dari 8 tugas.
 
-Ramu tidak memilih salah satu wording secara diam-diam. Kedua kasus disimpan sebagai claim `conflicted` dengan evidence dan fallback operasional. Study Mode tidak menjadi dependency runtime; untuk memory, setup Project baru memilih Project-only sejak awal, sedangkan Project lama mencoba menu Memory dan membuat Project baru bila opsi itu belum tersedia pada akun/app tersebut.
+Semester 3 mempunyai registry pack sendiri di [`../packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-03/source-registry.json`](../packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-03/source-registry.json). Registry tersebut menyimpan tujuh halaman BMP aktif Perpustakaan UT serta claim eksplisit untuk perubahan AKM II dan aturan Lab Perpajakan/PRATON.
+
+Pack tetap tidak menyalin BMP atau materi berhak cipta ke repository.
+
+## Period metadata
+
+Pack Semester 2 memakai `period_id: semester-02` dan `period_label: Semester 2`; Semester 3 memakai `semester-03` + `Semester 3`.
+
+Field generic Ramu tidak bernama `semester`. Institusi yang memakai trimester, quarter, term, atau academic session lain tetap menggunakan `period_id` + `period_label` sesuai sistem mereka.
+
+## Konflik source resmi
+
+Failure mode source pusat vs regional adalah regression case tingkat **institusi Universitas Terbuka**, bukan case yang dicopy ke setiap periode. Pack UT lain reuse suite institusi yang sama; universitas lain dapat mendefinisikan hierarchy source/eval mereka sendiri tanpa mewarisi aturan UT.
+
+Konflik juga dapat terjadi di dalam authority yang sama. Karena itu status claim hanya diubah setelah evidence current benar-benar direview.
+
+Pada review dokumentasi OpenAI **3 September 2026**, dua konflik produk yang sebelumnya dicatat sudah dapat ditutup berdasarkan guidance resmi current:
+
+- eligible existing Project dapat mengubah memory melalui **Project settings → Memory**; shared Project tetap project-only;
+- Study Mode **tidak berlaku pada Project conversations** menurut artikel Study Mode dan guidance Projects current.
+
+Ramu tetap tidak menjadikan Study Mode dependency. Data Controls untuk akun personal tetap diperlakukan sebagai pilihan akun pengguna, bukan syarat Ramu.
 
 ## Source freshness
 
 `python scripts/check_source_freshness.py` menemukan seluruh registry global dan `packs/**/source-registry.json`, lalu memeriksa source **dan claim**.
 
-Workflow **Source Freshness Watch** berjalan mingguan. Gate sekarang mencakup:
+Workflow **Source Freshness Watch** berjalan mingguan. Gate mencakup:
 
 - umur `verified_at` source;
 - reachability URL untuk `watch: true`;
+- retry terbatas agar kegagalan jaringan sesaat tidak langsung menjadi failure final;
 - keberadaan source ID yang dipakai evidence claim;
-- `operational_policy` untuk conflict claim;
+- `operational_policy` untuk conflicted claim;
 - umur `reviewed_at` claim.
 
-Source/claim yang overdue meminta review. Namun:
+Source/claim yang overdue meminta review. Watched URL yang tetap gagal setelah retry juga meminta review ketika scheduled workflow memakai `--fail-on-network`. Output checker dibawa ke GitHub Actions Job Summary dan issue review supaya source/error yang bermasalah dapat diidentifikasi.
+
+Namun:
 
 - URL hidup bukan bukti isi masih terbaru;
 - URL gagal bukan bukti fakta berubah;
@@ -99,7 +137,7 @@ Source/claim yang overdue meminta review. Namun:
 - satu halaman resmi dapat memuat bagian dengan freshness berbeda;
 - `verified_at`/`reviewed_at` hanya diperbarui setelah maintainer benar-benar membaca evidence yang relevan.
 
-Ramu sengaja tidak memakai hash HTML mentah sebagai kebenaran semantik untuk halaman produk dinamis. Hash mudah berubah karena markup/navigation tanpa perubahan fakta, sementara perubahan fakta juga dapat terjadi pada URL yang sama.
+Ramu sengaja tidak memakai hash HTML mentah sebagai kebenaran semantik untuk halaman dinamis.
 
 ## Validasi pack, period metadata, dan eval suites
 
@@ -115,21 +153,21 @@ core → institution → program → pack
 
 Scope `institution` dan `program` bersifat opsional. Validator memastikan core berada di awal, pack berada di akhir, scope tidak mundur, `scope_ref` cocok, ID case tidak duplikat setelah merge, dan setiap contract case mempunyai behavior case yang sesuai.
 
-CI kemudian menjalankan dry-run eval **per pack**. Jadi ketika periode berikutnya atau institusi baru ditambahkan ke katalog, pack tersebut ikut menjadi bagian validation matrix tanpa menambah path hardcode di workflow.
+Semester 3 menambahkan regression E17–E24 untuk failure mode yang memang pack-specific: tax-currentness, AKM II old-vs-current metadata, state kasus PRATON, SIA requirement/control, relevant cost, business evidence, language tutoring, dan ketidakpastian policy GenAI.
+
+CI menjalankan dry-run eval **per pack** melalui matrix yang dibangun dari `packs/index.json`. Jadi penambahan Semester 3 harus menghasilkan job eval-wiring kedua tanpa menulis path baru di workflow.
 
 ## ChatGPT/OpenAI sebagai source produk
 
-Fitur ChatGPT dapat berubah lebih cepat daripada kurikulum akademik sehingga dokumentasi produk berada di global registry dengan interval review lebih pendek. Ramu tidak menjadikan nama model, Study Mode, atau satu detail UI sebagai dependency permanen bila workflow inti dapat dibuat lebih netral.
+Fitur ChatGPT berubah lebih cepat daripada kurikulum akademik sehingga dokumentasi produk berada di global registry dengan interval review lebih pendek. Ramu tidak menjadikan nama model, Study Mode, atau satu detail UI sebagai dependency permanen bila workflow inti dapat dibuat lebih netral.
 
-Pada review **29 Agustus 2026**:
+Pada review **3 September 2026**:
 
-- dokumentasi Projects tetap menjadi source utama untuk workspace Project, files/sources, Project Instructions, dan memory;
-- release notes OpenAI ditambahkan sebagai source resmi untuk kronologi perubahan produk;
-- existing-Project memory diperlakukan sebagai claim conflicted karena guidance terbaru dan FAQ lama belum sepenuhnya sinkron;
-- Study Mode di dalam Projects tetap claim conflicted antara artikel Study Mode dan artikel Projects;
+- dokumentasi Projects menjadi source utama untuk workspace Project, files/sources, Project Instructions, dan memory;
+- release notes dipakai untuk kronologi perubahan produk;
+- existing-Project memory saat ini berstatus `confirmed` dapat diubah untuk eligible Project;
+- Study Mode di Project conversations saat ini berstatus `confirmed` tidak tersedia;
 - Data Controls FAQ tetap menjadi source utama untuk pengaturan penggunaan percakapan/data ChatGPT;
-- label tombol Project Sources dapat berubah, sehingga setup Ramu menjelaskan fungsi dan memberi contoh label tanpa menjadikannya kontrak permanen.
-
-Karena konflik tersebut, Ramu tidak menyuruh pengguna mengaktifkan Study Mode di dalam Project dan tidak menjadikannya bagian dari kontrak runtime. Guardrail belajar Ramu berasal dari Project Instructions, protocols, course context, dan eval contract sendiri.
+- label tombol Project Sources dapat berubah, sehingga setup Ramu menjelaskan fungsi tanpa menjadikan satu label UI sebagai kontrak permanen.
 
 Source/claim produk yang direview ada di [`../sources/registry.json`](../sources/registry.json). Tanggal verifikasi source dan review claim harus dibaca sebagai snapshot, bukan cap “benar selamanya”.
