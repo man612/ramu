@@ -1,56 +1,61 @@
 # Arah Proyek
 
+Dokumen ini menjelaskan bentuk Ramu sebagai proyek: apa yang ingin dijaga, bagaimana pack disusun, dan bagian mana yang sebaiknya tetap generik ketika periode atau institusi baru ditambahkan.
+
 ## Tujuan
 
-Ramu menyediakan konfigurasi workspace akademik yang bisa dipasang ke platform AI tanpa memaksa mahasiswa belajar prompt engineering.
+Ramu menyiapkan workspace akademik yang bisa dipasang ke platform AI tanpa mengharuskan pengguna memahami prompt engineering atau struktur repository.
 
-Implementasi pertama memakai **ChatGPT Projects**, tetapi format core dan pack tidak dibuat sebagai dokumentasi produk OpenAI semata. Jika platform utama berubah, course context, source governance, aturan belajar, dan kontrak evaluasi tetap dapat digunakan kembali melalui adapter/panduan baru.
+Implementasi saat ini memakai **ChatGPT Projects**. Core, pack, source registry, dan eval sengaja disimpan sebagai artefak terpisah dari UI produk, sehingga bagian yang masih relevan dapat dipakai kembali bila platform utama berubah di masa depan.
 
-## Arsitektur
+## Dua lapisan utama
 
-Secara produk, Ramu tetap punya dua lapisan besar:
+Secara arsitektur ada dua lapisan besar:
 
-1. **Core** — prinsip, protocol, learner-state contract, source rules, dan failure mode universal yang seharusnya dapat dipakai lintas kampus/prodi.
-2. **Pack** — konteks institusi + program + tahun akademik + periode beserta mata kuliah, sumber, versi, identity, dan wiring evaluasinya.
+1. **Core** — prinsip, protocol, learner-state contract, aturan sumber, dan failure mode yang berlaku luas.
+2. **Pack** — konteks institusi, program, tahun akademik, periode, mata kuliah, sumber, versi, dan eval yang memang spesifik pada konteks tersebut.
 
-Di dalam pack, evaluasi tidak lagi diasumsikan hanya `core + pack`. Manifest menyusun **ordered `eval_suites`** agar rule yang reusable dapat ditempatkan pada scope yang tepat: `core → institution → program → pack`.
+Eval di dalam pack dapat dikomposisi dari beberapa scope:
 
-`packs/index.json` adalah katalog machine-readable. Setiap entry menunjuk satu `manifest.json`. Tooling tidak boleh mengunci path atau jenis periode tertentu; validator, website, manual eval, dan automated behavior eval harus menemukan pack melalui katalog/manifest.
+```text
+core → institution → program → pack
+```
+
+`institution` dan `program` opsional. Aturan ditempatkan pada scope paling sempit yang masih benar-benar reusable, supaya case yang sama tidak perlu disalin ke setiap semester.
+
+## Katalog pack
+
+`packs/index.json` adalah pintu masuk tooling. Setiap entry menunjuk ke satu `manifest.json`, lalu validator, website, Manual Eval Kit, dan behavior eval membaca detail pack dari sana.
+
+Struktur UT S1 Akuntansi saat ini:
 
 ```text
 packs/
 ├── index.json
-├── universitas-terbuka/
-│   ├── source-registry.json
-│   ├── evals/                         # rule/eval reusable untuk UT
-│   └── s1-akuntansi/
-│       └── 2026-2027/
-│           ├── semester-02/
-│           └── semester-03/           # saat tersedia
-└── universitas-lain/                  # saat ada pack terverifikasi/request
+└── universitas-terbuka/
+    ├── source-registry.json
+    ├── evals/
+    └── s1-akuntansi/
+        └── 2026-2027/
+            ├── semester-02/
+            └── semester-03/
 ```
 
-Folder `semester-02/` di atas adalah identitas pack UT sekarang, bukan struktur yang diwajibkan Ramu untuk semua institusi.
+Path tersebut adalah bentuk pack UT yang tersedia sekarang, bukan template wajib untuk seluruh institusi.
 
 ## Unit utama
 
-- **Core** — prinsip umum yang jarang berubah.
-- **Pack catalog** — daftar pack yang dapat ditemukan tooling/site.
-- **Pack manifest** — metadata identity institusi/program/periode, course list, source registry, ordered `eval_suites`, dan version.
-- **Machine identity** — `institution_id`, `program_id`, dan pack `id` yang stabil; terpisah dari label manusia.
-- **Period metadata** — `period_id` untuk mesin + `period_label` untuk manusia; tidak ada field universal `semester`.
-- **Course pack** — konfigurasi siap upload untuk satu mata kuliah.
-- **Project Instructions** — perilaku runtime yang ditempel ke Project.
-- **Eval suite `core`** — failure mode universal seperti hallucinated citation, prompt injection, source freshness, dan state/version conflict.
-- **Eval suite `institution`** — rule yang berlaku lintas pack pada satu institusi, misalnya cara menyelesaikan konflik source pusat-vs-regional UT.
-- **Eval suite `program`** — rule reusable pada satu program studi bila memang ada failure mode yang tidak layak dinaikkan ke institusi.
-- **Eval suite `pack`** — behavior yang benar-benar spesifik periode/mata kuliah pada pack aktif.
-- **Source registry** — dapat berscope global, institusi, program, atau pack agar tidak menjadi satu file raksasa.
-- **Site** — membaca katalog + manifest, bukan hardcode satu semester/jenis kalender tertentu.
+- **Pack catalog** — daftar pack yang bisa ditemukan tooling dan site.
+- **Manifest** — identity, periode, daftar mata kuliah, source registry, eval suite, versi, dan metadata pack.
+- **Course pack** — konteks dan workflow khusus satu mata kuliah.
+- **Project Instructions** — aturan runtime yang dipasang ke ChatGPT Project.
+- **Source registry** — sumber yang dipakai beserta authority, fungsi, freshness, dan claim penting.
+- **Eval suite** — regression case pada scope core, institusi, program, atau pack.
+- **Site** — antarmuka untuk memilih pack, menyalin instruksi, dan mengambil course pack.
 
-## Kontrak identity
+## Identity mesin dan label manusia
 
-Ramu memisahkan identity mesin dari label manusia. Contoh pack pertama:
+Identity mesin dibuat stabil dan terpisah dari label yang dilihat pengguna. Contoh:
 
 ```text
 institution_id: universitas-terbuka
@@ -60,25 +65,27 @@ program_id:     universitas-terbuka.s1-akuntansi
 program:        S1 Akuntansi
 ```
 
-Label manusia boleh diperbaiki atau dilokalkan tanpa mengubah identity mesin. Sebaliknya, satu `institution_id`/`program_id` tidak boleh dipakai ulang untuk entitas berbeda. `program_id` dibuat unik secara global karena program scope dapat direferensikan lintas pack dan periode.
+Label dapat diperbaiki tanpa mengganti ID. Sebaliknya, ID yang sudah merujuk satu entitas tidak dipakai ulang untuk entitas lain.
 
-Identity tersebut menjadi trust boundary untuk komposisi data:
+Identity juga dipakai saat menyusun eval dan registry:
 
-- eval scope `institution` harus memakai `scope_ref == institution_id`;
-- eval scope `program` harus memakai `scope_ref == program_id`;
-- eval scope `pack` harus memakai `scope_ref == pack id`;
-- scoped source registry harus membawa identity yang cocok dengan pack yang mendeklarasikannya.
+- scope `institution` merujuk `institution_id`;
+- scope `program` merujuk `program_id`;
+- scope `pack` merujuk `id` pack;
+- scoped source registry membawa identity yang sesuai dengan pack yang menggunakannya.
 
-Dengan begitu, pack institusi A tidak dapat lolos validation bila tanpa sengaja menarik suite/registry scoped milik institusi B.
+Validator lintas-file memeriksa hubungan ini supaya sebuah pack tidak tanpa sengaja menarik registry atau suite milik konteks lain.
 
-## Kontrak periode akademik
+## Periode akademik
 
-Ramu membedakan identitas mesin dari label pengguna:
+Periode memakai dua metadata:
 
 ```text
 period_id:    semester-02
 period_label: Semester 2
 ```
+
+`period_id` bersifat machine-safe dan stabil. `period_label` mengikuti istilah yang benar-benar digunakan institusi dan menjadi prefix nama Project.
 
 Pack lain dapat memakai bentuk seperti:
 
@@ -94,11 +101,11 @@ period_id:    term-fall
 period_label: Fall Term
 ```
 
-`period_id` harus lower-case/machine-safe dan stabil untuk tooling. `period_label` mengikuti istilah resmi/manusiawi yang digunakan institusi dan menjadi prefix nama Project. Generic tooling tidak boleh menyimpulkan bahwa seluruh academic period adalah semester.
+Dengan begitu tooling tidak perlu berasumsi bahwa setiap institusi memakai semester.
 
 ## Komposisi eval
 
-Setiap manifest menyusun suite dari scope paling umum ke paling spesifik.
+Manifest menyusun suite dari aturan paling umum menuju paling spesifik:
 
 ```text
 core
@@ -110,76 +117,77 @@ program       (opsional)
 pack
 ```
 
-Pack UT S1 Akuntansi Semester 2 saat ini memakai:
+Pack UT yang tersedia sekarang memakai:
 
 ```text
 core → universitas-terbuka → id.ut.accounting-s1.2026-2027.s2
+core → universitas-terbuka → id.ut.accounting-s1.2026-2027.s3
 ```
 
-Contohnya, regression case konflik katalog pusat dan halaman regional UT berada pada suite institusi Universitas Terbuka. Semester 3 UT nanti dapat memakai suite yang sama tanpa menyalin case tersebut. Sebaliknya, universitas lain tidak ikut membawa rule UT.
+Konflik katalog pusat dengan halaman regional UT, misalnya, berada pada suite institusi karena masalah itu dapat muncul pada lebih dari satu periode. Sebaliknya, current-vs-old metadata AKM II Semester 3 tetap berada pada pack Semester 3 karena konteksnya memang spesifik.
 
-Validator menjaga beberapa invariant:
+Validator menjaga beberapa invariant penting:
 
-- suite core harus menjadi lapisan pertama;
-- suite pack harus menjadi lapisan terakhir;
-- scope tidak boleh mundur dari yang lebih spesifik ke lebih umum;
-- `scope_ref` harus cocok dengan `institution_id`, `program_id`, atau pack `id` sesuai scope;
-- ID case harus tetap unik setelah seluruh suite digabung;
-- behavior dan contract case harus tetap berpasangan.
+- core berada di awal dan pack di akhir;
+- scope tidak mundur dari yang lebih spesifik ke yang lebih umum;
+- `scope_ref` cocok dengan identity manifest;
+- ID case tetap unik setelah seluruh suite digabung;
+- contract dan behavior case tetap berpasangan.
 
-Behavior defaults boleh dioverride oleh suite yang lebih spesifik dan muncul kemudian, tetapi regression case yang memiliki ID sama tidak boleh ditimpa diam-diam.
+Behavior `defaults` boleh dioverride oleh suite yang lebih spesifik, tetapi regression case dengan ID yang sama tidak boleh tertimpa diam-diam.
 
 ## Schema dan semantic validation
 
-JSON di Ramu memiliki dua lapis validation yang sengaja dipisahkan:
+Validasi dibagi dua karena masalah yang diperiksa juga berbeda.
 
-1. **JSON Schema Draft 2020-12** memeriksa bentuk setiap katalog, manifest, source registry, contract, dan behavior file. Schema Ramu sendiri juga diperiksa terhadap meta-schema Draft 2020-12.
-2. **Semantic/cross-file validation** memeriksa invariant yang membutuhkan hubungan antardokumen: identity catalog↔manifest, identity scoped registry/eval, file existence, source dependency, jumlah SKS, suite ordering, duplicate case ID, dan wiring contract↔behavior.
+**JSON Schema Draft 2020-12** memeriksa bentuk katalog, manifest, source registry, contract, dan behavior file. Schema-nya sendiri ikut divalidasi terhadap meta-schema.
 
-Schema tidak dianggap dokumentasi dekoratif. CI harus benar-benar menjalankan instance validation terhadap schema yang dipublish. Sebaliknya, JSON Schema tidak dipaksa melakukan pekerjaan lintas-file yang lebih jelas dan auditable di semantic validator.
+**Semantic/cross-file validation** memeriksa hubungan yang tidak cukup dinyatakan dalam satu JSON file: identity catalog↔manifest, scoped registry/eval, keberadaan file, source dependency, total SKS, suite ordering, duplicate case ID, dan wiring contract↔behavior.
+
+Keduanya dijalankan di CI.
 
 ## Maintainer pack
 
-Field `maintainer` membedakan asal pemeliharaan tanpa memakai istilah “official” yang bisa disalahartikan sebagai resmi dari kampus:
+Field `maintainer` menunjukkan siapa yang memelihara pack di repository:
 
-- `ramu` — **Ramu Maintained**, dipelihara/review langsung dalam repository utama;
-- `community` — kontribusi komunitas yang ownership/review-nya harus terlihat jelas.
+- `ramu` — **Ramu Maintained**, direview dan dipelihara di repository utama;
+- `community` — kontribusi komunitas dengan ownership/review yang harus terlihat jelas.
 
-Status sumber dan status maintainer adalah dua hal berbeda. Community pack tetap bisa memiliki source resmi, dan Ramu Maintained pack tetap tidak boleh mengklaim sebagai layanan resmi universitas.
+Status ini tidak menyatakan bahwa pack resmi diterbitkan universitas. Source resmi tetap dinilai terpisah dari siapa yang memelihara pack.
 
-## Prinsip versioning
+## Versioning
 
-Data akademik selalu ditulis bersama tahun akademik, `period_id`/`period_label`, `pack_version`, dan tanggal verifikasi. Jika kurikulum berubah, pack baru dibuat pada jalur versi/tahun/periode yang sesuai; pack lama tidak diam-diam ditimpa seolah masih berlaku.
+Data akademik selalu dipasangkan dengan tahun akademik, periode, `pack_version`, dan tanggal verifikasi. Jika kurikulum berubah, perubahan masuk ke jalur tahun/periode/versi yang sesuai; pack lama tetap dapat ditelusuri sebagai snapshot.
 
-`packs/index.json` memiliki version untuk kontrak katalog dan `schema_version` manifest berubah bila bentuk kontrak manifest berubah. `contract_version` dapat berubah ketika wiring/format kontrak evaluasi berubah. `pack_version` mengikuti isi/config course pack yang benar-benar dipakai mahasiswa. Karena itu migrasi metadata/identity tidak otomatis berarti course pack mahasiswa perlu versi baru.
+Beberapa versi memiliki fungsi berbeda:
 
-Jika dua course pack untuk konteks yang sama terpasang sekaligus, versi yang sesuai manifest aktif diprioritaskan dan versi lama sebaiknya dihapus dari Project Sources.
+- `packs/index.json.version` untuk kontrak katalog;
+- `schema_version` untuk bentuk manifest;
+- `contract_version` untuk kontrak evaluasi;
+- `pack_version` untuk isi/config course pack yang dipakai pengguna.
+
+Perubahan metadata internal tidak otomatis berarti course pack perlu versi baru. Sebaliknya, perubahan yang memengaruhi isi/config yang benar-benar dipakai perlu dicatat pada `pack_version`.
 
 ## Status pack
 
-- `source-verified` — data dan aturan utama sudah diperiksa terhadap sumber primer, tetapi behavior belum dinyatakan terverifikasi penuh.
-- `verified` — sumber + behavior validation yang relevan sudah direview sesuai standar release saat itu.
-- `community` — kontribusi pihak lain yang belum memenuhi level maintained/verified penuh.
-- `experimental` — format/workflow/pack masih diuji.
-- `deprecated` — pack sudah digantikan atau tidak lagi layak direkomendasikan untuk penggunaan baru.
+- `source-verified` — data dan aturan utama sudah diperiksa terhadap sumber primer; behavior belum diklaim selesai sepenuhnya;
+- `verified` — source dan behavior validation yang relevan sudah direview sesuai standar release saat itu;
+- `community` — kontribusi pihak lain yang belum mencapai level maintained/verified;
+- `experimental` — format atau workflow masih diuji;
+- `deprecated` — sudah digantikan atau tidak lagi direkomendasikan untuk penggunaan baru.
 
-Status `verified` tetap berupa snapshot terhadap pack version + tanggal + environment/model/product state yang diuji, bukan janji keluaran AI selalu sama selamanya.
+`verified` tetap sebuah snapshot terhadap versi, tanggal, dan environment yang diuji. Bukan janji bahwa output model akan selalu sama atau selalu benar.
 
-## Validasi tanpa dan dengan API
+## Validasi tanpa API
 
-Ramu tidak membutuhkan OpenAI API untuk dipakai mahasiswa.
+Penggunaan normal dan static validation tidak membutuhkan OpenAI API.
 
-- JSON Schema + static semantic validation: otomatis dan gratis;
-- manual validation di ChatGPT Projects: gratis dan menguji runtime produk yang sebenarnya;
-- automated API behavior eval: opsional sebagai regression/benchmark tambahan ketika API tersedia.
+- JSON Schema + semantic validation berjalan lokal/CI;
+- manual validation dijalankan langsung di ChatGPT Projects;
+- automated behavior eval melalui API tersedia sebagai QA tambahan.
 
-Static CI memeriksa schema, identity, period metadata, menggabungkan ordered eval suites setiap pack, dan memeriksa wiring seluruh case. Manual Eval Kit menggunakan suite yang sama untuk menghasilkan checklist tanpa API.
+Manual Eval Kit memakai suite yang sama untuk menghasilkan checklist tanpa API.
 
-## Bukan target Ramu
+## Di luar ruang lingkup
 
-- menyimpan jawaban tugas massal;
-- menyalin BMP/materi berhak cipta;
-- menjadi LMS pengganti kampus;
-- menebak nilai akhir mahasiswa;
-- menjanjikan keluaran AI selalu benar atau kebal prompt injection;
-- mengunci pengguna ke satu sistem kalender akademik, model, plan, fitur tambahan, atau vendor untuk selamanya.
+Ramu tidak diarahkan menjadi bank jawaban tugas, LMS pengganti kampus, tempat menyimpan materi berhak cipta, atau sistem yang mengklaim AI selalu benar. Fokusnya tetap pada workspace belajar, sumber yang bisa ditelusuri, dan cara menguji perilaku penting saat pack berkembang.
