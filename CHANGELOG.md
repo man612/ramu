@@ -6,6 +6,28 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 
 ## [Unreleased]
 
+### Added
+
+- **UT S1 Akuntansi Semester 3 2026/2027** sebagai real second pack Ramu: 7 mata kuliah, 20 SKS, `period_id: semester-03`, dan 7 course pack yang diverifikasi ulang dari sumber current 2026/2027.
+- Pack-scoped source registry Semester 3 dengan tujuh halaman BMP aktif Perpustakaan UT serta claim evidence khusus redesign AKM II dan Laboratorium Perpajakan/PRATON.
+- Pack behavior regression **E17–E24** untuk tax-currentness, AKM II old-vs-current metadata, continuity kasus PRATON, SIA requirement/control, relevant cost, business evidence, language tutoring, dan ketidakpastian kebijakan GenAI UT. E18 dan E24 ditandai critical.
+- Regression test reachability Source Watch yang membuktikan transient failure dapat pulih melalui retry, sementara persistent failure tetap gagal.
+
+### Changed
+
+- Source Freshness Watch sekarang melakukan retry terbatas sebelum menganggap reachability gagal, menerbitkan diagnostics ke GitHub Actions Job Summary, dan membawa output source/error ke issue review tanpa menyamakan network failure dengan perubahan fakta.
+- Registry dan panduan ChatGPT diperbarui berdasarkan review resmi 3 September 2026: eligible existing Project dapat mengubah memory lewat Project settings, sementara Study Mode tidak berlaku pada Project conversations; keduanya tidak menjadi dependency runtime Ramu.
+- Source hierarchy Universitas Terbuka dan regression E14 dibuat **period-neutral**. Halaman regional tetap secondary ketika berbeda dari katalog pusat untuk struktur kurikulum atau metadata mata kuliah.
+- Dokumentasi/root README/setup sekarang menampilkan Semester 2 dan Semester 3 sebagai dua pack nyata. `default_pack_id` sengaja tetap Semester 2 agar existing entry point tidak berubah diam-diam.
+- Semester 3 tidak menyalin metadata lama: AKM II current 2026/2027 memakai `EACC4205` baru dan BP/BPro, Laboratorium Perpajakan memakai current slot/prasyarat/PRATON, Bahasa Inggris current mencantumkan `T`, dan Belajar di Era Digital mencantumkan `WT`.
+- CI pack matrix sekarang dapat membuktikan wiring Semester 2 dan Semester 3 dari `packs/index.json` tanpa path Semester 3 khusus pada workflow.
+
+### Notes
+
+- Semester 3 berstatus `source-verified`, **bukan** `verified`: source/fakta current telah direview, tetapi full manual behavior validation pada ChatGPT Projects asli dan pilot pengguna nyata belum diklaim.
+- Materi BMP/modul berhak cipta tetap tidak disalin ke repository; course pack hanya menyimpan metadata, workflow, verifier, dan source governance.
+- Keberadaan halaman berjudul **Pedoman Penggunaan Generative AI Tahun 2026** di UT tidak digunakan untuk mengarang isi atau menyimpulkan bahwa semua graded work mengizinkan GenAI; policy text/instruksi tugas/tutor tetap harus diverifikasi.
+
 ## [0.2.2-beta] - 2026-08-29
 
 ### Added
