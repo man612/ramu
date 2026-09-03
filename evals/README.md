@@ -1,19 +1,25 @@
 # Evals
 
-Ramu memisahkan **scope evaluasi**, **urutan komposisi**, dan **cara menjalankannya**.
+Eval di repository dibagi berdasarkan **scope**, lalu dirakit sesuai manifest pack yang sedang diuji.
 
 ## Composable eval suites
 
-Setiap pack mendeklarasikan `eval_suites` berurutan di `manifest.json`. Scope yang didukung:
+Setiap `manifest.json` mendeklarasikan `eval_suites` dari aturan paling umum ke paling spesifik:
 
-1. `core` — failure mode universal Ramu;
-2. `institution` — aturan/failure mode yang berlaku lintas pack pada satu institusi;
-3. `program` — aturan/failure mode yang berlaku lintas periode pada satu program studi;
-4. `pack` — skenario yang benar-benar spesifik pada pack/periode/mata kuliah tersebut.
+1. `core` — failure mode yang masuk akal untuk semua pack;
+2. `institution` — aturan yang berlaku lintas pack pada satu institusi;
+3. `program` — aturan lintas periode dalam satu program studi;
+4. `pack` — skenario yang membutuhkan konteks periode atau mata kuliah tertentu.
 
-Urutannya selalu dari umum ke spesifik: `core → institution → program → pack`. Scope yang tidak dibutuhkan boleh dilewati, misalnya `core → pack`.
+Urutan dasarnya:
 
-Contoh pack UT S1 Akuntansi Semester 2 sekarang:
+```text
+core → institution → program → pack
+```
+
+Scope yang tidak dibutuhkan boleh dilewati.
+
+Contoh Semester 3 UT S1 Akuntansi:
 
 ```json
 "eval_suites": [
@@ -31,29 +37,29 @@ Contoh pack UT S1 Akuntansi Semester 2 sekarang:
     "behavior": "packs/universitas-terbuka/evals/behavior.json"
   },
   {
-    "id": "semester-02",
+    "id": "semester-03",
     "scope": "pack",
-    "scope_ref": "id.ut.accounting-s1.2026-2027.s2",
-    "contracts": "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/evals/contracts.json",
-    "behavior": "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/evals/behavior.json"
+    "scope_ref": "id.ut.accounting-s1.2026-2027.s3",
+    "contracts": "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-03/evals/contracts.json",
+    "behavior": "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-03/evals/behavior.json"
   }
 ]
 ```
 
-Validator mewajibkan `core` berada di awal dan `pack` di akhir. Scope tidak boleh mundur ke level yang lebih umum. `suite_id`, `scope`, dan `scope_ref` pada file contracts/behavior harus cocok dengan deklarasi manifest.
+Validator memastikan `core` berada di awal dan `pack` di akhir. `suite_id`, `scope`, dan `scope_ref` pada contracts/behavior juga harus cocok dengan manifest.
 
-ID case harus **unik setelah seluruh suite digabung**. Jadi suite yang lebih spesifik tidak boleh diam-diam mengganti E01/E14 milik suite sebelumnya. Bila behavior suite yang lebih spesifik mendefinisikan `defaults`, nilai default runtime seperti `min_score` atau `max_output_tokens` boleh mengoverride nilai dari suite sebelumnya secara berurutan.
+ID case tetap **unik setelah seluruh suite digabung**. Suite yang lebih spesifik tidak boleh diam-diam mengganti case milik scope sebelumnya. `defaults` pada behavior boleh dioverride secara berurutan untuk nilai runtime seperti `min_score` atau `max_output_tokens`.
 
-## Scope yang tersedia sekarang
+## Scope yang aktif
 
 ### Core
 
-`evals/core/` berisi failure mode yang harus masuk akal lintas institusi/program, misalnya:
+`evals/core/` memuat failure mode lintas institusi, antara lain:
 
 - data/screenshot tidak lengkap;
-- referensi/DOI palsu;
+- referensi atau DOI palsu;
 - precedence rubrik;
-- integritas tugas;
+- academic integrity;
 - retrieval practice;
 - learner state;
 - source freshness;
@@ -62,53 +68,57 @@ ID case harus **unik setelah seluruh suite digabung**. Jadi suite yang lebih spe
 
 ### Universitas Terbuka
 
-`packs/universitas-terbuka/evals/` berisi failure mode yang memang terkait source governance UT dan dapat dipakai ulang oleh pack UT lain. E14, misalnya, menguji konflik source pusat vs regional berdasarkan registry UT.
+`packs/universitas-terbuka/evals/` berisi aturan yang memang khas UT dan dapat dipakai lebih dari satu periode. E14, misalnya, menguji konflik source pusat vs regional.
 
-### Pack Semester 2
+### Semester 2
 
-`packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-02/evals/` hanya menyimpan skenario yang membutuhkan konteks pack tersebut, misalnya aturan pajak vs BMP, jurnal AKM I, contoh pedagogis pada mata kuliah S2, dan context isolation antarmata kuliah.
+`semester-02/evals/` menyimpan skenario yang membutuhkan konteks pack Semester 2, seperti aturan pajak vs BMP dan jurnal AKM I.
 
-Dengan struktur ini, Semester 3 UT nanti dapat menyertakan suite `core + ut + <suite pack Semester 3>` tanpa menyalin E14. Jika suatu hari S1 Akuntansi mempunyai failure mode lintas semester yang tidak berlaku untuk program lain, suite `program` dapat ditambahkan di antara `ut` dan suite pack.
+### Semester 3
+
+`semester-03/evals/` menambahkan E17–E24 untuk tax-currentness, metadata lama vs current AKM II, continuity kasus PRATON, SIA requirement/control, relevant cost, business evidence, language tutoring, dan ketidakpastian isi kebijakan GenAI UT.
+
+Jika suatu hari ada failure mode lintas semester yang hanya berlaku pada S1 Akuntansi, scope `program` dapat ditempatkan antara `institution` dan `pack`.
 
 ## Tiga jalur pemeriksaan
 
-1. **Static validation** — gratis/deterministik; memeriksa manifest, source registry, contract marker, suite metadata, file, dan wiring.
-2. **Manual behavior validation** — gratis; case dijalankan manusia langsung di ChatGPT Projects.
-3. **Automated API behavior eval** — opsional; model kandidat dijalankan via API dan respons dinilai judge model.
+1. **Static validation** — deterministik; memeriksa manifest, source registry, contract marker, suite metadata, file, dan wiring.
+2. **Manual behavior validation** — case dijalankan langsung di ChatGPT Projects.
+3. **Automated API behavior eval** — opsional; kandidat dijalankan via API lalu dinilai judge model.
 
-Tidak memiliki API tidak membuat Ramu gagal atau tidak dapat dipakai. API hanya menambah automation/reproducibility pada satu lapisan QA.
+API hanya menambah satu lapisan automation. Penggunaan normal, static CI, dan manual validation tetap berjalan tanpa API.
 
 ## Pemeriksaan tanpa API
 
 ```bash
 python scripts/validate_repo.py
-python scripts/run_behavior_evals.py --dry-run --pack id.ut.accounting-s1.2026-2027.s2
+python scripts/run_behavior_evals.py --dry-run --pack id.ut.accounting-s1.2026-2027.s3
 python scripts/check_source_freshness.py
 ```
 
-CI mengambil seluruh pack dari `packs/index.json` dan menjalankan dry-run per pack melalui matrix. Dry-run selalu memakai suite yang dideklarasikan manifest pack tersebut.
+CI mengambil semua pack dari `packs/index.json` dan membuat matrix dry-run otomatis.
 
 ## Manual validation di ChatGPT Projects
 
 ```bash
 python scripts/prepare_manual_eval.py \
-  --pack id.ut.accounting-s1.2026-2027.s2
+  --pack id.ut.accounting-s1.2026-2027.s3
 ```
 
-Atau buka **Actions → Manual Eval Kit**. Workflow itu tidak membutuhkan secret/API dan menghasilkan checklist dari merged suite sebagai artifact.
+Atau buka **Actions → Manual Eval Kit**. Workflow tersebut tidak memerlukan secret/API dan menghasilkan checklist dari merged suite.
 
-Panduan: [`manual/README.md`](manual/README.md).
+Panduan lengkap: [`manual/README.md`](manual/README.md).
 
-## Automated behavior eval — opsional
+## Automated behavior eval
 
 ```bash
 export OPENAI_API_KEY="..."
 python scripts/run_behavior_evals.py \
-  --pack id.ut.accounting-s1.2026-2027.s2 \
+  --pack id.ut.accounting-s1.2026-2027.s3 \
   --candidate-model <candidate> \
   --grader-model <judge>
 ```
 
-Runner memuat manifest pack, Project Instructions, seluruh eval suite/context yang dideklarasikan, menjalankan kandidat, meminta judge structured verdict, lalu menyimpan summary/artifact ke `evals/results/`.
+Runner memuat manifest, Project Instructions, eval suite/context yang dideklarasikan, menjalankan candidate, meminta structured verdict dari judge, lalu menyimpan hasil ke `evals/results/`.
 
-Workflow **Behavior Evals** sengaja manual agar API tidak terpakai pada setiap push. Satu run probabilistik bukan bukti permanen; hasil penting perlu direview manusia dan dikaitkan dengan pack version + contract version + tanggal + model yang benar-benar diuji.
+Workflow **Behavior Evals** dibuat manual agar API tidak terpakai pada setiap push. Hasil probabilistik tetap perlu dikaitkan dengan pack version, contract version, tanggal, dan model yang benar-benar diuji.

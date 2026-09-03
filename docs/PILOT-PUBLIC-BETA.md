@@ -1,48 +1,48 @@
-# Pilot Public Beta Ramu
+# Pilot Public Beta
 
-Dokumen ini dipakai untuk menguji apakah Ramu benar-benar dapat dipasang dan digunakan mahasiswa dalam kondisi nyata, bukan hanya terlihat rapi di repository.
+Pilot dipakai untuk melihat apakah setup dan penggunaan Ramu benar-benar masuk akal di kondisi nyata. Fokusnya mencari friction dan failure mode, bukan membuktikan klaim besar tentang peningkatan nilai atau hasil belajar.
 
-Pilot adalah **field evidence kecil untuk menemukan friction dan failure mode**. Pilot 5–10 orang bukan eksperimen terkontrol dan tidak boleh dipakai sendirian untuk mengklaim Ramu meningkatkan nilai, hasil belajar, atau mewakili seluruh populasi mahasiswa.
+Pilot kecil 5–10 orang tetap berguna untuk menemukan masalah, tetapi bukan eksperimen terkontrol dan tidak mewakili seluruh populasi mahasiswa.
 
 ## Target awal
 
-Mulai dari **5–10 mahasiswa yang benar-benar cocok dengan pack yang diuji**. Untuk pack awal berarti mahasiswa yang relevan dengan Universitas Terbuka · S1 Akuntansi · Semester 2 · 2026/2027.
+Mulai dari **5–10 mahasiswa yang cocok dengan pack yang sedang diuji**. Untuk baseline awal, targetnya adalah pengguna yang relevan dengan UT S1 Akuntansi 2026/2027.
 
-Tujuannya bukan mengejar star GitHub, melainkan mengetahui:
+Hal yang ingin diketahui:
 
-- apakah pengguna dapat mengaktifkan satu Project;
-- seberapa cepat mereka mencapai manfaat pertama;
-- langkah setup mana yang gagal atau membingungkan;
-- failure mode tutor yang muncul di penggunaan nyata;
-- apakah mereka kembali dalam 7 hari;
-- apakah setelah satu mata kuliah mereka memilih memasang mata kuliah lain.
+- apakah satu Project bisa disiapkan tanpa kebingungan besar;
+- seberapa cepat pengguna sampai pada manfaat pertama;
+- langkah setup mana yang paling sering gagal;
+- behavior tutor apa yang bermasalah di penggunaan nyata;
+- apakah Project dipakai lagi dalam 7 hari;
+- apakah setelah satu mata kuliah pengguna memilih menambah mata kuliah lain.
 
 ## Skenario minimum
 
-Setiap peserta diminta:
+Setiap peserta mencoba:
 
-1. memasang **satu mata kuliah terlebih dahulu**, bukan seluruh pack;
+1. memasang **satu mata kuliah terlebih dahulu**;
 2. menjalankan satu sesi memahami konsep yang belum dikuasai;
-3. meminta Ramu mengecek jawaban buatan sendiri;
+3. meminta pengecekan terhadap jawaban buatan sendiri;
 4. memakai satu materi/screenshot/PDF yang memang mereka punya;
-5. kembali memakai Project yang sama pada hari berbeda bila masih relevan.
+5. kembali ke Project yang sama pada hari berbeda bila masih relevan.
 
-Setelah satu Project berhasil dan manfaatnya terasa, baru tawarkan setup mata kuliah lain.
+Mata kuliah lain baru ditambahkan setelah Project pertama benar-benar bisa dipakai.
 
-## Jangan simpan dataset peserta di repository
+## Data peserta tidak masuk repository
 
-Individual chat dan data peserta bukan artifact publik Ramu. Jangan commit:
+Jangan commit data individual seperti:
 
 - nama, email, nomor mahasiswa, username, atau direct identifier lain;
 - row per peserta;
 - transcript/chat mentah;
 - screenshot atau isi tugas/materi mentah;
 - credential/token;
-- kutipan feedback yang mudah mengidentifikasi seseorang.
+- feedback yang mudah mengidentifikasi seseorang.
 
-Yang boleh menjadi evidence repository hanyalah **angka agregat, kategori failure, tema feedback yang sudah disanitasi, dan regression linkage**.
+Evidence publik cukup berupa **angka agregat, kategori failure, tema feedback yang sudah disanitasi, dan regression linkage**.
 
-## Membuat summary lokal
+## Menyiapkan summary lokal
 
 Gunakan tooling pilot tanpa API:
 
@@ -54,7 +54,7 @@ python scripts/pilot_evidence.py prepare \
   --output evals/manual/results/pilot-summary.json
 ```
 
-`evals/manual/results/` di-ignore Git sehingga draft tidak sengaja terpublish.
+`evals/manual/results/` di-ignore Git agar draft tidak ikut terpublish.
 
 Saat pilot dimulai:
 
@@ -64,14 +64,14 @@ python scripts/pilot_evidence.py finalize \
   --start-now
 ```
 
-Setelah angka agregat diubah, jalankan lagi:
+Setelah count diperbarui:
 
 ```bash
 python scripts/pilot_evidence.py finalize evals/manual/results/pilot-summary.json
 python scripts/pilot_evidence.py validate evals/manual/results/pilot-summary.json
 ```
 
-Saat periode pilot benar-benar selesai:
+Saat pilot selesai:
 
 ```bash
 python scripts/pilot_evidence.py finalize \
@@ -79,28 +79,30 @@ python scripts/pilot_evidence.py finalize \
   --complete-now
 ```
 
-Tooling menghitung metrik dan readiness dari count yang dicatat; jangan mengedit nilai `metrics` atau `readiness` secara manual.
+Tooling menghitung `metrics` dan `readiness` dari count. Field hasil perhitungan tersebut tidak perlu diedit manual.
 
 ## Data agregat yang dicatat
 
-Summary menyimpan funnel dan metrik proses berikut:
+Summary menyimpan:
 
-- `started` — peserta yang benar-benar mulai mencoba;
-- `setup_completed` — berhasil setup satu Project;
-- `first_value_reached` — berhasil mencapai sesi yang dianggap memberi manfaat pertama;
-- `return_7d_eligible` dan `returned_within_7d` — denominator/numerator return use;
-- `multi_course_adopted` — memilih memasang mata kuliah tambahan;
-- `setup_completed_without_live_help` — setup selesai tanpa maintainer mengambil alih proses;
+- `started` — peserta yang benar-benar mulai;
+- `setup_completed` — berhasil menyiapkan satu Project;
+- `first_value_reached` — sampai pada sesi yang dianggap memberi manfaat pertama;
+- `return_7d_eligible` dan `returned_within_7d` — denominator/numerator penggunaan ulang;
+- `multi_course_adopted` — memilih menambah mata kuliah;
+- `setup_completed_without_live_help` — setup selesai tanpa maintainer mengambil alih;
 - bucket **time-to-first-value**: `<5m`, `5–15m`, `15–30m`, `>30m`, atau unknown;
-- aggregate setup/behavior failure category;
-- sanitized feedback theme;
-- regression `P001`, `P002`, ... untuk failure yang perlu ditindaklanjuti.
+- kategori setup/behavior failure;
+- tema feedback yang sudah disanitasi;
+- regression `P001`, `P002`, dan seterusnya untuk masalah yang perlu ditindaklanjuti.
 
-Rate dihitung tooling dari count tersebut. CI juga menolak funnel mustahil seperti `first_value_reached > setup_completed` atau jumlah bucket waktu yang tidak sama dengan jumlah first-value.
+CI menolak data agregat yang secara logika tidak mungkin, misalnya `first_value_reached > setup_completed` atau jumlah bucket waktu yang tidak cocok dengan count first-value.
 
 ## Regression dari pilot
 
-Failure yang material ditulis sebagai regression agregat, bukan transcript. Contoh kategori:
+Masalah material dicatat sebagai regression agregat, bukan transcript.
+
+Kategori yang tersedia antara lain:
 
 - fabrication;
 - source-selection;
@@ -111,44 +113,42 @@ Failure yang material ditulis sebagai regression agregat, bukan transcript. Cont
 - learner-state;
 - setup.
 
-Jika dapat direproduksi, hubungkan ke behavior case `E..` yang sudah ada atau buat eval regression baru pada scope paling tepat.
+Jika masalah bisa direproduksi, hubungkan ke behavior case `E..` yang sudah ada atau tambahkan case baru pada scope yang tepat.
 
-Regression yang `critical: true`, `reproducible: true`, dan masih `open` membuat readiness pilot menjadi **BLOCKED**.
+Regression dengan `critical: true`, `reproducible: true`, dan status `open` membuat readiness menjadi **BLOCKED**.
 
 ## Arti readiness
 
-Tooling hanya memiliki empat status:
+Tooling memakai empat status:
 
 - `INCOMPLETE` — pilot/protocol belum selesai;
-- `INSUFFICIENT_SAMPLE` — pilot selesai tetapi peserta yang mulai belum mencapai minimum yang dideklarasikan;
-- `BLOCKED` — ada reproducible critical regression yang masih terbuka;
-- `REVIEW_READY` — summary cukup lengkap untuk review manusia.
+- `INSUFFICIENT_SAMPLE` — pilot selesai tetapi jumlah peserta belum mencapai minimum;
+- `BLOCKED` — ada critical regression yang reproducible dan masih terbuka;
+- `REVIEW_READY` — summary cukup lengkap untuk direview manusia.
 
-Tidak ada status `PASS`, `STABLE`, atau `VALIDATED` otomatis dari pilot.
+`REVIEW_READY` berarti evidence sudah cukup rapi untuk dibaca bersama evidence lain. Ia bukan bukti statistik atau keputusan release otomatis.
 
-`REVIEW_READY` berarti evidence cukup untuk dibaca bersama evidence lain. Ia **bukan** bukti statistik, bukan causal claim, dan bukan keputusan release otomatis.
+## Mempublikasikan summary
 
-## Publish summary bila memang perlu
-
-Setelah privacy review dan review angka dilakukan manusia, sanitized summary yang ingin menjadi evidence publik dapat disalin ke:
+Setelah privacy review dan pengecekan angka, sanitized summary yang memang perlu menjadi evidence publik dapat disalin ke:
 
 ```text
 evidence/pilots/*.json
 ```
 
-CI akan memvalidasi schema serta invariant agregat setiap summary yang dipublish. Lihat [`../evidence/pilots/README.md`](../evidence/pilots/README.md).
+CI akan memvalidasi schema dan invariant agregat. Lihat [`../evidence/pilots/README.md`](../evidence/pilots/README.md).
 
-## Kriteria sebelum mempertimbangkan status lebih tinggi
+## Sebelum menaikkan status
 
-Public beta tidak sama dengan tervalidasi penuh. Sebelum status pack/release yang lebih tinggi dipertimbangkan, minimal:
+Public beta belum berarti behavior sudah tervalidasi penuh. Sebelum mempertimbangkan status yang lebih tinggi, periksa minimal:
 
 - static/schema/identity/site CI hijau;
-- full manual E01–E16 di ChatGPT Projects sudah dijalankan dan direview;
-- critical manual behavior case tidak FAIL;
-- pilot mencapai minimum yang dideklarasikan atau kekurangannya dijelaskan eksplisit;
-- critical failure dari pilot sudah diperbaiki/didokumentasikan dan, bila reproducible, masuk regression eval;
-- setup satu mata kuliah dapat diselesaikan pengguna baru tanpa bantuan maintainer terus-menerus;
-- source resmi aktif dan claim produk masih dalam interval review;
-- tidak ada blocker lisensi, secret, atau materi berhak cipta di repo.
+- manual behavior case yang relevan sudah dijalankan dan direview;
+- critical case tidak FAIL;
+- pilot mencapai minimum yang dideklarasikan atau kekurangannya dijelaskan;
+- critical failure pilot sudah diperbaiki/didokumentasikan dan masuk regression bila reproducible;
+- pengguna baru dapat menyiapkan satu mata kuliah tanpa bantuan terus-menerus;
+- source resmi masih aktif dan berada dalam interval review;
+- tidak ada blocker lisensi, secret, atau materi berhak cipta di repository.
 
-Automated API benchmark tetap QA tambahan opsional dan bukan pengganti manual Projects + field evidence.
+Automated API benchmark tetap menjadi QA tambahan, bukan pengganti manual Projects atau evidence penggunaan nyata.

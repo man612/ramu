@@ -1,34 +1,34 @@
 # Published Pilot Evidence
 
-Folder ini hanya untuk **ringkasan agregat pilot yang sudah disanitasi** dan memang sengaja dipublish sebagai evidence repository.
+Folder ini untuk **ringkasan agregat pilot yang sudah disanitasi** dan memang perlu disimpan sebagai evidence publik.
 
 Jangan commit:
 
 - nama, email, username, nomor mahasiswa, atau identifier peserta lain;
-- baris data per peserta;
+- data per peserta;
 - transcript/chat mentah;
 - screenshot atau isi tugas/materi kuliah mentah;
 - credential, token, API key, atau data akun;
-- kutipan feedback yang dapat mengidentifikasi peserta.
+- kutipan feedback yang masih dapat mengidentifikasi seseorang.
 
-Draft kerja sebaiknya dibuat di lokasi lokal yang di-ignore Git, misalnya:
+Draft kerja sebaiknya tetap lokal di path yang di-ignore Git, misalnya:
 
 ```bash
 python scripts/pilot_evidence.py prepare \
-  --pack id.ut.accounting-s1.2026-2027.s2 \
+  --pack id.ut.accounting-s1.2026-2027.s3 \
   --minimum 5 \
   --maximum 10 \
   --output evals/manual/results/pilot-summary.json
 ```
 
-Setelah agregat diisi, hitung ulang metrik/readiness dan validasi:
+Setelah data agregat diisi:
 
 ```bash
 python scripts/pilot_evidence.py finalize evals/manual/results/pilot-summary.json
 python scripts/pilot_evidence.py validate evals/manual/results/pilot-summary.json
 ```
 
-Kalau pilot sudah selesai:
+Saat pilot selesai:
 
 ```bash
 python scripts/pilot_evidence.py finalize \
@@ -36,15 +36,15 @@ python scripts/pilot_evidence.py finalize \
   --complete-now
 ```
 
-Hanya setelah privacy check, angka, kategori failure, feedback theme, dan regression linkage direview manusia, salin summary yang memang ingin dipublish ke folder ini lewat PR.
+Summary baru dipindahkan ke folder ini setelah privacy check, angka, kategori failure, tema feedback, dan regression linkage sudah direview.
 
-CI akan menjalankan JSON Schema validation dan `python scripts/pilot_evidence.py validate-published` terhadap setiap `*.json` di folder ini.
+CI menjalankan JSON Schema validation dan `python scripts/pilot_evidence.py validate-published` untuk setiap `*.json` yang dipublish di sini.
 
-## Arti readiness
+## Readiness
 
-- `INCOMPLETE` — pilot atau protocol metadata belum lengkap;
-- `INSUFFICIENT_SAMPLE` — pilot selesai tetapi jumlah peserta yang mulai belum mencapai minimum yang dideklarasikan;
-- `BLOCKED` — ada regression critical yang reproducible dan masih open;
-- `REVIEW_READY` — evidence agregat cukup lengkap untuk review maintainer.
+- `INCOMPLETE` — pilot atau metadata protocol belum lengkap;
+- `INSUFFICIENT_SAMPLE` — pilot selesai tetapi jumlah peserta belum mencapai minimum;
+- `BLOCKED` — ada critical regression yang reproducible dan masih terbuka;
+- `REVIEW_READY` — evidence agregat cukup lengkap untuk dibaca dan dinilai.
 
-`REVIEW_READY` **bukan** sinonim `PASS`, `stable`, statistically representative, atau bukti bahwa Ramu meningkatkan hasil belajar. Keputusan status pack/release tetap membutuhkan review manusia dan harus dibaca bersama manual behavior evidence, source freshness, serta limitation yang tercatat.
+`REVIEW_READY` bukan sinonim PASS, stabil, representatif secara statistik, atau bukti peningkatan hasil belajar. Status pack/release tetap perlu dibaca bersama manual behavior evidence, source freshness, dan limitation yang tercatat.
