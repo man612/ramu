@@ -57,6 +57,9 @@ jobs:
       - name: Prove CI and Pages gate contract
         run: python tests/test_ci_contract.py
 
+      - name: Prove source-watch retry contract
+        run: python tests/test_source_freshness_probe.py
+
       - name: Validate human-facing project names
         run: python scripts/validate_display_names.py
 
