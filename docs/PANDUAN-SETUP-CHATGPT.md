@@ -105,7 +105,7 @@ Nama Project berasal dari `project_name` pada manifest pack. Contributor tidak p
 
 Ramu memakai satu Project per mata kuliah supaya file, riwayat, source, dan learner state tidak bercampur.
 
-Gunakan **Project-only memory** bila tersedia. Jika kamu sedang berada di Project AKM I tetapi ingin membahas Perpajakan, lebih baik pindah ke Project Perpajakan daripada menyimpan progres pajak ke learner state AKM I.
+Gunakan **Project-only memory**. Pada eligible Project yang sudah ada, pengaturan memory dapat diubah melalui **Project settings → Memory**; perubahan dapat membutuhkan beberapa jam untuk berlaku. Shared Project tetap memakai Project-only memory. Jika kamu sedang berada di Project AKM I tetapi ingin membahas Perpajakan, lebih baik pindah ke Project Perpajakan daripada menyimpan progres pajak ke learner state AKM I.
 
 Jika dari suatu sesi muncul konteks belajar yang perlu dibawa ke chat berikutnya, minta Ramu membuat **Catatan Belajar Terbaru**. Bila ChatGPT menyediakan opsi untuk menyimpan hasil ke Project atau menjadikannya Project Source, catatan itu dapat disimpan ke Project. Ketika catatan baru menggantikan versi lama, hapus versi lama supaya dua state yang bertentangan tidak dipakai bersamaan.
 
@@ -128,7 +128,7 @@ Pengaturan apakah percakapan boleh digunakan untuk peningkatan model berada di *
 
 ## Tentang Study Mode
 
-Ramu tidak bergantung pada Study Mode. Pola bantuan belajar utama berasal dari Project Instructions, protocols, dan course pack. Bila Study Mode tersedia dan cocok digunakan, anggap sebagai fitur tambahan.
+Dokumentasi OpenAI saat ini menyatakan **Study Mode tidak berlaku pada Project conversations**. Ramu tidak bergantung pada Study Mode: pola bantuan belajar berasal dari Project Instructions, protocols, dan course pack, sehingga scaffolding, retrieval practice, dan tutoring behavior tetap tersedia di dalam Project tanpa Study Mode.
 
 ## Kalau UI ChatGPT berubah
 
