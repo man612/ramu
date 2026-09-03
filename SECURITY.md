@@ -1,29 +1,29 @@
 # Security Policy
 
-Ramu tidak menjalankan server atau menyimpan akun mahasiswa sendiri, tetapi tetap memiliki risiko keamanan pada prompt, sumber, file yang diunggah, dan tooling evaluasi.
+Ramu berjalan sebagai konfigurasi dan tooling di atas layanan AI pihak ketiga. Tidak ada server aplikasi atau akun mahasiswa yang dikelola repository ini, tetapi risiko tetap ada pada prompt, source, file, workflow, dan tooling evaluasi.
 
 ## Versi yang didukung
 
-Security fix diprioritaskan untuk **current `main`** dan **public-beta release terbaru**. Tag beta lama tetap dipertahankan sebagai snapshot yang dapat ditelusuri, tetapi tidak dijanjikan menerima backport untuk setiap perbaikan.
+Perbaikan keamanan diprioritaskan untuk **current `main`** dan **public-beta release terbaru**. Tag beta lama dipertahankan sebagai snapshot dan tidak selalu menerima backport.
 
-Jika masalah hanya muncul pada release lama, periksa dulu apakah masalah tersebut masih ada pada release terbaru sebelum membuat laporan publik.
+Jika masalah hanya muncul pada release lama, cek dulu apakah masih dapat direproduksi pada versi terbaru.
 
 ## Yang termasuk isu keamanan
 
 Contohnya:
 
-- prompt injection dari source/course material yang dapat mengubah guardrail Ramu;
-- source poisoning atau source routing yang membuat informasi tidak tepercaya diperlakukan sebagai sumber resmi;
-- secret/API key yang dapat bocor melalui workflow, artifact, log, atau contoh konfigurasi;
+- prompt injection dari source/course material yang dapat mengubah guardrail;
+- source poisoning atau routing yang membuat sumber tidak tepercaya dianggap resmi;
+- API key/secret bocor lewat workflow, artifact, log, atau contoh konfigurasi;
 - file atau instruksi yang menyebabkan data pribadi/sensitif tersalin ke output publik;
-- perubahan tooling yang membuat hasil eval terlihat lulus padahal gate tidak benar-benar dijalankan.
+- tooling yang membuat eval terlihat lulus padahal gate sebenarnya tidak dijalankan.
 
 ## Pelaporan
 
-Untuk masalah yang tidak mengandung detail sensitif, buka GitHub Issue dengan reproduksi minimal dan dampaknya.
+Masalah tanpa detail sensitif dapat dilaporkan lewat GitHub Issue dengan reproduksi minimal dan dampaknya.
 
-Untuk kerentanan yang memerlukan detail sensitif, gunakan GitHub private vulnerability reporting / Security Advisory repository bila fitur tersebut tersedia. Jangan menempelkan API key, token, data pribadi, materi kuliah privat, atau exploit yang belum diperbaiki ke issue publik.
+Untuk kerentanan yang memerlukan detail sensitif, gunakan GitHub private vulnerability reporting / Security Advisory bila tersedia. Jangan menaruh API key, token, data pribadi, materi kuliah privat, atau exploit yang belum diperbaiki di issue publik.
 
 ## Batas keamanan
 
-Ramu adalah lapisan konfigurasi dan evaluasi di atas layanan AI yang digunakan pengguna. Ramu tidak dapat menjamin perilaku model pihak ketiga, uptime layanan, kebijakan privasi platform, atau bahwa setiap jawaban AI selalu benar. Guardrail dan eval di repo digunakan untuk mengurangi failure mode yang diketahui, bukan sebagai jaminan keamanan absolut.
+Guardrail dan eval membantu mengurangi failure mode yang sudah diketahui, tetapi tidak bisa menjamin perilaku model pihak ketiga, uptime layanan, kebijakan privasi platform, atau akurasi setiap jawaban AI. Klaim keamanan sebaiknya selalu dibaca dalam batas tersebut.
