@@ -63,6 +63,9 @@ jobs:
       - name: Validate human-facing project names
         run: python scripts/validate_display_names.py
 
+      - name: Validate README learning-layer order
+        run: python scripts/validate_readme.py
+
       - name: Validate catalog-driven public site
         run: python scripts/validate_site.py
 
