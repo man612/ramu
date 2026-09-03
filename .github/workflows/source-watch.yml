@@ -24,18 +24,49 @@ jobs:
       - name: Check freshness and URL reachability across registries
         id: freshness
         continue-on-error: true
-        run: python scripts/check_source_freshness.py --online --fail-on-network
+        shell: bash
+        run: |
+          set -o pipefail
+          python scripts/check_source_freshness.py --online --fail-on-network 2>&1 | tee source-watch.log
 
-      - name: Open review issue when source watch needs attention
+      - name: Publish source-watch diagnostics
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "### Source Freshness Watch"
+            echo
+            echo '```text'
+            cat source-watch.log
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Open or update review issue when source watch needs attention
         if: steps.freshness.outcome == 'failure'
         env:
           GH_TOKEN: ${{ github.token }}
+        shell: bash
         run: |
-          existing="$(gh issue list --state open --search 'Source watch perlu ditinjau in:title' --json number --jq 'length')"
-          if [ "$existing" = "0" ]; then
+          existing="$(gh issue list --state open --search 'Source watch perlu ditinjau in:title' --json number --jq '.[0].number // empty')"
+          run_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          {
+            echo "Pemeriksaan mingguan menemukan source aktif melewati interval review atau watched URL tetap tidak dapat dijangkau setelah retry."
+            echo
+            echo "Kegagalan reachability sendiri belum berarti fakta sumber berubah. Review output berikut, lalu periksa registry/source yang disebut."
+            echo
+            echo '```text'
+            tail -n 80 source-watch.log
+            echo '```'
+            echo
+            echo "Workflow run: $run_url"
+          } > source-watch-issue.md
+
+          if [ -z "$existing" ]; then
             gh issue create \
               --title "Source watch perlu ditinjau" \
-              --body "Pemeriksaan mingguan menemukan source aktif melewati interval review atau watched URL tidak dapat dijangkau. Buka log workflow, jalankan python scripts/check_source_freshness.py --online --fail-on-network, lalu periksa registry yang disebut pada output (global atau pack/institusi). Kegagalan reachability sendiri belum berarti fakta sumber berubah."
+              --body-file source-watch-issue.md
+          else
+            gh issue comment "$existing" --body-file source-watch-issue.md
           fi
 
       - name: Fail job when source watch needs attention
