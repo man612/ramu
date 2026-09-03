@@ -1,101 +1,92 @@
-# Proses Release Ramu
+# Proses Release
 
-Dokumen ini menjaga agar release Ramu menjadi snapshot yang dapat ditelusuri, bukan sekadar label yang dipindahkan mengikuti `main`.
+Release diperlakukan sebagai snapshot yang bisa ditelusuri, bukan label yang ikut bergerak bersama `main`.
 
-## Prinsip versi
+## Versi
 
-Ramu mengikuti Semantic Versioning sebagai bahasa perubahan:
+Ramu memakai Semantic Versioning selama public beta:
 
-- `0.x.0-beta` — perubahan fitur/arsitektur yang cukup berarti selama public beta;
-- `0.x.y-beta` — perbaikan kompatibel yang tidak mengubah kemampuan utama;
-- release tanpa `-beta` hanya dipertimbangkan setelah behavior validation dan pilot pengguna memberi evidence yang cukup.
+- `0.x.0-beta` — perubahan fitur atau arsitektur yang cukup berarti;
+- `0.x.y-beta` — perbaikan kompatibel tanpa perubahan kemampuan utama;
+- release tanpa `-beta` baru layak dipertimbangkan setelah behavior validation dan pilot memberi evidence yang cukup.
 
 Release yang sudah terbit:
 
-- `v0.1.0-beta` = public-beta baseline pertama;
-- `v0.2.0-beta` = fondasi multi-pack + identity/schema validation + eval/security hardening + validation-gated Pages;
-- `v0.2.1-beta` = patch website dan UX: copy lebih langsung, custom pack picker, setup wording defensif, dan desktop visual scale lebih compact.
+- `v0.1.0-beta` — baseline public beta pertama;
+- `v0.2.0-beta` — fondasi multi-pack, identity/schema validation, eval/security hardening, dan Pages yang gated oleh validation;
+- `v0.2.1-beta` — patch website/UX dan setup copy.
 
-Jangan memindahkan atau reuse tag release yang sudah dipublikasikan. Jika repository berubah setelah release, perubahan tersebut tetap berada di `Unreleased` sampai versi berikutnya memang dibuat.
+Tag release yang sudah dipublikasikan tidak dipindahkan atau dipakai ulang. Perubahan setelah release tetap berada di `Unreleased` sampai versi berikutnya dibuat.
 
-## Validation dan deployment chain
+## Validation dan deployment
 
-Setiap push ke `main` harus menjalankan workflow **Validate Ramu**, termasuk perubahan dokumentasi/workflow.
+Setiap push ke `main` menjalankan **Validate Ramu**, termasuk perubahan dokumentasi dan workflow.
 
-GitHub Pages bukan gate paralel. Workflow **Deploy Pages** dipicu setelah run `Validate Ramu` selesai dan hanya melakukan deploy bila:
+**Deploy Pages** berjalan setelah Validate Ramu selesai dan hanya deploy bila:
 
 - upstream conclusion = `success`;
 - upstream event = `push`;
 - upstream branch = `main`.
 
-Pages checkout `workflow_run.head_sha`, sehingga commit yang dipublish adalah SHA yang benar-benar baru lolos validation, bukan sekadar keadaan `main` terbaru ketika deploy dimulai.
+Pages checkout `workflow_run.head_sha`. Dengan begitu commit yang diterbitkan adalah SHA yang memang baru lolos validation, bukan keadaan `main` lain yang kebetulan lebih baru saat deploy berjalan.
 
-Dependabot dapat membuat PR untuk dependency GitHub Actions dan dependency validation Python. Full-SHA pin tetap dipertahankan; update dependency tetap diperlakukan seperti PR biasa dan harus melewati validation sebelum merge. Jangan auto-merge dependency update hanya karena berasal dari Dependabot.
+Dependency GitHub Actions dipin ke full commit SHA. Dependabot boleh membuka update, tetapi PR dependency tetap direview dan melewati validation seperti perubahan lain.
 
-## Sebelum membuat release
+## Sebelum release
 
-1. Pastikan target commit sudah berada di `main`.
-2. Pastikan workflow **Validate Ramu** hijau pada commit tersebut.
-3. Pastikan run **Deploy Pages** downstream untuk SHA tersebut hijau bila release menyertakan site/pack/schema yang dipublish. Jangan menganggap Pages run untuk SHA lain sebagai bukti.
-4. Periksa `CHANGELOG.md` dan pindahkan item `Unreleased` ke versi yang akan dirilis **sebelum tag dibuat**.
-5. Periksa source review date. Jangan mengubah `verified_at` hanya supaya terlihat baru; tanggal harus mencerminkan review manusia sungguhan.
-6. Pastikan status behavior validation ditulis apa adanya. Static CI tidak sama dengan bukti bahwa semua respons model lolos.
-7. API **tidak wajib** untuk membuat public-beta release. Manual validation di ChatGPT Projects dan status pilot harus tetap dijelaskan terpisah.
-8. Pastikan tidak ada Dependabot/dependency PR relevan yang sengaja ditinggalkan hanya untuk membuat release terlihat hijau; review perubahan dependency secara normal.
+1. Pastikan target commit sudah ada di `main`.
+2. Pastikan **Validate Ramu** hijau pada SHA tersebut.
+3. Jika release menyentuh site/pack/schema yang dipublish, cek **Deploy Pages** downstream untuk SHA yang sama.
+4. Pindahkan item `Unreleased` di `CHANGELOG.md` ke versi yang akan dirilis sebelum membuat tag.
+5. Periksa tanggal review source. Jangan memperbarui `verified_at` hanya agar terlihat baru.
+6. Tulis status behavior validation apa adanya. Static CI bukan bukti bahwa seluruh respons model sudah lolos.
+7. API tidak wajib untuk public-beta release; manual validation dan status pilot tetap dicatat terpisah.
+8. Review dependency PR yang relevan secara normal, jangan menahannya hanya demi membuat release terlihat bersih.
 
 ## Membuat release di GitHub
 
-Dari repository:
-
 1. buka **Releases → Draft a new release**;
-2. buat **tag baru**, jangan reuse/memindahkan tag release lama;
-3. targetkan tag ke commit `main` yang sudah divalidasi;
-4. gunakan versi Semantic Versioning sesuai perubahan, misalnya `v0.2.2-beta` untuk patch kompatibel berikutnya atau `v0.3.0-beta` untuk perubahan kemampuan yang lebih berarti;
+2. buat tag baru;
+3. targetkan ke commit `main` yang sudah divalidasi;
+4. pilih versi sesuai perubahan;
 5. beri judul yang menjelaskan fokus release;
-6. gunakan generated release notes sebagai bahan bantu bila berguna, lalu kurasi terhadap `CHANGELOG.md`;
-7. tandai **Set as a pre-release** selama status Ramu masih public beta;
-8. cek ulang seluruh release notes sebelum publish.
+6. gunakan generated release notes sebagai bahan bantu bila berguna, lalu cocokkan dengan `CHANGELOG.md`;
+7. tandai **Set as a pre-release** selama status masih public beta;
+8. cek ulang notes sebelum publish.
 
-Release immutability sudah digunakan untuk release Ramu terbaru. Pertahankan setting tersebut agar tag dan asset release yang sudah dipublikasikan tidak dapat diubah diam-diam.
+Release immutability yang sudah digunakan sebaiknya tetap dipertahankan agar tag dan asset release tidak dapat berubah diam-diam.
 
 ## Setelah publish
 
-1. buka tag release dan pastikan SHA-nya sama dengan commit `main` yang memang diniatkan;
-2. bandingkan release lama → release baru dan pastikan perubahan penting tercakup di notes;
-3. cek bahwa release berstatus pre-release bila masih beta;
-4. pastikan `CHANGELOG.md` sudah mempunyai section versi dan compare link yang benar;
-5. simpan snapshot release notes di `docs/` bila release membawa perubahan yang perlu dirujuk dari repository;
+1. pastikan tag menunjuk SHA yang benar;
+2. bandingkan release lama dengan release baru;
+3. cek status pre-release bila masih beta;
+4. pastikan `CHANGELOG.md` punya section dan compare link yang sesuai;
+5. simpan snapshot release notes di `docs/` bila memang perlu dirujuk dari repository;
 6. jangan menaikkan status pack menjadi `verified` hanya karena release berhasil dibuat.
 
-## Aturan klaim
+## Cara menulis klaim release
 
-Release notes boleh mengatakan:
+Klaim yang aman dan bisa diperiksa misalnya:
 
 - static/schema/identity validation aktif;
-- Pages hanya deploy setelah validated main push;
+- Pages deploy setelah validated main push;
 - Manual Eval Kit tersedia;
-- behavior contracts dan critical must-pass gates tersedia;
-- source telah direview pada tanggal tertentu;
-- pilot/manual validation sedang atau sudah dilakukan dengan cakupan yang disebutkan.
+- behavior contracts dan critical gates tersedia;
+- source direview pada tanggal tertentu;
+- pilot/manual validation dilakukan dengan cakupan yang disebutkan.
 
-Release notes jangan mengatakan:
-
-- “semua jawaban akurat”;
-- “prompt-injection proof”;
-- “terbukti meningkatkan nilai”;
-- “fully validated”;
-
-kecuali benar-benar ada evidence yang sesuai dengan klaim tersebut.
+Hindari klaim seperti “semua jawaban akurat”, “prompt-injection proof”, “terbukti meningkatkan nilai”, atau “fully validated” tanpa evidence yang benar-benar mendukungnya.
 
 ## Automated Behavior Evals
 
-Automated eval melalui OpenAI API tetap opsional. Bila digunakan:
+Eval melalui OpenAI API tetap opsional. Bila digunakan:
 
 - API key hanya disimpan sebagai repository secret;
 - candidate dan judge dipilih saat run;
-- sebisa mungkin candidate dan judge berbeda;
+- candidate dan judge sebaiknya berbeda bila memungkinkan;
 - hasil model judge tetap perlu sampling/review manusia;
-- critical case wajib lulus selain memenuhi aggregate threshold;
-- kegagalan yang reproducible diubah menjadi regression case.
+- critical case harus lulus selain memenuhi aggregate threshold;
+- failure yang reproducible masuk regression case.
 
-Tidak adanya saldo/API key tidak boleh memblokir static validation, Manual Eval Kit, penggunaan Ramu, atau pilot pengguna.
+Ketiadaan API key atau saldo tidak memblokir static validation, Manual Eval Kit, penggunaan normal, atau pilot.
