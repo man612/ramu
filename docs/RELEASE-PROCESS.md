@@ -23,26 +23,31 @@ Tag release yang sudah dipublikasikan tidak dipindahkan atau dipakai ulang. Peru
 
 Setiap push ke `main` menjalankan **Validate Ramu**, termasuk perubahan dokumentasi dan workflow.
 
-**Deploy Pages** berjalan setelah Validate Ramu selesai dan hanya deploy bila:
+Job `validate` hanya sukses setelah catalog/static validation, eval wiring, dan browser regression selesai dengan sukses. Setelah itu, pada event `push` ke `main`, job `deploy-pages` memanggil reusable workflow `.github/workflows/pages.yml` melalui `workflow_call`.
 
-- upstream conclusion = `success`;
-- upstream event = `push`;
-- upstream branch = `main`.
+Reusable Pages workflow mempunyai permission minimum yang dibutuhkan untuk deployment:
 
-Pages checkout `workflow_run.head_sha`. Dengan begitu commit yang diterbitkan adalah SHA yang memang baru lolos validation, bukan keadaan `main` lain yang kebetulan lebih baru saat deploy berjalan.
+- `contents: read`;
+- `pages: write`;
+- `id-token: write`.
+
+Pages tidak lagi dipicu melalui privileged `workflow_run` dan tidak menerima `github.event.workflow_run.head_sha` untuk dynamic checkout. Deployment tetap berada pada trusted main-push chain yang sama setelah validation sukses, sehingga kode yang dideploy berasal dari commit `main` yang sedang divalidasi oleh run tersebut.
+
+`tests/test_ci_contract.py` menjaga kontrak ini: deploy harus bergantung pada `validate`, hanya berjalan pada push `main`, dan reusable Pages workflow dilarang kembali memakai `workflow_run` atau dynamic `ref` dari event upstream.
 
 Dependency GitHub Actions dipin ke full commit SHA. Dependabot boleh membuka update, tetapi PR dependency tetap direview dan melewati validation seperti perubahan lain.
 
 ## Sebelum release
 
 1. Pastikan target commit sudah ada di `main`.
-2. Pastikan **Validate Ramu** hijau pada SHA tersebut.
-3. Jika release menyentuh site/pack/schema yang dipublish, cek **Deploy Pages** downstream untuk SHA yang sama.
+2. Pastikan **Validate Ramu** hijau pada SHA tersebut, termasuk browser regression.
+3. Jika release menyentuh site/pack/schema/workflow yang dipublish, pastikan job **deploy-pages / deploy** pada run yang sama juga sukses.
 4. Pindahkan item `Unreleased` di `CHANGELOG.md` ke versi yang akan dirilis sebelum membuat tag.
 5. Periksa tanggal review source. Jangan memperbarui `verified_at` hanya agar terlihat baru.
 6. Tulis status behavior validation apa adanya. Static CI bukan bukti bahwa seluruh respons model sudah lolos.
 7. API tidak wajib untuk public-beta release; manual validation dan status pilot tetap dicatat terpisah.
 8. Review dependency PR yang relevan secara normal, jangan menahannya hanya demi membuat release terlihat bersih.
+9. Bila CodeQL atau security tooling membuka alert baru, periksa akar masalah sebelum release; jangan dismiss hanya untuk membuat dashboard hijau.
 
 ## Membuat release di GitHub
 
@@ -51,11 +56,11 @@ Dependency GitHub Actions dipin ke full commit SHA. Dependabot boleh membuka upd
 3. targetkan ke commit `main` yang sudah divalidasi;
 4. pilih versi sesuai perubahan;
 5. beri judul yang menjelaskan fokus release;
-6. gunakan generated release notes sebagai bahan bantu bila berguna, lalu cocokkan dengan `CHANGELOG.md`;
+6. gunakan generated release notes sebagai bahan bantu bila berguna, lalu cocokkan dengan `CHANGELOG.md` dan snapshot notes di `docs/`;
 7. tandai **Set as a pre-release** selama status masih public beta;
-8. cek ulang notes sebelum publish.
+8. cek ulang target SHA, notes, dan status pre-release sebelum publish.
 
-Release immutability yang sudah digunakan sebaiknya tetap dipertahankan agar tag dan asset release tidak dapat berubah diam-diam.
+Repository menggunakan immutable releases. Karena itu draft sebaiknya dirapikan lebih dulu sebelum publish; tag release yang sudah terbit tidak dipindahkan ke commit lain.
 
 ## Setelah publish
 
@@ -71,7 +76,8 @@ Release immutability yang sudah digunakan sebaiknya tetap dipertahankan agar tag
 Klaim yang aman dan bisa diperiksa misalnya:
 
 - static/schema/identity validation aktif;
-- Pages deploy setelah validated main push;
+- browser regression menjadi required validation gate;
+- Pages deploy hanya setelah validated main push dalam trusted workflow chain;
 - Manual Eval Kit tersedia;
 - behavior contracts dan critical gates tersedia;
 - source direview pada tanggal tertentu;
