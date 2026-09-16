@@ -12,7 +12,7 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urljoin
 
-from playwright.sync_api import Page, sync_playwright
+from playwright.sync_api import Page, expect, sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -79,10 +79,7 @@ def main() -> int:
                 # Homepage harus benar-benar merender data katalog, bukan sekadar punya marker statis.
                 page.goto(f"{base_url}/", wait_until="networkidle")
                 cards = page.locator("#course-list .course-card")
-                if cards.count() != len(default_manifest["courses"]):
-                    raise AssertionError(
-                        f"Homepage merender {cards.count()} course, expected {len(default_manifest['courses'])}."
-                    )
+                expect(cards).to_have_count(len(default_manifest["courses"]))
                 if default_manifest["period_label"] not in page.locator("#pack-title").inner_text():
                     raise AssertionError("Homepage tidak menampilkan period_label pack aktif.")
 
