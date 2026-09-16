@@ -26,7 +26,7 @@ python scripts/create_starter.py \
 
 Bila `--course` tidak diberikan dan command dijalankan dari terminal interaktif, generator akan menanyakannya. Opsi lain boleh kosong dan ditambahkan nanti.
 
-Secara default output dibuat di `./ramu-starter-<nama-mata-kuliah>/`. Gunakan `--output <folder>` untuk menentukan lokasi lain.
+Secara default output dibuat di `./ramu-starter-<nama-mata-kuliah>/`. Gunakan `--output <folder>` untuk menentukan lokasi lain. Pola folder default `ramu-starter-*/` di-ignore oleh repository supaya Starter personal yang dibuat dari root repo tidak mudah ikut ter-commit tanpa sengaja.
 
 ## Artefak yang dihasilkan
 
@@ -45,4 +45,4 @@ Jika suatu Starter ternyata berguna lintas pengguna dan ingin dijadikan communit
 
 ## Privasi
 
-Starter boleh tetap lokal. Jangan commit credential, data pribadi yang tidak perlu, transcript privat, rubrik/tugas yang tidak boleh dipublikasikan, atau materi kuliah berhak cipta ke repository publik.
+Starter boleh tetap lokal. Jangan commit credential, data pribadi yang tidak perlu, transcript privat, rubrik/tugas yang tidak boleh dipublikasikan, atau materi kuliah berhak cipta ke repository publik. Ignore pattern repository adalah perlindungan tambahan, bukan pengganti review sebelum commit.
