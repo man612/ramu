@@ -103,6 +103,8 @@ Kalau pola ini terasa berguna, baru tambahkan mata kuliah lain. Progress setup d
 
 Panduan lengkap: [`docs/PANDUAN-SETUP-CHATGPT.md`](docs/PANDUAN-SETUP-CHATGPT.md).
 
+Kalau mata kuliah belum tersedia di katalog, gunakan [`Ramu Starter`](starter/README.md) untuk membuat workspace personal tanpa public pack atau OpenAI API. Kalau konteksnya memang reusable dan ingin diajukan sebagai community pack, lanjutkan lewat [`Create a Pack`](docs/CREATE-A-PACK.md).
+
 ## Struktur pack
 
 `packs/index.json` menjadi katalog utama. Setiap entry menunjuk ke `manifest.json`, lalu manifest menghubungkan course pack, source registry, Project Instructions, dan eval suite yang diperlukan.
