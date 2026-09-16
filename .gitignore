@@ -3,8 +3,9 @@ evals/results/
 evals/manual/*-checklist.md
 evals/manual/results/
 
-# Local pack scaffolds
+# Local Ramu scaffolds
 pack-drafts/
+ramu-starter-*/
 
 # Python
 __pycache__/
