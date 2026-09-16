@@ -57,6 +57,7 @@ def main() -> int:
         'data-pack-picker-trigger',
         'data-pack-picker-menu',
         'href="catalog.css"',
+        'href="setup-phase3.css"',
         'id="setup-pack-name"',
         'id="setup-courses"',
         'id="copy-instructions"',
@@ -91,6 +92,13 @@ def main() -> int:
         ".pack-picker-menu",
         ".pack-picker-option",
         "#setup-pack-count",
+    ])
+    require_text(SITE / "setup-phase3.css", [
+        ".setup-layout",
+        ".setup-nav a[aria-current=\"step\"]",
+        ".setup-step-card.is-current-step",
+        ".setup-course summary",
+        "@media (max-width: 720px)",
     ])
 
     app_text = (SITE / "app.js").read_text(encoding="utf-8") if (SITE / "app.js").is_file() else ""

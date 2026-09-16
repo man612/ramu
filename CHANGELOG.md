@@ -14,6 +14,7 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 
 ### Changed
 
+- Setup desktop dirombak menjadi workspace 4 langkah yang lebih padat: sticky step navigation, pack summary ringkas, action hierarchy lebih jelas, dan course pack sebagai accordion rows; browser regression mengunci desktop state sekaligus mobile no-overflow.
 - Homepage Phase 2 mengganti fake ChatGPT phone mockup dengan live Ramu pack preview, menambahkan jalur Pack vs Ramu Starter, memadatkan workflow/layer hierarchy, dan mengubah course catalog menjadi resource list yang lebih tenang di desktop maupun mobile.
 - Browser regression sekarang memiliki mobile viewport contract untuk homepage/setup, termasuk no-horizontal-overflow dan visibility pada primary content.
 - Fondasi visual website mulai mengikuti `docs/UX-DIRECTION.md`: semantic neutral/sage tokens, typography dan radius yang lebih tenang, focus-visible yang eksplisit, serta motion layer yang dipangkas dari decorative effects menjadi state feedback dan setup-step highlighting.
