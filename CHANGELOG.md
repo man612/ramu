@@ -14,6 +14,8 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 
 ### Changed
 
+- Homepage Phase 2 mengganti fake ChatGPT phone mockup dengan live Ramu pack preview, menambahkan jalur Pack vs Ramu Starter, memadatkan workflow/layer hierarchy, dan mengubah course catalog menjadi resource list yang lebih tenang di desktop maupun mobile.
+- Browser regression sekarang memiliki mobile viewport contract untuk homepage/setup, termasuk no-horizontal-overflow dan visibility pada primary content.
 - Fondasi visual website mulai mengikuti `docs/UX-DIRECTION.md`: semantic neutral/sage tokens, typography dan radius yang lebih tenang, focus-visible yang eksplisit, serta motion layer yang dipangkas dari decorative effects menjadi state feedback dan setup-step highlighting.
 - Homepage/setup navigation now links to the reviewed English overview without duplicating the Indonesian website UI; browser regression waits for the rendered course-card count instead of treating `networkidle` as proof that async catalog rendering finished.
 - Metadata discovery website diperjelas dengan Open Graph `site_name`/locale, summary card metadata, serta title/description setup yang lebih deskriptif untuk direct entry dan link sharing.

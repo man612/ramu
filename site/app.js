@@ -201,21 +201,42 @@ function bindSetupLinks(entry) {
 
 function renderHomePack(entry, manifest) {
   const period = periodLabel(manifest);
+  const status = statusLabel(manifest.status, manifest.maintainer);
+  const title = `${manifest.institution} · ${manifest.program} · ${period}`;
+  const meta = `${manifest.academic_year} · ${manifest.total_sks} SKS · ${manifest.courses.length} mata kuliah`;
+
   setText("#hero-course-count", manifest.courses.length);
+  setText("#hero-preview-pack", title);
+  setText("#hero-preview-meta", meta);
+  setText("#hero-preview-status", status);
   setText("#pack-kicker", entry.maintainer === "ramu" ? "Ramu Maintained pack" : "Community pack");
-  setText("#pack-title", `${manifest.institution} · ${manifest.program} · ${period}`);
-  setText("#pack-meta", `${manifest.academic_year} · ${manifest.total_sks} SKS · ${manifest.courses.length} mata kuliah · pack ${manifest.pack_version}`);
-  setText("#pack-status", statusLabel(manifest.status, manifest.maintainer));
-  setText("#closing-pack-label", `${manifest.institution} · ${manifest.program} · ${period}`);
+  setText("#pack-title", title);
+  setText("#pack-meta", `${meta} · pack ${manifest.pack_version}`);
+  setText("#pack-status", status);
+  setText("#closing-pack-label", title);
   bindSetupLinks(entry);
+
+  const preview = document.querySelector("#hero-preview-courses");
+  if (preview) {
+    const visible = manifest.courses.slice(0, 4);
+    preview.innerHTML = visible.map(course => `
+      <div class="preview-course">
+        <code>${escapeHtml(courseDisplayCode(course))}</code>
+        <strong>${escapeHtml(course.short_name)}</strong>
+        <span>${escapeHtml(course.sks)} SKS</span>
+      </div>
+    `).join("") + (manifest.courses.length > visible.length
+      ? `<div class="preview-more">+${manifest.courses.length - visible.length} mata kuliah lain di pack ini</div>`
+      : "");
+  }
 
   const target = document.querySelector("#course-list");
   if (!target) return;
   target.innerHTML = manifest.courses.map(course => `
     <article class="course-card">
-      <div class="course-top"><span>${escapeHtml(courseDisplayCode(course))}</span><span>${escapeHtml(course.sks)} SKS</span></div>
+      <div class="course-top"><span class="course-code">${escapeHtml(courseDisplayCode(course))}</span><span class="course-sks">${escapeHtml(course.sks)} SKS</span></div>
       <h3>${escapeHtml(course.short_name)}</h3>
-      <p class="course-focus">Fokus: ${escapeHtml(course.focus || "materi dan tugas mata kuliah")}</p>
+      <p class="course-focus">${escapeHtml(course.focus || "Materi dan tugas mata kuliah")}</p>
       ${courseSelectionNote(course) ? `<p class="small-note">${escapeHtml(courseSelectionNote(course))}</p>` : ""}
     </article>
   `).join("");

@@ -82,6 +82,12 @@ def main() -> int:
                 expect(cards).to_have_count(len(default_manifest["courses"]))
                 if default_manifest["period_label"] not in page.locator("#pack-title").inner_text():
                     raise AssertionError("Homepage tidak menampilkan period_label pack aktif.")
+                preview = page.locator("#hero-preview-courses .preview-course")
+                expect(preview).to_have_count(min(4, len(default_manifest["courses"])))
+                if page.locator(".phone-stage").count() != 0:
+                    raise AssertionError("Homepage Phase 2 tidak boleh mengembalikan fake phone mockup.")
+                if page.locator('a[href*="starter/README.md"]').count() < 1:
+                    raise AssertionError("Homepage kehilangan jalur Ramu Starter untuk course tanpa public pack.")
 
                 # Custom picker harus bisa dipakai lewat keyboard dan memilih pack lain bila tersedia.
                 picker = page.locator("[data-pack-picker]").first
@@ -178,6 +184,30 @@ def main() -> int:
                 blocked_page.locator(f'[data-course-check="{first_course["code"]}"]').check()
                 assert_no_page_errors(blocked_page, blocked_errors, "blocked localStorage flow")
                 blocked_context.close()
+
+                # Mobile viewport adalah UX contract tersendiri, bukan sekadar desktop yang dipersempit.
+                mobile_context = browser.new_context(
+                    viewport={"width": 390, "height": 844},
+                    is_mobile=True,
+                    has_touch=True,
+                )
+                mobile_page = mobile_context.new_page()
+                mobile_errors: list[str] = []
+                mobile_page.on("pageerror", lambda exc: mobile_errors.append(str(exc)))
+                mobile_page.goto(f"{base_url}/", wait_until="networkidle")
+                expect(mobile_page.locator(".product-preview")).to_be_visible()
+                expect(mobile_page.locator(".hero-actions .primary")).to_be_visible()
+                expect(mobile_page.locator("#course-list .course-card").first).to_be_visible()
+                overflow = mobile_page.evaluate("document.documentElement.scrollWidth - window.innerWidth")
+                if overflow > 1:
+                    raise AssertionError(f"Homepage mobile overflow horizontal {overflow}px.")
+                mobile_page.goto(f"{base_url}/setup.html?pack={default_entry['id']}", wait_until="networkidle")
+                expect(mobile_page.locator("#setup-courses .setup-course").first).to_be_visible()
+                setup_overflow = mobile_page.evaluate("document.documentElement.scrollWidth - window.innerWidth")
+                if setup_overflow > 1:
+                    raise AssertionError(f"Setup mobile overflow horizontal {setup_overflow}px.")
+                assert_no_page_errors(mobile_page, mobile_errors, "mobile browser flow")
+                mobile_context.close()
                 browser.close()
         finally:
             server.shutdown()
