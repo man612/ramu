@@ -222,7 +222,14 @@ async function copyText(text, statusEl, message = "Tersalin.") {
 
 function storageKey(id) { return `ramu:${id}`; }
 function getProgress(id) { try { return JSON.parse(localStorage.getItem(storageKey(id))) || {}; } catch { return {}; } }
-function saveProgress(id, progress) { localStorage.setItem(storageKey(id), JSON.stringify(progress)); }
+function saveProgress(id, progress) {
+  try {
+    localStorage.setItem(storageKey(id), JSON.stringify(progress));
+    return true;
+  } catch {
+    return false;
+  }
+}
 
 async function downloadCoursePack(base, course, button) {
   const original = button.textContent;
