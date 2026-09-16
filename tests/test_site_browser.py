@@ -100,10 +100,34 @@ def main() -> int:
                     alternate = next(item for item in catalog["packs"] if item["id"] != default_entry["id"])
                     trigger.click()
                     picker.locator(f'[data-pack-id="{alternate["id"]}"]').click()
-                    page.wait_for_url(f"**?pack={alternate['id']}")
+                    page.wait_for_url(f"**?pack={alternate['id']}", wait_until="networkidle")
                     alternate_manifest = pack_manifest(stage, alternate)
                     if alternate_manifest["period_label"] not in page.locator("#pack-title").inner_text():
                         raise AssertionError("Navigasi pack picker tidak mengganti manifest yang dirender.")
+
+                # Semester 1 punya choice slot agama: UI harus memakai label manusia, bukan ID internal.
+                s1_entry = next((item for item in catalog["packs"] if item["id"] == "id.ut.accounting-s1.2026-2027.s1"), None)
+                if s1_entry:
+                    page.goto(f"{base_url}/?pack={s1_entry['id']}", wait_until="networkidle")
+                    religion_card = page.locator("#course-list .course-card").filter(has_text="Pendidikan Agama")
+                    if religion_card.count() != 1:
+                        raise AssertionError("Homepage Semester 1 tidak merender tepat satu choice slot Pendidikan Agama.")
+                    religion_text = religion_card.inner_text()
+                    if "Pilih 1" not in religion_text or "sesuai data pribadi dan registrasi UT" not in religion_text:
+                        raise AssertionError("Choice slot Pendidikan Agama kehilangan display_code atau basis pemilihan.")
+                    if "religion-choice" in religion_text:
+                        raise AssertionError("Homepage membocorkan ID internal choice slot sebagai kode akademik.")
+
+                    page.goto(f"{base_url}/setup.html?pack={s1_entry['id']}", wait_until="networkidle")
+                    religion_setup = page.locator('.setup-course[data-course="religion-choice"]')
+                    if religion_setup.count() != 1:
+                        raise AssertionError("Setup Semester 1 tidak merender choice slot Pendidikan Agama.")
+                    religion_setup.locator("summary").click()
+                    setup_text = religion_setup.inner_text()
+                    if "Pilih 1" not in setup_text or "sesuai data pribadi dan registrasi UT" not in setup_text:
+                        raise AssertionError("Setup choice slot tidak menjelaskan pilihan resmi Semester 1.")
+                    if "religion-choice ?" in setup_text:
+                        raise AssertionError("Setup membocorkan ID internal choice slot sebagai kode akademik.")
 
                 # Unknown pack ID harus fallback ke default, bukan memecahkan halaman.
                 page.goto(f"{base_url}/?pack=does-not-exist", wait_until="networkidle")
