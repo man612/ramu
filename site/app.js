@@ -288,10 +288,15 @@ async function downloadCoursePack(base, course, button) {
 
 function renderSetupSummary(entry, manifest) {
   setText("#setup-pack-name", `${manifest.institution} · ${manifest.program} · ${periodLabel(manifest)}`);
-  setText("#setup-pack-count", `${manifest.courses.length} course pack`);
-  setText("#setup-pack-meta", `${manifest.academic_year} · ${manifest.total_sks} SKS · ${statusLabel(manifest.status, manifest.maintainer)}`);
+  setText("#setup-pack-count", `${manifest.courses.length} mata kuliah · ${manifest.total_sks} SKS`);
+  setText("#setup-pack-meta", `${manifest.academic_year} · ${statusLabel(manifest.status, manifest.maintainer)}`);
   const list = document.querySelector("#setup-summary-list");
-  if (list) list.innerHTML = manifest.courses.map(course => `<li>${escapeHtml(course.short_name)}</li>`).join("");
+  if (list) {
+    const visible = manifest.courses.slice(0, 3);
+    const remaining = Math.max(0, manifest.courses.length - visible.length);
+    list.innerHTML = visible.map(course => `<li>${escapeHtml(course.short_name)}</li>`).join("") +
+      (remaining ? `<li>+${remaining} mata kuliah lain</li>` : "");
+  }
   document.title = `Setup ${manifest.name} — Ramu`;
 }
 

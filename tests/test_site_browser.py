@@ -141,6 +141,14 @@ def main() -> int:
 
                 # Setup page: render, progress persistence, instructions, dan download course pack.
                 page.goto(f"{base_url}/setup.html?pack={default_entry['id']}", wait_until="networkidle")
+                layout_display = page.locator(".setup-layout").evaluate("el => getComputedStyle(el).display")
+                nav_position = page.locator(".setup-nav").evaluate("el => getComputedStyle(el).position")
+                if layout_display != "grid" or nav_position != "sticky":
+                    raise AssertionError("Setup desktop kehilangan workspace grid atau sticky step navigation.")
+                if page.locator("#setup-summary-list li").count() > 4:
+                    raise AssertionError("Ringkasan pack setup kembali terlalu panjang untuk desktop workspace.")
+                page.evaluate("document.querySelector('#langkah-2').scrollIntoView({block: 'center'})")
+                expect(page.locator('.setup-nav a[href="#langkah-2"]')).to_have_attribute("aria-current", "step")
                 setup_cards = page.locator("#setup-courses .setup-course")
                 if setup_cards.count() != len(default_manifest["courses"]):
                     raise AssertionError("Setup page tidak merender seluruh course dari manifest.")
