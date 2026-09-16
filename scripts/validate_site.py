@@ -46,6 +46,7 @@ def main() -> int:
         'property="og:site_name" content="Ramu"',
         'property="og:locale" content="id_ID"',
         'name="twitter:card" content="summary"',
+        'href="https://github.com/man612/ramu/blob/main/README.en.md"',
         'href="https://github.com/man612/ramu/blob/main/SUPPORT.md"',
     ])
     require_text(SITE / "setup.html", [
@@ -63,6 +64,7 @@ def main() -> int:
         "Add to project sources",
         'rel="canonical" href="https://man612.github.io/ramu/setup.html"',
         'property="og:url" content="https://man612.github.io/ramu/setup.html"',
+        'href="https://github.com/man612/ramu/blob/main/README.en.md"',
         'property="og:site_name" content="Ramu"',
         'property="og:locale" content="id_ID"',
         'name="twitter:card" content="summary"',

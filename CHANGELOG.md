@@ -8,11 +8,13 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 
 ### Added
 
+- English entry surfaces through `README.en.md` and `CONTRIBUTING.en.md`, while Bahasa Indonesia remains the canonical project documentation.
 - **UT S1 Akuntansi Semester 1 2026/2027** sebagai maintained pack 18 SKS, termasuk slot Pendidikan Agama yang mengikuti pilihan resmi sesuai data pribadi/registrasi UT.
 - Dukungan manifest untuk `selection.mode: choose-one` agar satu slot kurikulum dapat memiliki beberapa kode mata kuliah resmi tanpa membuat kode akademik palsu atau menggandakan seluruh pack.
 
 ### Changed
 
+- Homepage/setup navigation now links to the reviewed English overview without duplicating the Indonesian website UI; browser regression waits for the rendered course-card count instead of treating `networkidle` as proof that async catalog rendering finished.
 - Metadata discovery website diperjelas dengan Open Graph `site_name`/locale, summary card metadata, serta title/description setup yang lebih deskriptif untuk direct entry dan link sharing.
 - Browser regression Semester 1 sekarang menunggu choice-slot benar-benar visible sebelum assertion agar async render tidak menghasilkan timing flake lokal.
 - Site memakai `display_code` untuk choice slot dan menampilkan basis/opsi pemilihan tanpa mengekspos ID internal sebagai kode mata kuliah UT.

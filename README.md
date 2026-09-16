@@ -4,6 +4,10 @@
 </p>
 
 <p align="center">
+  <strong>Bahasa Indonesia</strong> · <a href="README.en.md">English</a>
+</p>
+
+<p align="center">
   <strong>Workspace belajar terstruktur untuk ChatGPT Projects.</strong><br>
   Satu mata kuliah, satu Project, dengan konteks, sumber, dan pola bantuan yang tetap rapi dari waktu ke waktu.
 </p>
