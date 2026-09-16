@@ -1,0 +1,222 @@
+{
+  "version": 1,
+  "scope": "pack",
+  "institution_id": "universitas-terbuka",
+  "institution": "Universitas Terbuka",
+  "program_id": "universitas-terbuka.s1-akuntansi",
+  "program": "S1 Akuntansi",
+  "pack_id": "id.ut.accounting-s1.2026-2027.s1",
+  "verified_at": "2026-09-16",
+  "sources": [
+    {
+      "id": "ut-s1-eacc4101-bmp",
+      "name": "EKMA4115 Pengantar Akuntansi (Edisi 3) — Perpustakaan UT",
+      "kind": "official-course-material",
+      "authority": "Universitas Terbuka",
+      "url": "https://pustaka.ut.ac.id/lib/ekma4115-pengantar-akuntansi-edisi-3/",
+      "canonical_for": ["metadata BMP EACC4101", "deskripsi materi Pengantar Akuntansi"],
+      "freshness_class": "institution-page",
+      "verified_at": "2026-09-16",
+      "review_interval_days": 60,
+      "watch": true,
+      "status": "active"
+    },
+    {
+      "id": "ut-s1-eacc4102-bmp",
+      "name": "EACC4102 Laboratorium Pengantar Akuntansi — Perpustakaan UT",
+      "kind": "official-course-material",
+      "authority": "Universitas Terbuka",
+      "url": "https://pustaka.ut.ac.id/lib/eacc4102-laboratorium-pengantar-akuntansi/",
+      "canonical_for": ["metadata BMP EACC4102", "deskripsi Laboratorium Pengantar Akuntansi"],
+      "freshness_class": "institution-page",
+      "verified_at": "2026-09-16",
+      "review_interval_days": 60,
+      "watch": true,
+      "status": "active"
+    },
+    {
+      "id": "ut-s1-mkwn4110-bmp",
+      "name": "MKWN4110 Pancasila — Perpustakaan UT",
+      "kind": "official-course-material",
+      "authority": "Universitas Terbuka",
+      "url": "https://pustaka.ut.ac.id/lib/mkwn4110-pancasila/",
+      "canonical_for": ["metadata BMP MKWN4110", "deskripsi materi Pancasila"],
+      "freshness_class": "institution-page",
+      "verified_at": "2026-09-16",
+      "review_interval_days": 60,
+      "watch": true,
+      "status": "active"
+    },
+    {
+      "id": "ut-s1-mkwn4108-bmp",
+      "name": "MKWN4108 Bahasa Indonesia — Perpustakaan UT",
+      "kind": "official-course-material",
+      "authority": "Universitas Terbuka",
+      "url": "https://pustaka.ut.ac.id/lib/mkwn4108-pendidikan-kewarganegaraan/",
+      "canonical_for": ["metadata BMP MKWN4108", "deskripsi materi Bahasa Indonesia"],
+      "freshness_class": "institution-page",
+      "verified_at": "2026-09-16",
+      "review_interval_days": 60,
+      "watch": true,
+      "status": "active",
+      "notes": "Slug halaman Perpustakaan UT menyebut pendidikan-kewarganegaraan, tetapi judul dan metadata halaman adalah MKWN4108 Bahasa Indonesia."
+    },
+    {
+      "id": "ut-s1-econ4101-bmp",
+      "name": "ESPA4110 Pengantar Ekonomi Makro (Edisi 4) — Perpustakaan UT",
+      "kind": "official-course-material",
+      "authority": "Universitas Terbuka",
+      "url": "https://pustaka.ut.ac.id/lib/espa4110-pengantar-ekonomi-makro-edisi-4/",
+      "canonical_for": ["metadata BMP ECON4101", "deskripsi materi Pengantar Ekonomi Makro"],
+      "freshness_class": "institution-page",
+      "verified_at": "2026-09-16",
+      "review_interval_days": 60,
+      "watch": true,
+      "status": "active"
+    },
+    {
+      "id": "ut-s1-mkwn4109-bmp",
+      "name": "MKWN4109 Pendidikan Kewarganegaraan — Perpustakaan UT",
+      "kind": "official-course-material",
+      "authority": "Universitas Terbuka",
+      "url": "https://pustaka.ut.ac.id/lib/mkwn4109-pendidikan-kewarganegaraan/",
+      "canonical_for": ["metadata BMP MKWN4109", "deskripsi materi Pendidikan Kewarganegaraan"],
+      "freshness_class": "institution-page",
+      "verified_at": "2026-09-16",
+      "review_interval_days": 60,
+      "watch": true,
+      "status": "active"
+    },
+    {
+      "id": "ut-s1-mkwn4101-bmp",
+      "name": "MKWN4101 Pendidikan Agama Islam — Perpustakaan UT",
+      "kind": "official-course-material",
+      "authority": "Universitas Terbuka",
+      "url": "https://pustaka.ut.ac.id/lib/mkwn4101-pendidikan-agama-islam/",
+      "canonical_for": ["metadata pilihan MKWN4101", "deskripsi Pendidikan Agama Islam"],
+      "freshness_class": "institution-page",
+      "verified_at": "2026-09-16",
+      "review_interval_days": 60,
+      "watch": true,
+      "status": "active"
+    },
+    {
+      "id": "ut-s1-mkwn4102-bmp",
+      "name": "MKWU4102 Pendidikan Agama Katolik (Edisi 2) — Perpustakaan UT",
+      "kind": "official-course-material",
+      "authority": "Universitas Terbuka",
+      "url": "https://pustaka.ut.ac.id/lib/mkwu4102-pendidikan-agama-katolik-edisi-2/",
+      "canonical_for": ["metadata pilihan MKWN4102", "deskripsi Pendidikan Agama Katolik"],
+      "freshness_class": "institution-page",
+      "verified_at": "2026-09-16",
+      "review_interval_days": 60,
+      "watch": true,
+      "status": "active"
+    },
+    {
+      "id": "ut-s1-mkwn4103-bmp",
+      "name": "MKWU4103 Pendidikan Agama Kristen — Perpustakaan UT",
+      "kind": "official-course-material",
+      "authority": "Universitas Terbuka",
+      "url": "https://pustaka.ut.ac.id/lib/mkwu4103-pendidikan-agama-kristen/",
+      "canonical_for": ["metadata pilihan MKWN4103", "deskripsi Pendidikan Agama Kristen"],
+      "freshness_class": "institution-page",
+      "verified_at": "2026-09-16",
+      "review_interval_days": 60,
+      "watch": true,
+      "status": "active"
+    },
+    {
+      "id": "ut-s1-mkwn4104-bmp",
+      "name": "MKWU4104 Pendidikan Agama Buddha — Perpustakaan UT",
+      "kind": "official-course-material",
+      "authority": "Universitas Terbuka",
+      "url": "https://pustaka.ut.ac.id/lib/mkwu4104-pendidikan-agama-buddha/",
+      "canonical_for": ["metadata pilihan MKWN4104", "deskripsi Pendidikan Agama Buddha"],
+      "freshness_class": "institution-page",
+      "verified_at": "2026-09-16",
+      "review_interval_days": 60,
+      "watch": true,
+      "status": "active"
+    },
+    {
+      "id": "ut-s1-mkwn4105-bmp",
+      "name": "MKWU4105 Pendidikan Agama Hindu — Perpustakaan UT",
+      "kind": "official-course-material",
+      "authority": "Universitas Terbuka",
+      "url": "https://pustaka.ut.ac.id/lib/mkwu4105-pendidikan-agama-hindu/",
+      "canonical_for": ["metadata pilihan MKWN4105", "deskripsi Pendidikan Agama Hindu"],
+      "freshness_class": "institution-page",
+      "verified_at": "2026-09-16",
+      "review_interval_days": 60,
+      "watch": true,
+      "status": "active"
+    },
+    {
+      "id": "ut-s1-mkwn4107-bmp",
+      "name": "MKWU4107 Pendidikan Agama Khonghucu — Perpustakaan UT",
+      "kind": "official-course-material",
+      "authority": "Universitas Terbuka",
+      "url": "https://pustaka.ut.ac.id/lib/mkwu4107-pendidikan-agama-khonghucu/",
+      "canonical_for": ["metadata pilihan MKWN4107", "deskripsi Pendidikan Agama Khonghucu"],
+      "freshness_class": "institution-page",
+      "verified_at": "2026-09-16",
+      "review_interval_days": 60,
+      "watch": true,
+      "status": "active"
+    }
+  ],
+  "claims": [
+    {
+      "id": "ut-s1-current-structure",
+      "topic": "Struktur Semester 1 S1 Akuntansi UT 2026/2027",
+      "status": "confirmed",
+      "summary": "Paket arahan Semester 1 berjumlah 18 SKS: enam mata kuliah tetap dan satu slot Pendidikan Agama 3 SKS yang dipilih sesuai data pribadi.",
+      "evidence": [
+        {
+          "source_id": "ut-catalog-2026-2027",
+          "locator": "Program Studi 83/Akuntansi (S1), kolom paket arahan Semester 1",
+          "observation": "Katalog mencatat EACC4101, EACC4102, MKWN4110, MKWN4108, ECON4101, satu pilihan Pendidikan Agama, dan MKWN4109 dengan total 18 SKS."
+        }
+      ],
+      "reviewed_at": "2026-09-16",
+      "review_interval_days": 60
+    },
+    {
+      "id": "ut-s1-religion-choice",
+      "topic": "Pilihan Pendidikan Agama Semester 1",
+      "status": "confirmed",
+      "summary": "Slot Pendidikan Agama tidak mempunyai satu kode default; mahasiswa memilih satu dari enam kode resmi sesuai data pribadi/registrasi UT.",
+      "evidence": [
+        {
+          "source_id": "ut-catalog-2026-2027",
+          "locator": "Program Studi 83/Akuntansi (S1), baris 'Pilih Salah Satu Sesuai Data Pribadi'",
+          "observation": "Pilihan resmi adalah MKWN4101 Islam, MKWN4102 Katolik, MKWN4103 Kristen, MKWN4104 Buddha, MKWN4105 Hindu, atau MKWN4107 Khonghucu; semuanya 3 SKS pada slot I.5."
+        }
+      ],
+      "reviewed_at": "2026-09-16",
+      "review_interval_days": 60,
+      "notes": "Ramu tidak boleh menebak agama mahasiswa. Kode pilihan harus berasal dari registrasi atau pernyataan eksplisit mahasiswa."
+    },
+    {
+      "id": "ut-s1-eacc4102-praton",
+      "topic": "Pelaksanaan Laboratorium Pengantar Akuntansi EACC4102",
+      "status": "confirmed",
+      "summary": "EACC4102 adalah mata kuliah berpraktikum; PRATON dan UAS wajib, tugas tutorial bersifat serial, dan state tugas sebelumnya tidak boleh dikarang.",
+      "evidence": [
+        {
+          "source_id": "ut-guideline-2026-2027",
+          "locator": "Tabel praktik S1 Akuntansi dan metode pelaksanaan EACC4102",
+          "observation": "Pedoman 2026/2027 menetapkan PRATON dan UAS, 8 tugas wajib dengan minimal 5 tugas untuk lulus, serta komposisi nilai akhir PRATON 60% dan UAS 40%."
+        },
+        {
+          "source_id": "ut-s1-eacc4102-bmp",
+          "locator": "Tinjauan/Deskripsi Mata Kuliah",
+          "observation": "BMP EACC4102 menjelaskan praktik langsung penyusunan laporan keuangan dan 8 tugas tutorial yang bersifat serial."
+        }
+      ],
+      "reviewed_at": "2026-09-16",
+      "review_interval_days": 60
+    }
+  ]
+}

@@ -35,6 +35,7 @@
         "required": ["code", "name", "short_name", "project_name", "sks", "focus", "file"],
         "properties": {
           "code": {"type": "string", "minLength": 2},
+          "display_code": {"type": "string", "minLength": 1},
           "name": {"type": "string", "minLength": 2},
           "short_name": {"type": "string", "minLength": 1},
           "project_name": {"type": "string", "minLength": 2},
@@ -44,6 +45,30 @@
           "material": {"type": "string"},
           "practice": {"type": "string"},
           "service": {"type": "string"},
+          "selection": {
+            "type": "object",
+            "required": ["mode", "basis", "options"],
+            "properties": {
+              "mode": {"const": "choose-one"},
+              "basis": {"type": "string", "minLength": 3},
+              "options": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "object",
+                  "required": ["code", "name", "material", "sks"],
+                  "properties": {
+                    "code": {"type": "string", "minLength": 2},
+                    "name": {"type": "string", "minLength": 2},
+                    "material": {"type": "string", "minLength": 2},
+                    "sks": {"type": "integer", "minimum": 1}
+                  },
+                  "additionalProperties": false
+                }
+              }
+            },
+            "additionalProperties": false
+          },
           "file": {"type": "string", "minLength": 3}
         },
         "additionalProperties": false

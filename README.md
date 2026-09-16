@@ -61,7 +61,23 @@ Secara implementasi, lima lapisan itu tersebar di Project Instructions, course p
 
 ## Pack yang tersedia
 
-Saat ini ada dua pack aktif untuk **Universitas Terbuka · S1 Akuntansi · 2026/2027**.
+Saat ini ada tiga pack aktif untuk **Universitas Terbuka · S1 Akuntansi · 2026/2027**.
+
+### Semester 1 — 18 SKS
+
+| Project | Mata kuliah | SKS |
+|---|---|---:|
+| `Semester 1 • Pengantar Akuntansi` | EACC4101 Pengantar Akuntansi | 4 |
+| `Semester 1 • Lab Pengantar Akuntansi` | EACC4102 Laboratorium Pengantar Akuntansi | 2 |
+| `Semester 1 • Pancasila` | MKWN4110 Pancasila | 2 |
+| `Semester 1 • Bahasa Indonesia` | MKWN4108 Bahasa Indonesia | 2 |
+| `Semester 1 • Ekonomi Makro` | ECON4101 Pengantar Ekonomi Makro | 3 |
+| `Semester 1 • Pendidikan Agama` | Pendidikan Agama — pilih 1 sesuai data pribadi/registrasi UT | 3 |
+| `Semester 1 • Kewarganegaraan` | MKWN4109 Pendidikan Kewarganegaraan | 2 |
+
+Manifest: [`semester-01/manifest.json`](packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-01/manifest.json)
+
+Semester 1 direview terhadap struktur kurikulum UT 2026/2027 dan halaman BMP aktif. Slot Pendidikan Agama sengaja disimpan sebagai **pilihan**, bukan satu agama default, karena katalog UT meminta mahasiswa memilih sesuai data pribadi.
 
 ### Semester 2 — 16 SKS
 

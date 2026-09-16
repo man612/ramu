@@ -6,6 +6,16 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 
 ## [Unreleased]
 
+### Added
+
+- **UT S1 Akuntansi Semester 1 2026/2027** sebagai maintained pack 18 SKS, termasuk slot Pendidikan Agama yang mengikuti pilihan resmi sesuai data pribadi/registrasi UT.
+- Dukungan manifest untuk `selection.mode: choose-one` agar satu slot kurikulum dapat memiliki beberapa kode mata kuliah resmi tanpa membuat kode akademik palsu atau menggandakan seluruh pack.
+
+### Changed
+
+- Site memakai `display_code` untuk choice slot dan menampilkan basis/opsi pemilihan tanpa mengekspos ID internal sebagai kode mata kuliah UT.
+- Katalog/README homepage sekarang menampilkan Semester 1–3 secara akademik, sementara `default_pack_id` tetap Semester 2 untuk menjaga entry point lama.
+
 ## [0.3.0-beta] - 2026-09-16
 
 ### Added
