@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Scaffold community pack Ramu yang tetap berstatus experimental sampai direview."""
+"""Scaffold community pack Ramu yang tetap experimental sampai direview dan didaftarkan."""
 
 from __future__ import annotations
 
@@ -10,6 +10,7 @@ import sys
 from dataclasses import dataclass
 from datetime import date, datetime
 from pathlib import Path
+from urllib.parse import urlparse
 
 from ramu_repo import ROOT
 
@@ -29,7 +30,7 @@ class Course:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Buat scaffold community pack Ramu. Hasil tetap experimental dan belum otomatis masuk katalog."
+        description="Buat scaffold community pack Ramu. Output default ada di pack-drafts/ dan belum masuk katalog."
     )
     parser.add_argument("--institution", required=True)
     parser.add_argument("--institution-id", required=True)
@@ -46,15 +47,15 @@ def parse_args() -> argparse.Namespace:
         metavar="CODE|NAME|SHORT|SKS|FOCUS",
         help="Mata kuliah; ulangi flag untuk course lain.",
     )
-    parser.add_argument("--source-url", required=True, help="Minimal satu source HTTPS yang direview contributor.")
+    parser.add_argument("--source-url", required=True, help="Minimal satu source HTTPS yang benar-benar direview contributor.")
     parser.add_argument("--source-name", required=True)
     parser.add_argument("--source-authority", default="", help="Default: nama institusi.")
     parser.add_argument("--source-kind", default="official-source")
     parser.add_argument("--reviewed-at", default=date.today().isoformat(), help="Tanggal contributor membaca source, YYYY-MM-DD.")
     parser.add_argument("--review-interval-days", type=int, default=60)
     parser.add_argument("--pack-version", default="draft.1")
-    parser.add_argument("--output-root", help="Root fisik pengganti packs/; berguna untuk dry-run/test.")
-    parser.add_argument("--force", action="store_true", help="Izinkan overwrite scaffold pada path yang sama.")
+    parser.add_argument("--output-root", help="Root fisik output; default ./pack-drafts. Dipakai juga untuk dry-run/test.")
+    parser.add_argument("--force", action="store_true", help="Izinkan overwrite file scaffold pada path draft yang sama.")
     return parser.parse_args()
 
 
@@ -76,9 +77,19 @@ def require_machine_id(label: str, value: str) -> str:
 def parse_review_date(value: str) -> str:
     normalized = clean(value)
     try:
-        datetime.strptime(normalized, "%Y-%m-%d")
+        parsed = datetime.strptime(normalized, "%Y-%m-%d").date()
     except ValueError as exc:
         raise ValueError("--reviewed-at harus YYYY-MM-DD.") from exc
+    if parsed > date.today():
+        raise ValueError("--reviewed-at tidak boleh berada di masa depan.")
+    return normalized
+
+
+def validate_https_url(value: str) -> str:
+    normalized = clean(value)
+    parsed = urlparse(normalized)
+    if parsed.scheme != "https" or not parsed.netloc:
+        raise ValueError("--source-url harus URL HTTPS absolut.")
     return normalized
 
 
@@ -103,6 +114,7 @@ def json_write(path: Path, payload: object) -> None:
 
 
 def pack_relative_path(institution_id: str, program: str, academic_year: str, period_id: str) -> Path:
+    """Return eventual canonical path di bawah packs/, terpisah dari physical draft output."""
     return Path("packs") / institution_id / slugify(program) / slugify(academic_year) / period_id
 
 
@@ -161,7 +173,7 @@ def render_readme(*, pack_id: str, relative_path: Path, source_id: str) -> str:
     manifest_path = (relative_path / "manifest.json").as_posix().removeprefix("packs/")
     return f"""# Community pack draft
 
-Scaffold ini dibuat oleh `scripts/create_pack.py` dan **belum otomatis menjadi pack publik**.
+Scaffold ini dibuat oleh `scripts/create_pack.py` dan **belum otomatis menjadi pack publik**. Folder draft default berada di `pack-drafts/`, yang di-ignore Git supaya artefak setengah jadi tidak ikut masuk validation/discovery repository.
 
 Status awal sengaja `experimental` + `maintainer: community`. Tanggal pada `source_verified_at` berarti contributor menyatakan telah membaca source input pada tanggal tersebut; itu **bukan endorsement atau verifikasi maintainer Ramu**.
 
@@ -173,8 +185,9 @@ Sebelum mendaftarkan `{pack_id}` ke `packs/index.json`:
 4. isi course pack tanpa menyalin materi berhak cipta;
 5. tambahkan eval khusus bila ada failure mode pack-specific;
 6. review identity (`institution_id`, `program_id`, pack `id`) karena ID yang sudah dipublish sebaiknya stabil;
-7. tambahkan entry katalog dengan `manifest: {manifest_path}`;
-8. jalankan seluruh validation stack sebelum membuka PR.
+7. pindahkan folder draft ke path final yang sesuai dengan `{manifest_path}`;
+8. tambahkan entry katalog dari `catalog-entry.example.json`;
+9. jalankan seluruh validation stack sebelum membuka PR.
 
 `evals/contracts.json` dan `evals/behavior.json` sengaja mulai dengan `cases: []`. Jangan membuat regression case palsu hanya agar file terlihat penuh.
 """
@@ -187,21 +200,24 @@ def main() -> int:
         program = clean(args.program)
         academic_year = clean(args.academic_year)
         period_label = clean(args.period_label)
+        source_name = clean(args.source_name)
+        source_kind = clean(args.source_kind)
         if len(institution) < 2 or len(program) < 2 or len(period_label) < 2 or len(academic_year) < 4:
             raise ValueError("Label institusi/program/tahun/periode terlalu pendek.")
+        if len(source_name) < 3 or not source_kind:
+            raise ValueError("Source name/kind tidak boleh kosong.")
 
         institution_id = require_machine_id("institution_id", args.institution_id)
         program_id = require_machine_id("program_id", args.program_id)
         period_id = require_machine_id("period_id", args.period_id)
         pack_id = require_machine_id("pack_id", args.pack_id)
         reviewed_at = parse_review_date(args.reviewed_at)
+        source_url = validate_https_url(args.source_url)
         pack_version = clean(args.pack_version)
         if not pack_version:
             raise ValueError("pack_version tidak boleh kosong.")
         if args.review_interval_days < 1:
             raise ValueError("review_interval_days harus >= 1.")
-        if not args.source_url.startswith("https://"):
-            raise ValueError("--source-url harus memakai HTTPS.")
 
         courses = [parse_course(raw) for raw in args.course]
         codes = [course.code for course in courses]
@@ -209,17 +225,15 @@ def main() -> int:
             raise ValueError("Course code duplikat pada input.")
 
         relative_path = pack_relative_path(institution_id, program, academic_year, period_id)
-        output_root = Path(args.output_root).expanduser() if args.output_root else ROOT / "packs"
+        output_root = Path(args.output_root).expanduser() if args.output_root else ROOT / "pack-drafts"
         target = output_root / Path(*relative_path.parts[1:])
         ensure_target(target, args.force)
 
         source_id = f"{slugify(institution_id)}-{slugify(period_id)}-primary"
-        source_name = clean(args.source_name)
         authority = clean(args.source_authority) or institution
         source_registry_rel = (relative_path / "source-registry.json").as_posix()
         contracts_rel = (relative_path / "evals/contracts.json").as_posix()
         behavior_rel = (relative_path / "evals/behavior.json").as_posix()
-        instructions_rel = "PROJECT-INSTRUCTIONS.md"
 
         course_entries = []
         for course in courses:
@@ -258,14 +272,14 @@ def main() -> int:
             "maintainer": "community",
             "pack_version": pack_version,
             "contract_version": "1.1",
-            "project_instructions": instructions_rel,
+            "project_instructions": "PROJECT-INSTRUCTIONS.md",
             "learning_protocols": ["belajar", "tugas", "review", "latihan-ujian"],
             "courses": course_entries,
             "sources": [
                 {
-                    "type": clean(args.source_kind),
+                    "type": source_kind,
                     "name": source_name,
-                    "url": args.source_url,
+                    "url": source_url,
                     "registry_id": source_id,
                 }
             ],
@@ -302,9 +316,9 @@ def main() -> int:
                 {
                     "id": source_id,
                     "name": source_name,
-                    "kind": clean(args.source_kind),
+                    "kind": source_kind,
                     "authority": authority,
-                    "url": args.source_url,
+                    "url": source_url,
                     "canonical_for": ["metadata awal community pack yang direview contributor"],
                     "freshness_class": "academic-current",
                     "verified_at": reviewed_at,
@@ -365,7 +379,7 @@ def main() -> int:
 
     print(f"Community pack scaffold siap: {target.resolve()}")
     print("Status tetap experimental/community dan belum ditambahkan ke packs/index.json.")
-    print("Review README.md di folder draft, lalu jalankan validation stack setelah entry katalog ditambahkan.")
+    print("Output default berada di pack-drafts/ agar draft setengah jadi tidak ikut discovery/CI.")
     return 0
 
 
