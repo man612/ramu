@@ -206,16 +206,49 @@ def main() -> int:
                 expect(mobile_page.locator(".product-preview")).to_be_visible()
                 expect(mobile_page.locator(".hero-actions .primary")).to_be_visible()
                 expect(mobile_page.locator("#course-list .course-card").first).to_be_visible()
+                if mobile_page.locator(".mobile-dock").count():
+                    raise AssertionError("Homepage mobile masih membuat bottom dock lama.")
+                if mobile_page.locator('script[src="mobile.js"]').count():
+                    raise AssertionError("Homepage masih memuat mobile.js lama.")
+                primary_height = mobile_page.locator(".hero-actions .primary").evaluate("el => el.getBoundingClientRect().height")
+                if primary_height < 44:
+                    raise AssertionError(f"CTA utama mobile terlalu kecil: {primary_height}px.")
                 overflow = mobile_page.evaluate("document.documentElement.scrollWidth - window.innerWidth")
                 if overflow > 1:
                     raise AssertionError(f"Homepage mobile overflow horizontal {overflow}px.")
                 mobile_page.goto(f"{base_url}/setup.html?pack={default_entry['id']}", wait_until="networkidle")
                 expect(mobile_page.locator("#setup-courses .setup-course").first).to_be_visible()
+                if mobile_page.locator(".site-header nav").is_visible():
+                    raise AssertionError("Setup mobile masih menampilkan navigation links yang mengganggu task flow.")
+                mobile_nav = mobile_page.locator(".setup-nav")
+                if mobile_nav.evaluate("el => getComputedStyle(el).position") != "sticky":
+                    raise AssertionError("Setup mobile kehilangan sticky step rail.")
+                step_links = mobile_nav.locator('a[href^="#langkah-"]')
+                if step_links.count() != 4:
+                    raise AssertionError("Setup mobile harus mempertahankan empat langkah linear.")
+                if any(step_links.nth(i).evaluate("el => el.getBoundingClientRect().height") < 44 for i in range(4)):
+                    raise AssertionError("Target langkah mobile harus minimal 44px.")
+                if any(not step_links.nth(i).get_attribute("aria-label") for i in range(4)):
+                    raise AssertionError("Step rail mobile kehilangan aria-label saat label visual disembunyikan.")
+                mobile_page.locator("#langkah-2").scroll_into_view_if_needed()
+                mobile_page.wait_for_timeout(150)
+                if step_links.nth(1).get_attribute("aria-current") != "step":
+                    raise AssertionError("Step rail mobile tidak mengikuti langkah aktif.")
                 setup_overflow = mobile_page.evaluate("document.documentElement.scrollWidth - window.innerWidth")
                 if setup_overflow > 1:
                     raise AssertionError(f"Setup mobile overflow horizontal {setup_overflow}px.")
                 assert_no_page_errors(mobile_page, mobile_errors, "mobile browser flow")
                 mobile_context.close()
+
+                narrow_context = browser.new_context(viewport={"width": 320, "height": 740}, is_mobile=True, has_touch=True)
+                narrow_page = narrow_context.new_page()
+                narrow_page.goto(f"{base_url}/", wait_until="networkidle")
+                if narrow_page.evaluate("document.documentElement.scrollWidth - window.innerWidth") > 1:
+                    raise AssertionError("Homepage pecah pada viewport 320px.")
+                narrow_page.goto(f"{base_url}/setup.html?pack={default_entry['id']}", wait_until="networkidle")
+                if narrow_page.evaluate("document.documentElement.scrollWidth - window.innerWidth") > 1:
+                    raise AssertionError("Setup pecah pada viewport 320px.")
+                narrow_context.close()
                 browser.close()
         finally:
             server.shutdown()

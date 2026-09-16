@@ -257,7 +257,7 @@
   .entry-section { padding: 18px 0 56px; }
   .entry-path { grid-template-columns: 36px minmax(0, 1fr) auto; gap: 10px; }
   .entry-path small { font-size: .76rem; }
-}  .workflow-list li { grid-template-columns: 42px minmax(0, 1fr); min-height: 0; }
+  .workflow-list li { grid-template-columns: 42px minmax(0, 1fr); min-height: 0; }
   .workflow-list div { grid-template-columns: 1fr; gap: 6px; }
   .workflow-list p { font-size: .82rem; }
   .layer-list article { grid-template-columns: 1fr; gap: 5px; min-height: 0; padding: 16px 0; }
