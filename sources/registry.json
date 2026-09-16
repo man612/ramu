@@ -14,9 +14,9 @@
       "verified_at": "2026-09-16",
       "review_interval_days": 14,
       "watch": true,
-      "reachability_policy": "advisory",
+      "reachability_policy": "strict",
       "status": "active",
-      "notes": "Direview ulang 16 September 2026 terhadap current Projects guidance. Current-state guidance tetap dibandingkan dengan release notes atau artikel fitur khusus ketika claim produk berubah. Help Center dapat menolak probe otomatis; reachability advisory tidak menggantikan review evidence."
+      "notes": "Direview ulang 16 September 2026 terhadap current Projects guidance. Current-state guidance tetap dibandingkan dengan release notes atau artikel fitur khusus ketika claim produk berubah. Probe otomatis untuk source ini saat ini stabil dan dipertahankan sebagai strict reachability signal."
     },
     {
       "id": "openai-study-mode",
