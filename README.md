@@ -13,6 +13,8 @@
   ·
   <a href="https://man612.github.io/ramu/setup.html">Coba satu mata kuliah</a>
   ·
+  <a href="starter/README.md">Buat Ramu Starter</a>
+  ·
   <a href="docs/LANDASAN-PEMBELAJARAN.md">Landasan pembelajaran</a>
   ·
   <a href="evals/manual/README.md">Manual validation</a>
@@ -32,6 +34,8 @@
 Ramu menyiapkan satu ChatGPT Project untuk setiap mata kuliah. Project Instructions mengatur perilaku dasar, course pack memberi konteks mata kuliah, dan source registry membantu menjaga rujukan yang berubah dari waktu ke waktu.
 
 Tujuannya sederhana: saat sebuah mata kuliah dipakai berbulan-bulan, konteksnya tidak perlu dibangun ulang setiap chat, materi lama tidak mudah bercampur dengan aturan terbaru, dan bantuan AI tetap mengikuti kebutuhan belajar atau tugas yang sedang dikerjakan.
+
+Pack Universitas Terbuka yang tersedia di repository ini adalah reference implementation yang benar-benar dipakai, bukan batas arsitektur Ramu. Untuk mata kuliah yang belum ada di katalog, pengguna dapat memulai lewat [Ramu Starter](starter/README.md). Penggunaan dasar Ramu di ChatGPT Projects tidak memerlukan OpenAI API.
 
 > Nama **Ramu** berasal dari kata *meramu*: menyatukan konteks, sumber, materi, aturan belajar, dan pemeriksaan menjadi satu ruang belajar yang siap dipakai.
 
@@ -209,7 +213,7 @@ Pack `maintainer: ramu` berarti pack tersebut dipelihara di repository utama. Is
 
 Issue dan PR terbuka untuk bug, source yang berubah, perbaikan dokumentasi, eval baru, tooling, atau pack tambahan. Mulai dari [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
-Untuk masalah keamanan, lihat [`SECURITY.md`](SECURITY.md). Untuk pertanyaan umum, lihat [`SUPPORT.md`](SUPPORT.md).
+Untuk pedoman interaksi komunitas, lihat [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md). Untuk masalah keamanan, lihat [`SECURITY.md`](SECURITY.md). Untuk pertanyaan umum, lihat [`SUPPORT.md`](SUPPORT.md).
 
 ## Lisensi
 
