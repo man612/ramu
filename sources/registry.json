@@ -14,8 +14,9 @@
       "verified_at": "2026-09-03",
       "review_interval_days": 14,
       "watch": true,
+      "reachability_policy": "advisory",
       "status": "active",
-      "notes": "Current-state guidance dibandingkan dengan release notes atau artikel fitur khusus ketika claim produk baru berubah."
+      "notes": "Current-state guidance dibandingkan dengan release notes atau artikel fitur khusus ketika claim produk baru berubah. Help Center dapat menolak probe otomatis; reachability advisory tidak menggantikan review evidence."
     },
     {
       "id": "openai-study-mode",
@@ -28,6 +29,7 @@
       "verified_at": "2026-09-03",
       "review_interval_days": 14,
       "watch": true,
+      "reachability_policy": "advisory",
       "status": "active"
     },
     {
@@ -41,20 +43,22 @@
       "verified_at": "2026-09-03",
       "review_interval_days": 7,
       "watch": true,
+      "reachability_policy": "advisory",
       "status": "active",
-      "notes": "Dipakai sebagai evidence perubahan produk terbaru; current-state guidance tetap dibandingkan dengan artikel fitur terkait."
+      "notes": "Dipakai sebagai evidence perubahan produk terbaru; current-state guidance tetap dibandingkan dengan artikel fitur terkait. Help Center dapat menolak probe otomatis."
     },
     {
       "id": "openai-data-controls",
       "name": "Data Controls FAQ",
       "kind": "official-product-doc",
       "authority": "OpenAI",
-      "url": "https://help.openai.com/en/articles/7730893/data-controls-faq",
+      "url": "https://help.openai.com/en/articles/7730893-data-controls-faq",
       "canonical_for": ["pengaturan data ChatGPT"],
       "freshness_class": "product-current",
       "verified_at": "2026-09-03",
       "review_interval_days": 14,
       "watch": true,
+      "reachability_policy": "advisory",
       "status": "active"
     }
   ],
