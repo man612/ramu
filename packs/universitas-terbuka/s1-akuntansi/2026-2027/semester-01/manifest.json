@@ -1,0 +1,141 @@
+{
+  "schema_version": 4,
+  "id": "id.ut.accounting-s1.2026-2027.s1",
+  "name": "UT S1 Akuntansi — Semester 1",
+  "institution_id": "universitas-terbuka",
+  "institution": "Universitas Terbuka",
+  "program_id": "universitas-terbuka.s1-akuntansi",
+  "program": "S1 Akuntansi",
+  "academic_year": "2026/2027",
+  "period_id": "semester-01",
+  "period_label": "Semester 1",
+  "total_sks": 18,
+  "status": "source-verified",
+  "maintainer": "ramu",
+  "pack_version": "2026-2027.s1.1",
+  "contract_version": "1.1",
+  "project_instructions": "PROJECT-INSTRUCTIONS.md",
+  "learning_protocols": ["belajar", "tugas", "review", "latihan-ujian"],
+  "courses": [
+    {
+      "code": "EACC4101",
+      "name": "Pengantar Akuntansi",
+      "short_name": "Pengantar Akuntansi",
+      "project_name": "Semester 1 • Pengantar Akuntansi",
+      "sks": 4,
+      "focus": "siklus akuntansi, persamaan, jurnal, penyesuaian, laporan keuangan, dan pengendalian internal",
+      "exam_slot": "I.2",
+      "material": "EKMA4115 Pengantar Akuntansi (Edisi 3)",
+      "service": "T",
+      "file": "courses/EACC4101-pengantar-akuntansi.md"
+    },
+    {
+      "code": "EACC4102",
+      "name": "Laboratorium Pengantar Akuntansi",
+      "short_name": "Lab Pengantar Akuntansi",
+      "project_name": "Semester 1 • Lab Pengantar Akuntansi",
+      "sks": 2,
+      "focus": "praktik siklus akuntansi, laporan keuangan, PRATON serial, dan rekonsiliasi",
+      "exam_slot": "II.5",
+      "material": "EACC4102 Laboratorium Pengantar Akuntansi",
+      "practice": "BPr",
+      "service": "BPro",
+      "file": "courses/EACC4102-laboratorium-pengantar-akuntansi.md"
+    },
+    {
+      "code": "MKWN4110",
+      "name": "Pancasila",
+      "short_name": "Pancasila",
+      "project_name": "Semester 1 • Pancasila",
+      "sks": 2,
+      "focus": "sejarah, dasar negara, ideologi, sistem filsafat, dan penerapan nilai Pancasila",
+      "exam_slot": "I.3",
+      "material": "MKWN4110 Pancasila",
+      "service": "WT",
+      "file": "courses/MKWN4110-pancasila.md"
+    },
+    {
+      "code": "MKWN4108",
+      "name": "Bahasa Indonesia",
+      "short_name": "Bahasa Indonesia",
+      "project_name": "Semester 1 • Bahasa Indonesia",
+      "sks": 2,
+      "focus": "kalimat efektif, paragraf, rujukan, membaca kritis, dan penulisan ilmiah",
+      "exam_slot": "II.3",
+      "material": "MKWN4108 Bahasa Indonesia",
+      "service": "T",
+      "file": "courses/MKWN4108-bahasa-indonesia.md"
+    },
+    {
+      "code": "ECON4101",
+      "name": "Pengantar Ekonomi Makro",
+      "short_name": "Ekonomi Makro",
+      "project_name": "Semester 1 • Ekonomi Makro",
+      "sks": 3,
+      "focus": "indikator makro, pendapatan nasional, inflasi, pengangguran, kebijakan, pertumbuhan, dan ekonomi terbuka",
+      "exam_slot": "II.2",
+      "material": "ESPA4110 Pengantar Ekonomi Makro (Edisi 4)",
+      "service": "T",
+      "file": "courses/ECON4101-pengantar-ekonomi-makro.md"
+    },
+    {
+      "code": "religion-choice",
+      "display_code": "Pilih 1",
+      "name": "Pendidikan Agama",
+      "short_name": "Pendidikan Agama",
+      "project_name": "Semester 1 • Pendidikan Agama",
+      "sks": 3,
+      "focus": "nilai agama, etika, kehidupan bermasyarakat, dan kerukunan sesuai mata kuliah yang benar-benar terdaftar",
+      "exam_slot": "I.5",
+      "selection": {
+        "mode": "choose-one",
+        "basis": "sesuai data pribadi dan registrasi UT",
+        "options": [
+          {"code": "MKWN4101", "name": "Pendidikan Agama Islam", "material": "MKWN4101 Pendidikan Agama Islam", "sks": 3},
+          {"code": "MKWN4102", "name": "Pendidikan Agama Katolik", "material": "MKWU4102 Pendidikan Agama Katolik (Edisi 2)", "sks": 3},
+          {"code": "MKWN4103", "name": "Pendidikan Agama Kristen", "material": "MKWU4103 Pendidikan Agama Kristen", "sks": 3},
+          {"code": "MKWN4104", "name": "Pendidikan Agama Buddha", "material": "MKWU4104 Pendidikan Agama Buddha", "sks": 3},
+          {"code": "MKWN4105", "name": "Pendidikan Agama Hindu", "material": "MKWU4105 Pendidikan Agama Hindu", "sks": 3},
+          {"code": "MKWN4107", "name": "Pendidikan Agama Khonghucu", "material": "MKWU4107 Pendidikan Agama Khonghucu", "sks": 3}
+        ]
+      },
+      "file": "courses/religion-choice-pendidikan-agama.md"
+    },
+    {
+      "code": "MKWN4109",
+      "name": "Pendidikan Kewarganegaraan",
+      "short_name": "Kewarganegaraan",
+      "project_name": "Semester 1 • Kewarganegaraan",
+      "sks": 2,
+      "focus": "identitas nasional, hak dan kewajiban, demokrasi, HAM, integrasi, globalisasi, dan ketahanan nasional",
+      "exam_slot": "II.4",
+      "material": "MKWN4109 Pendidikan Kewarganegaraan",
+      "file": "courses/MKWN4109-pendidikan-kewarganegaraan.md"
+    }
+  ],
+  "sources": [
+    {
+      "type": "official",
+      "name": "Katalog Kurikulum UT 2026/2027 — Juli 2026",
+      "url": "https://www.ut.ac.id/wp-content/uploads/2026/07/01-Katalog-NON-PENDAS-TAHUN-2026-2027-21-07-2026_22072026.pdf",
+      "registry_id": "ut-catalog-2026-2027"
+    },
+    {
+      "type": "official",
+      "name": "Pedoman Sistem Penyelenggaraan UT 2026/2027",
+      "url": "https://www.ut.ac.id/wp-content/uploads/2026/06/03-PEDOMAN-PENYELENGGARAAN-2026-2027-080626_compressed.pdf",
+      "registry_id": "ut-guideline-2026-2027"
+    }
+  ],
+  "source_registries": [
+    "sources/registry.json",
+    "packs/universitas-terbuka/source-registry.json",
+    "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-01/source-registry.json"
+  ],
+  "eval_suites": [
+    {"id": "core", "scope": "core", "contracts": "evals/core/contracts.json", "behavior": "evals/core/behavior.json"},
+    {"id": "ut", "scope": "institution", "scope_ref": "universitas-terbuka", "contracts": "packs/universitas-terbuka/evals/contracts.json", "behavior": "packs/universitas-terbuka/evals/behavior.json"},
+    {"id": "semester-01", "scope": "pack", "scope_ref": "id.ut.accounting-s1.2026-2027.s1", "contracts": "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-01/evals/contracts.json", "behavior": "packs/universitas-terbuka/s1-akuntansi/2026-2027/semester-01/evals/behavior.json"}
+  ],
+  "source_verified_at": "2026-09-16"
+}
