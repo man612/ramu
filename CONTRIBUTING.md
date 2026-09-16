@@ -25,24 +25,32 @@ Yang cocok dibawa lewat issue atau PR antara lain:
 - validator, source watcher, site, atau tooling eval;
 - pack periode/program/institusi baru.
 
+## Starter bukan public pack
+
+Kalau kebutuhan utamanya adalah memakai pola Ramu untuk satu mata kuliah pribadi, mulai dari [`starter/README.md`](starter/README.md). Personal Starter sengaja berada di luar katalog dan tidak mengklaim source sudah diverifikasi.
+
+Jangan menjadikan setiap Starter sebagai PR pack. Pack publik masuk akal bila konteksnya reusable, source-nya dapat ditelusuri, identity-nya cukup stabil, dan ada alasan orang lain akan memakai artefak yang sama.
+
 ## Menambah pack baru
 
 Tooling menemukan pack dari [`packs/index.json`](packs/index.json). Hindari menambahkan daftar path baru secara manual ke JavaScript atau Python.
 
-Urutan kerja yang disarankan:
+Untuk membuat scaffold awal, jalur yang disarankan sekarang adalah [`scripts/create_pack.py`](scripts/create_pack.py). Generator membuat draft `experimental` + `community` di `pack-drafts/`, tidak memasukkannya ke katalog, dan tidak mengarang eval. Lihat [`docs/CREATE-A-PACK.md`](docs/CREATE-A-PACK.md) untuk input dan batas kepercayaannya.
 
-1. buat `packs/<institusi>/<program>/<tahun>/<periode>/`;
-2. tentukan `institution_id` yang stabil dan machine-safe;
-3. tentukan `program_id` yang stabil dan unik secara global;
-4. buat `manifest.json` mengikuti `schemas/pack-manifest.schema.json`;
-5. isi `period_id`, misalnya `semester-03`, `trimester-01`, atau `term-fall`;
-6. isi `period_label` sesuai istilah manusiawi yang dipakai institusi;
-7. tambahkan Project Instructions dan course pack;
-8. pakai registry yang sudah ada atau buat scoped `source-registry.json` jika diperlukan;
+Setelah draft direview, urutan kerja yang disarankan:
+
+1. pindahkan draft ke `packs/<institusi>/<program>/<tahun>/<periode>/`;
+2. pastikan `institution_id` stabil dan machine-safe;
+3. pastikan `program_id` stabil dan unik secara global;
+4. review `manifest.json` terhadap `schemas/pack-manifest.schema.json`;
+5. review `period_id`, misalnya `semester-03`, `trimester-01`, atau `term-fall`;
+6. review `period_label` sesuai istilah manusiawi yang dipakai institusi;
+7. review Project Instructions dan setiap course pack terhadap source yang benar;
+8. pakai registry yang sudah ada atau review scoped `source-registry.json` hasil scaffold;
 9. pilih eval suite pada scope yang tepat;
 10. buat eval khusus pack bila memang ada failure mode pack-specific;
 11. susun `eval_suites` dari umum ke spesifik;
-12. daftarkan pack di `packs/index.json`;
+12. daftarkan pack di `packs/index.json` menggunakan identity/path final;
 13. jalankan seluruh validasi sebelum membuka PR.
 
 Field yang paling sering disentuh:
@@ -107,15 +115,20 @@ Behavior `defaults` diproses berurutan, jadi suite yang lebih spesifik boleh men
 
 Source ID harus unik lintas registry. Halaman sekunder atau community signal juga tidak otomatis menjadi kanonik hanya karena domainnya resmi.
 
+Untuk reachability monitoring, source dapat memakai `reachability_policy: strict|advisory`. Default tetap `strict`; gunakan `advisory` hanya bila automated probe memang merupakan signal yang tidak stabil, bukan untuk menghindari review. Detailnya ada di [`docs/SOURCE-WATCH.md`](docs/SOURCE-WATCH.md).
+
 ## Validasi lokal
 
 Gunakan Python 3.12 atau versi kompatibel.
 
 ```bash
 python -m pip install -r requirements-dev.txt
+python -m compileall -q scripts tests
 python scripts/validate_schemas.py
 python scripts/validate_repo.py
 python scripts/validate_scope_identities.py
+python tests/test_starter_builder.py
+python tests/test_pack_builder.py
 python scripts/validate_display_names.py
 python scripts/validate_site.py
 python scripts/check_source_freshness.py
@@ -123,6 +136,15 @@ python scripts/run_behavior_evals.py --dry-run --pack <pack-id>
 ```
 
 `validate_schemas.py` memeriksa schema dan instance JSON. `validate_repo.py` serta `validate_scope_identities.py` menangani invariant lintas-file yang lebih tepat diperiksa secara semantik.
+
+Browser regression memerlukan Chromium Playwright:
+
+```bash
+python -m playwright install chromium
+python tests/test_site_browser.py
+```
+
+CI memasang browser beserta system dependencies secara otomatis dan menjadikan browser job bagian dari required `validate` gate.
 
 Daftar pack:
 
