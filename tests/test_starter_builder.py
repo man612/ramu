@@ -17,6 +17,7 @@ def run(*args: str) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
         [sys.executable, str(SCRIPT), *args],
         cwd=ROOT,
+        stdin=subprocess.DEVNULL,
         text=True,
         capture_output=True,
         check=False,
