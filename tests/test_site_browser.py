@@ -51,6 +51,35 @@ def assert_no_page_errors(page: Page, errors: list[str], label: str) -> None:
         raise AssertionError(f"{label} menghasilkan page error: {errors}")
 
 
+def tab_until(page: Page, selector: str, limit: int = 40) -> None:
+    page.evaluate("document.activeElement?.blur()")
+    for _ in range(limit):
+        page.keyboard.press("Tab")
+        if page.evaluate("selector => document.activeElement?.matches(selector)", selector):
+            return
+    raise AssertionError(f"Keyboard Tab tidak mencapai {selector}.")
+
+
+def assert_focus_not_obscured(page: Page, selector: str, label: str) -> None:
+    locator = page.locator(selector).first
+    locator.scroll_into_view_if_needed()
+    locator.focus()
+    result = locator.evaluate("""el => {
+      const rect = el.getBoundingClientRect();
+      const overlays = [...document.querySelectorAll('.site-header, .setup-nav')].filter(node => {
+        const style = getComputedStyle(node);
+        return (style.position === 'sticky' || style.position === 'fixed') && !node.contains(el);
+      });
+      const overlaps = overlays.some(node => {
+        const other = node.getBoundingClientRect();
+        return rect.left < other.right && rect.right > other.left && rect.top < other.bottom && rect.bottom > other.top;
+      });
+      return { top: rect.top, bottom: rect.bottom, height: innerHeight, overlaps };
+    }""")
+    if result["top"] < 0 or result["bottom"] > result["height"] or result["overlaps"]:
+        raise AssertionError(f"Focus {label} obscured/outside viewport: {result}")
+
+
 def main() -> int:
     with tempfile.TemporaryDirectory(prefix="ramu-browser-") as tmp:
         stage = Path(tmp)
@@ -249,6 +278,73 @@ def main() -> int:
                 if narrow_page.evaluate("document.documentElement.scrollWidth - window.innerWidth") > 1:
                     raise AssertionError("Setup pecah pada viewport 320px.")
                 narrow_context.close()
+
+                # Phase 5: keyboard, focus, reduced motion, dan breakpoint accessibility contracts.
+                access_context = browser.new_context(viewport={"width": 1280, "height": 900})
+                access_page = access_context.new_page()
+                access_page.goto(f"{base_url}/", wait_until="networkidle")
+                tab_until(access_page, "[data-pack-picker-trigger]")
+                focus_style = access_page.locator("[data-pack-picker-trigger]").evaluate(
+                    "el => ({style: getComputedStyle(el).outlineStyle, width: parseFloat(getComputedStyle(el).outlineWidth)})"
+                )
+                if focus_style["style"] == "none" or focus_style["width"] < 2:
+                    raise AssertionError(f"Keyboard focus ring tidak cukup terlihat: {focus_style}")
+                access_page.keyboard.press("Enter")
+                expect(access_page.locator("[data-pack-picker-trigger]")).to_have_attribute("aria-expanded", "true")
+                access_page.keyboard.press("Escape")
+
+                access_page.goto(f"{base_url}/setup.html?pack={default_entry['id']}", wait_until="networkidle")
+                details = access_page.locator("#setup-courses .setup-course").nth(1)
+                summary = details.locator("summary")
+                summary.focus()
+                before_open = details.evaluate("el => el.open")
+                access_page.keyboard.press("Enter")
+                if details.evaluate("el => el.open") == before_open:
+                    raise AssertionError("Course disclosure tidak dapat dioperasikan lewat keyboard Enter.")
+                copy_button = access_page.locator("#copy-instructions")
+                copy_button.focus()
+                access_page.keyboard.press("Enter")
+                access_page.wait_for_function("document.querySelector('#copy-status').textContent.trim().length > 0")
+                assert_focus_not_obscured(access_page, "#copy-instructions", "copy instructions desktop")
+                assert_focus_not_obscured(access_page, "#setup-courses .setup-course summary", "course summary desktop")
+                access_context.close()
+
+                reduced_context = browser.new_context(viewport={"width": 390, "height": 844}, reduced_motion="reduce")
+                reduced_page = reduced_context.new_page()
+                reduced_page.goto(f"{base_url}/", wait_until="networkidle")
+                if not reduced_page.evaluate("matchMedia('(prefers-reduced-motion: reduce)').matches"):
+                    raise AssertionError("Browser reduced-motion context tidak aktif.")
+                transition_ms = reduced_page.locator("[data-pack-picker-trigger]").evaluate("""el => {
+                  const raw = getComputedStyle(el).transitionDuration.split(',')[0].trim();
+                  return raw.endsWith('ms') ? parseFloat(raw) : parseFloat(raw) * 1000;
+                }""")
+                if transition_ms > 1:
+                    raise AssertionError(f"Reduced-motion masih menyisakan transition panjang: {transition_ms}ms")
+                reduced_page.locator("[data-pack-picker-trigger]").focus()
+                reduced_page.keyboard.press("Enter")
+                expect(reduced_page.locator("[data-pack-picker-trigger]")).to_have_attribute("aria-expanded", "true")
+                reduced_page.keyboard.press("Escape")
+                reduced_context.close()
+
+                for width, height in ((360, 780), (430, 844), (820, 900)):
+                    responsive_context = browser.new_context(viewport={"width": width, "height": height})
+                    responsive_page = responsive_context.new_page()
+                    responsive_page.goto(f"{base_url}/", wait_until="networkidle")
+                    if responsive_page.evaluate("document.documentElement.scrollWidth - window.innerWidth") > 1:
+                        raise AssertionError(f"Homepage overflow pada viewport {width}px.")
+                    responsive_page.goto(f"{base_url}/setup.html?pack={default_entry['id']}", wait_until="networkidle")
+                    if responsive_page.evaluate("document.documentElement.scrollWidth - window.innerWidth") > 1:
+                        raise AssertionError(f"Setup overflow pada viewport {width}px.")
+                    nav_position = responsive_page.locator(".setup-nav").evaluate("el => getComputedStyle(el).position")
+                    expected_position = "sticky" if width <= 720 else "static"
+                    if nav_position != expected_position:
+                        raise AssertionError(f"Setup nav {width}px = {nav_position}, expected {expected_position}.")
+                    if width <= 720:
+                        step_links = responsive_page.locator('.setup-nav a[href^="#langkah-"]')
+                        if any(step_links.nth(i).evaluate("el => el.getBoundingClientRect().height") < 44 for i in range(4)):
+                            raise AssertionError(f"Touch target setup <44px pada viewport {width}px.")
+                        assert_focus_not_obscured(responsive_page, "#copy-instructions", f"copy instructions {width}px")
+                    responsive_context.close()
                 browser.close()
         finally:
             server.shutdown()
