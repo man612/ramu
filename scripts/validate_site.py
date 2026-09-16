@@ -43,6 +43,9 @@ def main() -> int:
         'id="pack-title"',
         'rel="canonical" href="https://man612.github.io/ramu/"',
         'property="og:url" content="https://man612.github.io/ramu/"',
+        'property="og:site_name" content="Ramu"',
+        'property="og:locale" content="id_ID"',
+        'name="twitter:card" content="summary"',
         'href="https://github.com/man612/ramu/blob/main/SUPPORT.md"',
     ])
     require_text(SITE / "setup.html", [
@@ -60,6 +63,10 @@ def main() -> int:
         "Add to project sources",
         'rel="canonical" href="https://man612.github.io/ramu/setup.html"',
         'property="og:url" content="https://man612.github.io/ramu/setup.html"',
+        'property="og:site_name" content="Ramu"',
+        'property="og:locale" content="id_ID"',
+        'name="twitter:card" content="summary"',
+        '<title>Setup Ramu | siapkan ChatGPT Project untuk mata kuliah</title>',
     ])
     require_text(SITE / "app.js", [
         'const PACK_INDEX_URL = "./packs/index.json"',

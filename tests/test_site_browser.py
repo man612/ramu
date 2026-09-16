@@ -110,6 +110,7 @@ def main() -> int:
                 if s1_entry:
                     page.goto(f"{base_url}/?pack={s1_entry['id']}", wait_until="networkidle")
                     religion_card = page.locator("#course-list .course-card").filter(has_text="Pendidikan Agama")
+                    religion_card.wait_for(state="visible")
                     if religion_card.count() != 1:
                         raise AssertionError("Homepage Semester 1 tidak merender tepat satu choice slot Pendidikan Agama.")
                     religion_text = religion_card.inner_text()
@@ -120,6 +121,7 @@ def main() -> int:
 
                     page.goto(f"{base_url}/setup.html?pack={s1_entry['id']}", wait_until="networkidle")
                     religion_setup = page.locator('.setup-course[data-course="religion-choice"]')
+                    religion_setup.wait_for(state="visible")
                     if religion_setup.count() != 1:
                         raise AssertionError("Setup Semester 1 tidak merender choice slot Pendidikan Agama.")
                     religion_setup.locator("summary").click()
