@@ -40,6 +40,7 @@ def main() -> int:
         'data-setup-link',
         'href="catalog.css"',
         'href="homepage.css"',
+        '<body class="home-page">',
         'id="hero-preview-courses"',
         'href="https://github.com/man612/ramu/blob/main/starter/README.md"',
         'id="course-list"',
@@ -58,6 +59,9 @@ def main() -> int:
         'data-pack-picker-menu',
         'href="catalog.css"',
         'href="setup-phase3.css"',
+        '<body class="setup-page">',
+        'aria-label="Langkah 1: Cek Memory"',
+        'id="progress-title" aria-live="polite"',
         'id="setup-pack-name"',
         'id="setup-courses"',
         'id="copy-instructions"',
@@ -100,6 +104,13 @@ def main() -> int:
         ".setup-course summary",
         "@media (max-width: 720px)",
     ])
+    require_text(SITE / "mobile.css", [
+        ".setup-page .site-header nav",
+        ".setup-nav a span",
+        "grid-template-columns: repeat(4, minmax(0, 1fr))",
+        "min-height: 44px",
+        "@media (max-width: 430px)",
+    ])
 
     app_text = (SITE / "app.js").read_text(encoding="utf-8") if (SITE / "app.js").is_file() else ""
     for forbidden in (
@@ -121,6 +132,22 @@ def main() -> int:
     for path_name, text in (("site/index.html", index_text), ("site/setup.html", setup_text)):
         if "<select" in text.lower():
             fail(f"{path_name} masih memakai native browser select untuk pack picker.")
+        if "mobile.js" in text or "mobile-dock" in text:
+            fail(f"{path_name} masih memuat mobile dock/script lama.")
+
+    if (SITE / "mobile.js").exists():
+        fail("site/mobile.js harus dihapus setelah mobile dock dipensiunkan.")
+
+    mobile_text = (SITE / "mobile.css").read_text(encoding="utf-8") if (SITE / "mobile.css").is_file() else ""
+    if "mobile-dock" in mobile_text:
+        fail("site/mobile.css masih memuat mobile dock lama.")
+
+    for css_name in ("homepage.css", "mobile.css", "setup-phase3.css"):
+        css_path = SITE / css_name
+        if css_path.is_file():
+            css_text = css_path.read_text(encoding="utf-8")
+            if css_text.count("{") != css_text.count("}"):
+                fail(f"site/{css_name} punya kurung CSS tidak seimbang.")
 
     for forbidden in (
         "kecuali manifest pack menyatakan berbeda",
