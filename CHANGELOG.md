@@ -6,27 +6,45 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 
 ## [Unreleased]
 
+## [0.3.0-beta] - 2026-09-16
+
 ### Added
 
-- **UT S1 Akuntansi Semester 3 2026/2027** sebagai real second pack Ramu: 7 mata kuliah, 20 SKS, `period_id: semester-03`, dan 7 course pack yang diverifikasi ulang dari sumber current 2026/2027.
-- Pack-scoped source registry Semester 3 dengan tujuh halaman BMP aktif Perpustakaan UT serta claim evidence khusus redesign AKM II dan Laboratorium Perpajakan/PRATON.
-- Pack behavior regression **E17–E24** untuk tax-currentness, AKM II old-vs-current metadata, continuity kasus PRATON, SIA requirement/control, relevant cost, business evidence, language tutoring, dan ketidakpastian kebijakan GenAI UT. E18 dan E24 ditandai critical.
-- Regression test reachability Source Watch yang membuktikan transient failure dapat pulih melalui retry, sementara persistent failure tetap gagal.
+- **UT S1 Akuntansi Semester 3 2026/2027** sebagai real second pack Ramu: 7 mata kuliah, 20 SKS, `period_id: semester-03`, 7 course pack, pack-scoped source registry, dan behavior regression E17–E24. E18 dan E24 ditandai critical.
+- **Ramu Starter** melalui `scripts/create_starter.py` untuk membuat workspace personal dari nama mata kuliah, tujuan, source, dan aturan pengguna tanpa mewajibkan public pack atau OpenAI API.
+- Starter menghasilkan `PROJECT-INSTRUCTIONS.md`, `COURSE-PACK.txt`, `START-HERE.md`, dan `starter.json`, dengan trust marker `public_pack: false` dan `source_verified: false`.
+- **Create a Pack** melalui `scripts/create_pack.py` untuk membuat scaffold community pack dari identity institusi/program/periode, course, dan source yang direview contributor tanpa menulis struktur repository dari nol.
+- Draft community pack default berada di `pack-drafts/`, di-ignore Git, tidak masuk discovery `packs/**`, dimulai sebagai `status: experimental` dan `maintainer: community`, serta tidak mengarang eval case palsu.
+- **Playwright + Chromium browser regression** sebagai required validation gate untuk homepage/catalog, pack picker keyboard flow, pack switching, setup rendering, `localStorage`, Project Instructions, download course pack, dan blocked-storage behavior.
+- Regression test Starter generator, community pack generator, source-watch retry/reachability policy, serta CI/Pages trust chain.
 
 ### Changed
 
-- Source Freshness Watch sekarang melakukan retry terbatas sebelum menganggap reachability gagal, menerbitkan diagnostics ke GitHub Actions Job Summary, dan membawa output source/error ke issue review tanpa menyamakan network failure dengan perubahan fakta.
-- Registry dan panduan ChatGPT diperbarui berdasarkan review resmi 3 September 2026: eligible existing Project dapat mengubah memory lewat Project settings, sementara Study Mode tidak berlaku pada Project conversations; keduanya tidak menjadi dependency runtime Ramu.
+- Source Freshness Watch sekarang membedakan semantic freshness dari reachability, melakukan retry terbatas, mendukung `reachability_policy: strict|advisory`, dan mempertahankan `strict` sebagai default.
+- Advisory reachability hanya dipakai untuk source sah yang memang noisy terhadap automated probe; failure advisory dilaporkan sebagai `URL INCONCLUSIVE` tanpa memperbarui tanggal review secara otomatis.
+- Source OpenAI yang relevan direview ulang pada 16 September 2026; source yang probe-nya stabil tetap menggunakan strict reachability.
 - Source hierarchy Universitas Terbuka dan regression E14 dibuat **period-neutral**. Halaman regional tetap secondary ketika berbeda dari katalog pusat untuk struktur kurikulum atau metadata mata kuliah.
-- Dokumentasi/root README/setup sekarang menampilkan Semester 2 dan Semester 3 sebagai dua pack nyata. `default_pack_id` sengaja tetap Semester 2 agar existing entry point tidak berubah diam-diam.
-- Semester 3 tidak menyalin metadata lama: AKM II current 2026/2027 memakai `EACC4205` baru dan BP/BPro, Laboratorium Perpajakan memakai current slot/prasyarat/PRATON, Bahasa Inggris current mencantumkan `T`, dan Belajar di Era Digital mencantumkan `WT`.
-- CI pack matrix sekarang dapat membuktikan wiring Semester 2 dan Semester 3 dari `packs/index.json` tanpa path Semester 3 khusus pada workflow.
+- Dokumentasi/root README/setup menampilkan Semester 2 dan Semester 3 sebagai dua pack nyata. `default_pack_id` tetap Semester 2 agar existing entry point tidak berubah diam-diam.
+- README mendapat onboarding kecil tanpa rewrite: shortcut Ramu Starter, penjelasan bahwa pack UT adalah reference implementation bukan batas arsitektur, penegasan bahwa penggunaan dasar tidak membutuhkan OpenAI API, dan link Code of Conduct.
+- Output default `ramu-starter-*/` di-ignore Git untuk mengurangi risiko artefak personal ter-commit tidak sengaja.
+- Write `localStorage` pada setup page ditangani defensif sehingga storage yang diblok browser tidak memecahkan interaksi halaman.
+- CI pack matrix membuktikan wiring Semester 2 dan Semester 3 dari `packs/index.json` tanpa path pack khusus pada workflow.
+- `actions/deploy-pages` diperbarui dari v5.0.0 ke v5.0.1 dengan immutable full-SHA pin.
+- Deployment Pages dipindahkan dari privileged `workflow_run` menjadi reusable `workflow_call`; `deploy-pages` hanya dipanggil setelah job `validate` sukses pada push ke `main`.
+- `docs/RELEASE-PROCESS.md` disinkronkan dengan trusted Pages chain dan browser validation saat ini.
+
+### Security
+
+- Memperbaiki alert CodeQL **“Checkout of untrusted code in a privileged context”** pada Pages workflow dengan menghapus checkout berdasarkan `github.event.workflow_run.head_sha` dari context yang memiliki `pages: write` dan `id-token: write`.
+- `tests/test_ci_contract.py` sekarang melarang `workflow_run`, `github.event.workflow_run`, dan dynamic checkout `ref` kembali masuk ke reusable Pages workflow.
+- Permission Pages tetap minimum: `contents: read`, `pages: write`, dan `id-token: write`.
 
 ### Notes
 
 - Semester 3 berstatus `source-verified`, **bukan** `verified`: source/fakta current telah direview, tetapi full manual behavior validation pada ChatGPT Projects asli dan pilot pengguna nyata belum diklaim.
 - Materi BMP/modul berhak cipta tetap tidak disalin ke repository; course pack hanya menyimpan metadata, workflow, verifier, dan source governance.
 - Keberadaan halaman berjudul **Pedoman Penggunaan Generative AI Tahun 2026** di UT tidak digunakan untuk mengarang isi atau menyimpulkan bahwa semua graded work mengizinkan GenAI; policy text/instruksi tugas/tutor tetap harus diverifikasi.
+- UI/UX redesign, full manual validation, dan pilot pengguna nyata tetap berada di jalur kerja terpisah dan bukan klaim release ini.
 
 ## [0.2.2-beta] - 2026-08-29
 
@@ -172,7 +190,8 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 - Behavior validation aktual belum menjadi klaim penuh pada release ini.
 - Pilot pengguna nyata masih diperlukan sebelum Ramu dapat dianggap stabil.
 
-[Unreleased]: https://github.com/man612/ramu/compare/v0.2.2-beta...HEAD
+[Unreleased]: https://github.com/man612/ramu/compare/v0.3.0-beta...HEAD
+[0.3.0-beta]: https://github.com/man612/ramu/compare/v0.2.2-beta...v0.3.0-beta
 [0.2.2-beta]: https://github.com/man612/ramu/compare/v0.2.1-beta...v0.2.2-beta
 [0.2.1-beta]: https://github.com/man612/ramu/compare/v0.2.0-beta...v0.2.1-beta
 [0.2.0-beta]: https://github.com/man612/ramu/compare/v0.1.0-beta...v0.2.0-beta
