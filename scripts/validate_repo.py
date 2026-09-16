@@ -268,6 +268,23 @@ def validate_pack(entry: dict) -> None:
         for key in ("code", "name", "short_name", "project_name", "sks", "focus", "file"):
             if not course.get(key) and course.get(key) != 0:
                 fail(f"Pack {pack_id} course {code} kehilangan field `{key}`")
+        selection = course.get("selection")
+        if selection is not None:
+            if not str(course.get("display_code", "")).strip():
+                fail(f"Pack {pack_id} course {code}: choice slot harus punya display_code agar ID internal tidak tampil sebagai kode akademik.")
+            options = selection.get("options", []) if isinstance(selection, dict) else []
+            option_codes = [item.get("code") for item in options if isinstance(item, dict)]
+            if len(option_codes) != len(set(option_codes)):
+                fail(f"Pack {pack_id} course {code}: kode opsi selection harus unik.")
+            for option in options:
+                if not isinstance(option, dict):
+                    continue
+                if option.get("sks") != course.get("sks"):
+                    fail(
+                        f"Pack {pack_id} course {code}: SKS opsi {option.get('code')} "
+                        f"harus sama dengan SKS slot {course.get('sks')}."
+                    )
+
         rel = str(course.get("file", ""))
         course_file = (pack_dir / rel).resolve()
         try:

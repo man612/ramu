@@ -170,6 +170,17 @@ function setText(selector, value) {
   if (el) el.textContent = value;
 }
 
+function courseDisplayCode(course) {
+  return course.display_code || course.code;
+}
+
+function courseSelectionNote(course) {
+  const selection = course.selection;
+  if (!selection || selection.mode !== "choose-one" || !Array.isArray(selection.options)) return "";
+  const options = selection.options.map(option => option.name).filter(Boolean).join(", ");
+  return `Pilih 1 ${selection.basis}: ${options}.`;
+}
+
 function statusLabel(status, maintainer) {
   const statusMap = {
     "source-verified": "Sumber terverifikasi",
@@ -202,9 +213,10 @@ function renderHomePack(entry, manifest) {
   if (!target) return;
   target.innerHTML = manifest.courses.map(course => `
     <article class="course-card">
-      <div class="course-top"><span>${escapeHtml(course.code)}</span><span>${escapeHtml(course.sks)} SKS</span></div>
+      <div class="course-top"><span>${escapeHtml(courseDisplayCode(course))}</span><span>${escapeHtml(course.sks)} SKS</span></div>
       <h3>${escapeHtml(course.short_name)}</h3>
       <p class="course-focus">Fokus: ${escapeHtml(course.focus || "materi dan tugas mata kuliah")}</p>
+      ${courseSelectionNote(course) ? `<p class="small-note">${escapeHtml(courseSelectionNote(course))}</p>` : ""}
     </article>
   `).join("");
 }
@@ -298,11 +310,12 @@ async function renderSetup(entry, manifest) {
       <details class="setup-course" data-course="${escapeHtml(course.code)}" data-complete="${complete}" ${index === 0 ? "open" : ""}>
         <summary>
           <span class="course-number">${index + 1}</span>
-          <span class="setup-title"><strong>${escapeHtml(course.short_name)}</strong><span>${escapeHtml(course.code)} · ${escapeHtml(course.sks)} SKS · pack ${escapeHtml(manifest.pack_version)}</span></span>
+          <span class="setup-title"><strong>${escapeHtml(course.short_name)}</strong><span>${escapeHtml(courseDisplayCode(course))} · ${escapeHtml(course.sks)} SKS · pack ${escapeHtml(manifest.pack_version)}</span></span>
           <span class="done-pill">${complete ? "Selesai" : "Belum"}</span>
         </summary>
         <div class="setup-body">
           <p class="course-focus"><strong>Fokus:</strong> ${escapeHtml(course.focus || "materi dan tugas mata kuliah")}</p>
+          ${courseSelectionNote(course) ? `<p class="small-note"><strong>Pilihan:</strong> ${escapeHtml(courseSelectionNote(course))}</p>` : ""}
           <ol>
             <li>Buka ChatGPT, lalu pilih <strong>New Project</strong>.</li>
             <li>Beri nama <strong>${escapeHtml(course.project_name)}</strong>, kemudian pilih <strong>Project-only memory</strong>.</li>
