@@ -15,17 +15,22 @@ from ramu_repo import ROOT, RepoError, discover_source_registry_paths, load_json
 
 PROBE_ATTEMPTS = 3
 PROBE_RETRY_DELAYS = (1, 3)
+REACHABILITY_POLICIES = {"strict", "advisory"}
 
 
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--online", action="store_true", help="Coba akses watched URL dengan request ringan.")
-    parser.add_argument("--fail-on-network", action="store_true", help="Exit non-zero bila watched source tetap tidak dapat dijangkau setelah retry.")
+    parser.add_argument(
+        "--fail-on-network",
+        action="store_true",
+        help="Exit non-zero bila watched source berpolicy strict tetap tidak dapat dijangkau setelah retry.",
+    )
     return parser.parse_args()
 
 
 def probe_once(url: str) -> tuple[bool, str]:
-    headers = {"User-Agent": "ramu-source-watch/3.1 (+https://github.com/man612/ramu)"}
+    headers = {"User-Agent": "ramu-source-watch/3.2 (+https://github.com/man612/ramu)"}
     request = urllib.request.Request(url, headers=headers, method="HEAD")
     try:
         with urllib.request.urlopen(request, timeout=15) as response:
@@ -71,6 +76,15 @@ def probe(
     return False, f"{last_detail} after {attempts} attempts"
 
 
+def reachability_policy(source: dict[str, Any]) -> str:
+    """Return policy source; legacy entries default ke strict."""
+    policy = str(source.get("reachability_policy", "strict")).strip().lower()
+    if policy not in REACHABILITY_POLICIES:
+        sid = source.get("id", "<tanpa-id>")
+        raise ValueError(f"reachability_policy tidak valid untuk {sid}: {policy!r}")
+    return policy
+
+
 def parsed_age(raw_date: str, today: date) -> int:
     return (today - datetime.strptime(raw_date, "%Y-%m-%d").date()).days
 
@@ -80,7 +94,8 @@ def main() -> int:
     today = date.today()
     overdue_sources: list[tuple[dict[str, Any], int, Any]] = []
     overdue_claims: list[tuple[dict[str, Any], int, Any]] = []
-    network_warnings: list[tuple[dict[str, Any], str, Any]] = []
+    network_failures: list[tuple[dict[str, Any], str, Any]] = []
+    network_advisories: list[tuple[dict[str, Any], str, Any]] = []
     seen_ids: set[str] = set()
     seen_claim_ids: set[str] = set()
     source_map: dict[str, tuple[dict[str, Any], Any]] = {}
@@ -110,6 +125,7 @@ def main() -> int:
             try:
                 age = parsed_age(source["verified_at"], today)
                 interval = int(source["review_interval_days"])
+                policy = reachability_policy(source)
             except (KeyError, ValueError, TypeError) as exc:
                 print(f"ERROR: metadata freshness tidak valid untuk {sid}: {exc}", file=sys.stderr)
                 return 2
@@ -122,9 +138,12 @@ def main() -> int:
                 ok, detail = probe(source["url"])
                 if ok:
                     print(f"  URL: {detail}")
+                elif policy == "advisory":
+                    network_advisories.append((source, detail, rel))
+                    print(f"  URL INCONCLUSIVE: {detail} (policy advisory)")
                 else:
-                    network_warnings.append((source, detail, rel))
-                    print(f"  URL WARNING: {detail}")
+                    network_failures.append((source, detail, rel))
+                    print(f"  URL WARNING: {detail} (policy strict)")
 
     # Pass 2: semantic claims. Reachability tidak cukup untuk membuktikan claim masih benar.
     for registry_path, data in registries:
@@ -162,9 +181,13 @@ def main() -> int:
             if due_in < 0 and claim.get("status") != "deprecated":
                 overdue_claims.append((claim, -due_in, rel))
 
-    if network_warnings:
-        print("\nNetwork warnings (tidak otomatis dianggap fakta berubah):")
-        for source, detail, rel in network_warnings:
+    if network_advisories:
+        print("\nReachability inconclusive (signal saja; tidak membuat watch gagal):")
+        for source, detail, rel in network_advisories:
+            print(f"- {source['id']} [{rel}]: {detail}")
+    if network_failures:
+        print("\nNetwork warnings yang perlu ditinjau:")
+        for source, detail, rel in network_failures:
             print(f"- {source['id']} [{rel}]: {detail}")
     if overdue_sources:
         print("\nSumber aktif yang perlu diverifikasi ulang:")
@@ -177,15 +200,17 @@ def main() -> int:
 
     if overdue_sources or overdue_claims:
         return 1
-    if network_warnings and args.fail_on_network:
+    if network_failures and args.fail_on_network:
         return 2
 
     print(
         f"\nOK: {source_count} source + {claim_count} claim lintas {len(registries)} registry "
         "masih dalam interval review."
     )
-    if network_warnings:
-        print("Ada watched source yang perlu dicek reachability-nya; kegagalan jaringan bukan bukti fakta berubah.")
+    if network_advisories:
+        print("Ada source advisory yang probe otomatisnya inconclusive; freshness semantik tetap mengikuti review evidence.")
+    if network_failures:
+        print("Ada watched source strict yang perlu dicek reachability-nya; kegagalan jaringan bukan bukti fakta berubah.")
     return 0
 
 

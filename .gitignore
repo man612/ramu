@@ -3,6 +3,9 @@ evals/results/
 evals/manual/*-checklist.md
 evals/manual/results/
 
+# Local pack scaffolds
+pack-drafts/
+
 # Python
 __pycache__/
 *.py[cod]

@@ -29,6 +29,7 @@
           "verified_at": {"type": "string", "format": "date"},
           "review_interval_days": {"type": "integer", "minimum": 1},
           "watch": {"type": "boolean"},
+          "reachability_policy": {"type": "string", "enum": ["strict", "advisory"]},
           "status": {"type": "string", "enum": ["active", "secondary", "signal-only"]},
           "notes": {"type": "string"}
         },

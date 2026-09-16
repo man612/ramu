@@ -50,12 +50,12 @@ jobs:
           existing="$(gh issue list --state open --search 'Source watch perlu ditinjau in:title' --json number --jq '.[0].number // empty')"
           run_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
           {
-            echo "Pemeriksaan mingguan menemukan source aktif melewati interval review atau watched URL tetap tidak dapat dijangkau setelah retry."
+            echo "Pemeriksaan mingguan menemukan source/claim melewati interval review atau watched URL dengan policy strict tetap tidak dapat dijangkau setelah retry."
             echo
-            echo "Kegagalan reachability sendiri belum berarti fakta sumber berubah. Review output berikut, lalu periksa registry/source yang disebut."
+            echo "Reachability advisory tetap ditampilkan di Job Summary sebagai sinyal, tetapi tidak membuka issue dan tidak dianggap bukti bahwa fakta sumber berubah."
             echo
             echo '```text'
-            tail -n 80 source-watch.log
+            tail -n 100 source-watch.log
             echo '```'
             echo
             echo "Workflow run: $run_url"

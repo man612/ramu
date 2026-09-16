@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Regression contract untuk validation trigger, Pages gate, dan dependency update config."""
+"""Regression contract untuk validation trigger, browser gate, Pages gate, dan dependency update config."""
 
 from __future__ import annotations
 
@@ -29,6 +29,13 @@ def main() -> int:
     require(validate, "name: validate", "Validate workflow")
     require(validate, "Prove CI and Pages gate contract", "Validate workflow")
 
+    # Browser regression is a real gate, not a best-effort side job.
+    require(validate, "  browser:\n", "Validate workflow")
+    require(validate, "python -m playwright install --with-deps chromium", "Validate workflow")
+    require(validate, "python tests/test_site_browser.py", "Validate workflow")
+    require(validate, "needs: [catalog, eval-wiring, browser]", "Validate workflow")
+    require(validate, 'test "${{ needs.browser.result }}" = "success"', "Validate workflow")
+
     # Pages must be downstream of the completed Validate workflow, never a direct push deploy.
     require(pages, "  workflow_run:", "Pages workflow")
     require(pages, '    workflows: ["Validate Ramu"]', "Pages workflow")
@@ -45,7 +52,7 @@ def main() -> int:
     require(dependabot, 'package-ecosystem: "pip"', "Dependabot config")
     require(dependabot, 'interval: "weekly"', "Dependabot config")
 
-    print("CI/Pages contract regression — OK")
+    print("CI/browser/Pages contract regression — OK")
     return 0
 
 

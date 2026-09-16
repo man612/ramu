@@ -19,6 +19,7 @@ Entry source menyimpan beberapa metadata penting:
 - `verified_at` — tanggal terakhir source benar-benar diperiksa;
 - `review_interval_days` — interval review;
 - `watch` — apakah URL ikut dipantau;
+- `reachability_policy` — opsional `strict` atau `advisory` untuk kualitas signal probe otomatis; default tetap `strict`;
 - `status` — `active`, `secondary`, atau `signal-only`.
 
 Dengan model ini, sebuah halaman bisa resmi tetapi tetap hanya menjadi sumber sekunder untuk klaim tertentu.
@@ -114,12 +115,13 @@ Konflik pusat-vs-regional UT disimpan sebagai regression tingkat institusi supay
 
 Konflik juga bisa muncul di dalam authority yang sama. Status claim baru diubah setelah evidence current direview.
 
-Pada review dokumentasi OpenAI **3 September 2026**:
+Pada review dokumentasi OpenAI **16 September 2026**:
 
-- eligible existing Project dapat mengubah memory melalui **Project settings → Memory**; shared Project tetap project-only;
-- Study Mode tidak berlaku pada Project conversations menurut guidance resmi current.
+- current Projects guidance dan release notes menyatakan eligible existing Project dapat mengubah memory melalui **Project settings → Memory**; shared Project tetap project-only;
+- Study Mode tidak berlaku pada Project conversations menurut artikel Study Mode dan Projects current;
+- Data Controls tetap menentukan apakah konten akun personal yang eligible dapat dipakai untuk peningkatan model, dan pengaturan tersebut bukan dependency setup Ramu.
 
-Data Controls pada akun personal tetap merupakan pilihan akun pengguna dan bukan dependency setup.
+Dokumentasi produk dapat berubah cepat dan cache/index sumber eksternal tidak selalu sinkron pada menit yang sama. Registry menyimpan locator + observation dari evidence current yang direview; tanggal tidak dinaikkan hanya karena sebuah URL masih hidup.
 
 ## Source freshness
 
@@ -134,7 +136,14 @@ Workflow **Source Freshness Watch** berjalan mingguan dan memeriksa:
 - `operational_policy` untuk conflicted claim;
 - umur `reviewed_at` claim.
 
-Source atau claim yang melewati interval review akan ditandai. Watched URL yang tetap gagal setelah retry juga menjadi bahan review ketika scheduled workflow berjalan dengan `--fail-on-network`.
+Source atau claim yang melewati interval review tetap membuat watch gagal dan perlu direview. Reachability URL diperlakukan terpisah:
+
+- `strict` — kegagalan yang bertahan setelah retry dapat membuat `--fail-on-network` gagal dan membuka/memperbarui issue;
+- `advisory` — kegagalan probe dicatat sebagai `URL INCONCLUSIVE`, tetapi tidak membuat workflow gagal hanya karena network reachability.
+
+Policy `advisory` dipakai bila automated probe memang bukan signal stabil—misalnya Help Center yang dapat membalas 403 untuk request CI. Policy tersebut **tidak** memperpanjang freshness, tidak mengubah status claim, dan tidak membuktikan source masih benar. Entry tanpa `reachability_policy` tetap dianggap `strict` untuk kompatibilitas dan fail-safe behavior.
+
+Detail contract dan alasan penggunaannya ada di [`SOURCE-WATCH.md`](SOURCE-WATCH.md).
 
 Beberapa batas penting:
 
@@ -164,17 +173,20 @@ Semester 3 menambahkan E17–E24 untuk failure mode yang benar-benar spesifik: t
 
 CI menjalankan dry-run eval per pack dari `packs/index.json`. Saat Semester 3 ditambahkan, matrix kedua muncul otomatis tanpa path khusus S3 di workflow.
 
+Browser-level regression juga berjalan terpisah memakai Chromium untuk membuktikan behavior site yang tidak dapat dijamin hanya dengan static marker validation, seperti switching pack, setup progress, Project Instructions fetch, dan download course pack. Required check `validate` baru hijau setelah catalog/static tests, eval wiring, dan browser job semuanya berhasil.
+
 ## Dokumentasi produk ChatGPT/OpenAI
 
 Fitur produk berubah lebih cepat daripada kurikulum akademik. Karena itu source produk disimpan di registry global dengan interval review yang lebih pendek.
 
-Snapshot 3 September 2026 mencatat:
+Snapshot **16 September 2026** mencatat:
 
 - dokumentasi Projects sebagai source utama untuk workspace, files/sources, Project Instructions, dan memory;
 - release notes untuk kronologi perubahan produk;
 - existing-Project memory sebagai claim `confirmed` pada eligible Project;
 - Study Mode di Project conversations sebagai `confirmed` tidak tersedia;
 - Data Controls FAQ sebagai source pengaturan penggunaan percakapan/data;
+- halaman OpenAI Help Center memakai reachability `advisory` karena automated probe dapat ditolak tanpa membuktikan perubahan isi;
 - label UI diperlakukan sebagai detail yang bisa berubah, sehingga panduan lebih mengutamakan fungsi daripada posisi tombol.
 
 Registry produk: [`../sources/registry.json`](../sources/registry.json).
