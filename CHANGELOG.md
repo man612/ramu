@@ -14,6 +14,7 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 
 ### Changed
 
+- Fondasi visual website mulai mengikuti `docs/UX-DIRECTION.md`: semantic neutral/sage tokens, typography dan radius yang lebih tenang, focus-visible yang eksplisit, serta motion layer yang dipangkas dari decorative effects menjadi state feedback dan setup-step highlighting.
 - Homepage/setup navigation now links to the reviewed English overview without duplicating the Indonesian website UI; browser regression waits for the rendered course-card count instead of treating `networkidle` as proof that async catalog rendering finished.
 - Metadata discovery website diperjelas dengan Open Graph `site_name`/locale, summary card metadata, serta title/description setup yang lebih deskriptif untuk direct entry dan link sharing.
 - Browser regression Semester 1 sekarang menunggu choice-slot benar-benar visible sebelum assertion agar async render tidak menghasilkan timing flake lokal.
