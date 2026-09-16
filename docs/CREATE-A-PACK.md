@@ -43,6 +43,8 @@ python scripts/create_pack.py \
 
 ## Output
 
+Secara default scaffold dibuat di `pack-drafts/<institusi>/<program>/<tahun>/<periode>/`. `pack-drafts/` di-ignore Git dan berada di luar discovery `packs/**`, jadi draft yang belum selesai tidak ikut masuk validation repository atau website. `--output-root` tersedia untuk dry-run/test atau workspace lain.
+
 Generator membuat scaffold dengan:
 
 - `manifest.json` schema v4;
