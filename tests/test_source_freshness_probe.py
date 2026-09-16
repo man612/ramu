@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Regression test untuk retry reachability Source Freshness Watch tanpa akses jaringan."""
+"""Regression test untuk retry dan policy reachability Source Freshness Watch tanpa jaringan."""
 
 from __future__ import annotations
 
@@ -72,10 +72,21 @@ def main() -> int:
         )
         if not ok or detail != "HTTP 204" or no_retry_delays:
             raise AssertionError("Successful first probe seharusnya tidak melakukan retry.")
+
+        if freshness.reachability_policy({"id": "legacy"}) != "strict":
+            raise AssertionError("Source lama tanpa policy harus tetap strict agar kompatibel dan fail-safe.")
+        if freshness.reachability_policy({"id": "bot-protected", "reachability_policy": "advisory"}) != "advisory":
+            raise AssertionError("Source advisory harus tetap advisory.")
+        try:
+            freshness.reachability_policy({"id": "invalid", "reachability_policy": "ignore"})
+        except ValueError:
+            pass
+        else:
+            raise AssertionError("Policy reachability yang tidak dikenal harus ditolak.")
     finally:
         freshness.probe_once = original_probe_once
 
-    print("Source freshness probe retry regression — OK")
+    print("Source freshness probe + policy regression — OK")
     return 0
 
 
