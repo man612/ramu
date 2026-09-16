@@ -13,6 +13,8 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 
 ### Changed
 
+- Metadata discovery website diperjelas dengan Open Graph `site_name`/locale, summary card metadata, serta title/description setup yang lebih deskriptif untuk direct entry dan link sharing.
+- Browser regression Semester 1 sekarang menunggu choice-slot benar-benar visible sebelum assertion agar async render tidak menghasilkan timing flake lokal.
 - Site memakai `display_code` untuk choice slot dan menampilkan basis/opsi pemilihan tanpa mengekspos ID internal sebagai kode mata kuliah UT.
 - Katalog/README homepage sekarang menampilkan Semester 1–3 secara akademik, sementara `default_pack_id` tetap Semester 2 untuk menjaga entry point lama.
 
