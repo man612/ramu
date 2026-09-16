@@ -49,7 +49,7 @@ Ramu keeps one course in one Project and separates the workspace into five layer
 |---|---|
 | **References** | source registries and official references help distinguish current, older, or still-unverified information |
 | **Instructions** | Project Instructions carry baseline rules, tutor/rubric priority, and learning guardrails |
-| **Context zone** | one course stays in one Project so files, learner state, assignments, and chat history do not mix unnecessarily |
+| **Zoned context** | course-specific context stays within one Project so files, learner state, assignments, and chat history do not mix unnecessarily |
 | **Materials** | the course pack provides course context; BMP, tutor material, rubrics, screenshots, and private files are added through Project Sources when needed |
 | **Assessment** | checking, review, learner-state workflow, and behavior evals help test both answers and configuration changes |
 

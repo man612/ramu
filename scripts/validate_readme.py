@@ -17,6 +17,13 @@ MARKERS = [
     "| **Materi** |",
     "| **Asesmen** |",
 ]
+ENGLISH_MARKERS = [
+    "| **References** |",
+    "| **Instructions** |",
+    "| **Zoned context** |",
+    "| **Materials** |",
+    "| **Assessment** |",
+]
 
 
 def main() -> int:
@@ -48,6 +55,18 @@ def main() -> int:
 
     if positions != sorted(positions):
         print("README layer-order validation — ERROR: urutan lima lapisan README berubah.")
+        return 1
+
+    english_positions: list[int] = []
+    for marker in ENGLISH_MARKERS:
+        position = english.find(marker)
+        if position < 0:
+            print(f"README English layer validation — ERROR: terminology berubah atau marker hilang: {marker}")
+            return 1
+        english_positions.append(position)
+
+    if english_positions != sorted(english_positions):
+        print("README English layer validation — ERROR: urutan lima lapisan English berubah.")
         return 1
 
     print("README validation — OK: lima lapisan dan language entry surface valid.")
