@@ -23,6 +23,12 @@ def run(*args: str) -> subprocess.CompletedProcess[str]:
     )
 
 
+def replace_value(args: list[str], flag: str, value: str) -> list[str]:
+    result = args.copy()
+    result[result.index(flag) + 1] = value
+    return result
+
+
 def main() -> int:
     with tempfile.TemporaryDirectory(prefix="ramu-pack-builder-") as tmp:
         output_root = Path(tmp) / "packs"
@@ -92,17 +98,17 @@ def main() -> int:
         if forced.returncode != 0:
             raise AssertionError(f"Builder --force gagal: {forced.stderr}")
 
-        invalid = run(
-            *[item for pair in zip(common[::2], common[1::2]) for item in pair]
-        )
-        # Coverage invalid input dilakukan terpisah agar command di atas tidak mengubah contract happy path.
-        bad_url_args = common.copy()
-        url_index = bad_url_args.index("--source-url") + 1
-        bad_url_args[url_index] = "http://example.edu/catalog"
-        bad_url_args.extend(["--force"])
-        bad_url = run(*bad_url_args)
+        bad_url = run(*replace_value(common, "--source-url", "http://example.edu/catalog"), "--force")
         if bad_url.returncode == 0:
             raise AssertionError("Source URL non-HTTPS harus ditolak.")
+
+        bad_id = run(*replace_value(common, "--pack-id", "ID WITH SPACE"), "--force")
+        if bad_id.returncode == 0:
+            raise AssertionError("Pack ID non-machine-safe harus ditolak.")
+
+        future_date = run(*replace_value(common, "--reviewed-at", "2999-01-01"), "--force")
+        if future_date.returncode == 0:
+            raise AssertionError("Tanggal review masa depan harus ditolak.")
 
     print("Community pack builder regression — OK")
     return 0
