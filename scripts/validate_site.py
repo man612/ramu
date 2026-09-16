@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import re
 import sys
 from pathlib import Path
 
@@ -24,6 +25,18 @@ def require_text(path: Path, needles: list[str]) -> None:
     for needle in needles:
         if needle not in text:
             fail(f"{path.relative_to(ROOT)} kehilangan marker {needle!r}")
+
+
+def relative_luminance(value: str) -> float:
+    raw = value.lstrip("#")
+    rgb = [int(raw[i:i + 2], 16) / 255 for i in (0, 2, 4)]
+    linear = [c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4 for c in rgb]
+    return 0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2]
+
+
+def contrast_ratio(first: str, second: str) -> float:
+    a, b = relative_luminance(first), relative_luminance(second)
+    return (max(a, b) + 0.05) / (min(a, b) + 0.05)
 
 
 def main() -> int:
@@ -111,6 +124,30 @@ def main() -> int:
         "min-height: 44px",
         "@media (max-width: 430px)",
     ])
+
+    foundations_text = (SITE / "foundations.css").read_text(encoding="utf-8") if (SITE / "foundations.css").is_file() else ""
+    motion_text = (SITE / "motion.css").read_text(encoding="utf-8") if (SITE / "motion.css").is_file() else ""
+    tokens = dict(re.findall(r"--([a-z0-9-]+):\s*(#[0-9a-fA-F]{6})\s*;", foundations_text))
+    contrast_contracts = [
+        ("text", "bg", 4.5),
+        ("text-muted", "bg", 4.5),
+        ("text-muted", "surface", 4.5),
+        ("accent", "surface", 4.5),
+        ("focus", "bg", 3.0),
+        ("focus", "surface", 3.0),
+        ("surface", "accent-strong", 4.5),
+    ]
+    for foreground, background, minimum in contrast_contracts:
+        if foreground not in tokens or background not in tokens:
+            fail(f"Core color token hilang untuk contrast contract: {foreground}/{background}")
+            continue
+        ratio = contrast_ratio(tokens[foreground], tokens[background])
+        if ratio < minimum:
+            fail(f"Contrast {foreground}/{background} hanya {ratio:.2f}:1; minimum {minimum:.1f}:1")
+    if ":focus-visible" not in foundations_text or "outline: 2px solid var(--focus)" not in foundations_text:
+        fail("Foundation CSS kehilangan explicit focus-visible ring.")
+    if "@media (prefers-reduced-motion: reduce)" not in motion_text:
+        fail("Motion CSS kehilangan prefers-reduced-motion contract.")
 
     app_text = (SITE / "app.js").read_text(encoding="utf-8") if (SITE / "app.js").is_file() else ""
     for forbidden in (

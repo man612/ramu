@@ -14,6 +14,7 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 
 ### Changed
 
+- Phase 5 accessibility/regression memperluas browser contract ke keyboard focus/activation, focus-not-obscured, reduced-motion, viewport 320/360/390/430/820px, touch target mobile, serta core color contrast checks.
 - Mobile Phase 4 menghapus persistent bottom dock dan `mobile.js`, menjadikan setup small-screen task-first dengan sticky 4-step rail, target sentuh minimal 44px, header lebih fokus, serta regression 390px/320px; responsive homepage CSS juga dikunci agar kurung stylesheet seimbang.
 - Setup desktop dirombak menjadi workspace 4 langkah yang lebih padat: sticky step navigation, pack summary ringkas, action hierarchy lebih jelas, dan course pack sebagai accordion rows; browser regression mengunci desktop state sekaligus mobile no-overflow.
 - Homepage Phase 2 mengganti fake ChatGPT phone mockup dengan live Ramu pack preview, menambahkan jalur Pack vs Ramu Starter, memadatkan workflow/layer hierarchy, dan mengubah course catalog menjadi resource list yang lebih tenang di desktop maupun mobile.
