@@ -36,16 +36,24 @@ def main() -> int:
     require(validate, "needs: [catalog, eval-wiring, browser]", "Validate workflow")
     require(validate, 'test "${{ needs.browser.result }}" = "success"', "Validate workflow")
 
-    # Pages must be downstream of the completed Validate workflow, never a direct push deploy.
-    require(pages, "  workflow_run:", "Pages workflow")
-    require(pages, '    workflows: ["Validate Ramu"]', "Pages workflow")
-    require(pages, "    types: [completed]", "Pages workflow")
+    # Pages deployment must stay in the trusted main-push chain after validation succeeds.
+    require(validate, "  deploy-pages:\n", "Validate workflow")
+    require(validate, "needs: validate", "Validate workflow")
+    require(validate, "if: github.event_name == 'push' && github.ref == 'refs/heads/main'", "Validate workflow")
+    require(validate, "uses: ./.github/workflows/pages.yml", "Validate workflow")
+    require(validate, "pages: write", "Validate workflow")
+    require(validate, "id-token: write", "Validate workflow")
+
+    # The privileged Pages workflow is reusable only: never accept workflow_run head_sha for checkout.
+    require(pages, "  workflow_call:\n", "Pages workflow")
+    forbid(pages, "  workflow_run:\n", "Pages workflow")
     forbid(pages, "  push:\n", "Pages workflow")
     forbid(pages, "  workflow_dispatch:\n", "Pages workflow")
-    require(pages, "github.event.workflow_run.conclusion == 'success'", "Pages workflow")
-    require(pages, "github.event.workflow_run.event == 'push'", "Pages workflow")
-    require(pages, "github.event.workflow_run.head_branch == 'main'", "Pages workflow")
-    require(pages, "ref: ${{ github.event.workflow_run.head_sha }}", "Pages workflow")
+    forbid(pages, "github.event.workflow_run", "Pages workflow")
+    forbid(pages, "          ref:", "Pages workflow")
+    require(pages, "Checkout validated main commit", "Pages workflow")
+    require(pages, "pages: write", "Pages workflow")
+    require(pages, "id-token: write", "Pages workflow")
 
     # Dependency bots should update immutable action SHAs / pinned validation deps through reviewed PRs.
     require(dependabot, 'package-ecosystem: "github-actions"', "Dependabot config")
