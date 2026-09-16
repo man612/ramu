@@ -10,6 +10,7 @@ import threading
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from urllib.parse import urljoin
 
 from playwright.sync_api import Page, sync_playwright
 
@@ -123,7 +124,11 @@ def main() -> int:
                     raise AssertionError("Progress setup tidak bertahan setelah reload.")
 
                 open_instructions = page.locator("#open-instructions")
-                instructions_response = page.request.get(open_instructions.get_attribute("href"))
+                instructions_href = open_instructions.get_attribute("href")
+                if not instructions_href:
+                    raise AssertionError("Setup page tidak memberi href Project Instructions.")
+                instructions_url = urljoin(page.url, instructions_href)
+                instructions_response = page.request.get(instructions_url)
                 if not instructions_response.ok:
                     raise AssertionError("Project Instructions tidak dapat diambil dari setup page.")
                 if "Project Instructions" not in instructions_response.text():
