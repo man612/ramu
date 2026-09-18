@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import re
+import struct
 import sys
 from pathlib import Path
 
@@ -62,7 +63,11 @@ def main() -> int:
         'property="og:url" content="https://man612.github.io/ramu/"',
         'property="og:site_name" content="Ramu"',
         'property="og:locale" content="id_ID"',
-        'name="twitter:card" content="summary"',
+        'property="og:image" content="https://man612.github.io/ramu/social-preview.png"',
+        'property="og:image:width" content="1280"',
+        'property="og:image:height" content="640"',
+        'name="twitter:card" content="summary_large_image"',
+        'name="twitter:image" content="https://man612.github.io/ramu/social-preview.png"',
         'href="https://github.com/man612/ramu/blob/main/README.en.md"',
         'href="https://github.com/man612/ramu/blob/main/SUPPORT.md"',
     ])
@@ -88,7 +93,11 @@ def main() -> int:
         'href="https://github.com/man612/ramu/blob/main/README.en.md"',
         'property="og:site_name" content="Ramu"',
         'property="og:locale" content="id_ID"',
-        'name="twitter:card" content="summary"',
+        'property="og:image" content="https://man612.github.io/ramu/social-preview.png"',
+        'property="og:image:width" content="1280"',
+        'property="og:image:height" content="640"',
+        'name="twitter:card" content="summary_large_image"',
+        'name="twitter:image" content="https://man612.github.io/ramu/social-preview.png"',
         '<title>Setup Ramu | siapkan ChatGPT Project untuk mata kuliah</title>',
     ])
     require_text(SITE / "app.js", [
@@ -124,6 +133,20 @@ def main() -> int:
         "min-height: 44px",
         "@media (max-width: 430px)",
     ])
+
+    preview = SITE / "social-preview.png"
+    if not preview.is_file():
+        fail("Social preview asset tidak ditemukan.")
+    else:
+        data = preview.read_bytes()
+        if len(data) >= 24 and data[:8] == b"\x89PNG\r\n\x1a\n":
+            width, height = struct.unpack(">II", data[16:24])
+            if (width, height) != (1280, 640):
+                fail(f"Social preview harus 1280x640, sekarang {width}x{height}.")
+        else:
+            fail("Social preview harus PNG valid.")
+        if len(data) >= 1_000_000:
+            fail(f"Social preview harus <1 MB, sekarang {len(data)} byte.")
 
     foundations_text = (SITE / "foundations.css").read_text(encoding="utf-8") if (SITE / "foundations.css").is_file() else ""
     motion_text = (SITE / "motion.css").read_text(encoding="utf-8") if (SITE / "motion.css").is_file() else ""

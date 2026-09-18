@@ -8,6 +8,7 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 
 ### Added
 
+- Social preview 1280×640 dengan identitas quiet editorial Ramu, dipakai ulang oleh Open Graph/Twitter metadata website.
 - English entry surfaces through `README.en.md` and `CONTRIBUTING.en.md`, while Bahasa Indonesia remains the canonical project documentation.
 - **UT S1 Akuntansi Semester 1 2026/2027** sebagai maintained pack 18 SKS, termasuk slot Pendidikan Agama yang mengikuti pilihan resmi sesuai data pribadi/registrasi UT.
 - Dukungan manifest untuk `selection.mode: choose-one` agar satu slot kurikulum dapat memiliki beberapa kode mata kuliah resmi tanpa membuat kode akademik palsu atau menggandakan seluruh pack.
