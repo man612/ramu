@@ -390,6 +390,12 @@ Remove from the redesign:
 
 `prefers-reduced-motion: reduce` remains mandatory, but the normal experience should already be calm enough that accessibility is not achieved merely by disabling an otherwise over-animated interface.
 
+## Appearance decision
+
+Ramu intentionally ships one polished light appearance for this redesign. Dark mode is not added in Phase 6 because there is no product requirement yet that justifies maintaining a second complete token/state surface. Revisit it only when usage evidence or accessibility needs make the extra maintenance worthwhile.
+
+The social preview follows the same quiet editorial identity: warm ivory canvas, graphite type, muted sage accent, real product information, no gradients/glow/fake metrics.
+
 ## Accessibility contract
 
 Implementation must preserve or improve:
