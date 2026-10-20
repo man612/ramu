@@ -170,6 +170,16 @@ Beberapa versi memiliki fungsi berbeda:
 
 Perubahan metadata internal tidak otomatis berarti course pack perlu versi baru. Sebaliknya, perubahan yang memengaruhi isi/config yang benar-benar dipakai perlu dicatat pada `pack_version`.
 
+## Disiplin versi pack dan catatan pembaruan
+
+`pack_version` terpisah dari versi rilis repository. Pada pull request dan push ke `main`, `scripts/check_pack_versions.py` membandingkan snapshot Git sebelum dan sesudah perubahan pada setiap pack yang **sudah terdaftar** di katalog.
+
+- Jika Project Instructions, isi file course pack, informasi mata kuliah, identitas akademik, referensi pada manifest, atau `learning_protocols` berubah, **naikkan `pack_version`** (misalnya `2026-2027.s2.1` → `2026-2027.s2.2`) dan tulis `## 2026-2027.s2.2` pada `PACK-CHANGES.md` di folder pack.
+- Catatan versi harus menjelaskan perubahan untuk pengguna dan **apakah perlu memperbarui Project Instructions atau mengganti file course pack**. Jangan memakai catatan versi sebagai alasan menghapus chat, seluruh Sources, atau Project yang sudah ada.
+- Pembaruan `verified_at` di source registry, status review administratif, website, CI, atau dokumentasi saja **tidak** menyebabkan permintaan upload ulang dan tidak mewajibkan bump versi course pack.
+- `PACK-CHANGES.md` adalah riwayat perubahan yang bisa dibaca manusia. UI website tetap dapat mendeteksi perubahan bytes konten secara independen dari nomor versi dan tidak mengklaim mengetahui apakah pengguna sudah memperbarui ChatGPT Project.
+- Pack baru memiliki aturan schema/identity tersendiri; perbandingan versi baru dimulai setelah pack itu dipublikasikan. Revisi aturan versi bersifat prospektif, **tidak memindahkan** tag release `v0.4.0-beta` yang telah terbit.
+
 ## Status pack
 
 - `source-verified` — data dan aturan utama sudah diperiksa terhadap sumber primer; behavior belum diklaim selesai sepenuhnya;
