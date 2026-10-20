@@ -27,7 +27,15 @@ Panduan ini untuk pengguna yang **sudah memiliki** ChatGPT Project satu mata kul
 
 Website Ramu menyimpan tanda setup secara **lokal di browser**, di bawah ID pack dan kode mata kuliah. Tanda itu tidak membaca ChatGPT Project, sehingga **tidak dapat membuktikan** apa yang benar-benar diunggah pengguna.
 
-Mulai perbaikan Oktober 2026, setiap tanda selesai baru menyimpan sidik revisi SHA-256 dari *isi file* Project Instructions dan course pack, bersama identitas/metadata akademik pada manifest. Tanda **Selesai** berarti pengguna sudah mengonfirmasi bahan yang saat itu disajikan website; bukan hasil inspeksi otomatis ke ChatGPT. Jika salah satu file berubah meski `pack_version` tidak dinaikkan, atau periode/metadata relevan berubah, website menampilkan **Perlu ditinjau** dan menghentikan penghitung selesai untuk mata kuliah tersebut sampai pengguna memeriksa lalu mencentang ulang.
+Mulai perbaikan Oktober 2026, setiap tanda selesai menyimpan sidik revisi SHA-256 dari *isi file* Project Instructions dan course pack, bersama identitas/metadata akademik pada manifest. Sekarang setiap komponen juga disimpan **terpisah**, sehingga saat revisi berubah website dapat menjelaskan alasan yang sudah bisa dibuktikan dan tindakan yang relevan:
+
+- **Instruksi berubah:** periksa lalu tempel ulang Project Instructions; course pack tidak harus diunggah ulang jika isinya tetap.
+- **Course pack berubah:** unduh dan ganti hanya course pack yang bersangkutan; pertahankan BMP, materi, dan chat pribadi.
+- **Identitas/metadata berubah:** cocokkan kode, program, dan periode dengan registrasi; jangan otomatis menimpa Project semester/tahun lain.
+- **Nomor versi berubah:** lihat catatan `PACK-CHANGES.md` pada pack; nomor versi saja bukan bukti semua file mesti diunggah ulang.
+- **Konfirmasi lama tanpa rincian hash:** website tetap menunjukkan `Perlu ditinjau` tanpa menebak komponen mana yang berubah. Konfirmasi lama yang masih punya fingerprint gabungan cocok dapat dimigrasikan dengan aman menjadi fingerprint komponen.
+
+Tanda **Selesai** berarti pengguna sudah mengonfirmasi bahan yang saat itu disajikan website; bukan hasil inspeksi otomatis ke ChatGPT. Jika salah satu file berubah meski `pack_version` tidak dinaikkan, atau periode/metadata relevan berubah, website menampilkan **Perlu ditinjau** dan menghentikan penghitung selesai untuk mata kuliah tersebut sampai pengguna memeriksa lalu mencentang ulang.
 
 Untuk progres lama yang hanya disimpan sebagai `true` tanpa informasi revisi, website tetap mempertahankan riwayat tetapi menampilkan **Perlu ditinjau**. Ini bukan perintah membuat Project baru atau menghapus chat. Jika file tidak dapat diperiksa (misalnya offline), status akan menunjukkan **Belum dapat dicek**, bukan otomatis hijau; muat ulang saat online.
 

@@ -36,6 +36,12 @@ def main() -> int:
     require(source_watch, "python scripts/check_source_freshness.py --online --fail-on-network", "Source Watch")
     forbid(source_watch, "--report-only-overdue", "Source Watch")
 
+    # Published pack changes cannot bypass version bump and human-facing notes.
+    require(validate, "fetch-depth: 0", "Validate workflow")
+    require(validate, "python tests/test_pack_version_policy.py", "Validate workflow")
+    require(validate, "python scripts/check_pack_versions.py --base", "Validate workflow")
+    require(validate, "github.event.pull_request.base.sha", "Validate workflow")
+
     # Browser regression is a real gate, not a best-effort side job.
     require(validate, "  browser:\n", "Validate workflow")
     require(validate, "python -m playwright install --with-deps chromium", "Validate workflow")

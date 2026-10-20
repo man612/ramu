@@ -285,36 +285,77 @@ function sourceHash(url) {
   return contentHashes.get(url);
 }
 
+// Sidik komponen disimpan terpisah: pengguna mendapat tindakan yang sesuai,
+ // tanpa mengira website dapat membaca keadaan ChatGPT Project mereka.
 async function courseRevision(base, instructionsUrl, course, manifest) {
-  const [instructionHash, courseHash] = await Promise.all([
+  const [instructions, material, academic] = await Promise.all([
     sourceHash(instructionsUrl),
-    sourceHash(`${base}/${course.file}`)
+    sourceHash(`${base}/${course.file}`),
+    hashBytes(new TextEncoder().encode(JSON.stringify({
+      pack_id: manifest.id,
+      academic_year: manifest.academic_year,
+      period_id: manifest.period_id,
+      course
+    })))
   ]);
-  const payload = JSON.stringify({
+  const parts = { instructions, material, academic, version: manifest.pack_version };
+  // Formula gabungan tetap sama dengan versi website sebelumnya agar konfirmasi
+  // v1 yang cocok tidak perlu diulang, tetapi konfirmasi boolean tetap ditinjau.
+  const revision = await hashBytes(new TextEncoder().encode(JSON.stringify({
     pack_id: manifest.id,
     pack_version: manifest.pack_version,
     academic_year: manifest.academic_year,
     period_id: manifest.period_id,
     course,
-    instructionHash,
-    courseHash
-  });
-  return hashBytes(new TextEncoder().encode(payload));
+    instructionHash: instructions,
+    courseHash: material
+  })));
+  return { revision, parts };
+}
+
+function changeGuidance(savedParts, parts) {
+  if (!savedParts || typeof savedParts !== "object" ||
+    !["instructions", "material", "academic", "version"].every(key =>
+      typeof savedParts[key] === "string")) {
+    return ["Progres sebelumnya tidak menyimpan rincian revisi. Bandingkan Project Instructions, course pack, dan identitas mata kuliah sebelum mengonfirmasi lagi."];
+  }
+  const guidance = [];
+  if (savedParts.instructions !== parts.instructions) {
+    guidance.push("Project Instructions berubah. Periksa lalu tempel instruksi baru di Project settings; perubahan ini sendiri tidak mengharuskan upload ulang course pack.");
+  }
+  if (savedParts.material !== parts.material) {
+    guidance.push("Isi course pack berubah. Unduh file yang baru dan ganti hanya course pack lama di Project Sources; pertahankan chat serta materi pribadi.");
+  }
+  if (savedParts.academic !== parts.academic) {
+    guidance.push("Identitas atau metadata akademik mata kuliah berubah. Cocokkan kode, nama, dan periode dengan registrasi sebelum mengganti Project lama.");
+  }
+  if (savedParts.version !== parts.version) {
+    guidance.push("Nomor versi pack berubah. Tinjau catatan pembaruan; perubahan versi saja tidak membuktikan file perlu diunggah ulang.");
+  }
+  return guidance.length ? guidance : [
+    "Jejak revisi tidak cocok meski komponennya tampak sama. Periksa Project yang ada sebelum konfirmasi ulang."
+  ];
 }
 
 async function inspectCourseProgress(saved, base, instructionsUrl, course, manifest) {
-  if (!saved) return { status: "new" };
+  if (!saved) return { status: "new", guidance: [] };
   try {
-    const revision = await courseRevision(base, instructionsUrl, course, manifest);
-    // Boolean "true" dari versi website lama tidak berisi bukti revisi;
-    // jangan langsung dipromosikan sebagai selesai pada versi sekarang.
-    const current = saved && typeof saved === "object"
-      && saved.completed === true && saved.revision === revision;
-    return { status: current ? "current" : "review", revision };
+    const revisionData = await courseRevision(base, instructionsUrl, course, manifest);
+    const current = typeof saved === "object" && saved.completed === true
+      && saved.revision === revisionData.revision;
+    return current
+      ? { status: "current", ...revisionData, migrate: !saved.parts, guidance: [] }
+      : { status: "review", ...revisionData,
+          guidance: changeGuidance(saved?.parts, revisionData.parts) };
   } catch {
-    // Offline / browser tanpa Web Crypto: tidak boleh diam-diam menampilkan "Selesai".
-    return { status: "unavailable" };
+    return { status: "unavailable", guidance: [
+      "Versi materi belum dapat diperiksa. Muat ulang ketika online sebelum mengonfirmasi; progres lama tidak dihapus."
+    ] };
   }
+}
+
+function revisionNoteText(state) {
+  return (state.guidance || []).join(" ");
 }
 
 function updateCourseState(card, state) {
@@ -326,11 +367,9 @@ function updateCourseState(card, state) {
       : state.status === "unavailable" ? "Belum dapat dicek" : "Belum";
   const note = card.querySelector(".revision-note");
   note.hidden = !["review", "unavailable"].includes(state.status);
-  note.textContent = state.status === "review"
-    ? "Pernah ditandai selesai, tetapi isi/versi instruksi atau course pack sekarang belum dikonfirmasi. Periksa Project yang sudah ada, lalu centang ulang. Chat dan sumber pribadi tidak perlu dihapus."
-    : state.status === "unavailable"
-      ? "Versi terbaru belum bisa dibandingkan (misalnya sedang offline). Sambungkan kembali dan muat ulang halaman sebelum mengonfirmasi."
-      : "";
+  note.textContent = revisionNoteText(state);
+  const history = card.querySelector(".revision-history");
+  if (history) history.hidden = !["review", "unavailable"].includes(state.status);
 }
 
 async function downloadCoursePack(base, course, button) {
@@ -375,10 +414,26 @@ async function renderSetup(entry, manifest) {
   const base = packBase(entry);
   const progress = getProgress(manifest.id);
   const instructionsUrl = `${base}/${manifest.project_instructions}`;
+  const historyUrl = "https://github.com/man612/ramu/blob/main/packs/"
+    + entry.manifest.replace(/\/manifest\.json$/, "/PACK-CHANGES.md");
   const states = Object.fromEntries(await Promise.all(manifest.courses.map(async course => [
     course.code,
     await inspectCourseProgress(progress[course.code], base, instructionsUrl, course, manifest)
   ])));
+  // Upgrade progres lama yang sudah punya fingerprint cocok tanpa kehilangan
+  // konfirmasi; boolean lama tetap review karena tidak punya jejak revisi.
+  for (const course of manifest.courses) {
+    const state = states[course.code];
+    if (state.migrate && state.status === "current") {
+      progress[course.code] = {
+        completed: true, revision: state.revision,
+        packVersion: manifest.pack_version, parts: state.parts
+      };
+    }
+  }
+  if (manifest.courses.some(course => states[course.code].migrate)) {
+    saveProgress(manifest.id, progress);
+  }
   const instructionButton = document.querySelector("#copy-instructions");
   const status = document.querySelector("#copy-status");
   const openInstructions = document.querySelector("#open-instructions");
@@ -430,7 +485,8 @@ async function renderSetup(entry, manifest) {
             <a class="small-button" href="https://chatgpt.com/" target="_blank" rel="noopener">Buka ChatGPT</a>
           </div>
           <p class="small-note">Course pack menjadi source Project. Screenshot soal, rubrik, atau materi tambahan cukup dimasukkan saat dibutuhkan.</p>
-          <p class="small-note revision-note" role="status" ${needsReview ? "" : "hidden"}>${state.status === "review" ? "Pernah ditandai selesai, tetapi versi/isi sekarang perlu dicek kembali. Periksa Project lama dan centang ulang; jangan menghapus chat atau sumber pribadi." : state.status === "unavailable" ? "Tidak dapat memeriksa revisi saat ini. Muat ulang setelah terhubung ke internet sebelum mengonfirmasi." : ""}</p>
+          <p class="small-note revision-note" role="status" ${needsReview ? "" : "hidden"}>${escapeHtml(revisionNoteText(state))}</p>
+          <a class="small-note revision-history" href="${escapeHtml(historyUrl)}" target="_blank" rel="noopener" ${needsReview ? "" : "hidden"}>Baca riwayat perubahan pack →</a>
           <label class="complete-check"><input type="checkbox" data-course-check="${escapeHtml(course.code)}" ${complete ? "checked" : ""}><span>Aku sudah memastikan Project ini menggunakan instruksi dan course pack yang ditinjau.</span></label>
         </div>
       </details>
@@ -472,16 +528,19 @@ async function renderSetup(entry, manifest) {
         try {
           const course = manifest.courses.find(item => item.code === code);
           if (!course) throw new Error("Mata kuliah tidak ditemukan");
-          const revision = await courseRevision(base, instructionsUrl, course, manifest);
+          const { revision, parts } = await courseRevision(base, instructionsUrl, course, manifest);
           progress[code] = {
             completed: true,
             revision,
-            packVersion: manifest.pack_version
+            packVersion: manifest.pack_version,
+            parts
           };
-          states[code] = { status: "current", revision };
+          states[code] = { status: "current", revision, parts, guidance: [] };
         } catch {
           input.checked = false;
-          states[code] = { status: "unavailable" };
+          states[code] = { status: "unavailable", guidance: [
+            "Versi materi belum dapat diperiksa. Muat ulang ketika online sebelum mengonfirmasi."
+          ] };
         } finally {
           input.disabled = false;
         }
