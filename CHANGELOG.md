@@ -14,6 +14,9 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 
 ### Fixed
 
+- Progres setup website kini menyimpan sidik revisi dari **isi Project Instructions + course pack + identitas/metadata manifest**, bukan boolean saja; perubahan material memberi status `Perlu ditinjau` tanpa menghapus Project pengguna.
+- Tanda selesai lawas yang belum memiliki informasi revisi tidak otomatis dipromosikan menjadi selesai untuk versi baru; pemeriksaan/browser offline juga tidak memalsukan status siap.
+
 - Setup mengakomodasi akun dengan toggle **Enable memory** maupun kontrol legacy terpisah, tanpa mewajibkan dua label lama pada semua pengguna.
 - Instruksi mata kuliah di website membedakan Project baru dengan Project yang sudah ada; tidak lagi menyuruh setiap pengguna membuat Project duplikat atau mengunggah ulang file yang tidak berubah.
 - README menampilkan Semester 1–3 secara konsisten, termasuk identitas suite evaluasi masing-masing pack.
