@@ -6,6 +6,10 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 
 ## [Unreleased]
 
+Tidak ada perubahan baru sejak `v0.4.0-beta`. Tambahkan perubahan berikutnya di bagian ini.
+
+## [0.4.0-beta] - 2026-10-20
+
 ### Added
 
 - (2026-10-20) Kontrak regresi perilaku tutor adaptif: dukungan format visual/interaktif bila relevan dan tersedia, dengan fallback teks serta pembeda evidence mandiri vs setelah bantuan.
@@ -224,7 +228,8 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 - Behavior validation aktual belum menjadi klaim penuh pada release ini.
 - Pilot pengguna nyata masih diperlukan sebelum Ramu dapat dianggap stabil.
 
-[Unreleased]: https://github.com/man612/ramu/compare/v0.3.0-beta...HEAD
+[Unreleased]: https://github.com/man612/ramu/compare/v0.4.0-beta...HEAD
+[0.4.0-beta]: https://github.com/man612/ramu/compare/v0.3.0-beta...v0.4.0-beta
 [0.3.0-beta]: https://github.com/man612/ramu/compare/v0.2.2-beta...v0.3.0-beta
 [0.2.2-beta]: https://github.com/man612/ramu/compare/v0.2.1-beta...v0.2.2-beta
 [0.2.1-beta]: https://github.com/man612/ramu/compare/v0.2.0-beta...v0.2.1-beta
