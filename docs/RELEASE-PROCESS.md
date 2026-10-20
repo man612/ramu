@@ -17,6 +17,7 @@ Release yang sudah terbit:
 - `v0.2.1-beta` — patch website/UX dan setup copy;
 - `v0.2.2-beta` — public-readiness cleanup, support surface, repository security, dan sinkronisasi release workflow;
 - `v0.3.0-beta` — Ramu Starter, Create a Pack, Semester 3, browser QA, Source Watch hardening, dan Pages trust-boundary hardening.
+- `v0.4.0-beta` — Semester 1, adaptasi cara belajar, onboarding/aksesibilitas website, source-integrity hardening, dan monitoring yang lebih andal (manual Projects validation/pilot belum selesai).
 
 Tag release yang sudah dipublikasikan tidak dipindahkan atau dipakai ulang. Perubahan setelah release tetap berada di `Unreleased` sampai versi berikutnya dibuat.
 
