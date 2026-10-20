@@ -8,12 +8,20 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 
 ### Added
 
+- (2026-10-20) Kontrak regresi perilaku tutor adaptif: dukungan format visual/interaktif bila relevan dan tersedia, dengan fallback teks serta pembeda evidence mandiri vs setelah bantuan.
+- (2026-10-20) Regression Source Watch untuk klasifikasi error DNS/TLS/timeout, fallback HEAD→GET, dan pengembalian hasil probe paralel secara deterministik.
+
 - Social preview 1280×640 dengan identitas quiet editorial Ramu, dipakai ulang oleh Open Graph/Twitter metadata website.
 - English entry surfaces through `README.en.md` and `CONTRIBUTING.en.md`, while Bahasa Indonesia remains the canonical project documentation.
 - **UT S1 Akuntansi Semester 1 2026/2027** sebagai maintained pack 18 SKS, termasuk slot Pendidikan Agama yang mengikuti pilihan resmi sesuai data pribadi/registrasi UT.
 - Dukungan manifest untuk `selection.mode: choose-one` agar satu slot kurikulum dapat memiliki beberapa kode mata kuliah resmi tanpa membuat kode akademik palsu atau menggandakan seluruh pack.
 
 ### Changed
+
+- (2026-10-20) Source Watch tetap strict pada workflow terjadwal, sementara validasi PR mencatat source/claim overdue tanpa otomatis memblokir perubahan kode yang tidak terkait; metadata/claim yang rusak tetap memblokir CI.
+- (2026-10-20) Source Watch sekarang memakai paling banyak 3 worker network probe dan mencetak penyebab error yang terklasifikasi; run manual terbaru selesai SUCCESS untuk 26 URL yang dipantau (22 UT HTTP 200; 4 OpenAI advisory HTTP 403).
+- (2026-10-20) Panduan Projects diperbarui untuk Semester 1 dan Project Sources; aturan OpenAI Projects/Memory/Study Mode/Data Controls direview ulang sesuai dokumentasi produk.
+- (2026-10-20) Dependensi validation Playwright diperbarui ke 1.63.0 dan actions/upload-artifact dipin ke v7.0.2 setelah melalui PR/CI.
 
 - Phase 5 accessibility/regression memperluas browser contract ke keyboard focus/activation, focus-not-obscured, reduced-motion, viewport 320/360/390/430/820px, touch target mobile, serta core color contrast checks.
 - Mobile Phase 4 menghapus persistent bottom dock dan `mobile.js`, menjadikan setup small-screen task-first dengan sticky 4-step rail, target sentuh minimal 44px, header lebih fokus, serta regression 390px/320px; responsive homepage CSS juga dikunci agar kurung stylesheet seimbang.
@@ -26,6 +34,11 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 - Browser regression Semester 1 sekarang menunggu choice-slot benar-benar visible sebelum assertion agar async render tidak menghasilkan timing flake lokal.
 - Site memakai `display_code` untuk choice slot dan menampilkan basis/opsi pemilihan tanpa mengekspos ID internal sebagai kode mata kuliah UT.
 - Katalog/README homepage sekarang menampilkan Semester 1–3 secara akademik, sementara `default_pack_id` tetap Semester 2 untuk menjaga entry point lama.
+
+### Fixed
+
+- (2026-10-20) URL regional UT Banjarmasin yang menampilkan konten tidak sesuai/halaman error dikarantina menjadi `signal-only`; indeks akademik umum menggantikan URL lama hanya sebagai sinyal, bukan sumber akademik kanonik.
+- (2026-10-20) Panduan setup serta arah proyek disinkronkan dengan katalog Semester 1–3 tanpa mengubah identitas atau status akademik pack.
 
 ## [0.3.0-beta] - 2026-09-16
 
