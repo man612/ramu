@@ -214,9 +214,29 @@ def main() -> int:
                 checkbox = page.locator(f'[data-course-check="{first_course["code"]}"]')
                 checkbox.check()
                 expect(page.locator(f'[data-course="{first_course["code"]}"] .done-pill')).to_have_text("Selesai")
+                saved_parts = page.evaluate("""([key, code]) =>
+                  JSON.parse(localStorage.getItem(key))[code].parts
+                """, [f"ramu:{default_manifest['id']}", first_course["code"]])
+                if set(saved_parts) != {"instructions", "material", "academic", "version"}:
+                    raise AssertionError("Konfirmasi belum menyimpan fingerprint per komponen.")
                 page.reload(wait_until="networkidle")
                 if not page.locator(f'[data-course-check="{first_course["code"]}"]').is_checked():
                     raise AssertionError("Progres setup versi yang sama tidak bertahan setelah reload.")
+
+                # Konfirmasi v1 dengan hash gabungan yang cocok boleh naik format
+                # tanpa mengulang setup; boolean legacy tetap tidak dipercaya.
+                page.evaluate("""([key, code]) => {
+                  const saved = JSON.parse(localStorage.getItem(key));
+                  delete saved[code].parts;
+                  localStorage.setItem(key, JSON.stringify(saved));
+                }""", [f"ramu:{default_manifest['id']}", first_course["code"]])
+                page.reload(wait_until="networkidle")
+                expect(page.locator(f'[data-course="{first_course["code"]}"] .done-pill')).to_have_text("Selesai")
+                migrated_parts = page.evaluate("""([key, code]) =>
+                  JSON.parse(localStorage.getItem(key))[code].parts
+                """, [f"ramu:{default_manifest['id']}", first_course["code"]])
+                if not migrated_parts or "instructions" not in migrated_parts:
+                    raise AssertionError("Konfirmasi v1 valid belum dimigrasi menjadi jejak komponen.")
 
                 # Legacy Boolean dari website sebelumnya bukan bukti revisi;
                 # riwayat tidak boleh hilang/diam-diam dipromosikan ke versi sekarang.
@@ -253,6 +273,15 @@ def main() -> int:
                 page.reload(wait_until="networkidle")
                 current_card = page.locator(f'.setup-course[data-course="{first_course["code"]}"]')
                 expect(current_card.locator(".done-pill")).to_have_text("Perlu ditinjau")
+                course_notice = current_card.locator(".revision-note").inner_text()
+                if "Isi course pack berubah" not in course_notice or "Project Instructions berubah" in course_notice:
+                    raise AssertionError("Revisi course mesti menjelaskan hanya file course yang berubah.")
+                expect(current_card.locator('.revision-history')).to_have_attribute(
+                    "href", "https://github.com/man612/ramu/blob/main/packs/"
+                    + default_entry["manifest"].replace("/manifest.json", "/PACK-CHANGES.md")
+                )
+                if page.locator(f'.setup-course[data-course="{second_course["code"]}"] .done-pill').inner_text() != "Selesai":
+                    raise AssertionError("Perubahan satu course membatalkan mata kuliah lain.")
                 if current_card.locator("[data-course-check]").is_checked():
                     raise AssertionError("Isi course berubah tetapi status tetap selesai.")
                 if not page.locator("#progress-title").inner_text().endswith("1 perlu dicek"):
@@ -275,6 +304,9 @@ def main() -> int:
                 page.reload(wait_until="networkidle")
                 expect(current_card.locator(".done-pill")).to_have_text("Perlu ditinjau")
                 expect(page.locator(f'[data-course="{second_course["code"]}"] .done-pill')).to_have_text("Perlu ditinjau")
+                instruction_notice = current_card.locator(".revision-note").inner_text()
+                if "Project Instructions berubah" not in instruction_notice or "Isi course pack berubah" in instruction_notice:
+                    raise AssertionError("Revisi instruksi tidak boleh mengklaim perubahan isi course.")
                 page.unroute(instruction_pattern)
                 page.reload(wait_until="networkidle")
                 expect(current_card.locator(".done-pill")).to_have_text("Selesai")
@@ -294,6 +326,9 @@ def main() -> int:
                 page.reload(wait_until="networkidle")
                 expect(current_card.locator(".done-pill")).to_have_text("Perlu ditinjau")
                 expect(page.locator(f'[data-course="{second_course["code"]}"] .done-pill')).to_have_text("Perlu ditinjau")
+                version_notice = current_card.locator(".revision-note").inner_text()
+                if "Nomor versi pack berubah" not in version_notice or "Isi course pack berubah" in version_notice:
+                    raise AssertionError("Perubahan versi saja tidak boleh menyuruh upload ulang.")
                 page.unroute(manifest_pattern)
                 page.reload(wait_until="networkidle")
                 expect(current_card.locator(".done-pill")).to_have_text("Selesai")
