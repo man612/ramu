@@ -8,6 +8,10 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 
 ### Added
 
+- **Pack Update Intelligence**: status `Perlu ditinjau` di website kini menjelaskan bagian yang berubah (Project Instructions, isi course pack, metadata akademik, atau nomor versi) beserta tindakan aman yang diperlukan. Konfirmasi revisi sebelumnya dimigrasikan bila fingerprint gabungannya masih cocok.
+- **Riwayat perubahan pack**: `PACK-CHANGES.md` per semester UT serta tautan dari kartu setup yang perlu ditinjau.
+- **Pack version CI policy**: perubahan pada instruksi/materi/metadata publik pack yang sudah ada wajib diikuti kenaikan `pack_version` dan catatan perubahan yang bisa dibaca mahasiswa; review metadata sumber dan perubahan website saja tidak memaksa bump.
+
 - **Panduan pembaruan Project yang sudah ada**: membedakan perubahan repository, Project Instructions, dan course pack, dengan prosedur mengganti Source secara aman tanpa menghapus chat atau materi pribadi.
 - **README catalog sync check**: struktur pack serta eval chain di README harus mengikuti seluruh pack aktif di `packs/index.json`, bukan daftar semester yang tertinggal.
 - **Public Sharing Kit** untuk memperkenalkan Ramu ke mahasiswa dan developer tanpa klaim pilot/hasil belajar yang belum diverifikasi, lengkap dengan checklist social preview repository GitHub.
