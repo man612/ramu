@@ -412,6 +412,8 @@ async function renderSetup(entry, manifest) {
   const base = packBase(entry);
   const progress = getProgress(manifest.id);
   const instructionsUrl = `${base}/${manifest.project_instructions}`;
+  const historyUrl = "https://github.com/man612/ramu/blob/main/packs/"
+    + entry.manifest.replace(/\/manifest\.json$/, "/PACK-CHANGES.md");
   const states = Object.fromEntries(await Promise.all(manifest.courses.map(async course => [
     course.code,
     await inspectCourseProgress(progress[course.code], base, instructionsUrl, course, manifest)
@@ -482,6 +484,7 @@ async function renderSetup(entry, manifest) {
           </div>
           <p class="small-note">Course pack menjadi source Project. Screenshot soal, rubrik, atau materi tambahan cukup dimasukkan saat dibutuhkan.</p>
           <p class="small-note revision-note" role="status" ${needsReview ? "" : "hidden"}>${escapeHtml(revisionNoteText(state))}</p>
+          <a class="small-note revision-history" href="${escapeHtml(historyUrl)}" target="_blank" rel="noopener" ${needsReview ? "" : "hidden"}>Baca riwayat perubahan pack →</a>
           <label class="complete-check"><input type="checkbox" data-course-check="${escapeHtml(course.code)}" ${complete ? "checked" : ""}><span>Aku sudah memastikan Project ini menggunakan instruksi dan course pack yang ditinjau.</span></label>
         </div>
       </details>
