@@ -264,6 +264,75 @@ function saveProgress(id, progress) {
   }
 }
 
+// Progres lokal hanya mencatat konfirmasi pengguna, bukan keadaan ChatGPT.
+ // Hash isi aktual membedakan revisi tanpa menggantungkan semuanya pada pack_version.
+const contentHashes = new Map();
+async function hashBytes(bytes) {
+  if (!globalThis.crypto?.subtle) throw new Error("Digest tidak tersedia");
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  return Array.from(new Uint8Array(digest), byte => byte.toString(16).padStart(2, "0")).join("");
+}
+
+function sourceHash(url) {
+  if (!contentHashes.has(url)) {
+    const promise = fetch(url, { cache: "no-store" }).then(async response => {
+      if (!response.ok) throw new Error("Source tidak dapat dimuat");
+      return hashBytes(await response.arrayBuffer());
+    });
+    contentHashes.set(url, promise);
+    promise.catch(() => { if (contentHashes.get(url) === promise) contentHashes.delete(url); });
+  }
+  return contentHashes.get(url);
+}
+
+async function courseRevision(base, instructionsUrl, course, manifest) {
+  const [instructionHash, courseHash] = await Promise.all([
+    sourceHash(instructionsUrl),
+    sourceHash(`${base}/${course.file}`)
+  ]);
+  const payload = JSON.stringify({
+    pack_id: manifest.id,
+    pack_version: manifest.pack_version,
+    academic_year: manifest.academic_year,
+    period_id: manifest.period_id,
+    course,
+    instructionHash,
+    courseHash
+  });
+  return hashBytes(new TextEncoder().encode(payload));
+}
+
+async function inspectCourseProgress(saved, base, instructionsUrl, course, manifest) {
+  if (!saved) return { status: "new" };
+  try {
+    const revision = await courseRevision(base, instructionsUrl, course, manifest);
+    // Boolean "true" dari versi website lama tidak berisi bukti revisi;
+    // jangan langsung dipromosikan sebagai selesai pada versi sekarang.
+    const current = saved && typeof saved === "object"
+      && saved.completed === true && saved.revision === revision;
+    return { status: current ? "current" : "review", revision };
+  } catch {
+    // Offline / browser tanpa Web Crypto: tidak boleh diam-diam menampilkan "Selesai".
+    return { status: "unavailable" };
+  }
+}
+
+function updateCourseState(card, state) {
+  const isCurrent = state.status === "current";
+  card.dataset.complete = String(isCurrent);
+  card.dataset.progressStatus = state.status;
+  card.querySelector(".done-pill").textContent =
+    isCurrent ? "Selesai" : state.status === "review" ? "Perlu ditinjau"
+      : state.status === "unavailable" ? "Belum dapat dicek" : "Belum";
+  const note = card.querySelector(".revision-note");
+  note.hidden = !["review", "unavailable"].includes(state.status);
+  note.textContent = state.status === "review"
+    ? "Pernah ditandai selesai, tetapi isi/versi instruksi atau course pack sekarang belum dikonfirmasi. Periksa Project yang sudah ada, lalu centang ulang. Chat dan sumber pribadi tidak perlu dihapus."
+    : state.status === "unavailable"
+      ? "Versi terbaru belum bisa dibandingkan (misalnya sedang offline). Sambungkan kembali dan muat ulang halaman sebelum mengonfirmasi."
+      : "";
+}
+
 async function downloadCoursePack(base, course, button) {
   const original = button.textContent;
   try {
@@ -306,6 +375,10 @@ async function renderSetup(entry, manifest) {
   const base = packBase(entry);
   const progress = getProgress(manifest.id);
   const instructionsUrl = `${base}/${manifest.project_instructions}`;
+  const states = Object.fromEntries(await Promise.all(manifest.courses.map(async course => [
+    course.code,
+    await inspectCourseProgress(progress[course.code], base, instructionsUrl, course, manifest)
+  ])));
   const instructionButton = document.querySelector("#copy-instructions");
   const status = document.querySelector("#copy-status");
   const openInstructions = document.querySelector("#open-instructions");
@@ -331,13 +404,15 @@ async function renderSetup(entry, manifest) {
   if (openInstructions) openInstructions.href = instructionsUrl;
 
   const courseCards = manifest.courses.map((course, index) => {
-    const complete = Boolean(progress[course.code]);
+    const state = states[course.code];
+    const complete = state.status === "current";
+    const needsReview = state.status === "review" || state.status === "unavailable";
     return `
-      <details class="setup-course" data-course="${escapeHtml(course.code)}" data-complete="${complete}" ${index === 0 ? "open" : ""}>
+      <details class="setup-course" data-course="${escapeHtml(course.code)}" data-complete="${complete}" data-progress-status="${state.status}" ${index === 0 ? "open" : ""}>
         <summary>
           <span class="course-number">${index + 1}</span>
           <span class="setup-title"><strong>${escapeHtml(course.short_name)}</strong><span>${escapeHtml(courseDisplayCode(course))} · ${escapeHtml(course.sks)} SKS · pack ${escapeHtml(manifest.pack_version)}</span></span>
-          <span class="done-pill">${complete ? "Selesai" : "Belum"}</span>
+          <span class="done-pill">${complete ? "Selesai" : state.status === "review" ? "Perlu ditinjau" : state.status === "unavailable" ? "Belum dapat dicek" : "Belum"}</span>
         </summary>
         <div class="setup-body">
           <p class="course-focus"><strong>Fokus:</strong> ${escapeHtml(course.focus || "materi dan tugas mata kuliah")}</p>
@@ -355,7 +430,8 @@ async function renderSetup(entry, manifest) {
             <a class="small-button" href="https://chatgpt.com/" target="_blank" rel="noopener">Buka ChatGPT</a>
           </div>
           <p class="small-note">Course pack menjadi source Project. Screenshot soal, rubrik, atau materi tambahan cukup dimasukkan saat dibutuhkan.</p>
-          <label class="complete-check"><input type="checkbox" data-course-check="${escapeHtml(course.code)}" ${complete ? "checked" : ""}><span>Project ${escapeHtml(course.short_name)} sudah selesai disiapkan</span></label>
+          <p class="small-note revision-note" role="status" ${needsReview ? "" : "hidden"}>${state.status === "review" ? "Pernah ditandai selesai, tetapi versi/isi sekarang perlu dicek kembali. Periksa Project lama dan centang ulang; jangan menghapus chat atau sumber pribadi." : state.status === "unavailable" ? "Tidak dapat memeriksa revisi saat ini. Muat ulang setelah terhubung ke internet sebelum mengonfirmasi." : ""}</p>
+          <label class="complete-check"><input type="checkbox" data-course-check="${escapeHtml(course.code)}" ${complete ? "checked" : ""}><span>Aku sudah memastikan Project ini menggunakan instruksi dan course pack yang ditinjau.</span></label>
         </div>
       </details>
     `;
@@ -385,13 +461,34 @@ async function renderSetup(entry, manifest) {
   });
 
   target.querySelectorAll("[data-course-check]").forEach(input => {
-    input.addEventListener("change", () => {
-      progress[input.dataset.courseCheck] = input.checked;
-      saveProgress(manifest.id, progress);
+    input.addEventListener("change", async () => {
+      const code = input.dataset.courseCheck;
       const card = input.closest(".setup-course");
-      card.dataset.complete = String(input.checked);
-      card.querySelector(".done-pill").textContent = input.checked ? "Selesai" : "Belum";
-      updateProgress(manifest, progress);
+      if (!input.checked) {
+        progress[code] = false;
+        states[code] = { status: "new" };
+      } else {
+        input.disabled = true;
+        try {
+          const course = manifest.courses.find(item => item.code === code);
+          if (!course) throw new Error("Mata kuliah tidak ditemukan");
+          const revision = await courseRevision(base, instructionsUrl, course, manifest);
+          progress[code] = {
+            completed: true,
+            revision,
+            packVersion: manifest.pack_version
+          };
+          states[code] = { status: "current", revision };
+        } catch {
+          input.checked = false;
+          states[code] = { status: "unavailable" };
+        } finally {
+          input.disabled = false;
+        }
+      }
+      saveProgress(manifest.id, progress);
+      updateCourseState(card, states[code]);
+      updateProgress(manifest, states);
     });
   });
 
@@ -410,14 +507,18 @@ async function renderSetup(entry, manifest) {
       setTimeout(() => button.textContent = original, 1000);
     });
   });
-  updateProgress(manifest, progress);
+  updateProgress(manifest, states);
 }
 
-function updateProgress(manifest, progress) {
-  const done = manifest.courses.filter(course => progress[course.code]).length;
+function updateProgress(manifest, states) {
+  const done = manifest.courses.filter(course => states[course.code]?.status === "current").length;
+  const review = manifest.courses.filter(course =>
+    ["review", "unavailable"].includes(states[course.code]?.status)
+  ).length;
   const title = document.querySelector("#progress-title");
   const bar = document.querySelector("#progress-bar");
-  if (title) title.textContent = `${done} dari ${manifest.courses.length} Project selesai`;
+  if (title) title.textContent = `${done} dari ${manifest.courses.length} dikonfirmasi`
+    + (review ? ` · ${review} perlu dicek` : "");
   if (bar) bar.style.width = `${(done / manifest.courses.length) * 100}%`;
 }
 
