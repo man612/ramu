@@ -29,6 +29,13 @@ def main() -> int:
     require(validate, "name: validate", "Validate workflow")
     require(validate, "Prove CI and Pages gate contract", "Validate workflow")
 
+    # Sumber global yang overdue tidak boleh memblokir PR yang tidak terkait;
+    # pemeriksaan metadata dan seluruh gate lain tetap wajib dijalankan.
+    require(validate, "python scripts/check_source_freshness.py --report-only-overdue", "Validate workflow")
+    source_watch = (ROOT / ".github/workflows/source-watch.yml").read_text(encoding="utf-8")
+    require(source_watch, "python scripts/check_source_freshness.py --online --fail-on-network", "Source Watch")
+    forbid(source_watch, "--report-only-overdue", "Source Watch")
+
     # Browser regression is a real gate, not a best-effort side job.
     require(validate, "  browser:\n", "Validate workflow")
     require(validate, "python -m playwright install --with-deps chromium", "Validate workflow")
