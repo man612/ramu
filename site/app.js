@@ -343,11 +343,11 @@ async function renderSetup(entry, manifest) {
           <p class="course-focus"><strong>Fokus:</strong> ${escapeHtml(course.focus || "materi dan tugas mata kuliah")}</p>
           ${courseSelectionNote(course) ? `<p class="small-note"><strong>Pilihan:</strong> ${escapeHtml(courseSelectionNote(course))}</p>` : ""}
           <ol>
-            <li>Buka ChatGPT, lalu pilih <strong>New Project</strong>.</li>
-            <li>Beri nama <strong>${escapeHtml(course.project_name)}</strong>, kemudian pilih <strong>Project-only memory</strong>.</li>
+            <li>Jika belum ada Project untuk mata kuliah ini, buka ChatGPT lalu pilih <strong>New Project</strong>. Jika sudah ada, <strong>gunakan Project lama</strong> dan ikuti panduan update—jangan membuat duplikat.</li>
+            <li>Untuk Project baru, beri nama <strong>${escapeHtml(course.project_name)}</strong>, kemudian pilih <strong>Project-only memory</strong> bila tersedia; Project lama bisa memeriksa pilihan itu melalui Project settings.</li>
             <li>Buka <strong>⋯ → Project settings → Project Instructions</strong>, lalu tempel instruksi Ramu dari langkah 2.</li>
             <li>Tekan <strong>Unduh paket (.txt)</strong> di bawah.</li>
-            <li>Di Project, buka area <strong>Sources</strong> atau <strong>Project Sources</strong>, pilih tombol untuk menambahkan source, lalu unggah file yang baru diunduh. Nama tombol dapat berbeda antar versi ChatGPT.</li>
+            <li>Di Project, buka area <strong>Sources</strong> atau <strong>Project Sources</strong>, lalu unggah file yang baru diunduh. Saat update, cocokkan versi dan hapus hanya source course pack lama yang tergantikan; jangan hapus materi pribadi atau chat. Nama tombol dapat berbeda antar versi ChatGPT.</li>
           </ol>
           <div class="inline-actions">
             <button class="small-button copy-project" type="button" data-text="${escapeHtml(course.project_name)}">Salin nama Project</button>
