@@ -65,6 +65,12 @@ Browser regression menandai konfirmasi setup per mata kuliah dengan SHA-256 dari
 - perubahan `pack_version` juga meminta konfirmasi ulang tanpa menghapus sejarah progres;
 - indikator UI bukan pembacaan aktual ke ChatGPT Project; pada kegagalan pemeriksaan jaringan/hash, tidak boleh otomatis hijau.
 
+## Governance versi pack dan alasan pembaruan
+
+`python tests/test_pack_version_policy.py` menguji policy offline: perubahan konten tanpa bump ditolak, bump tanpa `PACK-CHANGES.md` versi baru ditolak, bump + catatan lolos, dan perubahan yang tidak mengubah konten publik tidak membutuhkan bump. Saat PR/main berjalan, `scripts/check_pack_versions.py --base <sha> --head <sha>` membandingkan snapshot Git secara langsung setelah checkout full history.
+
+Browser regression mengecek konfirmasi dengan sidik komponen terpisah dan migrasi konfirmasi lama yang fingerprint-nya masih cocok, membedakan pesan pembaruan instruksi, course pack, serta perubahan nomor versi tanpa mengklaim materi berubah, dan menyediakan tautan ke `PACK-CHANGES.md`.
+
 ## Browser-level site regression
 
 `python tests/test_site_browser.py` menjalankan Chromium melalui Playwright terhadap staging lokal yang disusun seperti artifact GitHub Pages. Cakupannya sengaja menguji behavior yang tidak dapat dibuktikan hanya dengan mencari marker HTML/JavaScript:
