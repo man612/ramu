@@ -76,7 +76,10 @@ def assert_focus_not_obscured(page: Page, selector: str, label: str) -> None:
       });
       return { top: rect.top, bottom: rect.bottom, height: innerHeight, overlaps };
     }""")
-    if result["top"] < 0 or result["bottom"] > result["height"] or result["overlaps"]:
+    # Fractional CSS pixel rounding (< 1px) depends on Chromium scroll placement;
+    # keep rejecting meaningful clipping and any sticky/fixed overlay collision.
+    tolerance_px = 1.0
+    if result["top"] < -tolerance_px or result["bottom"] > result["height"] + tolerance_px or result["overlaps"]:
         raise AssertionError(f"Focus {label} obscured/outside viewport: {result}")
 
 
