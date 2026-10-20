@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import sys
 
-from ramu_repo import ROOT
+from ramu_repo import ROOT, pack_context, pack_entries
 
 README = ROOT / "README.md"
 README_EN = ROOT / "README.en.md"
@@ -68,6 +68,28 @@ def main() -> int:
     if english_positions != sorted(english_positions):
         print("README English layer validation — ERROR: urutan lima lapisan English berubah.")
         return 1
+
+    # Dokumentasi arsitektur tidak boleh diam-diam meninggalkan satu semester
+    # setelah katalog berubah; jangan cocokkan dengan daftar hardcoded.
+    start = text.find("## Struktur pack")
+    end = text.find("## Validasi", start)
+    if start < 0 or end < 0:
+        print("README catalog sync — ERROR: section Struktur pack/Validasi tidak ditemukan.")
+        return 1
+    architecture = text[start:end]
+    for entry in pack_entries():
+        ctx = pack_context(entry["id"])
+        period_dir = ctx["manifest_path"].parent.name
+        if f"{period_dir}/" not in architecture:
+            print(f"README catalog sync — ERROR: directory {period_dir}/ tidak tercantum dalam struktur pack.")
+            return 1
+        suite_line = " → ".join(
+            str(suite.get("scope_ref") or suite.get("id"))
+            for suite in ctx["manifest"]["eval_suites"]
+        )
+        if suite_line not in architecture:
+            print(f"README catalog sync — ERROR: eval chain {suite_line!r} tidak dicantumkan.")
+            return 1
 
     print("README validation — OK: lima lapisan dan language entry surface valid.")
     return 0
