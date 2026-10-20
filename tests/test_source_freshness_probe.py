@@ -3,7 +3,9 @@
 
 from __future__ import annotations
 
+import socket
 import sys
+import urllib.error
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -87,6 +89,43 @@ def main() -> int:
             raise AssertionError("Network failure strict tetap gagal meskipun review debt advisory.")
         if freshness.outcome_code(has_overdue=False, has_strict_network_failure=False) != 0:
             raise AssertionError("Status bersih wajib sukses.")
+
+        # Probe HEAD yang gagal karena DNS juga mencoba GET agar HEAD-only
+        # rejection tidak keliru dianggap link mati. Penyebabnya harus terbaca.
+        freshness.probe_once = original_probe_once
+        old_urlopen = freshness.urllib.request.urlopen
+        methods: list[str] = []
+
+        def dns_failure(request, timeout):
+            methods.append(request.get_method())
+            raise urllib.error.URLError(socket.gaierror(-2, "hostname not resolved"))
+
+        try:
+            freshness.urllib.request.urlopen = dns_failure
+            ok, detail = freshness.probe_once("https://example.invalid/test")
+        finally:
+            freshness.urllib.request.urlopen = old_urlopen
+        if ok or methods != ["HEAD", "GET"]:
+            raise AssertionError(f"Fallback HEAD->GET saat DNS error rusak: {methods}")
+        if detail != "HEAD DNS resolution failure; GET DNS resolution failure":
+            raise AssertionError(f"DNS error harus spesifik namun aman: {detail!r}")
+
+        # ThreadPoolExecutor wajib mengembalikan hasil dalam urutan source input
+        # supaya warning tetap menunjuk ke source ID yang benar.
+        urls = ["one", "two", "three", "four"]
+        results = freshness.batch_probe(
+            urls, max_workers=2, runner=lambda url: (url in {"one", "three"}, url)
+        )
+        if results != [(True, "one"), (False, "two"), (True, "three"), (False, "four")]:
+            raise AssertionError(f"Batch probe mengacaukan urutan: {results}")
+        if freshness.batch_probe([], max_workers=2) != []:
+            raise AssertionError("Batch kosong harus valid tanpa jaringan.")
+        try:
+            freshness.batch_probe(["one"], max_workers=0, runner=lambda url: (True, url))
+        except ValueError:
+            pass
+        else:
+            raise AssertionError("Jumlah worker tidak valid harus ditolak.")
 
         if freshness.reachability_policy({"id": "legacy"}) != "strict":
             raise AssertionError("Source lama tanpa policy harus tetap strict agar kompatibel dan fail-safe.")
