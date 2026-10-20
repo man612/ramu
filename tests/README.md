@@ -54,6 +54,17 @@ Test ini menjaga supaya hardening terhadap false alarm tidak berubah menjadi mek
 
 Browser regression pada halaman setup memastikan tidak lagi mewajibkan checkbox `Reference saved memories` dan `Reference chat history` untuk semua pengguna; petunjuk tetap mencakup `Enable memory`, panduan pembaruan Project lama dapat ditemukan, serta langkah course tidak memaksa pengguna membuat Project duplikat atau menghapus seluruh Source.
 
+## Progres setup berbasis revisi konten
+
+Browser regression menandai konfirmasi setup per mata kuliah dengan SHA-256 dari Project Instructions, file course, dan metadata manifest. Pemeriksaan mencakup:
+
+- Centang baru menghasilkan status selesai yang bertahan setelah reload bila konten sama;
+- boolean `true` dari versi website lama dipertahankan tetapi tampil sebagai **Perlu ditinjau** sampai konfirmasi ulang;
+- perubahan **isi course pack** membuat hanya mata kuliah terkait perlu ditinjau (meskipun `pack_version` tetap);
+- perubahan **Project Instructions** memicu tinjau ulang semua mata kuliah yang sebelumnya dikonfirmasi untuk pack itu;
+- perubahan `pack_version` juga meminta konfirmasi ulang tanpa menghapus sejarah progres;
+- indikator UI bukan pembacaan aktual ke ChatGPT Project; pada kegagalan pemeriksaan jaringan/hash, tidak boleh otomatis hijau.
+
 ## Browser-level site regression
 
 `python tests/test_site_browser.py` menjalankan Chromium melalui Playwright terhadap staging lokal yang disusun seperti artifact GitHub Pages. Cakupannya sengaja menguji behavior yang tidak dapat dibuktikan hanya dengan mencari marker HTML/JavaScript:
