@@ -59,6 +59,13 @@ Halaman regional tetap dicatat karena berguna untuk mendeteksi drift. Pada revie
 
 ## UT S1 Akuntansi 2026/2027
 
+**Audit metadata 20 Oktober 2026:** [Matriks bukti Semester 1–3 dan pembacaan PDF resmi](AUDIT-AKADEMIK-UT-2026-2027-2026-10-20.md). Setelah membandingkan 19 slot mata kuliah, enam alternatif di satu slot Pendidikan Agama, nomor SKS, slot ujian, kode bahan ajar, dan penanda layanan terhadap tabel resmi Juli 2026, **tidak ditemukan ketidakcocokan dalam ruang lingkup tersebut**. Pedoman PRATON dan sejumlah halaman BMP resmi juga ditinjau untuk klaim spesifik. Ini **bukan** audit lengkap semua isi modul, validasi hukum pajak terbaru, atau uji langsung ChatGPT Projects. Tanggal `source_verified_at` dan `verified_at` registry tidak dinaikkan hanya karena pemeriksaan terfokus ini.
+
+### Semester 1
+
+Katalog pusat mencatat **18 SKS**: EACC4101 Pengantar Akuntansi (4), EACC4102 Laboratorium Pengantar Akuntansi (2), MKWN4110 Pancasila (2), MKWN4108 Bahasa Indonesia (2), ECON4101 Pengantar Ekonomi Makro (3), **satu pilihan** Pendidikan Agama sesuai data pribadi (3), serta MKWN4109 Pendidikan Kewarganegaraan (2). Slot agama bukan enam mata kuliah terpisah. EACC4102 termasuk BPr/BPro; halaman BMP resmi menguraikan delapan tugas yang bersifat serial dan pedoman 2026/2027 menjadi rujukan untuk penilaian.
+
+
 ### Semester 2
 
 Katalog pusat mencatat **16 SKS**:

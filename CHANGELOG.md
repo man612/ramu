@@ -8,6 +8,8 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 
 ### Added
 
+- **Audit sumber akademik UT 2026/2027 (20 Oktober)**: matriks pembacaan katalog pusat 19 slot mata kuliah Semester 1–3, pilihan Pendidikan Agama, referensi BMP, slot ujian, keterangan layanan, serta pengecekan silang PRATON/prasyarat dan ketidakpastian yang belum terverifikasi. Tidak ditemukan mismatch metadata dalam scope audit; tanggal source verification/pack version tidak diubah tanpa alasan.
+
 - **Pack Update Intelligence**: status `Perlu ditinjau` di website kini menjelaskan bagian yang berubah (Project Instructions, isi course pack, metadata akademik, atau nomor versi) beserta tindakan aman yang diperlukan. Konfirmasi revisi sebelumnya dimigrasikan bila fingerprint gabungannya masih cocok.
 - **Riwayat perubahan pack**: `PACK-CHANGES.md` per semester UT serta tautan dari kartu setup yang perlu ditinjau.
 - **Pack version CI policy**: perubahan pada instruksi/materi/metadata publik pack yang sudah ada wajib diikuti kenaikan `pack_version` dan catatan perubahan yang bisa dibaca mahasiswa; review metadata sumber dan perubahan website saja tidak memaksa bump.
