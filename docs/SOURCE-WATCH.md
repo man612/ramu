@@ -64,7 +64,9 @@ Halaman OpenAI Help Center pada registry global memakai policy advisory setelah 
 
 Probe mencoba sampai tiga kali dengan jeda terbatas. Tujuannya menyerap kegagalan jaringan sesaat tanpa mengabaikan failure yang konsisten.
 
-`HEAD` digunakan lebih dulu. Untuk response tertentu seperti 403/405, checker mencoba request `GET` ringan sebagai fallback. Hasil akhir tetap tunduk pada `reachability_policy` source.
+`HEAD` digunakan lebih dulu. Untuk response tertentu seperti 403/405 **atau** gangguan jaringan pada HEAD, checker mencoba request `GET` ringan sebagai fallback. Jika keduanya gagal, log sekarang membedakan kegagalan DNS, TLS, timeout, koneksi ditolak, atau koneksi terputus. Kategori ini membantu investigasi tetapi belum membuktikan source sudah mati. Pesan error mentah tidak dicetak agar tidak membocorkan URL/token dari jaringan.
+
+URL yang dimonitor dicek dengan maksimal **3 worker paralel** dan hasil ditampilkan menurut urutan registry semula. Retry tiap URL tetap tiga kali, dan policy `strict`/`advisory` tidak berubah. Pemisahan ini memperpendek pekerjaan jaringan ketika banyak situs lambat/tidak dapat diakses, tanpa menyamakan network error dengan perubahan isi sumber.
 
 ## Menjalankan lokal
 

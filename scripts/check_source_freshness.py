@@ -4,10 +4,13 @@
 from __future__ import annotations
 
 import argparse
+import socket
+import ssl
 import sys
 import time
 import urllib.error
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor
 from datetime import date, datetime
 from typing import Any, Callable
 
@@ -34,6 +37,22 @@ def parse_args():
     return parser.parse_args()
 
 
+def probe_error_detail(exc: urllib.error.URLError) -> str:
+    """Ringkas sebab kegagalan tanpa mencetak URL, token, atau pesan jaringan mentah."""
+    reason = exc.reason
+    if isinstance(reason, socket.gaierror):
+        return "DNS resolution failure"
+    if isinstance(reason, ssl.SSLError):
+        return "TLS handshake/certificate failure"
+    if isinstance(reason, (TimeoutError, socket.timeout)):
+        return "network timeout"
+    if isinstance(reason, ConnectionRefusedError):
+        return "connection refused"
+    if isinstance(reason, ConnectionResetError):
+        return "connection reset"
+    return f"URLError ({type(reason).__name__})"
+
+
 def probe_once(url: str) -> tuple[bool, str]:
     headers = {"User-Agent": "ramu-source-watch/3.2 (+https://github.com/man612/ramu)"}
     request = urllib.request.Request(url, headers=headers, method="HEAD")
@@ -43,6 +62,10 @@ def probe_once(url: str) -> tuple[bool, str]:
     except urllib.error.HTTPError as exc:
         if exc.code not in {403, 405}:
             return False, f"HTTP {exc.code}"
+        head_detail = f"HEAD HTTP {exc.code}"
+    except urllib.error.URLError as exc:
+        # Beberapa origin memutus koneksi untuk HEAD tetapi tetap melayani GET.
+        head_detail = f"HEAD {probe_error_detail(exc)}"
     except Exception as exc:
         return False, type(exc).__name__
 
@@ -52,8 +75,10 @@ def probe_once(url: str) -> tuple[bool, str]:
             return 200 <= response.status < 400, f"HTTP {response.status}"
     except urllib.error.HTTPError as exc:
         return False, f"HTTP {exc.code}"
+    except urllib.error.URLError as exc:
+        return False, f"{head_detail}; GET {probe_error_detail(exc)}"
     except Exception as exc:
-        return False, type(exc).__name__
+        return False, f"{head_detail}; GET {type(exc).__name__}"
 
 
 def probe(
@@ -79,6 +104,21 @@ def probe(
             sleep_fn(PROBE_RETRY_DELAYS[delay_index])
 
     return False, f"{last_detail} after {attempts} attempts"
+
+
+def batch_probe(
+    urls: list[str],
+    *,
+    max_workers: int = 3,
+    runner: Callable[[str], tuple[bool, str]] = probe,
+) -> list[tuple[bool, str]]:
+    """Batasi probe paralel; hasil mengikuti urutan input demi diagnostics deterministik."""
+    if max_workers < 1:
+        raise ValueError("max_workers harus >= 1")
+    if not urls:
+        return []
+    with ThreadPoolExecutor(max_workers=min(max_workers, len(urls))) as pool:
+        return list(pool.map(runner, urls))
 
 
 def reachability_policy(source: dict[str, Any]) -> str:
@@ -113,6 +153,7 @@ def main() -> int:
     overdue_claims: list[tuple[dict[str, Any], int, Any]] = []
     network_failures: list[tuple[dict[str, Any], str, Any]] = []
     network_advisories: list[tuple[dict[str, Any], str, Any]] = []
+    watched_sources: list[tuple[dict[str, Any], str, Any]] = []
     seen_ids: set[str] = set()
     seen_claim_ids: set[str] = set()
     source_map: dict[str, tuple[dict[str, Any], Any]] = {}
@@ -152,15 +193,7 @@ def main() -> int:
             if due_in < 0 and source.get("status") == "active":
                 overdue_sources.append((source, -due_in, rel))
             if args.online and source.get("watch"):
-                ok, detail = probe(source["url"])
-                if ok:
-                    print(f"  URL: {detail}")
-                elif policy == "advisory":
-                    network_advisories.append((source, detail, rel))
-                    print(f"  URL INCONCLUSIVE: {detail} (policy advisory)")
-                else:
-                    network_failures.append((source, detail, rel))
-                    print(f"  URL WARNING: {detail} (policy strict)")
+                watched_sources.append((source, policy, rel))
 
     # Pass 2: semantic claims. Reachability tidak cukup untuk membuktikan claim masih benar.
     for registry_path, data in registries:
@@ -197,6 +230,26 @@ def main() -> int:
             print(f"[{freshness}] claim {cid}: {status}; reviewed {age}d ago; interval {interval}d")
             if due_in < 0 and claim.get("status") != "deprecated":
                 overdue_claims.append((claim, -due_in, rel))
+
+    # Jalan setelah metadata/claim tervalidasi, agar request jaringan tidak mubazir
+    # ketika kontrak registry sendiri salah.
+    if watched_sources:
+        print(f"\nURL reachability ({len(watched_sources)} watched sources, maksimal 3 worker):")
+        try:
+            results = batch_probe([source["url"] for source, _, _ in watched_sources])
+        except Exception as exc:
+            print(f"ERROR: online probe gagal secara internal: {type(exc).__name__}", file=sys.stderr)
+            return 2
+        for (source, policy, rel), (ok, detail) in zip(watched_sources, results):
+            sid = source["id"]
+            if ok:
+                print(f"  [OK] {sid} [{rel}]: {detail}")
+            elif policy == "advisory":
+                network_advisories.append((source, detail, rel))
+                print(f"  [INCONCLUSIVE] {sid} [{rel}]: {detail} (policy advisory)")
+            else:
+                network_failures.append((source, detail, rel))
+                print(f"  [WARNING] {sid} [{rel}]: {detail} (policy strict)")
 
     if network_advisories:
         print("\nReachability inconclusive (signal saja; tidak membuat watch gagal):")
