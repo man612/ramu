@@ -130,6 +130,14 @@ Pada review dokumentasi OpenAI **16 September 2026**:
 
 Dokumentasi produk dapat berubah cepat dan cache/index sumber eksternal tidak selalu sinkron pada menit yang sama. Registry menyimpan locator + observation dari evidence current yang direview; tanggal tidak dinaikkan hanya karena sebuah URL masih hidup.
 
+## Perubahan hukum pajak terkini (review 20 Oktober 2026)
+
+DJP/Kemenkeu menjadi sumber primer untuk **hukum dan administrasi pajak yang berlaku**, sementara katalog/pedoman UT tetap sumber primer untuk **struktur kurikulum dan pelaksanaan mata kuliah**. Keduanya tidak boleh saling menggantikan.
+
+Dalam pemeriksaan Oktober 2026, ada dua perubahan relevan: **PER-12/PJ/2026** (berlaku 1 Oktober 2026) tentang pembetulan SPT/Coretax beserta ketentuan transisi; dan **PMK 71/2026** (berlaku 2 Oktober 2026) mengenai prosedur pembetulan/keberatan serta alokasi pokok dan sanksi dalam ruang lingkup pasalnya. Detail dengan locator ketentuan, sumber primer, dampak pada EACC4104 dan EACC4206, serta batas verifikasi ada di [Review regulasi pajak 20 Oktober 2026](REVIEW-REGULASI-PAJAK-2026-10-20.md).
+
+Kedua peraturan beserta dua klaim terikat periode tercatat di registry institusi `packs/universitas-terbuka/source-registry.json` dan ikut Source Watch. **Tidak** ada perubahan fakta katalog UT atau tarif tetap yang terbukti salah dalam dua course pack, sehingga manifest dan `pack_version` tidak dinaikkan. URL yang hidup bukan bukti status hukum tetap berlaku pada tanggal kasus di masa depan.
+
 ## Source freshness
 
 `python scripts/check_source_freshness.py` menemukan registry global dan `packs/**/source-registry.json`, lalu memeriksa source serta claim.
