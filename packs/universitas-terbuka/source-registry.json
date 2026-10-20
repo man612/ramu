@@ -39,24 +39,25 @@
       "url": "https://feb.ut.ac.id/program-studi-akuntansi-s1/",
       "canonical_for": ["informasi program studi"],
       "freshness_class": "institution-page",
-      "verified_at": "2026-09-03",
+      "verified_at": "2026-10-20",
       "review_interval_days": 45,
       "watch": true,
-      "status": "active"
+      "status": "active",
+      "notes": "Dibaca ulang 20 Oktober 2026: halaman resmi FEB UT menyajikan identitas, profil, dan informasi Prodi S1 Akuntansi. Metadata mata kuliah 2026/2027 tetap mengacu ke katalog akademik pusat."
     },
     {
       "id": "ut-regional-accounting-banjarmasin",
-      "name": "UT Banjarmasin — Program Studi Akuntansi S1",
+      "name": "UT Banjarmasin — indeks akademik (sinyal saja)",
       "kind": "official-regional",
       "authority": "Universitas Terbuka Daerah Banjarmasin",
-      "url": "https://banjarmasin.ut.ac.id/program-studi-akuntansi-s1/",
+      "url": "https://banjarmasin.ut.ac.id/megamenu/akademik/",
       "canonical_for": [],
       "freshness_class": "regional-page",
-      "verified_at": "2026-09-03",
+      "verified_at": "2026-10-20",
       "review_interval_days": 45,
       "watch": false,
-      "status": "secondary",
-      "notes": "Pernah ditemukan berbeda atau tertinggal dari katalog pusat, termasuk metadata bahan ajar. Bukan sumber kanonik untuk struktur kurikulum atau metadata mata kuliah ketika berbeda dari katalog pusat."
+      "status": "signal-only",
+      "notes": "Karantina 20 Oktober 2026: path /program-studi-akuntansi-s1/ terpantau menampilkan spam perjudian lalu error PHP include pada pemeriksaan ulang. Penyebab/luas gangguan belum terkonfirmasi. URL diganti indeks akademik umum untuk pemantauan; status signal-only dan tidak boleh dipakai untuk klaim akademik sampai sumber prodi pulih serta diverifikasi ulang. Bukan sumber kanonik untuk struktur kurikulum atau metadata mata kuliah."
     },
     {
       "id": "pojokut-community",
