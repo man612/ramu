@@ -8,7 +8,15 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 
 ### Added
 
+- **Panduan pembaruan Project yang sudah ada**: membedakan perubahan repository, Project Instructions, dan course pack, dengan prosedur mengganti Source secara aman tanpa menghapus chat atau materi pribadi.
+- **README catalog sync check**: struktur pack serta eval chain di README harus mengikuti seluruh pack aktif di `packs/index.json`, bukan daftar semester yang tertinggal.
 - **Public Sharing Kit** untuk memperkenalkan Ramu ke mahasiswa dan developer tanpa klaim pilot/hasil belajar yang belum diverifikasi, lengkap dengan checklist social preview repository GitHub.
+
+### Fixed
+
+- Setup mengakomodasi akun dengan toggle **Enable memory** maupun kontrol legacy terpisah, tanpa mewajibkan dua label lama pada semua pengguna.
+- Instruksi mata kuliah di website membedakan Project baru dengan Project yang sudah ada; tidak lagi menyuruh setiap pengguna membuat Project duplikat atau mengunggah ulang file yang tidak berubah.
+- README menampilkan Semester 1–3 secara konsisten, termasuk identitas suite evaluasi masing-masing pack.
 
 ## [0.4.0-beta] - 2026-10-20
 
