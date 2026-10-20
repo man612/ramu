@@ -37,6 +37,7 @@ packs/
     ├── evals/
     └── s1-akuntansi/
         └── 2026-2027/
+            ├── semester-01/
             ├── semester-02/
             └── semester-03/
 ```
@@ -120,6 +121,7 @@ pack
 Pack UT yang tersedia sekarang memakai:
 
 ```text
+core → universitas-terbuka → id.ut.accounting-s1.2026-2027.s1
 core → universitas-terbuka → id.ut.accounting-s1.2026-2027.s2
 core → universitas-terbuka → id.ut.accounting-s1.2026-2027.s3
 ```
