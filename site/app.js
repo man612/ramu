@@ -346,7 +346,7 @@ async function renderSetup(entry, manifest) {
             <li>Jika belum ada Project untuk mata kuliah ini, buka ChatGPT lalu pilih <strong>New Project</strong>. Jika sudah ada, <strong>gunakan Project lama</strong> dan ikuti panduan update—jangan membuat duplikat.</li>
             <li>Untuk Project baru, beri nama <strong>${escapeHtml(course.project_name)}</strong>, kemudian pilih <strong>Project-only memory</strong> bila tersedia; Project lama bisa memeriksa pilihan itu melalui Project settings.</li>
             <li>Buka <strong>⋯ → Project settings → Project Instructions</strong>, lalu tempel instruksi Ramu dari langkah 2.</li>
-            <li>Tekan <strong>Unduh paket (.txt)</strong> di bawah.</li>
+            <li>Untuk Project baru, tekan <strong>Unduh paket (.txt)</strong>. Untuk Project lama, unduh ulang hanya jika isi course pack perlu diperbarui.</li>
             <li>Di Project, buka area <strong>Sources</strong> atau <strong>Project Sources</strong>, lalu unggah file yang baru diunduh. Saat update, cocokkan versi dan hapus hanya source course pack lama yang tergantikan; jangan hapus materi pribadi atau chat. Nama tombol dapat berbeda antar versi ChatGPT.</li>
           </ol>
           <div class="inline-actions">
