@@ -280,6 +280,25 @@ def main() -> int:
                 expect(current_card.locator(".done-pill")).to_have_text("Selesai")
                 expect(page.locator(f'[data-course="{second_course["code"]}"] .done-pill')).to_have_text("Selesai")
 
+                # Kenaikan versi akademik/manifest harus meminta review bahkan
+                # ketika bytes course pack dan instructions tidak berubah.
+                manifest_pattern = f"**/{default_entry['manifest']}"
+                changed_manifest = dict(default_manifest)
+                changed_manifest["pack_version"] = default_manifest["pack_version"] + ".test"
+                page.route(
+                    manifest_pattern,
+                    lambda route: route.fulfill(
+                        status=200, body=json.dumps(changed_manifest), content_type="application/json"
+                    ),
+                )
+                page.reload(wait_until="networkidle")
+                expect(current_card.locator(".done-pill")).to_have_text("Perlu ditinjau")
+                expect(page.locator(f'[data-course="{second_course["code"]}"] .done-pill')).to_have_text("Perlu ditinjau")
+                page.unroute(manifest_pattern)
+                page.reload(wait_until="networkidle")
+                expect(current_card.locator(".done-pill")).to_have_text("Selesai")
+
+
                 open_instructions = page.locator("#open-instructions")
                 instructions_href = open_instructions.get_attribute("href")
                 if not instructions_href:
