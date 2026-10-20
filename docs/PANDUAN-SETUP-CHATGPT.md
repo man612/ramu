@@ -33,7 +33,9 @@ Pilih mata kuliah yang memang sedang digunakan. Tidak perlu menyiapkan seluruh s
 3. Gunakan nama Project yang ditampilkan Ramu, misalnya `Semester 3 • AKM II`.
 4. Pilih **Project-only memory** agar konteks Project tetap terpisah dari percakapan di luar Project.
 
-Pada eligible Project yang sudah ada, pengaturan memory dapat diubah melalui **Project settings → Memory**. Shared Project tetap memakai Project-only memory. Nama atau posisi menu dapat berubah mengikuti versi aplikasi; yang dicari adalah fungsi yang setara.
+Pada Project yang sudah ada dan mendukung opsi tersebut, pengaturan memory dapat diubah melalui **Project settings → Memory**. Shared Project tetap memakai Project-only memory. Perubahan bisa membutuhkan beberapa jam dan tidak otomatis menghapus chat/file Project.
+
+**Pengaturan akun tidak selalu berupa dua toggle.** Buka **Settings → Personalization → Memory**. Jika yang muncul hanya **Enable memory**, aktifkan bila ingin menggunakan memory. Jika akun masih menampilkan **Reference saved memories** dan **Reference chat history** secara terpisah, ikuti persyaratan sesuai paket/workspace; khusus beberapa managed workspace, admin juga harus mengizinkan memory. Jangan menjadikan dua label lama sebagai checklist wajib bagi semua pengguna. Lihat [Memory in ChatGPT](https://help.openai.com/en/articles/8590148-memory-in-chatgpt).
 
 ## 3. Pasang Project Instructions
 
@@ -82,6 +84,8 @@ ini feedback tutor kemarin
 ```
 
 Kalau Project pertama terasa berguna, baru ulangi langkah yang sama untuk mata kuliah lain.
+
+**Sudah memakai Ramu sebelumnya?** Jangan ulangi langkah *New Project* untuk mata kuliah yang sama. Gunakan [Panduan Update Project yang sudah ada](PANDUAN-UPDATE-PROJECT.md): bandingkan instruksi/versi course pack, ganti **hanya** source yang tergantikan, dan pertahankan chat serta materi pribadi.
 
 ## Course pack Semester 1
 
@@ -140,7 +144,8 @@ Jika sesi menghasilkan konteks yang perlu dibawa ke chat berikutnya, minta **Cat
 - screenshot soal biasanya cukup dikirim di chat yang sedang dikerjakan;
 - rubrik sebaiknya ikut dikirim jika tugas memilikinya;
 - file yang sudah tidak dipakai dapat dihapus;
-- hindari memasang dua versi course pack untuk mata kuliah yang sama sekaligus.
+- hindari memasang dua versi course pack untuk mata kuliah yang sama sekaligus;
+- jika mengganti course pack, ingat bahwa pilihan **Upload anyway** untuk nama file yang sama bisa menambah salinan baru, bukan otomatis memperbarui salinan lama; tinjau Sources setelah upload.
 
 Batas file dan detail UI ChatGPT dapat berubah. Dokumentasi produk yang dicatat di source registry dipakai untuk memantau perubahan tersebut, bukan angka atau posisi tombol yang di-hardcode ke course pack.
 

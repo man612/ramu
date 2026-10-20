@@ -48,6 +48,12 @@ Test ini menjaga supaya hardening terhadap false alarm tidak berubah menjadi mek
 
 `python tests/test_pack_builder.py` menguji scaffold community pack dengan periode non-semester. Test menjaga agar draft selalu mulai sebagai `experimental` + `community`, total SKS dan identity konsisten, eval tidak dikarang otomatis, output tidak dioverwrite tanpa `--force`, dan input berisiko seperti URL non-HTTPS, machine ID tidak valid, atau tanggal review masa depan ditolak.
 
+## Kompatibilitas Memory, update Project, dan katalog README
+
+`python scripts/validate_readme.py` selain memeriksa urutan lapisan README juga membaca `packs/index.json` dan manifest aktif, lalu memastikan struktur direktori dan eval chain tiap pack benar-benar tercantum di dokumentasi. Perubahan jumlah semester tanpa sinkronisasi README harus gagal di CI.
+
+Browser regression pada halaman setup memastikan tidak lagi mewajibkan checkbox `Reference saved memories` dan `Reference chat history` untuk semua pengguna; petunjuk tetap mencakup `Enable memory`, panduan pembaruan Project lama dapat ditemukan, serta langkah course tidak memaksa pengguna membuat Project duplikat atau menghapus seluruh Source.
+
 ## Browser-level site regression
 
 `python tests/test_site_browser.py` menjalankan Chromium melalui Playwright terhadap staging lokal yang disusun seperti artifact GitHub Pages. Cakupannya sengaja menguji behavior yang tidak dapat dibuktikan hanya dengan mencari marker HTML/JavaScript:
