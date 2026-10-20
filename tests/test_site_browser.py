@@ -230,6 +230,7 @@ def main() -> int:
                 expect(legacy_card.locator(".done-pill")).to_have_text("Perlu ditinjau")
                 if legacy_card.locator("[data-course-check]").is_checked():
                     raise AssertionError("Progres Boolean legacy tidak boleh terlihat sudah dikonfirmasi.")
+                legacy_card.evaluate("el => el.open = true")
                 legacy_card.locator("[data-course-check]").check()
                 expect(legacy_card.locator(".done-pill")).to_have_text("Selesai")
                 page.reload(wait_until="networkidle")
