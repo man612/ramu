@@ -226,7 +226,7 @@ def main() -> int:
                   localStorage.setItem(key, JSON.stringify(stored));
                 }""", [f"ramu:{default_manifest['id']}", second_course["code"]])
                 page.reload(wait_until="networkidle")
-                legacy_card = page.locator(f'[data-course="{second_course["code"]}"]')
+                legacy_card = page.locator(f'.setup-course[data-course="{second_course["code"]}"]')
                 expect(legacy_card.locator(".done-pill")).to_have_text("Perlu ditinjau")
                 if legacy_card.locator("[data-course-check]").is_checked():
                     raise AssertionError("Progres Boolean legacy tidak boleh terlihat sudah dikonfirmasi.")
@@ -251,7 +251,7 @@ def main() -> int:
                     ),
                 )
                 page.reload(wait_until="networkidle")
-                current_card = page.locator(f'[data-course="{first_course["code"]}"]')
+                current_card = page.locator(f'.setup-course[data-course="{first_course["code"]}"]')
                 expect(current_card.locator(".done-pill")).to_have_text("Perlu ditinjau")
                 if current_card.locator("[data-course-check]").is_checked():
                     raise AssertionError("Isi course berubah tetapi status tetap selesai.")
