@@ -23,6 +23,18 @@ Panduan ini untuk pengguna yang **sudah memiliki** ChatGPT Project satu mata kul
 7. Kalau ada `Catatan Belajar Terbaru`, pertahankan yang terbaru agar progres belajar tidak hilang. Jika catatan lama dan baru bertentangan, tinjau sebelum menghapus versi usang. Pembaruan course pack **bukan alasan** menghapus seluruh riwayat chat.
 8. Jika Project dibagikan, koordinasikan perubahan dengan anggota lain: menghapus source dari Shared Project memengaruhi semua anggota. Pengaturan memory Shared Project juga berbeda dari Project pribadi.
 
+## Tanda progres setup dan versi materi di website
+
+Website Ramu menyimpan tanda setup secara **lokal di browser**, di bawah ID pack dan kode mata kuliah. Tanda itu tidak membaca ChatGPT Project, sehingga **tidak dapat membuktikan** apa yang benar-benar diunggah pengguna.
+
+Mulai perbaikan Oktober 2026, setiap tanda selesai baru menyimpan sidik revisi SHA-256 dari *isi file* Project Instructions dan course pack, bersama identitas/metadata akademik pada manifest. Tanda **Selesai** berarti pengguna sudah mengonfirmasi bahan yang saat itu disajikan website; bukan hasil inspeksi otomatis ke ChatGPT. Jika salah satu file berubah meski `pack_version` tidak dinaikkan, atau periode/metadata relevan berubah, website menampilkan **Perlu ditinjau** dan menghentikan penghitung selesai untuk mata kuliah tersebut sampai pengguna memeriksa lalu mencentang ulang.
+
+Untuk progres lama yang hanya disimpan sebagai `true` tanpa informasi revisi, website tetap mempertahankan riwayat tetapi menampilkan **Perlu ditinjau**. Ini bukan perintah membuat Project baru atau menghapus chat. Jika file tidak dapat diperiksa (misalnya offline), status akan menunjukkan **Belum dapat dicek**, bukan otomatis hijau; muat ulang saat online.
+
+Pemeriksaan SHA dilakukan di browser dengan Web Crypto, bukan layanan server: isi file tidak dikirim ke server analitik oleh fitur progres ini. Data konfirmasi tetap tinggal di penyimpanan browser tersebut, tidak tersinkron ke perangkat lain atau ke ChatGPT. Jika penyimpanan browser dihapus/diblokir, progres bisa hilang dari website, tetapi **tidak menghapus ChatGPT Project**.
+
+Kenaikan versi repository Ramu seperti `v0.4.0-beta` **tidak dengan sendirinya** memaksa upload ulang. Pastikan perubahan yang memang menyangkut mata kuliah dan Project kamu, sesuai tabel di atas.
+
 ## Memastikan hasil pembaruan
 
 - Project masih untuk **mata kuliah yang sama**, dan tahun/periode akademik relevan.
