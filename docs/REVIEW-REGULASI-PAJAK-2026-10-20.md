@@ -19,7 +19,7 @@ Ini adalah **catatan perubahan hukum saat tanggal review**, bukan nasihat pajak 
 
 ## 2. PMK 71/2026 — berlaku 2 Oktober 2026
 
-**Sumber primer:** [JDIH Kemenkeu — PMK Nomor 71 Tahun 2026](https://www.jdih.kemenkeu.go.id/dok/pmk-71-tahun-2026). Ditetapkan 29 September 2026, diundangkan dan **berlaku 2 Oktober 2026**. Mengubah PMK 118/2024 tentang tata cara pembetulan, keberatan, pengurangan, penghapusan, dan pembatalan di bidang perpajakan.
+**Teks peraturan primer:** [DJP — PMK Nomor 71 Tahun 2026](https://pajak.go.id/id/peraturan/perubahan-atas-peraturan-menteri-keuangan-nomor-118-tahun-2024-tentang-tata-cara). **Status hukum/tanggal berlaku:** [JDIH Kemenkeu — PMK 71/2026](https://www.jdih.kemenkeu.go.id/dok/pmk-71-tahun-2026). Ditetapkan 29 September 2026, diundangkan dan **berlaku 2 Oktober 2026**. Mengubah PMK 118/2024 tentang tata cara pembetulan, keberatan, pengurangan, penghapusan, dan pembatalan di bidang perpajakan.
 
 - Dalam lingkup **Pasal 23 ayat (6)–(7)** hasil perubahan, pembayaran pada dokumen ketetapan/tagihan yang menjadi dasar permohonan pengurangan/penghapusan sanksi dihitung untuk **pokok pajak lebih dahulu**, lalu ke sanksi administratif/denda apabila ada sisa.
 - Perubahan itu **bukan pernyataan bahwa semua kewajiban pajak, jenis pembayaran, atau sengketa** selalu mengikuti rumus yang sama tanpa membaca syarat pasal.
@@ -43,5 +43,7 @@ Ini adalah **catatan perubahan hukum saat tanggal review**, bukan nasihat pajak 
 3. Jika content course pack perlu diperbarui, barulah naikkan `pack_version` terkait dan tulis alasan/dampak pengguna pada `PACK-CHANGES.md`; jangan memaksa upload ulang semua semester hanya karena ada berita pajak.
 4. Jika URL gagal di CI, bedakan kegagalan jaringan dari perubahan hukum. Source Watch merupakan **sinyal review**, bukan pembaca semantik peraturan.
 5. Peraturan lain—termasuk PPN, tarif, nilai kurs, atau kebijakan temporer—harus diverifikasi **untuk tanggal/periode kasusnya sendiri**. Dua regulasi di atas tidak cukup untuk menyimpulkan semua ketentuan pajak terbaru.
+
+**Catatan keterjangkauan (20 Oktober 2026):** URL PER-12 pada DJP dan URL teks PMK-71 yang dipublikasikan DJP sama-sama memberi **HTTP 200** dari pemeriksaan HEAD terpisah. URL JDIH Kemenkeu mengalami **TLS connection error** dari komputer pemeriksa (bukan bukti laman resmi tidak valid). Karena itu URL DJP yang memuat **teks peraturan primer yang sama** dipakai untuk pantauan otomatis, sementara URL JDIH tetap ditautkan untuk verifikasi status hukum dan tanggal berlaku. Jangan menaikkan `verified_at` hanya karena respons HTTP 200.
 
 **Batas audit:** hanya dua regulasi spesifik yang ditelusuri pada 20 Oktober 2026. Kajian ini tidak membuktikan bahwa tidak ada peraturan pajak lain yang berubah, atau bahwa prosedur aplikasi Coretax selalu sama dengan teks peraturan pada setiap akun.
