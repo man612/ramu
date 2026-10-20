@@ -196,10 +196,10 @@ def main() -> int:
                     raise AssertionError("Progress pemeriksaan Memory tidak tersimpan.")
                 update_link = page.locator('#langkah-3 a[href*="PANDUAN-UPDATE-PROJECT.md"]')
                 expect(update_link).to_have_count(1)
-                if "GitHub" not in update_link.get_attribute("href"):
+                if "github.com" not in (update_link.get_attribute("href") or ""):
                     raise AssertionError("Panduan update Project belum bisa dicari dari setup.")
                 first_project_card = page.locator("#setup-courses .setup-course").first
-                first_project_card.locator("summary").click()
+                first_project_card.evaluate("el => el.open = true")
                 existing_text = first_project_card.inner_text()
                 if "gunakan Project lama" not in existing_text or "jangan membuat duplikat" not in existing_text:
                     raise AssertionError("Setup masih menyuruh semua pengguna membuat New Project.")
