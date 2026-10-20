@@ -182,6 +182,30 @@ def main() -> int:
                 if setup_cards.count() != len(default_manifest["courses"]):
                     raise AssertionError("Setup page tidak merender seluruh course dari manifest.")
 
+                # Preflight mengikuti dua pengalaman Memory yang berbeda; jangan
+                # mewajibkan toggle legacy pada semua pengguna.
+                expect(page.locator('[data-progress="memory-reviewed"]')).to_have_count(1)
+                if page.locator('[data-progress="saved-memory"], [data-progress="chat-history"]').count():
+                    raise AssertionError("Setup masih mewajibkan dua toggle memory legacy.")
+                memory_text = page.locator("#langkah-1").inner_text()
+                if "Enable memory" not in memory_text or "Reference saved memories" not in memory_text:
+                    raise AssertionError("Petunjuk Memory tidak mengakomodasi pengalaman baru dan legacy.")
+                page.locator('[data-progress="memory-reviewed"]').check()
+                page.reload(wait_until="networkidle")
+                if not page.locator('[data-progress="memory-reviewed"]').is_checked():
+                    raise AssertionError("Progress pemeriksaan Memory tidak tersimpan.")
+                update_link = page.locator('#langkah-3 a[href*="PANDUAN-UPDATE-PROJECT.md"]')
+                expect(update_link).to_have_count(1)
+                if "GitHub" not in update_link.get_attribute("href"):
+                    raise AssertionError("Panduan update Project belum bisa dicari dari setup.")
+                first_project_card = page.locator("#setup-courses .setup-course").first
+                first_project_card.locator("summary").click()
+                existing_text = first_project_card.inner_text()
+                if "gunakan Project lama" not in existing_text or "jangan membuat duplikat" not in existing_text:
+                    raise AssertionError("Setup masih menyuruh semua pengguna membuat New Project.")
+                if "hapus hanya source course pack lama" not in existing_text:
+                    raise AssertionError("Setup kehilangan aturan penggantian source yang aman.")
+
                 first_course = default_manifest["courses"][0]
                 checkbox = page.locator(f'[data-course-check="{first_course["code"]}"]')
                 checkbox.check()
