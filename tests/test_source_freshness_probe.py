@@ -73,6 +73,21 @@ def main() -> int:
         if not ok or detail != "HTTP 204" or no_retry_delays:
             raise AssertionError("Successful first probe seharusnya tidak melakukan retry.")
 
+        # Default dan scheduled watch tetap memblokir keterlambatan review.
+        if freshness.outcome_code(has_overdue=True, has_strict_network_failure=False) != 1:
+            raise AssertionError("Overdue dalam mode strict wajib memblokir Source Watch.")
+        if freshness.outcome_code(
+            has_overdue=True, has_strict_network_failure=False, report_only_overdue=True
+        ) != 0:
+            raise AssertionError("Overdue dalam mode CI advisory tidak boleh memblokir validation.")
+        if freshness.outcome_code(
+            has_overdue=True, has_strict_network_failure=True,
+            report_only_overdue=True, fail_on_network=True,
+        ) != 2:
+            raise AssertionError("Network failure strict tetap gagal meskipun review debt advisory.")
+        if freshness.outcome_code(has_overdue=False, has_strict_network_failure=False) != 0:
+            raise AssertionError("Status bersih wajib sukses.")
+
         if freshness.reachability_policy({"id": "legacy"}) != "strict":
             raise AssertionError("Source lama tanpa policy harus tetap strict agar kompatibel dan fail-safe.")
         if freshness.reachability_policy({"id": "bot-protected", "reachability_policy": "advisory"}) != "advisory":

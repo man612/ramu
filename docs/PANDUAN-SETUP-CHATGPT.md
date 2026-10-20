@@ -10,6 +10,7 @@ Buka [site Ramu](https://man612.github.io/ramu/) lalu pilih pack yang sesuai.
 
 Pack yang tersedia untuk UT S1 Akuntansi 2026/2027:
 
+- **Semester 1** — 7 mata kuliah, 18 SKS;
 - **Semester 2** — 5 mata kuliah, 16 SKS;
 - **Semester 3** — 7 mata kuliah, 20 SKS.
 
@@ -58,6 +59,8 @@ Di halaman setup:
 
 Course pack menjadi konteks tetap untuk mata kuliah tersebut. BMP, materi kelas, screenshot soal, rubrik, atau file pribadi ditambahkan sendiri ketika memang dibutuhkan.
 
+Jika tersedia pada akunmu, Project juga bisa menyimpan jawaban ChatGPT sebagai source atau menerima tautan Google Drive/Slack yang didukung. Gunakan hanya untuk materi yang relevan dan sesuai izin akses. **Tautan aplikasi bukan pengganti verifikasi sumber:** konten dapat berubah, dan Google Drive yang terhubung dalam Project tidak otomatis menyinkronkan seluruh isinya untuk retrieval. Course pack Ramu tetap menjadi konteks dasar.
+
 ## 5. Mulai gunakan
 
 Begitu satu Project siap, langsung pakai seperti chat biasa.
@@ -79,6 +82,20 @@ ini feedback tutor kemarin
 ```
 
 Kalau Project pertama terasa berguna, baru ulangi langkah yang sama untuk mata kuliah lain.
+
+## Course pack Semester 1
+
+| Nama Project | Mata kuliah | Course pack |
+|---|---|---|
+| `Semester 1 • Pengantar Akuntansi` | EACC4101 Pengantar Akuntansi | `EACC4101-pengantar-akuntansi.md` |
+| `Semester 1 • Lab Pengantar Akuntansi` | EACC4102 Laboratorium Pengantar Akuntansi | `EACC4102-laboratorium-pengantar-akuntansi.md` |
+| `Semester 1 • Pancasila` | MKWN4110 Pancasila | `MKWN4110-pancasila.md` |
+| `Semester 1 • Bahasa Indonesia` | MKWN4108 Bahasa Indonesia | `MKWN4108-bahasa-indonesia.md` |
+| `Semester 1 • Ekonomi Makro` | ECON4101 Pengantar Ekonomi Makro | `ECON4101-pengantar-ekonomi-makro.md` |
+| `Semester 1 • Pendidikan Agama` | Pendidikan Agama (pilih sesuai registrasi UT) | `religion-choice-pendidikan-agama.md` |
+| `Semester 1 • Kewarganegaraan` | MKWN4109 Pendidikan Kewarganegaraan | `MKWN4109-pendidikan-kewarganegaraan.md` |
+
+Pendidikan Agama merupakan **satu pilihan mata kuliah**, bukan enam mata kuliah yang perlu dipasang semua. Cek registrasi UT sebelum memilih materi.
 
 ## Course pack Semester 2
 

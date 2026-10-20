@@ -22,6 +22,11 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--online", action="store_true", help="Coba akses watched URL dengan request ringan.")
     parser.add_argument(
+        "--report-only-overdue",
+        action="store_true",
+        help="Laporkan source/claim overdue tanpa memblokir CI; metadata invalid tetap gagal. Scheduled watch tetap strict.",
+    )
+    parser.add_argument(
         "--fail-on-network",
         action="store_true",
         help="Exit non-zero bila watched source berpolicy strict tetap tidak dapat dijangkau setelah retry.",
@@ -87,6 +92,18 @@ def reachability_policy(source: dict[str, Any]) -> str:
 
 def parsed_age(raw_date: str, today: date) -> int:
     return (today - datetime.strptime(raw_date, "%Y-%m-%d").date()).days
+
+
+def outcome_code(
+    *, has_overdue: bool, has_strict_network_failure: bool,
+    report_only_overdue: bool = False, fail_on_network: bool = False,
+) -> int:
+    """Pisahkan review debt dari error metadata dan kegagalan probe strict."""
+    if has_overdue and not report_only_overdue:
+        return 1
+    if has_strict_network_failure and fail_on_network:
+        return 2
+    return 0
 
 
 def main() -> int:
@@ -198,15 +215,25 @@ def main() -> int:
         for claim, late, rel in overdue_claims:
             print(f"- {claim['id']} [{rel}] — lewat {late} hari; status {claim.get('status')}")
 
-    if overdue_sources or overdue_claims:
-        return 1
-    if network_failures and args.fail_on_network:
-        return 2
-
-    print(
-        f"\nOK: {source_count} source + {claim_count} claim lintas {len(registries)} registry "
-        "masih dalam interval review."
+    exit_code = outcome_code(
+        has_overdue=bool(overdue_sources or overdue_claims),
+        has_strict_network_failure=bool(network_failures),
+        report_only_overdue=args.report_only_overdue,
+        fail_on_network=args.fail_on_network,
     )
+    if exit_code:
+        return exit_code
+
+    if overdue_sources or overdue_claims:
+        print(
+            "\nREVIEW REQUIRED (non-blocking for this run): source/claim overdue. "
+            "Scheduled Source Watch tetap wajib meminta review; tidak ada tanggal yang diperpanjang otomatis."
+        )
+    else:
+        print(
+            f"\nOK: {source_count} source + {claim_count} claim lintas {len(registries)} registry "
+            "masih dalam interval review."
+        )
     if network_advisories:
         print("Ada source advisory yang probe otomatisnya inconclusive; freshness semantik tetap mengikuti review evidence.")
     if network_failures:

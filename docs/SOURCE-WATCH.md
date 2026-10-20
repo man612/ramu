@@ -51,7 +51,14 @@ Setelah retry habis, kegagalan advisory:
 - **tidak** memperpanjang `verified_at` atau `reviewed_at`;
 - **tidak** menganggap claim masih benar secara otomatis.
 
-Saat ini halaman OpenAI Help Center pada registry global memakai policy advisory karena probe otomatis dapat menerima HTTP 403 walaupun source tetap dapat direview melalui jalur normal. Policy ini khusus untuk kualitas signal reachability, bukan penurunan standar evidence.
+Halaman OpenAI Help Center pada registry global memakai policy advisory setelah probe GitHub Actions berulang kali menerima HTTP 403 sepanjang September–Oktober 2026, sementara halaman resmi dapat diperiksa melalui jalur web biasa. Hal ini bukan bukti kontennya tidak berubah: verifikasi semantik tetap wajib dan tanggal review tidak boleh diperpanjang otomatis.
+
+## Bedakan validasi pull request dan Source Watch
+
+- **Validate Ramu** (`pull_request`/push ke main) menjalankan `python scripts/check_source_freshness.py --report-only-overdue`. Keterlambatan review source/claim tetap tercetak sebagai `REVIEW REQUIRED`, tetapi tidak memblokir perubahan kode yang sehat. Metadata tidak valid, ID duplikat, atau claim yang mengacu ke source tidak dikenal tetap menjadi error.
+- **Source Freshness Watch** (mingguan/manual) tetap menjalankan `--online --fail-on-network` tanpa `--report-only-overdue`. Source/claim overdue dan kegagalan strict network tetap meminta review melalui issue dan membuat job gagal.
+- Pengubahan sumber atau status pack tetap membutuhkan verifikasi evidence manusia sebelum status `source-verified`/`verified` dinaikkan. CI hijau sendiri tidak menjamin semua fakta source mutakhir.
+- Pada 19 Oktober 2026, banyak URL UT memperoleh `URLError` dalam run yang sama. Cari penyebab jaringan runner sebelum menganggap semua sumber tersebut mati.
 
 ## Retry
 

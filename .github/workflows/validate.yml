@@ -78,8 +78,8 @@ jobs:
       - name: Validate catalog-driven public site
         run: python scripts/validate_site.py
 
-      - name: Check source review dates
-        run: python scripts/check_source_freshness.py
+      - name: Report overdue sources and claims (non-blocking review debt)
+        run: python scripts/check_source_freshness.py --report-only-overdue
 
       - name: Build pack matrix
         id: packs
