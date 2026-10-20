@@ -368,6 +368,8 @@ function updateCourseState(card, state) {
   const note = card.querySelector(".revision-note");
   note.hidden = !["review", "unavailable"].includes(state.status);
   note.textContent = revisionNoteText(state);
+  const history = card.querySelector(".revision-history");
+  if (history) history.hidden = !["review", "unavailable"].includes(state.status);
 }
 
 async function downloadCoursePack(base, course, button) {
