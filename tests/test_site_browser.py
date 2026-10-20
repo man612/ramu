@@ -210,11 +210,74 @@ def main() -> int:
                     raise AssertionError("Setup kehilangan aturan penggantian source yang aman.")
 
                 first_course = default_manifest["courses"][0]
+                second_course = default_manifest["courses"][1]
                 checkbox = page.locator(f'[data-course-check="{first_course["code"]}"]')
                 checkbox.check()
+                expect(page.locator(f'[data-course="{first_course["code"]}"] .done-pill')).to_have_text("Selesai")
                 page.reload(wait_until="networkidle")
                 if not page.locator(f'[data-course-check="{first_course["code"]}"]').is_checked():
-                    raise AssertionError("Progress setup tidak bertahan setelah reload.")
+                    raise AssertionError("Progres setup versi yang sama tidak bertahan setelah reload.")
+
+                # Legacy Boolean dari website sebelumnya bukan bukti revisi;
+                # riwayat tidak boleh hilang/diam-diam dipromosikan ke versi sekarang.
+                page.evaluate("""([key, code]) => {
+                  const stored = JSON.parse(localStorage.getItem(key));
+                  stored[code] = true;
+                  localStorage.setItem(key, JSON.stringify(stored));
+                }""", [f"ramu:{default_manifest['id']}", second_course["code"]])
+                page.reload(wait_until="networkidle")
+                legacy_card = page.locator(f'[data-course="{second_course["code"]}"]')
+                expect(legacy_card.locator(".done-pill")).to_have_text("Perlu ditinjau")
+                if legacy_card.locator("[data-course-check]").is_checked():
+                    raise AssertionError("Progres Boolean legacy tidak boleh terlihat sudah dikonfirmasi.")
+                legacy_card.locator("[data-course-check]").check()
+                expect(legacy_card.locator(".done-pill")).to_have_text("Selesai")
+                page.reload(wait_until="networkidle")
+                expect(legacy_card.locator(".done-pill")).to_have_text("Selesai")
+
+                # Bahkan saat pack_version belum dinaikkan, isi course berubah
+                # harus membuat status lama menjadi perlu ditinjau lagi.
+                course_url_pattern = f"**/{first_course['file']}"
+                original_source = (stage / "packs" / default_entry["manifest"]).parent.joinpath(
+                    first_course["file"]
+                ).read_text(encoding="utf-8")
+                page.route(
+                    course_url_pattern,
+                    lambda route: route.fulfill(
+                        status=200,
+                        body=original_source + "\\nSIMULATED COURSE REVISION\\n",
+                        content_type="text/plain",
+                    ),
+                )
+                page.reload(wait_until="networkidle")
+                current_card = page.locator(f'[data-course="{first_course["code"]}"]')
+                expect(current_card.locator(".done-pill")).to_have_text("Perlu ditinjau")
+                if current_card.locator("[data-course-check]").is_checked():
+                    raise AssertionError("Isi course berubah tetapi status tetap selesai.")
+                if not page.locator("#progress-title").inner_text().endswith("1 perlu dicek"):
+                    raise AssertionError("Jumlah perlu ditinjau tidak memperhitungkan revisi file.")
+                page.unroute(course_url_pattern)
+
+                # Project Instructions juga berlaku lintas mata kuliah dalam pack.
+                original_instructions = (stage / "packs" / default_entry["manifest"]).parent.joinpath(
+                    default_manifest["project_instructions"]
+                ).read_text(encoding="utf-8")
+                instruction_pattern = f"**/{default_manifest['project_instructions']}"
+                page.route(
+                    instruction_pattern,
+                    lambda route: route.fulfill(
+                        status=200,
+                        body=original_instructions + "\\nSIMULATED INSTRUCTION REVISION\\n",
+                        content_type="text/plain",
+                    ),
+                )
+                page.reload(wait_until="networkidle")
+                expect(current_card.locator(".done-pill")).to_have_text("Perlu ditinjau")
+                expect(page.locator(f'[data-course="{second_course["code"]}"] .done-pill')).to_have_text("Perlu ditinjau")
+                page.unroute(instruction_pattern)
+                page.reload(wait_until="networkidle")
+                expect(current_card.locator(".done-pill")).to_have_text("Selesai")
+                expect(page.locator(f'[data-course="{second_course["code"]}"] .done-pill')).to_have_text("Selesai")
 
                 open_instructions = page.locator("#open-instructions")
                 instructions_href = open_instructions.get_attribute("href")
