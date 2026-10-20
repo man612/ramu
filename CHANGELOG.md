@@ -6,7 +6,9 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 
 ## [Unreleased]
 
-Tidak ada perubahan baru sejak `v0.4.0-beta`. Tambahkan perubahan berikutnya di bagian ini.
+### Added
+
+- **Public Sharing Kit** untuk memperkenalkan Ramu ke mahasiswa dan developer tanpa klaim pilot/hasil belajar yang belum diverifikasi, lengkap dengan checklist social preview repository GitHub.
 
 ## [0.4.0-beta] - 2026-10-20
 
