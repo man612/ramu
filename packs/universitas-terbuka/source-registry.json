@@ -11,7 +11,13 @@
       "kind": "official",
       "authority": "Universitas Terbuka",
       "url": "https://www.ut.ac.id/wp-content/uploads/2026/07/01-Katalog-NON-PENDAS-TAHUN-2026-2027-21-07-2026_22072026.pdf",
-      "canonical_for": ["struktur kurikulum", "SKS", "bahan ajar", "layanan tutorial", "slot ujian"],
+      "canonical_for": [
+        "struktur kurikulum",
+        "SKS",
+        "bahan ajar",
+        "layanan tutorial",
+        "slot ujian"
+      ],
       "freshness_class": "academic-year",
       "verified_at": "2026-09-03",
       "review_interval_days": 60,
@@ -24,7 +30,11 @@
       "kind": "official",
       "authority": "Universitas Terbuka",
       "url": "https://www.ut.ac.id/wp-content/uploads/2026/06/03-PEDOMAN-PENYELENGGARAAN-2026-2027-080626_compressed.pdf",
-      "canonical_for": ["aturan penyelenggaraan", "praktik/PRATON", "komponen penilaian"],
+      "canonical_for": [
+        "aturan penyelenggaraan",
+        "praktik/PRATON",
+        "komponen penilaian"
+      ],
       "freshness_class": "academic-year",
       "verified_at": "2026-09-03",
       "review_interval_days": 60,
@@ -37,7 +47,9 @@
       "kind": "official",
       "authority": "Universitas Terbuka",
       "url": "https://feb.ut.ac.id/program-studi-akuntansi-s1/",
-      "canonical_for": ["informasi program studi"],
+      "canonical_for": [
+        "informasi program studi"
+      ],
       "freshness_class": "institution-page",
       "verified_at": "2026-10-20",
       "review_interval_days": 45,
@@ -72,6 +84,74 @@
       "watch": false,
       "status": "signal-only",
       "notes": "Dipakai untuk sinyal masalah mahasiswa, bukan aturan akademik."
+    },
+    {
+      "id": "djp-per12-2026",
+      "name": "PER-12/PJ/2026 — pembetulan SPT dalam Coretax",
+      "kind": "official-regulation",
+      "authority": "Direktorat Jenderal Pajak",
+      "url": "https://www.pajak.go.id/index.php/id/peraturan/perubahan-atas-peraturan-direktur-jenderal-pajak-nomor-11pj2025-tentang-ketentuan",
+      "canonical_for": [
+        "ketentuan pembetulan SPT dalam Coretax sejak 1 Oktober 2026, termasuk ketentuan transisi"
+      ],
+      "freshness_class": "current-tax-regulation",
+      "verified_at": "2026-10-20",
+      "review_interval_days": 30,
+      "watch": true,
+      "status": "active",
+      "notes": "Peraturan diterbitkan 28 September 2026 dan efektif 1 Oktober 2026. Dasar hukum yang diverifikasi melalui teks peraturan primer DJP: Pasal 129A(1), Pasal II angka 1–2. PER-12 mengubah PER-11/PJ/2025; tidak mengubah semua tarif pajak dan tidak otomatis berlaku identik pada kasus yang telah diajukan sebelum tanggal berlaku."
+    },
+    {
+      "id": "kemenkeu-pmk71-2026",
+      "name": "PMK 71 Tahun 2026 — perubahan prosedur penyelesaian kewajiban perpajakan",
+      "kind": "official-regulation",
+      "authority": "Kementerian Keuangan Republik Indonesia",
+      "url": "https://www.jdih.kemenkeu.go.id/dok/pmk-71-tahun-2026",
+      "canonical_for": [
+        "perubahan prosedur pembetulan/keberatan/pengurangan/penghapusan/pembatalan pajak 2026, termasuk alokasi pembayaran pokok utang"
+      ],
+      "freshness_class": "current-tax-regulation",
+      "verified_at": "2026-10-20",
+      "review_interval_days": 30,
+      "watch": true,
+      "status": "active",
+      "notes": "Diundangkan dan berlaku 2 Oktober 2026 menurut JDIH Kemenkeu. Ketentuan pokok dibayar dahulu ada di Pasal 23(6)–(7) versi perubahan, dalam konteks permohonan terkait sanksi/ketetapan yang diatur pasal itu. Tidak boleh digeneralisasi ke seluruh jenis transaksi atau tarif."
+    }
+  ],
+  "claims": [
+    {
+      "id": "current-tax-coretax-spt-amendment-2026",
+      "topic": "Pembetulan SPT di Coretax setelah PER-12/PJ/2026",
+      "status": "confirmed",
+      "summary": "Mulai 1 Oktober 2026, pembetulan SPT yang tunduk pada PER-12/PJ/2026 mengikuti prinsip SPT pembetulan terakhir; ketentuan peralihan membedakan pembetulan yang disampaikan sebelum dan setelah tanggal berlaku, termasuk masa/tahun pajak sejak 2025.",
+      "evidence": [
+        {
+          "source_id": "djp-per12-2026",
+          "locator": "Pasal 129A ayat (1) dan Pasal II angka 1 huruf a–b, angka 2",
+          "observation": "Peraturan primer DJP menyatakan kewajiban pajak mengikuti SPT pembetulan terakhir, menangani laporan sebelum berlaku menurut PER-11/PJ/2025 bila belum selesai, dan menetapkan ruang transisi untuk pembetulan setelah berlaku atas masa/tahun pajak sejak 2025. Berlaku 1 Oktober 2026."
+        }
+      ],
+      "reviewed_at": "2026-10-20",
+      "review_interval_days": 30,
+      "operational_policy": "Untuk pertanyaan pembetulan SPT, tentukan tanggal penyampaian, masa atau tahun pajak, jenis SPT, dan status penyelesaian sebelumnya sebelum memilih aturan. Jangan menganggap satu skema berlaku tanpa pemeriksaan transisi.",
+      "notes": "Tidak mengklaim semua mekanisme administratif Coretax telah berjalan persis sebagaimana teks hukum. Ini catatan current-law, terpisah dari aturan BMP UT."
+    },
+    {
+      "id": "current-tax-pmk71-settlement-2026",
+      "topic": "Alokasi pembayaran pokok pajak dan sanksi dalam PMK 71/2026",
+      "status": "confirmed",
+      "summary": "PMK 71/2026 mulai berlaku 2 Oktober 2026 dan dalam konteks Pasal 23(6)–(7) memperhitungkan pembayaran terhadap pokok pajak terlebih dahulu, baru ke sanksi administratif/denda bila terdapat kelebihan pembayaran.",
+      "evidence": [
+        {
+          "source_id": "kemenkeu-pmk71-2026",
+          "locator": "JDIH Kemenkeu: tanggal pengundangan/berlaku 2 Oktober 2026; PERUBAHAN Pasal 23 ayat (6)–(7)",
+          "observation": "Halaman peraturan resmi dan peraturan primer pada situs DJP menegaskan pembayaran terkait Surat Ketetapan Pajak/Surat Tagihan Pajak dalam konteks permohonan pengurangan/penghapusan sanksi dipakai untuk pokok terlebih dahulu; sisanya terhadap sanksi/denda."
+        }
+      ],
+      "reviewed_at": "2026-10-20",
+      "review_interval_days": 30,
+      "operational_policy": "Sebelum menghitung pokok/sanksi, identifikasi SKP/STP, jenis permohonan, dan ayat yang memang berlaku. Jangan menerapkan alokasi pokok-dahulu pada semua situasi tanpa dasar dan jangan menyamakan ini dengan perubahan tarif.",
+      "notes": "Dukungan silang: siaran pers DJP 12 Oktober 2026 https://www.pajak.go.id/id/siaran-pers/pemerintah-permudah-penyelesaian-kewajiban-perpajakan."
     }
   ]
 }

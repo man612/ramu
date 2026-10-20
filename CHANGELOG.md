@@ -8,6 +8,8 @@ Formatnya mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/) dan 
 
 ### Added
 
+- **Review regulasi pajak 20 Oktober 2026**: dua sumber primer DJP/Kemenkeu dan evidence klaim spesifik untuk PER-12/PJ/2026 (pembetulan SPT/Coretax) serta PMK 71/2026 (prosedur pokok/sanksi), dengan tanggal mulai berlaku dan ketentuan transisi. Referensi dicatat dalam source registry UT untuk pemantauan berkala; course pack tidak dibump karena belum ada klaim materi yang terbukti salah.
+
 - **Audit sumber akademik UT 2026/2027 (20 Oktober)**: matriks pembacaan katalog pusat 19 slot mata kuliah Semester 1–3, pilihan Pendidikan Agama, referensi BMP, slot ujian, keterangan layanan, serta pengecekan silang PRATON/prasyarat dan ketidakpastian yang belum terverifikasi. Tidak ditemukan mismatch metadata dalam scope audit; tanggal source verification/pack version tidak diubah tanpa alasan.
 
 - **Pack Update Intelligence**: status `Perlu ditinjau` di website kini menjelaskan bagian yang berubah (Project Instructions, isi course pack, metadata akademik, atau nomor versi) beserta tindakan aman yang diperlukan. Konfirmasi revisi sebelumnya dimigrasikan bila fingerprint gabungannya masih cocok.
