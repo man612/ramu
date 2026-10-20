@@ -125,7 +125,7 @@ Tidak perlu menyiapkan satu semester sekaligus.
 
 Kalau pola ini terasa berguna, baru tambahkan mata kuliah lain. Progress setup di website disimpan lokal di browser berdasarkan `pack id`.
 
-Panduan lengkap: [`docs/PANDUAN-SETUP-CHATGPT.md`](docs/PANDUAN-SETUP-CHATGPT.md).
+Panduan setup baru: [`docs/PANDUAN-SETUP-CHATGPT.md`](docs/PANDUAN-SETUP-CHATGPT.md). Bila **sudah mempunyai ChatGPT Project**, jangan membuat Project lain hanya karena Ramu mendapat pembaruan: ikuti [`Panduan Update Project`](docs/PANDUAN-UPDATE-PROJECT.md) agar instruksi, course pack, dan catatan belajar lama tidak tertukar.
 
 Kalau mata kuliah belum tersedia di katalog, gunakan [`Ramu Starter`](starter/README.md) untuk membuat workspace personal tanpa public pack atau OpenAI API. Kalau konteksnya memang reusable dan ingin diajukan sebagai community pack, lanjutkan lewat [`Create a Pack`](docs/CREATE-A-PACK.md).
 
@@ -141,6 +141,7 @@ packs/
     ├── evals/
     └── s1-akuntansi/
         └── 2026-2027/
+            ├── semester-01/
             ├── semester-02/
             └── semester-03/
 ```
@@ -173,8 +174,9 @@ pack
 Pack UT yang aktif saat ini memakai:
 
 ```text
-core → universitas-terbuka → semester-02
-core → universitas-terbuka → semester-03
+core → universitas-terbuka → id.ut.accounting-s1.2026-2027.s1
+core → universitas-terbuka → id.ut.accounting-s1.2026-2027.s2
+core → universitas-terbuka → id.ut.accounting-s1.2026-2027.s3
 ```
 
 `core` memuat failure mode yang berlaku luas, misalnya sitasi palsu, prompt injection, context leak, source freshness, learner state, dan academic integrity. Suite institusi menyimpan aturan yang memang khas UT, seperti konflik katalog pusat dengan halaman regional. Skenario yang hanya masuk akal untuk mata kuliah/periode tertentu tetap berada dekat pack-nya.
