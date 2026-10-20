@@ -63,6 +63,9 @@ jobs:
       - name: Prove source-watch retry and reachability policy
         run: python tests/test_source_freshness_probe.py
 
+      - name: Prove adaptive tutor presentation and learner evidence contract
+        run: python tests/test_adaptive_learning_contract.py
+
       - name: Prove personal Starter generator
         run: python tests/test_starter_builder.py
 
