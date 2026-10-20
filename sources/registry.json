@@ -1,7 +1,7 @@
 {
   "version": 2,
   "scope": "global",
-  "verified_at": "2026-09-16",
+  "verified_at": "2026-10-20",
   "sources": [
     {
       "id": "openai-projects",
@@ -11,12 +11,12 @@
       "url": "https://help.openai.com/en/articles/10169521-projects-in-chatgpt",
       "canonical_for": ["fitur ChatGPT Projects"],
       "freshness_class": "product-current",
-      "verified_at": "2026-09-16",
+      "verified_at": "2026-10-20",
       "review_interval_days": 14,
       "watch": true,
-      "reachability_policy": "strict",
+      "reachability_policy": "advisory",
       "status": "active",
-      "notes": "Direview ulang 16 September 2026 terhadap current Projects guidance. Current-state guidance tetap dibandingkan dengan release notes atau artikel fitur khusus ketika claim produk berubah. Probe otomatis untuk source ini saat ini stabil dan dipertahankan sebagai strict reachability signal."
+      "notes": "Direview ulang 20 Oktober 2026: project-only memory dapat diubah lewat Project settings, Study Mode tidak berlaku di Projects, dan data controls tetap berbeda dari memory. GitHub Actions menerima HTTP 403 berulang sepanjang September–Oktober sementara halaman dapat direview melalui jalur web biasa; reachability probe dinilai advisory, bukan bukti perubahan fakta."
     },
     {
       "id": "openai-study-mode",
@@ -26,7 +26,7 @@
       "url": "https://help.openai.com/en/articles/11780217-study-mode",
       "canonical_for": ["fitur Study Mode"],
       "freshness_class": "product-current",
-      "verified_at": "2026-09-16",
+      "verified_at": "2026-10-20",
       "review_interval_days": 14,
       "watch": true,
       "reachability_policy": "advisory",
@@ -40,12 +40,12 @@
       "url": "https://help.openai.com/en/articles/6825453-chatgpt-release-notes",
       "canonical_for": ["kronologi perubahan produk ChatGPT"],
       "freshness_class": "product-current",
-      "verified_at": "2026-09-16",
+      "verified_at": "2026-10-20",
       "review_interval_days": 7,
       "watch": true,
       "reachability_policy": "advisory",
       "status": "active",
-      "notes": "Direview ulang 16 September 2026. Dipakai sebagai evidence perubahan produk terbaru; current-state guidance tetap dibandingkan dengan artikel fitur terkait. Help Center dapat menolak probe otomatis."
+      "notes": "Direview ulang 20 Oktober 2026, termasuk pembaruan GPT-6 dan Intelligent UI (7 Oktober) serta rilis hingga 16 Oktober. Kemampuan baru tidak otomatis dianggap tersedia di semua Project/model; current-state guidance tetap dibandingkan dengan artikel fitur khusus. Help Center dapat menolak probe otomatis."
     },
     {
       "id": "openai-data-controls",
@@ -55,7 +55,7 @@
       "url": "https://help.openai.com/en/articles/7730893-data-controls-faq",
       "canonical_for": ["pengaturan data ChatGPT"],
       "freshness_class": "product-current",
-      "verified_at": "2026-09-16",
+      "verified_at": "2026-10-20",
       "review_interval_days": 14,
       "watch": true,
       "reachability_policy": "advisory",
@@ -80,7 +80,7 @@
           "observation": "Current Projects guidance menyatakan memory dapat dipilih saat membuat Project dan diubah kemudian melalui Project settings → Memory; FAQ current juga menyatakan existing eligible Project dapat dialihkan ke Project-only memory."
         }
       ],
-      "reviewed_at": "2026-09-16",
+      "reviewed_at": "2026-10-20",
       "review_interval_days": 7,
       "operational_policy": "Untuk setup Ramu baru, pilih Project-only memory. Untuk eligible Project yang sudah ada, ubah lewat Project settings → Memory; perubahan dapat memerlukan beberapa jam untuk berlaku.",
       "notes": "Shared Project tetap project-only dan tidak dapat dialihkan ke Default memory."
@@ -102,7 +102,7 @@
           "observation": "Artikel Projects current menyatakan Study Mode dan scheduled Study hours tidak berlaku untuk Project conversations."
         }
       ],
-      "reviewed_at": "2026-09-16",
+      "reviewed_at": "2026-10-20",
       "review_interval_days": 7,
       "operational_policy": "Ramu tidak menjadikan Study Mode dependency. Scaffolding, retrieval practice, dan tutoring behavior tetap dijalankan melalui Project Instructions + course context.",
       "notes": "Jangan mengklaim Ramu memerlukan atau otomatis mengaktifkan Study Mode."
@@ -124,7 +124,7 @@
           "observation": "Data Controls current menjelaskan toggle Improve the model for everyone dan bahwa chat tetap ada di history saat toggle dimatikan."
         }
       ],
-      "reviewed_at": "2026-09-16",
+      "reviewed_at": "2026-10-20",
       "review_interval_days": 14,
       "operational_policy": "Data Controls tetap pilihan akun pengguna, bukan syarat Ramu. Site Ramu tidak menerima upload file kuliah pribadi."
     }
