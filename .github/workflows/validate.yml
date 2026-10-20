@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0 # Need old/new Git snapshots for pack-version diff.
 
       - name: Set up Python
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
@@ -74,6 +76,14 @@ jobs:
 
       - name: Validate human-facing project names
         run: python scripts/validate_display_names.py
+
+      - name: Prove pack version bump and release-note policy
+        run: python tests/test_pack_version_policy.py
+
+      - name: Enforce pack version bump for published-content changes
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+        run: python scripts/check_pack_versions.py --base "$BASE_SHA" --head "$GITHUB_SHA"
 
       - name: Validate README learning-layer order
         run: python scripts/validate_readme.py
