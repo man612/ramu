@@ -367,6 +367,27 @@
   background: var(--surface);
 }
 
+/* Status revision-aware: label tekstual tetap wajib, warna hanya pendamping. */
+.setup-course[data-progress-status="review"],
+.setup-course[data-progress-status="unavailable"] {
+  border-color: var(--border-strong);
+}
+.setup-course[data-progress-status="review"] .done-pill,
+.setup-course[data-progress-status="unavailable"] .done-pill {
+  background: var(--surface-subtle);
+  color: var(--text-soft);
+}
+.revision-note {
+  margin: 10px 0;
+  padding: 9px 11px;
+  border-left: 3px solid var(--border-strong);
+  background: var(--surface-subtle);
+  color: var(--text-soft);
+  font-size: .77rem;
+  line-height: 1.5;
+}
+.revision-note[hidden] { display: none; }
+
 .setup-body {
   padding: 14px 14px 16px 56px;
   border-top: 1px solid var(--line);
