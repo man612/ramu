@@ -11,7 +11,7 @@
 
 ## Yang sudah cukup kuat
 
-| Topik | Bukti | Terakhir dicek |
+| Topik | Bukti (mandiri / setelah bantuan) | Terakhir dicek |
 |---|---|---|
 |  |  |  |
 
@@ -27,4 +27,4 @@
 
 ## Catatan
 
-Status ini bukan penilaian permanen. Perbarui ketika ada bukti baru dari latihan, tugas, atau feedback tutor.
+Status ini bukan penilaian permanen. Perbarui ketika ada bukti baru dari latihan, tugas, atau feedback tutor. Catat apakah mahasiswa menjawab tanpa bantuan, setelah petunjuk, atau setelah melihat solusi. Aktivitas interaktif/flashcard yang selesai bukan bukti penguasaan tanpa jawaban mandiri.

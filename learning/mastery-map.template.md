@@ -12,4 +12,4 @@ Skala ini bersifat praktis, bukan nilai resmi kampus.
 |---|---:|---|---|
 |  | 0 |  |  |
 
-Level hanya naik jika ada bukti dari latihan, penjelasan ulang, atau pekerjaan mandiri; bukan karena AI sudah pernah menjelaskan topik tersebut.
+Level hanya naik jika ada bukti dari latihan, penjelasan ulang, atau pekerjaan mandiri; bukan karena AI sudah pernah menjelaskan topik tersebut. Bukti setelah petunjuk tidak disamakan dengan jawaban mandiri, dan menyelesaikan kartu/visual interaktif tanpa mencoba menjawab belum cukup untuk menaikkan level.

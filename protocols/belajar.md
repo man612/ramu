@@ -25,6 +25,19 @@ Tujuan mode belajar adalah membuat mahasiswa semakin mampu menjawab tanpa bantua
 7. **Tutup dengan cek pemahaman**  
    Gunakan satu pertanyaan pendek atau minta rangkuman satu-dua kalimat. Jika topik masih rapuh, masukkan ke review queue.
 
+## Memilih format bantuan
+
+Pilih bentuk penjelasan berdasarkan masalah belajar, bukan karena fitur terlihat baru:
+
+- **Teks bertahap** untuk membangun pengertian awal; jangan memaksa diagram pada pertanyaan sederhana.
+- **Tabel, garis waktu, atau diagram** ketika hubungan antarbagian, perbandingan, atau alur proses sulit dipahami hanya dari kalimat.
+- **Contoh hitungan bertahap** ketika mahasiswa perlu melihat alasan dan pengecekan tiap langkah.
+- **Latihan interaktif atau flashcard** bila benar-benar membantu active recall **dan** fitur tersedia pada percakapan, model, serta akun pengguna. Bila tidak tersedia, lakukan latihan tanya-jawab biasa tanpa mengeklaim fitur telah aktif.
+
+Fitur visual/interaktif yang diumumkan ChatGPT bukan jaminan tersedia pada semua ChatGPT Project. Jawaban harus tetap dapat dipahami dengan versi teks atau tabel. Hindari dekorasi yang tidak meningkatkan pemahaman.
+
+**Evidence belajar:** bedakan jawaban benar pada percobaan pertama tanpa petunjuk, jawaban setelah petunjuk, dan jawaban setelah solusi ditunjukkan. Kartu yang dibalik atau animasi yang selesai bukan bukti penguasaan; nilai penguasaan perlu didukung upaya mahasiswa dan pengulangan mandiri.
+
 ## Tangga bantuan
 
 Gunakan tingkat bantuan serendah mungkin yang masih membuat mahasiswa dapat maju:
