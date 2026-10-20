@@ -106,7 +106,7 @@
       "name": "PMK 71 Tahun 2026 — perubahan prosedur penyelesaian kewajiban perpajakan",
       "kind": "official-regulation",
       "authority": "Kementerian Keuangan Republik Indonesia",
-      "url": "https://www.jdih.kemenkeu.go.id/dok/pmk-71-tahun-2026",
+      "url": "https://pajak.go.id/id/peraturan/perubahan-atas-peraturan-menteri-keuangan-nomor-118-tahun-2024-tentang-tata-cara",
       "canonical_for": [
         "perubahan prosedur pembetulan/keberatan/pengurangan/penghapusan/pembatalan pajak 2026, termasuk alokasi pembayaran pokok utang"
       ],
@@ -115,7 +115,7 @@
       "review_interval_days": 30,
       "watch": true,
       "status": "active",
-      "notes": "Diundangkan dan berlaku 2 Oktober 2026 menurut JDIH Kemenkeu. Ketentuan pokok dibayar dahulu ada di Pasal 23(6)–(7) versi perubahan, dalam konteks permohonan terkait sanksi/ketetapan yang diatur pasal itu. Tidak boleh digeneralisasi ke seluruh jenis transaksi atau tarif."
+      "notes": "Sumber peraturan primer PMK 71/2026 dipublikasikan dengan teks pasal lengkap pada situs DJP (HTTP 200 dari koneksi pemeriksa pada 20 Oktober 2026); JDIH Kemenkeu tetap sumber pembanding tanggal berlaku https://www.jdih.kemenkeu.go.id/dok/pmk-71-tahun-2026, tetapi sempat gagal koneksi TLS dari komputer pemeriksa dan tidak dipakai sebagai URL watch utama. Ketentuan Pasal 23(6)–(7) pokok terlebih dahulu hanya dalam lingkup pasal ini."
     }
   ],
   "claims": [
@@ -144,8 +144,8 @@
       "evidence": [
         {
           "source_id": "kemenkeu-pmk71-2026",
-          "locator": "JDIH Kemenkeu: tanggal pengundangan/berlaku 2 Oktober 2026; PERUBAHAN Pasal 23 ayat (6)–(7)",
-          "observation": "Halaman peraturan resmi dan peraturan primer pada situs DJP menegaskan pembayaran terkait Surat Ketetapan Pajak/Surat Tagihan Pajak dalam konteks permohonan pengurangan/penghapusan sanksi dipakai untuk pokok terlebih dahulu; sisanya terhadap sanksi/denda."
+          "locator": "Teks PMK 71 Tahun 2026 pada situs DJP: perubahan Pasal 23 ayat (6)-(7); tanggal berlaku dikonfirmasi JDIH Kemenkeu (2 Oktober 2026)",
+          "observation": "Teks peraturan primer yang dipublikasikan DJP memuat pelunasan pokok sebelum sanksi/denda dalam konteks ketentuan Pasal 23(6)–(7). JDIH Kemenkeu mengonfirmasi tanggal berlaku 2 Oktober 2026, meskipun dari satu koneksi pemeriksa JDIH mengalami kegagalan TLS."
         }
       ],
       "reviewed_at": "2026-10-20",
